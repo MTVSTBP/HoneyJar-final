@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/writeLayout}"
+      layout:fragment="content">
+<head>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/post/postWrite.css}"/>
+    <th:block layout:fragment="title">
+        <title>포스트 작성</title>
+    </th:block>
+</head>
+<body>
+<div id="container">
+    <form id="postForm" th:object="${postRequestDTO}" th:action="@{/posts/create}" method="post">
+        <div class="category_public_wrap">
+            <!-- category -->
+            <div class="category_wrap">
+                <label for="category">카테고리</label>
+                <div class="custom-select-wrapper">
+                    <select id="category" th:field="*{category}">
+                        <option value="">선택</option>
+                        <option th:each="category : ${categories}"
+                                th:value="${category.id}"
+                                th:text="${category.name}">카테고리</option>
+                    </select>
+                </div>
+                <p class="error-message" id="categoryError"></p>
+            </div>
+            <!-- //category -->
+
+            <!-- 공개 여부 -->
+            <div class="public_wrap">
+                <label for="publicPost">공개 여부</label>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="publicPost" checked="true">
+                    <label for="publicPost"></label>
+                </div>
+            </div>
+            <!-- //공개 여부 -->
+        </div>
+
+        <!-- image upload -->
+        <div class="form-group">
+            <label for="imageUpload">사진 첨부 (최대 5개)</label>
+            <label for="imageUpload" class="custom-file-upload">
+                <img src="/assets/svg/camera_enhance.svg" alt="Upload Icon">
+            </label>
+            <input type="file" id="imageUpload" accept="image/jpeg, image/png, image/gif" multiple>
+            <div id="imagePreview"></div>
+            <p id="fileCountMessage">최대 5개까지 업로드할 수 있습니다.</p>
+            <p id="fileTypeMessage">jpg, png, gif 파일만 업로드할 수 있습니다.</p>
+            <p class="error-message" id="imageError"></p>
+        </div>
+        <!-- //image upload -->
+
+        <!-- titles -->
+        <div class="form-group">
+            <div class="post_title">
+                <label for="postTitle">제목</label>
+                <input type="text" id="postTitle" th:field="*{postTitle}" placeholder="제목을 입력하세요">
+                <p class="error-message" id="postTitleError"></p>
+            </div>
+        </div>
+        <!-- //titles -->
+
+        <!-- recommended menu -->
+        <div class="form-group">
+            <label for="bestMenu">대표 메뉴</label>
+            <input type="text" id="bestMenu" th:field="*{bestMenu}" placeholder="추천 메뉴를 입력하세요">
+            <p class="error-message" id="bestMenuError"></p>
+        </div>
+        <!-- //recommended menu -->
+
+        <!-- price -->
+        <div class="form-group">
+            <label for="price">가격</label>
+            <input type="number" id="price" th:field="*{price}" placeholder="가격을 입력하세요">
+            <p class="error-message" id="priceError"></p>
+        </div>
+        <!-- //price -->
+
+        <!-- address -->
+        <div class="form-group address_wrap">
+            <label for="address">주소</label>
+            <div class="input-group">
+                <input type="text" id="address" th:field="*{address}" placeholder="주소를 입력하세요">
+                <button type="button" id="openMap">
+                    <img src="/assets/svg/place.svg" alt="마커이미지">
+                </button>
+            </div>
+            <p class="error-message" id="addressError"></p>
+        </div>
+        <!-- //address -->
+
+        <!-- content -->
+        <div class="form-group">
+            <label for="content">내용</label>
+            <textarea id="content" th:field="*{content}" placeholder="내용을 입력하세요" rows="5"></textarea>
+            <p class="error-message" id="contentError"></p>
+        </div>
+        <!-- //content -->
+
+        <!-- submit button -->
+        <div class="submit_wrap">
+            <button type="submit" id="submitBtn">등록</button>
+        </div>
+        <!-- //submit button -->
+
+    </form>
+
+    <!-- Modal -->
+    <div id="Modal" class="modal">
+        <div class="modal-content">
+            <span class="close">
+                <img src="/assets/svg/close.svg" alt="닫기">
+            </span>
+            <div class="modal-text">
+                <p>등록이 완료되었어요!</p>
+            </div>
+            <button id="complete" class="complete">확인</button>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript" type="text/javascript" th:src="@{/js/pages/post/postWrite.js}"></script>
+
+</body>
+</html>

@@ -61,7 +61,11 @@ input:focus{
 .address_search .search{
     width: 100%;
     display: flex;
-    justify-content: space-around;
+}
+
+.address_search .search form {
+    width: 100%;
+    display: flex;
 }
 .address_search .search input {
     width: 80%;
