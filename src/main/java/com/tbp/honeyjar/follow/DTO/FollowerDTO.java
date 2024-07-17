@@ -1,4 +1,4 @@
-package com.tbp.honeyjar.mypage.DTO;
+package com.tbp.honeyjar.follow.DTO;
 
 import lombok.Builder;
 
