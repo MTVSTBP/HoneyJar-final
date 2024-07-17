@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}"
+      layout:fragment="content"
+>
+
+<head>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/admin/category/adminCategory.css}"/>
+    <th:block layout:fragment="title">
+        <title>adminCategory</title>
+    </th:block>
+</head>
+
+<body>
+<!-- 헤더영역 -->
+<div></div>
+<!-- //헤더영역 -->
+
+<div id="container">
+    <div class="sub_title">
+        <h4>카테고리</h4>
+    </div>
+    <!-- 맛집 카테고리 -->
+    <div id="best_c" class="category">
+        <div class="category_header">
+            <h5>맛집</h5>
+            <div class="plus">
+                <a href="/admin/category/write">
+                    <img src="/assets/svg/plus.svg" alt="생성">
+                </a>
+            </div>
+        </div>
+        <div class="categorybody">
+            <ul id="best_c_list">
+                <li th:text="${dto.text}"></li>
+            </ul>
+        </div>
+    </div>
+    <!-- //맛집 카테고리 -->
+
+    <!-- FAQ 카테고리 -->
+    <div id="faq_c" class="category">
+        <div class="category_header">
+            <h5>FAQ</h5>
+            <div class="plus">
+                <a href="/admin/category/write">
+                    <img src="/assets/svg/plus.svg" alt="생성">
+                </a>
+            </div>
+        </div>
+        <div class="categorybody">
+            <ul id="faq_c_list"></ul>
+        </div>
+    </div>
+    <!-- //FAQ 카테고리 -->
+
+    <!-- 문의 카테고리 -->
+    <div id="notice_c" class="category">
+        <div class="category_header">
+            <h5>문의</h5>
+            <div class="plus">
+                <a href="/admin/category/write">
+                    <img src="/assets/svg/plus.svg" alt="생성">
+                </a>
+            </div>
+        </div>
+        <div class="categorybody">
+            <ul id="notice_c_list"></ul>
+        </div>
+    </div>
+    <!-- //문의 카테고리 -->
+
+    <!-- 삭제 확인 모달 -->
+    <div id="deleteConfirmModal" class="modal">
+        <div class="modal-content">
+                <span class="close">
+                    <img src="/assets/svg/close.svg" alt="닫기">
+                </span>
+            <div class="modal-text">
+                <p>정말로 삭제 하시겠어요?</p>
+            </div>
+            <button id="confirmDelete" class="complete">삭제</button>
+        </div>
+    </div>
+
+    <!-- 삭제 완료 모달 -->
+    <div id="deleteSuccessModal" class="modal">
+        <div class="modal-content">
+                <span class="close">
+                    <img src="/assets/svg/close.svg" alt="닫기">
+                </span>
+            <div class="modal-text">
+                <p>삭제가 완료되었습니다!</p>
+            </div>
+            <button id="completeDelete" class="complete">확인</button>
+        </div>
+    </div>
+
+</div>
+<script th:inline="javascript" th:src="@{/js/pages/admin/category/adminCategory.js}"></script>
+</body>
+
+</html>
