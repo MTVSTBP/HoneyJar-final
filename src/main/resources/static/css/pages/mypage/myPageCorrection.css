@@ -1,0 +1,244 @@
+input,
+button {
+    outline: 0;
+}
+.main {
+    display:flex;
+    align-content: center;
+    height: 100%;
+}
+/* Profile Styles */
+.profile__image-container {
+    position: relative;
+    width: 94px;
+    height: 90px;
+    margin: 25px auto 0;
+}
+
+.profile__image {
+    width: 100%;
+    height: 100%;
+}
+
+.profile__change-button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 25.53%;
+    height: 26.67%;
+}
+
+.profile__change-button:hover {
+    content: url("../../../assets/svg/change_profile_hovered.svg");
+}
+
+.profile__image-upload {
+    display: none;
+}
+/* Profile Styles End */
+
+/* Form field styles */
+.my-page-form {
+    width: 100%;
+}
+
+.form-field {
+    margin-top: 32px;
+    text-align: center;
+}
+
+.form-field__label {
+    display: block;
+    margin-bottom: 7px;
+    color: #979797;
+    font-family: "Pretendard-Regular";
+    font-size: 13px;
+    font-weight: 300;
+}
+
+.form-field__input {
+    width: 100%;
+    max-width: 235px;
+    height: 41px;
+    border: 1px solid #979797;
+    border-radius: 8px;
+    text-align: center;
+    font-family: "Pretendard-Bold";
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.form-field__input.active {
+    border-color: #ff8243;
+}
+/* Form field styles End */
+
+/* Category styles */
+.category {
+    margin-top: 32px;
+    text-align: center;
+}
+
+.category__group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.category__group label {
+    display: flex;
+    align-items: center;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.category__group input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 15px;
+    height: 15px;
+    border: 2px solid #979797;
+    border-radius: 2px;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.category__group input[type="checkbox"]:checked {
+    background-color: #ff8243;
+    border-color: #ff8243;
+}
+
+.category__group input[type="checkbox"]:checked::after {
+    content: "\2713";
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 12px;
+}
+
+.category__label {
+    display: inline-flex;
+    align-items: center;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.category__checkbox {
+    display: none;
+}
+
+.category__custom-checkbox {
+    width: 15px;
+    height: 15px;
+    border: 2px solid #979797;
+    border-radius: 2px;
+    margin-right: 5px;
+    position: relative;
+}
+
+.category__custom-checkbox::after {
+    content: "\2713";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ff8243;
+    font-size: 15px;
+    opacity: 0;
+}
+
+.category__checkbox:checked + .category__custom-checkbox {
+    border-color: #ff8243;
+}
+
+.category__checkbox:checked + .category__custom-checkbox::after {
+    opacity: 1;
+}
+
+.category__text {
+    color: #979797;
+    font-family: "Pretendard-Regular";
+    font-size: 12px;
+}
+/* Category styles End */
+
+/* Button styles */
+.button {
+    display: block;
+    width: 100%;
+    max-width: 130px;
+    height: 37px;
+    margin: 50px auto 37px;
+    border: none;
+    border-radius: 40px;
+    font-family: "Pretendard-Bold";
+    font-size: 15px;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.button--submit {
+    background-color: #979797;
+}
+
+.button--submit.active {
+    background-color: #ff8243;
+}
+
+.button--complete {
+    width: 100%;
+    max-width: 286px;
+    height: 40px;
+    margin: 0 0 17px;
+    background-color: #ff8243;
+    font-family: "Pretendard-Regular";
+    font-size: 15px;
+    font-weight: 500;
+}
+/* Button styles End */
+
+/* Modal styles */
+.modal-container {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.modal {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    background-color: rgba(0, 0, 0, 0.24);
+}
+
+.modal__content {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 312px;
+    border-radius: 20px;
+    position: absolute;
+    left: 50%;
+    bottom: 16px;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal__text {
+    width: 80%;
+    margin: 75px 0 42px;
+    padding: 5px 0;
+    text-align: center;
+    font-family: "Pretendard-Bold";
+    font-size: 15px;
+    font-weight: 700;
+}
+/* Modal styles End */

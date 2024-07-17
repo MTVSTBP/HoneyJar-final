@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<!-- Thymeleaf 선언 / headerFragment 임을 선언-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="header(title)">
+<link rel="stylesheet" th:href="@{/css/layout/header.css}"/>
+<header id="header" class="header">
+    <div class="top_container">
+        <img id="mini_logo" src="/assets/svg/mini_logo.svg" alt="Mini Logo">
+        <p id="title" th:text="${title}">타이틀</p>
+    </div>
+</header>
+</html>

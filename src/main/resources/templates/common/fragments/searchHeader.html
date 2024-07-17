@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<!-- Thymeleaf 선언 / headerFragment 임을 선언-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="searchHeader">
+<link rel="stylesheet" th:href="@{/css/layout/searchHeader.css}"/>
+<header id="header" class="header">
+    <div class="search_header">
+        <div class="address_search">
+            <img class="logo" src="/assets/svg/header_logo.svg" alt="꿀단지 헤더 로고">
+            <div class="search">
+                <input placeholder="검색">
+                <img src="/assets/svg/search.svg" alt="검색">
+            </div>
+        </div>
+    </div>
+</header>
+</html>

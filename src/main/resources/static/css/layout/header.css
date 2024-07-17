@@ -1,0 +1,24 @@
+.header {
+    height: 90px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    background-color: #ffd140;
+}
+.top_container {
+    margin-left: 20px;
+    display: flex;
+    width: 50%;
+    justify-content: space-between;
+    align-items: center;
+}
+p#title {
+    height: 30px;
+    font-size: 30px;
+    font-family: Inter, sans-serif;
+    font-weight: bold;
+    color: white;
+    display: flex;
+    align-items: center;
+}

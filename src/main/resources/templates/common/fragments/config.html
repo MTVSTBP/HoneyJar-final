@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<!--Thymeleaf, ConfigFragment 선언-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="config">
+<head>
+    <!--Common Head-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport"
+          content="width=device-width, maximum-scale=1.0, minimum-scale=1, user-scalable=yes,initial-scale=1.0"/>
+    <title>test</title>
+    <!--Common CSS -->
+    <!-- css 초기화 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <link rel="stylesheet" th:href="@{/css/layout/navigator.css}"/>
+
+    <!--Common JS -->
+    <script defer="defer" type="text/javascript" th:src="@{/js/layout/navigator.js}"></script>
+</head>
+</html>

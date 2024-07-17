@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<!-- Thymeleaf 선언 / headerFragment 임을 선언-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="writeHeader">
+<head>
+    <link rel="stylesheet" th:href="@{/css/layout/writeHeader.css}"/>
+</head>
+<body>
+<header id="header" class="header">
+    <div class="sub_navi">
+        <div class="back" id="back">
+            <img src="/assets/svg/arrow_back.svg" alt="뒤로가기">
+        </div>
+    </div>
+</header>
+<script th:inline="javascript" type="text/javascript" th:src="@{/js/layout/writeHeader.js}"></script>
+</body>
+</html>

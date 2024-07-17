@@ -1,0 +1,54 @@
+input{
+    max-width: 450px;
+    width: 100%;
+    border: 1px solid #EDEDED;
+    border-radius: 5px;
+    height: 41px;
+    padding: 0 0.5rem;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+}
+
+input:focus{
+    outline: none;
+    border: 2px solid #FF8243;
+}
+
+
+.search_header{
+    background-color: #FFD140;
+    height: 90px;
+    max-width: 480px;
+    min-width: 320px;
+    width: 100%;
+    margin: 0 auto;
+}
+.search_header .logo{
+    max-width: 40px;
+    width: 90%;
+    margin-right: 2rem;
+}
+
+.address_search {
+    position: relative;
+    width: 90%;
+    height: 90px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.address_search .search{
+    width: 80%;
+    display: flex;
+    justify-content: space-around;
+}
+.address_search .search input {
+    width: 65%;
+    border-radius: 20px;
+    padding: 0 1rem;
+}
+.address_search .search img{
+    max-width: 32px;
+}

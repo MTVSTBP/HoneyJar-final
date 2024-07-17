@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<!-- Thymeleaf 선언 / headerFragment 임을 선언-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="followHeader">
+    <link rel="stylesheet" th:href="@{/css/layout/followHeader.css}"/>
+    <header id="header" class="header">
+        <div class="top_container">
+            <img id="mini_logo" src="/assets/svg/mini_logo.svg"></img>
+            <p id="title">Follower</p>
+        </div>
+        <div class="bottom_container">
+            <input id = "search" type="text" placeholder="닉네임 검색"></input>
+            <img id="magnifier" src="/assets/svg/magnifier.svg"></img>
+        </div>
+    </header>
+</html>

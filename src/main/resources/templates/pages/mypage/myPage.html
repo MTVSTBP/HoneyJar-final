@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout.html"
+      layout:decorate="~{common/layout/defaultLayout}"
+      layout:fragment="content"
+      th:with="pageTitle='MyPage'">
+<head>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/mypage/myPage.css}"/>
+    <th:block layout:fragment="title">
+        <title th:text="${pageTitle}">MyPage</title>
+    </th:block>
+</head>
+<body>
+<div id="container2">
+    <div id="header"></div>
+    <div id="profileContainer">
+        <div id="detailContainer">
+            <div id="userDetail">
+                <div th:text="${myPage.userName}">유저 이름</div>
+                <img id="pencil" src="/assets/svg/mypage_profile_correction.svg"  alt="사진이 없습니다."/>
+            </div>
+            <div id="pr" th:text="${myPage.userPr}">자기소개</div>
+        </div>
+        <div id="profileImage">
+            <img id="profileSvg" src="/assets/svg/base_profile.svg"  alt="사진이 없습니다."/>
+        </div>
+    </div>
+    <div id="post_data">
+        <div id="like">
+            <div class="post_data_title">포스트</div>
+            <div class="post_data_set">
+                <div class="post_data_icon">
+                    <img src="/assets/svg/post.svg" alt="사진이 없습니다."/>
+                </div>
+                <div class="post_data_num" th:text="${myPage.getNumberOfPosts()}"></div>
+            </div>
+            <div class="border"></div>
+        </div>
+        <div id="follower">
+            <div class="post_data_title">팔로워</div>
+            <div class="post_data_set">
+                <div class="post_data_icon">
+                    <img src="/assets/svg/human.svg" alt="사진이 없습니다."/>
+                </div>
+                <div class="post_data_num" th:text="${myPage.getNumberOfFollowers()}"></div>
+            </div>
+            <div class="border"></div>
+        </div>
+        <div id="following">
+            <div class="post_data_title">팔로잉</div>
+            <div class="post_data_set">
+                <div class="post_data_icon">
+                    <img src="/assets/svg/human.svg" alt="사진이 없습니다."/>
+                </div>
+                <div class="post_data_num" th:text="${myPage.getNumberOfFollowees()}"></div>
+            </div>
+        </div>
+    </div>
+    <div id="bookMark">
+        <div id="textLine">
+            <div id="bookMarkText">북마크</div>
+            <div id="more">더보기&gt</div>
+        </div>
+        <div id="postData"></div>
+    </div>
+    <div id="navigate"></div>
+</div>
+</body>
+</html>

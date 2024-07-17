@@ -1,0 +1,71 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+/*font-family: Inter, sans-serif;로 사용 */
+@font-face {
+    font-family: "Pretendard-Black";
+    font-weight: 900;
+    src: url(../assets/font/Pretendard-Black.otf);
+}
+@font-face {
+    font-family: "Pretendard-ExtraBold";
+    font-weight: 800;
+    src: url(../assets/font/Pretendard-ExtraBold.otf);
+}
+@font-face {
+    font-family: "Pretendard-Bold";
+    font-weight: bold;
+    src: url(../assets/font/Pretendard-Bold.otf);
+}
+@font-face {
+    font-family: "Pretendard-SemiBold";
+    font-weight: 600;
+    src: url(../assets/font/Pretendard-SemiBold.otf);
+}
+@font-face {
+    font-family: "Pretendard-Medium";
+    font-weight: 500;
+    src: url(../assets/font/Pretendard-Medium.otf);
+}
+@font-face {
+    font-family: "Pretendard-Regular";
+    font-weight: normal;
+    src: url(../assets/font/Pretendard-Regular.otf);
+}
+@font-face {
+    font-family: "Pretendard-Light";
+    font-weight: 300;
+    src: url(../assets/font/Pretendard-Light.otf);
+}
+@font-face {
+    font-family: "Pretendard-ExtraLight";
+    font-weight: 200;
+    src: url(../assets/font/Pretendard-ExtraLight.otf);
+}
+@font-face {
+    font-family: "Pretendard-Thin";
+    font-weight: 100;
+    src: url(../assets/font/Pretendard-Thin.otf);
+}
+@font-face {
+    font-family: "Sandbox-Bold";
+    font-weight: bold;
+    src: url(../assets/font/SandboxBold.ttf);
+}
+@font-face {
+    font-family: "Sandbox-Medium";
+    font-weight: 500;
+    src: url(../assets/font/SandboxMedium.ttf);
+}
+@font-face {
+    font-family: "Sandbox-Thin";
+    font-weight: 300;
+    src: url(../assets/font/SandboxThin.ttf);
+}
+
+body,
+html {
+    margin: 0 auto;
+    padding: 0;
+    height: 100dvh;
+    max-width: 400px;
+    background-color: white;
+}

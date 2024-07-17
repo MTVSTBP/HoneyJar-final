@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<!-- Thymeleaf 선언 / headerFragment 임을 선언-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="addressHeader">
+<link rel="stylesheet" th:href="@{/css/layout/addressHeader.css}"/>
+<header id="header" class="header">
+    <div id="search_container">
+        <div class="search_header">
+            <div class="back" id="back">
+                <img src="/assets/svg/arrow_back_ios.svg" alt="뒤로가기">
+                <p>주소</p>
+            </div>
+            <div class="address_search">
+                <div class="search">
+                    <input placeholder="검색">
+                    <img src="/assets/svg/search.svg" alt="검색">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript" type="text/javascript" th:src="@{/js/layout/addressHeader.js}"></script>
+</header>
+</html>
