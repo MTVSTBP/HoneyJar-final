@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}"
+      layout:fragment="content"
+>
+
+<head>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/admin/notice/adminNotice.css}"/>
+    <th:block layout:fragment="title">
+        <title>adminCategory</title>
+    </th:block>
+</head>
+
+<body>
+<!-- 헤더영역 -->
+<div></div>
+<!-- //헤더영역 -->
+<div id="container">
+    <div class="sub_title">
+        <h4>공지사항</h4>
+        <div class="plus">
+            <a href="/admin/notice/write">
+                <img src="/assets/svg/plus.svg" alt="생성">
+            </a>
+        </div>
+    </div>
+
+    <div class="notice">
+        <ul th:object="${dto}" class="list">
+            <!-- 클릭했을때, 읽음 처리로 컬러 변경됨. class="notice_link" -->
+            <li>
+                <div class="more_h">
+                    <img src="/assets/svg/more_horiz.svg" alt="more_horiz">
+                    <div class="click_box">
+                        <div class="d_flex">
+                            <a class="edit_p" href="/admin/notice/write">수정</a>
+                            <a id="deletePost" class="delete_p" href="javascript:void(0)">삭제</a>
+                        </div>
+                    </div>
+                </div>
+                <a href="/admin/notice/" class="notice_link">
+                    <div class="item">
+                        <div th:text="*{title}" class="title">정기 업로드 예정</div>
+                        <div class="context_text">
+                            <p th:text="*{post}" class="context">AM 01:00 ~ 05:00 업로드 예정이 있으므로 서비스가 원할하지 않을 수도
+                                있습니다.</p>
+                            <span th:text="*{created_at}">2024.07.01</span>
+                        </div>
+                    </div>
+                </a>
+
+            </li>
+            <li>
+                <div class="more_h">
+                    <img src="/assets/svg/more_horiz.svg" alt="more_horiz">
+                    <div class="click_box">
+                        <div class="d_flex">
+                            <a class="edit_p" href="/src/pages/html/adminQnaCorrection.html">수정</a>
+                            <a id="deletePost" class="delete_p" href="javascript:void(0)">삭제</a>
+                        </div>
+                    </div>
+                </div>
+                <a href="/src/pages/html/noticeDetail.html" class="notice_link">
+                    <div class="item">
+                        <div class="title">정기 업로드 예정</div>
+                        <div class="context_text">
+                            <p class="context">AM 01:00 ~ 05:00 업로드 예정이 있으므로 서비스가 원할하지 않을 수도 있습니다.</p>
+                            <span>2024.07.01</span>
+                        </div>
+                    </div>
+                </a>
+
+            </li>
+        </ul>
+    </div>
+
+    <!-- 삭제 확인 모달 -->
+    <div id="deleteConfirmModal" class="modal">
+        <div class="modal-content">
+                <span class="close">
+                    <img src="/assets/svg/close.svg" alt="닫기">
+                </span>
+            <div class="modal-text">
+                <p>정말로 삭제 하시겠어요?</p>
+            </div>
+            <button id="confirmDelete" class="complete">삭제</button>
+        </div>
+    </div>
+
+    <!-- 삭제 완료 모달 -->
+    <div id="deleteSuccessModal" class="modal">
+        <div class="modal-content">
+                <span class="close">
+                    <img src="/assets/svg/close.svg" alt="닫기">
+                </span>
+            <div class="modal-text">
+                <p>삭제가 완료되었습니다!</p>
+            </div>
+            <button id="completeDelete" class="complete">확인</button>
+        </div>
+    </div>
+
+</div>
+
+<script th:inline="javascript" th:src="@{/js/pages/admin/notice/adminNotice.js}"></script>
+
+</body>
+
+</html>
