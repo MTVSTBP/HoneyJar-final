@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/writeLayout}"
+      layout:fragment="content"
+>
+<head>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/post/postDetail.css}"/>
+    <th:block layout:fragment="title">
+        <title th:text="${postDetail.postTitle}">포스트 상세</title>
+    </th:block>
+</head>
+<body>
+<div id="container">
+    <!-- title -->
+    <div class="title_wrap">
+        <div class="title">
+            <span id="category" th:text="${postDetail.category}">카테고리명</span>
+            <h2 th:text="${postDetail.postTitle}">맛있다는 제목</h2>
+            <p id="date" th:text="${postDetail.date}">2024.06.24</p>
+        </div>
+        <div class="more_h">
+            <img src="/assets/svg/more_horiz.svg" alt="more_horiz">
+            <div class="click_box">
+                <div class="d_flex">
+                    <a class="edit_p" onclick="location.href='/post/correction'">수정</a>
+                    <a id="deletePost" class="delete_p" href="javascript:void(0)">삭제</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- //title -->
+
+    <!-- slider image -->
+    <div class="kind_wrap">
+        <div class="kind_slider">
+            <ul class="slider">
+                <li th:each="image : ${postDetail.images}" th:text="${image}"></li>
+            </ul>
+        </div>
+        <div class="arrow">
+            <a href="" class="prev">
+                <img src="/assets/svg/arrow_back_ios.svg" alt="이전">
+            </a>
+            <a href="" class="next">
+                <img src="/assets/svg/arrow_forward_ios.svg" alt="다음">
+            </a>
+        </div>
+    </div>
+    <!-- //slider image -->
+
+    <!-- information -->
+    <div class="information">
+        <div class="infos">
+            <div class="best_menu info">
+                <h5>대표 메뉴</h5>
+                <p th:text="${postDetail.bestMenu}">교토식 오코노미야끼, 츄라이</p>
+            </div>
+
+            <div class="price info">
+                <h5>가격</h5>
+                <p th:text="${postDetail.price}">30,000</p>
+            </div>
+
+            <div class="address info">
+                <h5>주소</h5>
+                <p th:text="${postDetail.address}">경기도 성남시 수정구 대왕판교로 815</p>
+            </div>
+        </div>
+
+        <div class="bookmark">
+            <button id="bookmarkButton">
+                <img src="/assets/svg/bookmark_border.svg" alt="북마크" id="bookmarkImage">
+            </button>
+        </div>
+    </div>
+    <!-- //information -->
+
+    <!-- map -->
+    <div class="map">
+        <div class="map_box">
+            <p>map</p>
+        </div>
+    </div>
+
+    <!-- context -->
+    <div class="post_context">
+        <p th:text="${postDetail.content}">맛있었다는 내용이 들어가는 구간! 텍스트가 짤리지 않고 그대로 작성되어 줄바꿈이 됨</p>
+    </div>
+    <!--// context -->
+
+    <!-- comment -->
+    <div class="comment_box">
+        <div class="like">
+            <button id="likeButton" data-post-id="${postDetail.id}">
+                <img src="/assets/svg/favorite.svg" alt="좋아요" id="likeImage">
+                <span id="likeCount" th:text="${postDetail.likeCount}">0</span>
+            </button>
+        </div>
+        <div class="comment">
+            <button id="commentButton">
+                <img src="/assets/svg/mode_comment.svg" alt="댓글">
+                <span id="commentCount">0</span>
+            </button>
+        </div>
+        <div class="scope" id="rating">
+            <button id="openRatingModal" data-post-id="${postDetail.id}">
+                <img src="/assets/svg/star.svg" alt="별점" id="ratingStar">
+                <span id="averageRating" th:text="${postDetail.averageRating}">0</span> <!-- 초기 총점 0으로 설정 -->
+            </button>
+        </div>
+
+        <!-- 삭제 확인 모달 -->
+        <div id="deleteConfirmModal" class="modal">
+            <div class="modal-content">
+                        <span class="close">
+                            <img src="/assets/svg/close.svg" alt="닫기">
+                        </span>
+                <div class="modal-text">
+                    <p>정말로 삭제 하시겠어요?</p>
+                </div>
+                <button id="confirmDelete" class="complete">삭제</button>
+            </div>
+        </div>
+
+        <!-- 삭제 완료 모달 -->
+        <div id="deleteSuccessModal" class="modal">
+            <div class="modal-content">
+                        <span class="close">
+                            <img src="/assets/svg/close.svg" alt="닫기">
+                        </span>
+                <div class="modal-text">
+                    <p>삭제가 완료되었습니다!</p>
+                </div>
+                <button id="completeDelete" class="complete">확인</button>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <!-- 모달에 확인 버튼 추가 -->
+        <div id="ratingModal" class="modal">
+            <div class="modal-content">
+                        <span class="close">
+                            <img src="/assets/svg/close.svg" alt="">
+                        </span>
+                <div class="rating">
+                    <p>평점을 남겨주세요!</p>
+                </div>
+                <div class="modal-rating">
+                    <span class="star" data-value="1">&#9733;</span>
+                    <span class="star" data-value="2">&#9733;</span>
+                    <span class="star" data-value="3">&#9733;</span>
+                    <span class="star" data-value="4">&#9733;</span>
+                    <span class="star" data-value="5">&#9733;</span>
+                </div>
+                <button id="confirmRating" class="confirmRating">확인</button>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<script th:inline="javascript" type="text/javascript" th:src="@{/js/pages/post/postDetail.js}"></script>
+
+</body>
+</html>
