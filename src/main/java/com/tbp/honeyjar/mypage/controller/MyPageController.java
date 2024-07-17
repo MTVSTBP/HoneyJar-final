@@ -21,11 +21,6 @@ public class MyPageController {
         // MyPageDTO myPage = myPageService.getMyPage(userId);
         MyPageDTO myPage = new MyPageDTO();
         myPage.setNumberOfPosts(6);
-        myPage.setUserId(1L);
-        myPage.setUserName("파이리");
-        myPage.setUserPr("안녕하세요");
-        myPage.setNumberOfFollowees(37);
-        myPage.setNumberOfFollowers(29);
         model.addAttribute("myPage", myPage);
         return "pages/mypage/myPage";
     }
@@ -38,9 +33,6 @@ public class MyPageController {
     @GetMapping("/{userId}/correction")
     public String getMyPageCorrection(@PathVariable Long userId, Model model) {
         MyPageCorrectionDTO myPage = new MyPageCorrectionDTO();
-        myPage.setUserId(1L);
-        myPage.setUserName("파이리");
-        myPage.setUserPr("안녕하세요");
         model.addAttribute("myPage", myPage);
         return "pages/mypage/myPageCorrection";
     }
