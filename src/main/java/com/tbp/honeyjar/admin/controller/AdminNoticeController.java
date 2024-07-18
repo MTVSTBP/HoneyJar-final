@@ -54,11 +54,11 @@ public class AdminNoticeController {
         requestDto.setUpdatedAt(LocalDateTime.now());
 
         noticeService.save(requestDto);
-        
+
         return "redirect:/admin/notice";
     }
 
-    @GetMapping("/write/{notice_id}")
+    @GetMapping("/correction/{notice_id}")
     public String write(@PathVariable Long notice_id, Model model) {
         NoticeResponseDto notice = noticeService.findById(notice_id);
 
