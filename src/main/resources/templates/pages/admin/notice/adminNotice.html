@@ -34,7 +34,7 @@
                     <img src="/assets/svg/more_horiz.svg" alt="more_horiz">
                     <div class="click_box">
                         <div class="d_flex">
-                            <a class="edit_p" href="/admin/notice/write">수정</a>
+                            <a class="edit_p" th:href="@{|/admin/notice/write/${notice.noticeId}|}">수정</a>
                             <a id="deletePost" class="delete_p" href="javascript:void(0)">삭제</a>
                         </div>
                     </div>
