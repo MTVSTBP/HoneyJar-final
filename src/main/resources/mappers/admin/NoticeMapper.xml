@@ -4,21 +4,26 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tbp.honeyjar.admin.dao.NoticeMapper">
 
-    <resultMap id="adminNoticeResultMap" type="com.tbp.honeyjar.admin.dto.NoticeDto">
+    <resultMap id="adminNoticeListResultMap" type="com.tbp.honeyjar.admin.dto.notice.NoticeListResponseDto">
         <id property="noticeId" column="notice_id"/>
         <result property="title" column="title"/>
         <result property="post" column="post"/>
         <result property="createdAt" column="created_at"/>
-        <result property="updatedAt" column="updated_at"/>
     </resultMap>
 
-    <select id="findAllNotices" resultMap="adminNoticeResultMap">
+    <resultMap id="adminNoticeResultMap" type="com.tbp.honeyjar.admin.dto.notice.NoticeResponseDto">
+        <id property="noticeId" column="notice_id"/>
+        <result property="title" column="title"/>
+        <result property="post" column="post"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
+    <select id="findAllNotices" resultMap="adminNoticeListResultMap">
         select
             notice_id,
             title,
             post,
-            created_at,
-            updated_at
+            created_at
         from notice
         order by notice_id
     </select>
@@ -28,8 +33,7 @@
             notice_id,
             title,
             post,
-            created_at,
-            updated_at
+            created_at
         from notice
         where notice_id = #{noticeId}
     </select>
