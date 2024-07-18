@@ -22,4 +22,15 @@
         from notice
         order by notice_id
     </select>
+
+    <select id="findById" resultMap="adminNoticeResultMap">
+        select
+            notice_id,
+            title,
+            post,
+            created_at,
+            updated_at
+        from notice
+        where notice_id = #{noticeId}
+    </select>
 </mapper>

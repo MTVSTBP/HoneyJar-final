@@ -39,7 +39,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="/admin/notice/" class="notice_link">
+                <a th:href="@{|/admin/notice/${notice.noticeId}|}" class="notice_link">
                     <div class="item">
                         <div th:text="${notice.title}" class="title">정기 업로드 예정</div>
                         <div class="context_text">

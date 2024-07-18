@@ -9,4 +9,6 @@ import java.util.List;
 public interface NoticeMapper {
 
     List<NoticeDto> findAllNotices();
+
+    NoticeDto findById(Long id);
 }
