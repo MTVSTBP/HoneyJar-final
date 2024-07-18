@@ -4,12 +4,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const fileCountMessage = document.getElementById('fileCountMessage');
     const fileTypeMessage = document.getElementById('fileTypeMessage');
     const submitBtn = document.getElementById('submitBtn');
-    const modal = document.getElementById('Modal');
-    const closeBtn = document.querySelector(".close");
-    const completeBtn = document.getElementById('complete');
-    const addressInput = document.getElementById('address');
-    const addressButton = document.getElementById('openMap');
-    const publicPost = document.getElementById('publicPost'); // 공개 여부 토글
+    const placeNameInput = document.getElementById('placeName');
+    const placeNameButton = document.getElementById('openMap');
     const maxFiles = 5;
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
     let selectedFiles = JSON.parse(localStorage.getItem('selectedFiles')) || [];
@@ -120,20 +116,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function validateForm() {
         const postTitleElement = document.getElementById('postTitle');
-        const categoryElement = document.getElementById('category');
         const contentElement = document.getElementById('content');
-        const addressElement = document.getElementById('address');
+        const placeNameElement = document.getElementById('placeName');
 
         const postTitle = postTitleElement ? postTitleElement.value.trim() : '';
-        const category = categoryElement ? categoryElement.value : '';
         const content = contentElement ? contentElement.value.trim() : '';
-        const address = addressElement ? addressElement.value.trim() : '';
+        const placeName = placeNameElement ? placeNameElement.value.trim() : '';
 
         const postTitleError = document.getElementById('postTitleError');
-        const categoryError = document.getElementById('categoryError');
         const contentError = document.getElementById('contentError');
         const imageError = document.getElementById('imageError');
-        const addressError = document.getElementById('addressError');
+        const placeNameError = document.getElementById('placeNameError');
 
         let isValid = true;
 
@@ -144,13 +137,6 @@ document.addEventListener("DOMContentLoaded", function () {
             hideErrorMessage(postTitleError);
         }
 
-        if (!category) {
-            showErrorMessage(categoryError, '카테고리를 선택하세요.');
-            isValid = false;
-        } else {
-            hideErrorMessage(categoryError);
-        }
-
         if (!content) {
             showErrorMessage(contentError, '내용을 입력하세요.');
             isValid = false;
@@ -158,11 +144,11 @@ document.addEventListener("DOMContentLoaded", function () {
             hideErrorMessage(contentError);
         }
 
-        if (!address) {
-            showErrorMessage(addressError, '주소를 입력하세요.');
+        if (!placeName) {
+            showErrorMessage(placeNameError, '주소를 입력하세요.');
             isValid = false;
         } else {
-            hideErrorMessage(addressError);
+            hideErrorMessage(placeNameError);
         }
 
         if (selectedFiles.length === 0) {
@@ -189,81 +175,105 @@ document.addEventListener("DOMContentLoaded", function () {
         return isValid;
     }
 
-    const postForm = document.getElementById('postForm');
-    postForm.addEventListener('input', (event) => {
-        hideErrorMessage(document.getElementById(event.target.id + 'Error'));
-    });
-    postForm.addEventListener('change', (event) => {
-        hideErrorMessage(document.getElementById(event.target.id + 'Error'));
-    });
-    postForm.addEventListener('submit', function (event) {
+    async function getPresignedUrl(fileName) {
+        const response = await fetch(`/s3/pre-signed-url/image/${fileName}`);
+        const data = await response.json();
+        if (response.ok) {
+            return data.presignedUrl;
+        } else {
+            throw new Error(data.error || 'Failed to get presigned URL');
+        }
+    }
+
+    async function uploadFileToS3(file, presignedUrl) {
+        await fetch(presignedUrl, {
+            method: 'PUT',
+            body: file,
+            headers: {
+                'Content-Type': file.type
+            }
+        });
+    }
+
+    async function uploadFilesAndGetUrls() {
+        const urls = [];
+        for (const file of selectedFiles) {
+            const fileName = `${Date.now()}-${file.name}`;
+            const presignedUrl = await getPresignedUrl(fileName);
+            await uploadFileToS3(file, presignedUrl);
+            urls.push(presignedUrl.split('?')[0]); // URL에서 쿼리 파라미터 제거
+        }
+        return urls;
+    }
+
+    postForm.addEventListener('submit', async function(event) {
         event.preventDefault();
 
         if (!validateForm()) {
             return;
         }
 
-        openModal();
-    });
+        try {
+            const imageUrls = await uploadFilesAndGetUrls();
+            const mainImageUrl = imageUrls[thumbnailIndex];
 
-    function openModal() {
-        modal.style.display = "block";
-    }
+            const formData = new FormData(postForm);
+            formData.append('imageUrls', JSON.stringify(imageUrls));
+            formData.append('mainImageUrl', mainImageUrl);
 
-    function closeModal() {
-        modal.style.display = "none";
-    }
+            const response = await fetch('/post/write', {  // 여기가 중요한 부분입니다.
+                method: 'POST',
+                body: formData
+            });
 
-    closeBtn.addEventListener("click", closeModal);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
 
-    completeBtn.addEventListener("click", function() {
-        closeModal();
-        window.location.href = "/post/detail";
-        localStorage.removeItem('selectedFiles');
-        localStorage.removeItem('thumbnailIndex');
-    });
+            const result = await response.json();
 
-    window.addEventListener("click", function(event) {
-        if (event.target === modal) {
-            closeModal();
+            if (response.ok) {
+                window.location.href = `/post/detail?postId=${result.postId}`;
+            } else {
+                alert(`Error: ${result.message}\n${result.error}`);
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            alert('An error occurred while submitting the form.');
         }
     });
 
     function openMapPage() {
         localStorage.setItem('postFormState', JSON.stringify({
             postTitle: document.getElementById('postTitle').value.trim(),
-            category: document.getElementById('category').value,
             content: document.getElementById('content').value.trim(),
             bestMenu: document.getElementById('bestMenu').value.trim(), // 유지
             price: document.getElementById('price').value.trim(), // 유지
-            address: document.getElementById('address').value.trim(),
-            publicPost: publicPost.checked  // 공개 여부 상태 저장
+            placeName: document.getElementById('placeName').value.trim()
         }));
         window.location.href = '/post/map';
     }
 
     // 주소 입력 필드 클릭 시
-    addressInput.addEventListener('click', openMapPage);
-    addressButton.addEventListener('click', openMapPage);
+    placeNameInput.addEventListener('click', openMapPage);
+    placeNameButton.addEventListener('click', openMapPage);
 
     // 폼 상태 복원 함수
     function restoreFormState() {
         const postFormState = JSON.parse(localStorage.getItem('postFormState'));
         if (postFormState) {
             document.getElementById('postTitle').value = postFormState.postTitle;
-            document.getElementById('category').value = postFormState.category;
             document.getElementById('content').value = postFormState.content;
             document.getElementById('bestMenu').value = postFormState.bestMenu;
             document.getElementById('price').value = postFormState.price;
-            document.getElementById('address').value = postFormState.address;
-            publicPost.checked = postFormState.publicPost;
+            document.getElementById('placeName').value = postFormState.placeName;
             localStorage.removeItem('postFormState');
         }
 
         // 주소 복원
         const selectedPlace = JSON.parse(localStorage.getItem('selectedPlace'));
         if (selectedPlace) {
-            document.getElementById('address').value = selectedPlace.address_name || selectedPlace.road_address_name;
+            document.getElementById('placeName').value = selectedPlace.place_name || selectedPlace.road_address_name;
             localStorage.removeItem('selectedPlace');
         }
 

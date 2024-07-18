@@ -4,13 +4,15 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tbp.honeyjar.post.dao.PostMapper">
 
+    <!-- 포스트 리스트 조회 -->
     <resultMap id="postListResultMap" type="com.tbp.honeyjar.post.dto.PostListDTO">
         <id property="postId" column="post_id"/>
-        <result property="postTitle" column="title"/>
+        <result property="title" column="title"/>
         <result property="post" column="post"/>
-        <result property="profileImg" column="profile_img"/>
+        <!-- <result property="profileImg" column="profile_img"/> // user table -->
     </resultMap>
 
+    <!-- 포스트 상세 조회 -->
     <resultMap id="postResponseResultMap" type="com.tbp.honeyjar.post.dto.PostResponseDTO">
         <id property="postId" column="post_id"/>
         <result property="title" column="title"/>
@@ -19,114 +21,125 @@
         <result property="post" column="post"/>
         <result property="createAt" column="create_at"/>
         <result property="updateAt" column="update_at"/>
-        <result property="foodCategory" column="food_category"/>
+<!--        <result property="foodCategory" column="food_category"/>-->
         <result property="placeName" column="place_name"/>
-        <result property="xCoordinate" column="x_coordinate"/>
-        <result property="yCoordinate" column="y_coordinate"/>
-        <result property="profileImg" column="profile_img"/>
-        <result property="like" column="like"/>
-        <result property="commentId" column="comment_id"/>
-        <result property="rating" column="rating"/>
+<!--        <result property="xCoordinate" column="x_coordinate"/>-->
+<!--        <result property="yCoordinate" column="y_coordinate"/>-->
+        <!-- <result property="profileImg" column="profile_img"/> // user table -->
+        <!-- <result property="like" column="like"/> // like table -->
+        <!-- <result property="commentId" column="comment_id"/> // comment table -->
+        <!-- <result property="rating" column="rating"/> // rating table -->
     </resultMap>
 
+    <!-- 포스트 리스트 조회 쿼리 -->
     <select id="findAllPost" resultMap="postListResultMap">
         SELECT
-            p.post_id,
-            p.title,
-            p.post,
-            u.profile_img
+        p.post_id,
+        p.title,
+        p.post
+        <!-- u.profile_img // user table -->
         FROM
-            post p
-        JOIN
-            user u ON p.user_id = u.id
+        post p
+        <!-- JOIN user u ON p.user_id = u.id // user table -->
     </select>
 
+    <!-- 포스트 상세 조회 쿼리 -->
     <select id="findPostById" resultMap="postResponseResultMap">
         SELECT
-            p.post_id,
-            p.title,
-            p.recommend_menu,
-            p.price,
-            p.post,
-            p.create_at,
-            p.update_at,
-            f.food_category,
-            m.place_name,
-            m.x_coordinate,
-            m.y_coordinate,
-            u.profile_img,
-            p.like,
-            c.comment_id,
-            r.rating
+        p.post_id,
+        p.title,
+        p.recommend_menu,
+        p.price,
+        p.post,
+        p.create_at,
+        p.update_at,
+        <!--f.food_category,-->
+        <!-- m.place_name,-->
+        <!-- m.x_coordinate,-->
+        <!-- m.y_coordinate-->
+        <!-- u.profile_img, // user table -->
+        <!-- p.like, // like table -->
+        <!-- c.comment_id, // comment table -->
+        <!-- r.rating // rating table -->
         FROM
-            post p
+        post p
+<!--        JOIN-->
+<!--        foodcategory f ON p.food_category_id = f.id-->
         JOIN
-            foodcategory f ON p.food_category_id = f.id
-        JOIN
-            map m ON p.map_id = m.id
-        JOIN
-            user u ON p.user_id = u.id
-        LEFT JOIN
-            comment c ON p.post_id = c.post_id
-        LEFT JOIN
-            rating r ON p.post_id = r.post_id
+        map m ON p.map_id = m.id
+        <!-- JOIN user u ON p.user_id = u.id // user table -->
+        <!-- LEFT JOIN comment c ON p.post_id = c.post_id // comment table -->
+        <!-- LEFT JOIN rating r ON p.post_id = r.post_id // rating table -->
         WHERE
-            p.post_id = #{postId}
+        p.post_id = #{postId}
     </select>
 
+    <!-- 포스트 등록 쿼리 -->
     <insert id="createPost">
-        INSERT
-            INTO post
-        (
+        INSERT INTO post (
             title,
             recommend_menu,
             price,
             post,
             create_at,
-            food_category_id,
-            place_name,
-            x_coordinate,
-            y_coordinate,
-            user_id
+            place_name
         )
-        VALUES
-        (
-            #{title},
-            #{recommendMenu},
-            #{price},
-            #{post},
-            #{createAt},
-                (
-                    SELECT id
-                    FROM foodcategory
-                    WHERE food_category = #{foodCategory}
-                ),
+        VALUES (
+        #{title},
+        #{recommendMenu},
+        #{price},
+        #{post},
+        NOW(),
         #{placeName},
-        #{xCoordinate},
-        #{yCoordinate},
-        #{userId}
         )
     </insert>
 
+    <!-- 포스트 수정 쿼리 -->
     <update id="updatePost">
-        UPDATE
-            post
+        UPDATE post
         SET
-            title = #{title},
+        title = #{title},
         recommend_menu = #{recommendMenu},
         price = #{price},
         post = #{post},
         update_at = #{updateAt},
-        food_category_id =
-            (
-                SELECT id
-                FROM foodcategory
-                WHERE food_category = #{foodCategory}
-            ),
+<!--        food_category_id = (SELECT id FROM foodcategory WHERE food_category = #{foodCategory}),-->
         place_name = #{placeName},
         x_coordinate = #{xCoordinate},
         y_coordinate = #{yCoordinate}
+        <!-- user_id = #{userId} -->
         WHERE post_id = #{postId}
     </update>
 
+    <!-- 이미지 삽입 쿼리 -->
+    <insert id="insertImages">
+        <foreach collection="images" item="image" separator=";">
+            INSERT INTO image (
+            url,
+            user_id,
+            post_id,
+            is_main
+            )
+            VALUES (
+            #{image.url},
+            #{image.userId},
+            #{image.postId},
+            #{image.isMain}
+            )
+        </foreach>
+    </insert>
+
+    <!-- 포스트 ID로 이미지 조회 쿼리 -->
+    <select id="findImagesByPostId" resultType="com.tbp.honeyjar.image.dto.ImageDTO">
+        SELECT
+        image_id,
+        url,
+        user_id,
+        post_id,
+        is_main
+        FROM
+        image
+        WHERE
+        post_id = #{postId}
+    </select>
 </mapper>

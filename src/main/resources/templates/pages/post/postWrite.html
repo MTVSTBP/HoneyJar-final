@@ -11,33 +11,34 @@
 </head>
 <body>
 <div id="container">
-    <form id="postForm" th:object="${postRequestDTO}" th:action="@{/posts/create}" method="post">
+    <form id="postForm" th:object="${postRequestDTO}" th:action="@{/posts/write}" method="post">
         <div class="category_public_wrap">
             <!-- category -->
-            <div class="category_wrap">
-                <label for="category">카테고리</label>
-                <div class="custom-select-wrapper">
-                    <select id="category" th:field="*{category}">
-                        <option value="">선택</option>
-                        <option th:each="category : ${categories}"
-                                th:value="${category.id}"
-                                th:text="${category.name}">카테고리</option>
-                    </select>
-                </div>
-                <p class="error-message" id="categoryError"></p>
-            </div>
+            <!--            <div class="category_wrap">-->
+            <!--                <label for="category">카테고리</label>-->
+            <!--                <div class="custom-select-wrapper">-->
+            <!--                    <select id="category" th:field="*{foodCategory}">-->
+            <!--                        <option value="">선택</option>-->
+            <!--                        <option th:each="category : ${categories}"-->
+            <!--                                th:value="${category.id}"-->
+            <!--                                th:text="${category.name}">카테고리</option>-->
+            <!--                    </select>-->
+            <!--                </div>-->
+            <!--                <p class="error-message" id="categoryError"></p>-->
+            <!--            </div>-->
             <!-- //category -->
 
             <!-- 공개 여부 -->
-            <div class="public_wrap">
-                <label for="publicPost">공개 여부</label>
-                <div class="toggle-switch">
-                    <input type="checkbox" id="publicPost" checked="true">
-                    <label for="publicPost"></label>
-                </div>
-            </div>
+            <!--            <div class="public_wrap">-->
+            <!--                <label for="publicPost">공개 여부</label>-->
+            <!--                <div class="toggle-switch">-->
+            <!--                    <input type="checkbox" id="publicPost" th:field="*{publicPost}">-->
+            <!--                    <label for="publicPost"></label>-->
+            <!--                </div>-->
+            <!--            </div>-->
             <!-- //공개 여부 -->
         </div>
+
 
         <!-- image upload -->
         <div class="form-group">
@@ -57,7 +58,7 @@
         <div class="form-group">
             <div class="post_title">
                 <label for="postTitle">제목</label>
-                <input type="text" id="postTitle" th:field="*{postTitle}" placeholder="제목을 입력하세요">
+                <input type="text" id="postTitle" th:field="*{title}" placeholder="제목을 입력하세요">
                 <p class="error-message" id="postTitleError"></p>
             </div>
         </div>
@@ -66,7 +67,7 @@
         <!-- recommended menu -->
         <div class="form-group">
             <label for="bestMenu">대표 메뉴</label>
-            <input type="text" id="bestMenu" th:field="*{bestMenu}" placeholder="추천 메뉴를 입력하세요">
+            <input type="text" id="bestMenu" th:field="*{recommendMenu}" placeholder="추천 메뉴를 입력하세요">
             <p class="error-message" id="bestMenuError"></p>
         </div>
         <!-- //recommended menu -->
@@ -79,23 +80,23 @@
         </div>
         <!-- //price -->
 
-        <!-- address -->
-        <div class="form-group address_wrap">
-            <label for="address">주소</label>
+        <!-- placeName -->
+        <div class="form-group placeName_wrap">
+            <label for="placeName">주소</label>
             <div class="input-group">
-                <input type="text" id="address" th:field="*{address}" placeholder="주소를 입력하세요">
+                <input type="text" id="placeName" th:field="*{placeName}" placeholder="주소를 입력하세요">
                 <button type="button" id="openMap">
                     <img src="/assets/svg/place.svg" alt="마커이미지">
                 </button>
             </div>
-            <p class="error-message" id="addressError"></p>
+            <p class="error-message" id="placeNameError"></p>
         </div>
-        <!-- //address -->
+        <!-- //placeName -->
 
         <!-- content -->
         <div class="form-group">
             <label for="content">내용</label>
-            <textarea id="content" th:field="*{content}" placeholder="내용을 입력하세요" rows="5"></textarea>
+            <textarea id="content" th:field="*{post}" placeholder="내용을 입력하세요" rows="5"></textarea>
             <p class="error-message" id="contentError"></p>
         </div>
         <!-- //content -->
