@@ -1,7 +1,7 @@
 package com.tbp.honeyjar.admin.service;
 
+import com.tbp.honeyjar.admin.dao.NoticeMapper;
 import com.tbp.honeyjar.admin.dto.NoticeDto;
-import com.tbp.honeyjar.admin.repository.NoticeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,13 +11,13 @@ import java.util.List;
 @Service
 public class NoticeService {
 
-    private final NoticeRepository noticeRepository;
+    private final NoticeMapper noticeMapper;
 
     public List<NoticeDto> findAllNotices() {
-        return noticeRepository.findAllNotices();
+        return noticeMapper.findAllNotices();
     }
 
-    public int findById(Long noticeId) {
-        return noticeRepository.findById(noticeId);
+    public NoticeDto findById(Long id) {
+        return noticeMapper.findById(id);
     }
 }

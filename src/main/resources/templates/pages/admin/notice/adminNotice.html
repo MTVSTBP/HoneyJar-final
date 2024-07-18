@@ -27,9 +27,9 @@
     </div>
 
     <div class="notice">
-        <ul th:object="${dto}" class="list">
+        <ul class="list">
             <!-- 클릭했을때, 읽음 처리로 컬러 변경됨. class="notice_link" -->
-            <li>
+            <li th:each="notice : ${noticeList}">
                 <div class="more_h">
                     <img src="/assets/svg/more_horiz.svg" alt="more_horiz">
                     <div class="click_box">
@@ -39,38 +39,16 @@
                         </div>
                     </div>
                 </div>
-                <a href="/admin/notice/" class="notice_link">
+                <a th:href="@{|/admin/notice/${notice.noticeId}|}" class="notice_link">
                     <div class="item">
-                        <div th:text="*{title}" class="title">정기 업로드 예정</div>
+                        <div th:text="${notice.title}" class="title">정기 업로드 예정</div>
                         <div class="context_text">
-                            <p th:text="*{post}" class="context">AM 01:00 ~ 05:00 업로드 예정이 있으므로 서비스가 원할하지 않을 수도
+                            <p th:text="${notice.post}" class="context">AM 01:00 ~ 05:00 업로드 예정이 있으므로 서비스가 원할하지 않을 수도
                                 있습니다.</p>
-                            <span th:text="*{created_at}">2024.07.01</span>
+                            <span th:text="${notice.createdAt}">2024.07.01</span>
                         </div>
                     </div>
                 </a>
-
-            </li>
-            <li>
-                <div class="more_h">
-                    <img src="/assets/svg/more_horiz.svg" alt="more_horiz">
-                    <div class="click_box">
-                        <div class="d_flex">
-                            <a class="edit_p" href="/src/pages/html/adminQnaCorrection.html">수정</a>
-                            <a id="deletePost" class="delete_p" href="javascript:void(0)">삭제</a>
-                        </div>
-                    </div>
-                </div>
-                <a href="/src/pages/html/noticeDetail.html" class="notice_link">
-                    <div class="item">
-                        <div class="title">정기 업로드 예정</div>
-                        <div class="context_text">
-                            <p class="context">AM 01:00 ~ 05:00 업로드 예정이 있으므로 서비스가 원할하지 않을 수도 있습니다.</p>
-                            <span>2024.07.01</span>
-                        </div>
-                    </div>
-                </a>
-
             </li>
         </ul>
     </div>

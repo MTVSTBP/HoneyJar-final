@@ -23,27 +23,31 @@ public class AdminNoticeController {
     @GetMapping
     public String notice(Model model) {
 
-        NoticeDto dto = new NoticeDto(1L, "Title Test", "Content Test", LocalDateTime.now(), LocalDateTime.now());
+        List<NoticeDto> noticeList = noticeService.findAllNotices();
 
-        model.addAttribute("dto", dto);
-
-        List<NoticeDto> notices = noticeService.findAllNotices();
-        if (!notices.isEmpty()) {
-            model.addAttribute(notices);
+        if (!noticeList.isEmpty()) {
+            model.addAttribute("noticeList", noticeList);
         }
 
         return "pages/admin/notice/adminNotice";
     }
 
-    @GetMapping("/write")
-    public String write() {
-        return "pages/admin/notice/adminNoticeWrite";
+    @GetMapping("/{notice_id}")
+    public String noticeDetail(@PathVariable Long notice_id, Model model) {
+        NoticeDto notice = noticeService.findById(notice_id);
+
+        model.addAttribute("notice", notice);
+
+        return "pages/admin/notice/adminNoticeDetail";
     }
 
     @GetMapping("/write/{notice_id}")
-    public String write(@PathVariable Long notice_id) {
-        noticeService.findById(notice_id);
-        return "pages/admin/notice/adminNoticeDetail";
+    public String write(@PathVariable Long notice_id, Model model) {
+        NoticeDto notice = noticeService.findById(notice_id);
+
+        model.addAttribute("notice", notice);
+
+        return "pages/admin/notice/adminNoticeCorrection";
     }
 }
 

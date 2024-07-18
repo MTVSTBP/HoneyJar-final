@@ -1,23 +1,35 @@
 package com.tbp.honeyjar.admin.dto;
 
-import lombok.Data;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@NoArgsConstructor
 public class NoticeDto {
 
-    private long id;
+    private long noticeId;
     private String title;
     private String post;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
-    public NoticeDto(long id, String title, String post, LocalDateTime created_at, LocalDateTime updated_at) {
-        this.id = id;
+    @Builder
+    public NoticeDto(String title, String post, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.title = title;
         this.post = post;
-        this.created_at = created_at;
-        this.updated_at = updated_at;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
+    public NoticeDto toDto() {
+        return this.builder()
+                .title(title)
+                .post(post)
+                .createdAt(createdAt)
+                .updatedAt(updatedAt)
+                .build();
     }
 }
