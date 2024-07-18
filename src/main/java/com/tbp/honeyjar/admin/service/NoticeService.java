@@ -16,4 +16,8 @@ public class NoticeService {
     public List<NoticeDto> findAllNotices() {
         return noticeMapper.findAllNotices();
     }
+
+    public NoticeDto findById(Long id) {
+        return noticeMapper.findById(id);
+    }
 }
