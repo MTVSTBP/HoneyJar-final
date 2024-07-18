@@ -3,6 +3,7 @@ package com.tbp.honeyjar.admin.service;
 import com.tbp.honeyjar.admin.dao.NoticeMapper;
 import com.tbp.honeyjar.admin.dto.notice.NoticeListResponseDto;
 import com.tbp.honeyjar.admin.dto.notice.NoticeResponseDto;
+import com.tbp.honeyjar.admin.dto.notice.NoticeSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,5 +25,9 @@ public class NoticeService {
     @Transactional(readOnly = true)
     public NoticeResponseDto findById(Long id) {
         return noticeMapper.findById(id);
+    }
+
+    public void save(NoticeSaveRequestDto requestDto) {
+        noticeMapper.save(requestDto);
     }
 }

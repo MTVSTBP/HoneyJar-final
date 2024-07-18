@@ -37,4 +37,21 @@
         from notice
         where notice_id = #{noticeId}
     </select>
+
+    <insert id="save" parameterType="com.tbp.honeyjar.admin.dto.notice.NoticeSaveRequestDto">
+        insert into notice
+        (
+            title,
+            post,
+            created_at,
+            updated_at
+        )
+        values
+        (
+            #{title},
+            #{post},
+            #{createdAt},
+            #{updatedAt}
+        )
+    </insert>
 </mapper>
