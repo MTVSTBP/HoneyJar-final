@@ -15,4 +15,6 @@ public interface NoticeMapper {
     NoticeResponseDto findById(Long id);
 
     void save(NoticeSaveRequestDto dto);
+
+    Long delete(int postId);
 }

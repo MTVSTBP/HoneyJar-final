@@ -30,4 +30,8 @@ public class NoticeService {
     public void save(NoticeSaveRequestDto requestDto) {
         noticeMapper.save(requestDto);
     }
+
+    public Long delete(int postId) {
+        return noticeMapper.delete(postId);
+    }
 }

@@ -66,5 +66,16 @@ public class AdminNoticeController {
 
         return "pages/admin/notice/adminNoticeCorrection";
     }
+
+    @GetMapping("/delete/{notice_id}")
+    public String delete(@PathVariable Long notice_id) {
+        NoticeResponseDto post = noticeService.findById(notice_id);
+
+        if (post != null){
+            noticeService.delete(post.getNoticeId());
+        }
+
+        return "redirect:/admin/notice";
+    }
 }
 

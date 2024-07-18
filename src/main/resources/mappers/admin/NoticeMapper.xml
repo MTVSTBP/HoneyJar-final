@@ -54,4 +54,10 @@
             #{updatedAt}
         )
     </insert>
+
+    <delete id="delete" parameterType="_int">
+        delete from notice
+        where
+            notice_id = #{noticeId}
+    </delete>
 </mapper>
