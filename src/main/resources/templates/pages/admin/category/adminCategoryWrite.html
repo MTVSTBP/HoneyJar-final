@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/writeLayout}"
+      layout:fragment="content"
+>
+
+<head>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/admin/category/adminCategoryWrite.css}"/>
+    <th:block layout:fragment="title">
+        <title>adminCategory</title>
+    </th:block>
+</head>
+
+<body>
+    <!-- 헤더 영역 -->
+    <div></div>
+    <!-- //헤더 영역 -->
+
+    <div id="container">
+        <form id="Form">
+            <!-- category -->
+            <div class="category_wrap">
+                <label for="category">카테고리</label>
+                <div class="custom-select-wrapper">
+                    <select id="category">
+                        <option value="">선택</option>
+                        <option value="best_c">맛집</option>
+                        <option value="faq_c">FAQ</option>
+                        <option value="notice_c">문의</option>
+                        <!-- 다른 카테고리 옵션들 -->
+                    </select>
+                </div>
+                <p class="error-message" id="categoryError"></p>
+            </div>
+            <!-- //category -->
+
+            <!-- title -->
+            <div class="form-group">
+                <div class="title">
+                    <label for="categoryCreated">카테고리 등록</label>
+                    <input type="text" id="categoryCreated" placeholder="카테고리를 등록 하세요">
+                    <p class="error-message" id="titleError"></p>
+                </div>
+            </div>
+            <!-- //title -->
+
+            <!-- submit button -->
+            <div class="submit_wrap">
+                <button type="submit" id="submitBtn">등록</button>
+            </div>
+            <!-- //submit button -->
+
+        </form>
+
+        <!-- Modal -->
+        <!-- 모달에 확인 버튼 추가 -->
+        <div id="Modal" class="modal">
+            <div class="modal-content">
+                <span class="close">
+                    <img src="/assets/svg/close.svg" alt="닫기">
+                </span>
+                <div class="modal-text">
+                    <p>등록이 완료되었어요!</p>
+                </div>
+                <button id="complete" class="complete">확인</button>
+            </div>
+        </div>
+    </div>
+    <script th:inline="javascript" type="text/javascript" th:src="@{/js/pages/admin/category/adminCategoryWrite.js}"></script>
+</body>
+
+</html>

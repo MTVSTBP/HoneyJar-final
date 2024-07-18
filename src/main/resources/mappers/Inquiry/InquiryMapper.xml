@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tbp.honeyjar.inquiry.mapper.InquiryMapper">
+    <resultMap  id="inquiryResultMap"   type="com.tbp.honeyjar.inquiry.dto.InquiryDto">
+        <id     property="id"           column="inquiry_id"/>
+        <result property="title"        column="title"/>
+        <result property="post"         column="post"/>
+        <result property="createdAt"    column="inquiry_at"/>
+        <result property="updatedAt"    column="updated_at"/>
+        <result property="userId"       column="user_id"/>
+        <result property="categoryId"   column="category_id"/>
+    </resultMap>
+
+    <select id="getInquiryList" resultMap="inquiryResultMap">
+        SELECT
+            id,
+            post,
+            createdAt,
+            updatedAt,
+            userId,
+            categoryId
+        FROM inquiry
+        order by createdId desc
+    </select>
+
+<!--    <update id="updateInquiry" resultMap="inquiryResult">-->
+<!--        UPDATE-->
+<!--        SET-->
+<!--            inquiry (-->
+<!--                title, post,-->
+<!--                inquiry_date-->
+<!--            )-->
+<!--        VALUES (-->
+<!--            #{inquiryTitle},-->
+<!--            #{inquiryContent},-->
+<!--            now()-->
+<!--        )-->
+<!--    </update>-->
+
+</mapper>

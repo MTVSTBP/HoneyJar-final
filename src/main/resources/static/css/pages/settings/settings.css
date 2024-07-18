@@ -1,0 +1,160 @@
+/* Font Face */
+@font-face {
+    font-family: "Pretendard-Regular";
+    src: url("/assets/font/Pretendard-Regular.otf") format("opentype");
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Pretendard-Bold";
+    src: url("/assets/font/Pretendard-Bold.otf") format("opentype");
+    font-style: normal;
+}
+/* Font Face End */
+
+/* Common Styles */
+input,
+select,
+textarea,
+button {
+    outline: 0;
+}
+
+.page-container {
+    min-height: calc(100vh - 167px); /* 100vh에서 header와 footer 높이를 뺀 값 */
+    display: flex;
+    flex-direction: column;
+}
+
+.content-wrapper {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.main {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 30px 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+/* Common Styles End */
+
+/* header & footer styles */
+.header,
+.footer {
+    width: 100%;
+}
+
+.header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    height: 77px;
+    background-color: #ffd140;
+}
+
+.footer {
+    height: 90px;
+    background-color: #ff8243;
+}
+/* header & footer styles End */
+
+/* User Info Styles */
+.user-info__profile {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin: 0 0 70px 0;
+}
+
+.user-info__image {
+    width: 74px;
+    height: 74px;
+    margin: 0 15px 0 0;
+}
+
+.user-info__container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+.user-info__row {
+    display: flex;
+    align-items: center;
+    margin: 5px 0 5px 0;
+}
+
+.user-info__column {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 0;
+}
+
+.user-info__label {
+    font-family: "Pretendard-Regular";
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0 8px 0 0;
+}
+
+.user-info__nickname {
+    font-family: "Pretendard-Bold";
+    font-size: 20px;
+    font-weight: 700;
+    color: #989898;
+}
+
+.user-info__introduction {
+    font-family: "Pretendard-Regular";
+    font-size: 14px;
+    font-weight: 300;
+    color: #989898;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+}
+/* User Info Styles End */
+
+/* Setting Tab Styles */
+.setting-tab {
+    width: 100%;
+    position: relative;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.setting-tab__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0 20px 0;
+}
+
+.setting-tab__notification {
+    width: 8px;
+    height: 8px;
+    background-color: #ff8243;
+    border-radius: 50%;
+    display: none;
+}
+
+.setting-tab__notification.active {
+    display: block;
+}
+
+.setting-tab__text {
+    font-family: "Pretendard-Regular";
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* .setting-tab:last-child {
+  margin: 0 0 35px 0;
+} */
+/* Setting Tab Styles End */

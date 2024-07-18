@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}"
+      layout:fragment="content">
+<head>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/inquiry/inquiryDetail.css}"/>
+    <th:block layout:fragment="title">
+        <title>1:1 문의 상세</title>
+    </th:block>
+    <script defer="defer" th:src="@{/js/pages/inquiry/inquiryDetail.js}"></script>
+</head>
+<body>
+<!-- 헤더영역 -->
+<div></div>
+<!-- //헤더영역 -->
+<div id="container">
+    <div class="sub_title">
+        <a href="/" id="back-button">
+            <img src="/assets/svg/arrow_back.svg" alt="뒤로가기">
+            <h4>1:1 문의</h4>
+        </a>
+    </div>
+    <div class="inquiryDetail">
+        <div class="info">
+            <div class="title">
+                <h2 th:text="${inquiry.title}">문의 드립니다.</h2>
+                <div class="user_info">
+                    <img src="/assets/svg/base_profile.svg" alt="관리자프로필">
+                    <p th:text="${inquiry.userId}">사용자</p>
+                </div>
+                <span th:text="${#temporals.format(inquiry.createdDate, 'yyyy-MM-dd')}">2024.07.01</span>
+            </div>
+        </div>
+        <div class="inquiry_context">
+            <p th:text="${inquiry.content}">팔로우 차단할 수 있는 기능은 없나요??</p>
+        </div>
+    </div>
+    <!-- 관리자인 경우에만 보이게 추후 적용해야됨. -->
+    <div class="button_list">
+        <button id="edit-button" class="btn">수정</button>
+    </div>
+
+    <!-- 삭제 확인 모달 -->
+    <div id="deleteConfirmModal" class="modal">
+        <div class="modal-content">
+            <span class="close">
+                <img src="/assets/svg/close.svg" alt="닫기">
+            </span>
+            <div class="modal-text">
+                <p>정말로 삭제 하시겠어요?</p>
+            </div>
+            <button id="confirmDelete" class="complete">삭제</button>
+        </div>
+    </div>
+
+    <!-- 삭제 완료 모달 -->
+    <div id="deleteSuccessModal" class="modal">
+        <div class="modal-content">
+            <span class="close">
+                <img src="/assets/svg/close.svg" alt="닫기">
+            </span>
+            <div class="modal-text">
+                <p>삭제가 완료되었습니다!</p>
+            </div>
+            <button id="completeDelete" class="complete">확인</button>
+        </div>
+    </div>
+
+    <div class="comment_input">
+        <div class="edit_icon">
+            <img src="/assets/svg/mode.svg" alt="edit">
+        </div>
+        <div class="input_comment">
+            댓글
+        </div>
+        <div class="input_area">
+            <textarea class="text" placeholder="댓글을 입력하세요."></textarea>
+        </div>
+        <div class="input_submit">
+            <button type="submit" class="submit_button">등록</button>
+        </div>
+        <span><hr></span>
+    </div>
+
+    <div class="comment_list">
+        <div th:each="comment : ${comments}" class="user_details">
+            <div class="user_record">
+                <img th:src="@{${comment.profileImg}}" alt="사용자프로필" class="user_profile">
+                <div class="user">
+                    <div class="user_info">
+                        <span class="user_name" th:text="${comment.nickName}">관리자</span>
+                    </div>
+                </div>
+            </div>
+            <div class="user_comment">
+                <p class="commentText" th:text="${comment.content}">안녕하세요. 꿀단지 입니다. 관련 문의에 대해 답변드립니다.</p>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
