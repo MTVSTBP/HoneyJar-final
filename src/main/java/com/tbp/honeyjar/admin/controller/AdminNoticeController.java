@@ -1,5 +1,6 @@
 package com.tbp.honeyjar.admin.controller;
 
+import com.tbp.honeyjar.admin.dto.notice.NoticeCorrectionRequestDto;
 import com.tbp.honeyjar.admin.dto.notice.NoticeListResponseDto;
 import com.tbp.honeyjar.admin.dto.notice.NoticeResponseDto;
 import com.tbp.honeyjar.admin.dto.notice.NoticeSaveRequestDto;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static java.time.LocalDateTime.*;
 
 @RequiredArgsConstructor
 @Controller
@@ -50,8 +53,8 @@ public class AdminNoticeController {
 
     @PostMapping("/write")
     public String writeNotice(NoticeSaveRequestDto requestDto) {
-        requestDto.setCreatedAt(LocalDateTime.now());
-        requestDto.setUpdatedAt(LocalDateTime.now());
+        requestDto.setCreatedAt(now());
+        requestDto.setUpdatedAt(now());
 
         noticeService.save(requestDto);
 
@@ -59,7 +62,7 @@ public class AdminNoticeController {
     }
 
     @GetMapping("/correction/{notice_id}")
-    public String write(@PathVariable Long notice_id, Model model) {
+    public String correction(@PathVariable Long notice_id, Model model) {
         NoticeResponseDto notice = noticeService.findById(notice_id);
 
         model.addAttribute("notice", notice);
@@ -67,13 +70,25 @@ public class AdminNoticeController {
         return "pages/admin/notice/adminNoticeCorrection";
     }
 
-    @GetMapping("/delete/{notice_id}")
-    public String delete(@PathVariable Long notice_id) {
-        NoticeResponseDto post = noticeService.findById(notice_id);
+    @PostMapping("/correction/{notice_id}")
+    public String correctionNotice(@PathVariable Long notice_id, NoticeCorrectionRequestDto requestDto) {
+        NoticeResponseDto notice = noticeService.findById(notice_id);
 
-        if (post != null){
-            noticeService.delete(post.getNoticeId());
+
+        if (notice != null){
+            requestDto.setUpdatedAt(now());
+            requestDto.setNoticeId(notice.getNoticeId());
+            noticeService.correction(requestDto);
         }
+
+        return "redirect:/admin/notice";
+    }
+
+    @GetMapping("/delete/{notice_id}")
+    public String delete(@PathVariable Long notice_id, Model model) {
+        NoticeResponseDto notice = noticeService.findById(notice_id);
+
+        noticeService.delete(notice.getNoticeId());
 
         return "redirect:/admin/notice";
     }

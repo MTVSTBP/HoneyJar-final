@@ -1,5 +1,6 @@
 package com.tbp.honeyjar.admin.dao;
 
+import com.tbp.honeyjar.admin.dto.notice.NoticeCorrectionRequestDto;
 import com.tbp.honeyjar.admin.dto.notice.NoticeListResponseDto;
 import com.tbp.honeyjar.admin.dto.notice.NoticeResponseDto;
 import com.tbp.honeyjar.admin.dto.notice.NoticeSaveRequestDto;
@@ -17,4 +18,6 @@ public interface NoticeMapper {
     void save(NoticeSaveRequestDto dto);
 
     Long delete(int postId);
+
+    Long correction(NoticeCorrectionRequestDto dto);
 }

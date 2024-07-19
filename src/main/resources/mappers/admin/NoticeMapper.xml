@@ -55,6 +55,16 @@
         )
     </insert>
 
+    <update id="correction" parameterType="com.tbp.honeyjar.admin.dto.notice.NoticeCorrectionRequestDto">
+        update notice
+        set
+            title = #{title},
+            post = #{post},
+            updated_at = #{updatedAt}
+        where
+            notice_id = #{noticeId}
+    </update>
+
     <delete id="delete" parameterType="_int">
         delete from notice
         where
