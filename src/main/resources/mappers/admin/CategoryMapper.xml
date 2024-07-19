@@ -29,4 +29,34 @@
         from other_category
         order by category_id
     </select>
+
+    <insert id="saveFoodCategory" parameterType="com.tbp.honeyjar.admin.dto.category.FoodCategorySaveRequestDto">
+        insert into food_category
+        (
+            category_name,
+            created_at,
+            updated_at
+        )
+        values
+        (
+            #{name},
+            #{createdAt},
+            #{updatedAt}
+        )
+    </insert>
+
+    <insert id="saveQnaCategory" parameterType="com.tbp.honeyjar.admin.dto.category.QnaCategorySaveRequestDto">
+        insert into other_category
+        (
+        category_name,
+        created_at,
+        updated_at
+        )
+        values
+        (
+        #{name},
+        #{createdAt},
+        #{updatedAt}
+        )
+    </insert>
 </mapper>
