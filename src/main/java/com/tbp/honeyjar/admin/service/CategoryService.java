@@ -50,4 +50,12 @@ public class CategoryService {
     public Long correctionQnaCategory(QnaCategoryCorrectionDto requestDto) {
         return categoryMapper.correctionQnaCategory(requestDto);
     }
+
+    public Long deleteFoodCategory(Long id) {
+        return categoryMapper.deleteFoodCategory(id);
+    }
+
+    public Long deleteQnaCategory(Long id) {
+        return categoryMapper.deleteQnaCategory(id);
+    }
 }

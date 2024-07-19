@@ -22,4 +22,8 @@ public interface CategoryMapper {
     Long correctionFoodCategory(FoodCategoryCorrectionDto requestDto);
 
     Long correctionQnaCategory(QnaCategoryCorrectionDto requestDto);
+
+    Long deleteFoodCategory(Long id);
+
+    Long deleteQnaCategory(Long id);
 }

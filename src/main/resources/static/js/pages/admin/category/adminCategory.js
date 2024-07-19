@@ -64,18 +64,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // 삭제 클릭 이벤트 등록
-    function registerDeleteClickEvents() {
-        const deleteButtons = document.querySelectorAll('.delete_p');
-
-        deleteButtons.forEach(function(deleteButton) {
-            deleteButton.addEventListener('click', function(event) {
-                event.preventDefault();
-                const category = this.getAttribute('data-category');
-                const index = this.getAttribute('data-index');
-                openDeleteConfirmModal(category, index);
-            });
-        });
-    }
+    // function registerDeleteClickEvents() {
+    //     const deleteButtons = document.querySelectorAll('.delete_p');
+    //
+    //     deleteButtons.forEach(function(deleteButton) {
+    //         deleteButton.addEventListener('click', function(event) {
+    //             event.preventDefault();
+    //             const category = this.getAttribute('data-category');
+    //             const index = this.getAttribute('data-index');
+    //             openDeleteConfirmModal(category, index);
+    //         });
+    //     });
+    // }
 
     // 삭제 확인 모달 열기
     function openDeleteConfirmModal(category, index) {

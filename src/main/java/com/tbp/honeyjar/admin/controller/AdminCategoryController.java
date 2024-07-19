@@ -111,4 +111,26 @@ public class AdminCategoryController {
 
         return "redirect:/admin/category";
     }
+
+    @GetMapping("/delete/food/{id}")
+    public String deleteFoodCategory(@PathVariable Long id) {
+        FoodResponseDto food = categoryService.findFoodById(id);
+
+        if (food != null) {
+            categoryService.deleteFoodCategory(food.getId());
+        }
+
+        return "redirect:/admin/category";
+    }
+
+    @GetMapping("/delete/qna/{id}")
+    public String deleteQnaCategory(@PathVariable Long id) {
+        QnaResponseDto qna = categoryService.findQnaById(id);
+
+        if (qna != null) {
+            categoryService.deleteQnaCategory(qna.getId());
+        }
+
+        return "redirect:/admin/category";
+    }
 }
