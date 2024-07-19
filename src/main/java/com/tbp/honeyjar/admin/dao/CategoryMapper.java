@@ -18,4 +18,8 @@ public interface CategoryMapper {
     Long saveFoodCategory(FoodCategorySaveRequestDto requestDto);
 
     Long saveQnaCategory(QnaCategorySaveRequestDto requestDto);
+
+    Long correctionFoodCategory(FoodCategoryCorrectionDto requestDto);
+
+    Long correctionQnaCategory(QnaCategoryCorrectionDto requestDto);
 }

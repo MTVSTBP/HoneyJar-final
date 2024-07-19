@@ -74,6 +74,20 @@ public class AdminCategoryController {
         return "pages/admin/category/adminCategoryCorrection";
     }
 
+    @PostMapping("/correction/food/{id}")
+    public String correctionFood(@PathVariable Long id, FoodCategoryCorrectionDto requestDto) {
+
+        FoodResponseDto food = categoryService.findFoodById(id);
+
+        if (food != null) {
+            requestDto.setUpdatedAt(LocalDateTime.now());
+            requestDto.setId(food.getId());
+            categoryService.correctionFoodCategory(requestDto);
+        }
+
+        return "redirect:/admin/category";
+    }
+
     @GetMapping("/correction/qna/{id}")
     public String correctionQna(@PathVariable Long id, Model model) {
 
@@ -82,5 +96,19 @@ public class AdminCategoryController {
         model.addAttribute("data", data);
 
         return "pages/admin/category/adminCategoryCorrection";
+    }
+
+    @PostMapping("/correction/qna/{id}")
+    public String correctionQna(@PathVariable Long id, QnaCategoryCorrectionDto requestDto) {
+
+        FoodResponseDto food = categoryService.findFoodById(id);
+
+        if (food != null) {
+            requestDto.setUpdatedAt(LocalDateTime.now());
+            requestDto.setId(food.getId());
+            categoryService.correctionQnaCategory(requestDto);
+        }
+
+        return "redirect:/admin/category";
     }
 }

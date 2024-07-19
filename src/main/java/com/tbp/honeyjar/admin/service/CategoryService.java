@@ -42,4 +42,12 @@ public class CategoryService {
     public Long saveQnaCategory(QnaCategorySaveRequestDto requestDto) {
         return categoryMapper.saveQnaCategory(requestDto);
     }
+
+    public Long correctionFoodCategory(FoodCategoryCorrectionDto requestDto) {
+        return categoryMapper.correctionFoodCategory(requestDto);
+    }
+
+    public Long correctionQnaCategory(QnaCategoryCorrectionDto requestDto) {
+        return categoryMapper.correctionQnaCategory(requestDto);
+    }
 }

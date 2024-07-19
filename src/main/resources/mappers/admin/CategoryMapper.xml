@@ -85,4 +85,20 @@
         from other_category
         where category_id = #{id}
     </select>
+
+    <update id="correctionFoodCategory" parameterType="com.tbp.honeyjar.admin.dto.category.FoodCategoryCorrectionDto">
+        update food_category
+        set
+            category_name = #{name}
+        where
+            category_id = #{id}
+    </update>
+
+    <update id="correctionQnaCategory" parameterType="com.tbp.honeyjar.admin.dto.category.QnaCategoryCorrectionDto">
+        update other_category
+        set
+            category_name = #{name}
+        where
+            category_id = #{id}
+    </update>
 </mapper>
