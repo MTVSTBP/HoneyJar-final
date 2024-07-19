@@ -14,6 +14,16 @@
         <result property="name" column="category_name"/>
     </resultMap>
 
+    <resultMap id="foodCategoryResultMap" type="com.tbp.honeyjar.admin.dto.category.FoodResponseDto">
+        <id property="id" column="category_id"/>
+        <result property="name" column="category_name"/>
+    </resultMap>
+
+    <resultMap id="qnaCategoryResultMap" type="com.tbp.honeyjar.admin.dto.category.QnaResponseDto">
+        <id property="id" column="category_id"/>
+        <result property="name" column="category_name"/>
+    </resultMap>
+
     <select id="findAllFoodCategory" resultMap="foodCategoryListResultMap">
         select
             category_id,
@@ -48,15 +58,31 @@
     <insert id="saveQnaCategory" parameterType="com.tbp.honeyjar.admin.dto.category.QnaCategorySaveRequestDto">
         insert into other_category
         (
-        category_name,
-        created_at,
-        updated_at
+            category_name,
+            created_at,
+            updated_at
         )
         values
         (
-        #{name},
-        #{createdAt},
-        #{updatedAt}
+            #{name},
+            #{createdAt},
+            #{updatedAt}
         )
     </insert>
+
+    <select id="findFoodById" resultMap="foodCategoryResultMap">
+        select
+            category_id,
+            category_name
+        from food_category
+        where category_id = #{id}
+    </select>
+
+    <select id="findQnaById" resultMap="qnaCategoryResultMap">
+        select
+            category_id,
+            category_name
+        from other_category
+        where category_id = #{id}
+    </select>
 </mapper>

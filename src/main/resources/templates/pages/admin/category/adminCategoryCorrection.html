@@ -17,7 +17,7 @@
     <!-- //헤더 영역 -->
 
     <div id="container">
-        <form id="Form">
+        <form id="Form" method="post">
             <!-- category -->
             <div class="category_wrap">
                 <label for="category">카테고리</label>
@@ -38,7 +38,7 @@
             <div class="form-group">
                 <div class="title">
                     <label for="categoryCreated">카테고리 수정</label>
-                    <input type="text" id="categoryCreated" placeholder="카테고리를 수정 하세요">
+                    <input type="text" th:value="${data.name}" id="categoryCreated" placeholder="카테고리를 수정 하세요">
                     <p class="error-message" id="titleError"></p>
                 </div>
             </div>

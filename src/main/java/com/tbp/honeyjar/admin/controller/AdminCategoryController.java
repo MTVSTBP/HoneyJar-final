@@ -1,14 +1,12 @@
 package com.tbp.honeyjar.admin.controller;
 
-import com.tbp.honeyjar.admin.dto.category.FoodCategorySaveRequestDto;
-import com.tbp.honeyjar.admin.dto.category.FoodCategoryListResponseDto;
-import com.tbp.honeyjar.admin.dto.category.QnaCategoryListResponseDto;
-import com.tbp.honeyjar.admin.dto.category.QnaCategorySaveRequestDto;
+import com.tbp.honeyjar.admin.dto.category.*;
 import com.tbp.honeyjar.admin.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -64,5 +62,25 @@ public class AdminCategoryController {
         categoryService.saveQnaCategory(requestDto);
 
         return "redirect:/admin/category";
+    }
+
+    @GetMapping("/correction/food/{id}")
+    public String correctionFood(@PathVariable Long id, Model model) {
+
+        FoodResponseDto data = categoryService.findFoodById(id);
+
+        model.addAttribute("data", data);
+
+        return "pages/admin/category/adminCategoryCorrection";
+    }
+
+    @GetMapping("/correction/qna/{id}")
+    public String correctionQna(@PathVariable Long id, Model model) {
+
+        QnaResponseDto data = categoryService.findQnaById(id);
+
+        model.addAttribute("data", data);
+
+        return "pages/admin/category/adminCategoryCorrection";
     }
 }
