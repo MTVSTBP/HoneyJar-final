@@ -41,7 +41,9 @@ public class AdminNoticeController {
     public String noticeDetail(@PathVariable Long notice_id, Model model) {
         NoticeResponseDto notice = noticeService.findById(notice_id);
 
-        model.addAttribute("notice", notice);
+        if (notice != null) {
+            model.addAttribute("notice", notice);
+        }
 
         return "pages/admin/notice/adminNoticeDetail";
     }
@@ -65,7 +67,9 @@ public class AdminNoticeController {
     public String correction(@PathVariable Long notice_id, Model model) {
         NoticeResponseDto notice = noticeService.findById(notice_id);
 
-        model.addAttribute("notice", notice);
+        if (notice != null) {
+            model.addAttribute("notice", notice);
+        }
 
         return "pages/admin/notice/adminNoticeCorrection";
     }
@@ -73,7 +77,6 @@ public class AdminNoticeController {
     @PostMapping("/correction/{notice_id}")
     public String correctionNotice(@PathVariable Long notice_id, NoticeCorrectionRequestDto requestDto) {
         NoticeResponseDto notice = noticeService.findById(notice_id);
-
 
         if (notice != null){
             requestDto.setUpdatedAt(now());
@@ -85,10 +88,12 @@ public class AdminNoticeController {
     }
 
     @GetMapping("/delete/{notice_id}")
-    public String delete(@PathVariable Long notice_id, Model model) {
+    public String delete(@PathVariable Long notice_id) {
         NoticeResponseDto notice = noticeService.findById(notice_id);
 
-        noticeService.delete(notice.getNoticeId());
+        if (notice != null){
+            noticeService.delete(notice.getNoticeId());
+        }
 
         return "redirect:/admin/notice";
     }
