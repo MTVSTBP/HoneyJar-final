@@ -9,7 +9,6 @@
         <id property="postId" column="post_id"/>
         <result property="title" column="title"/>
         <result property="post" column="post"/>
-        <!-- <result property="profileImg" column="profile_img"/> // user table -->
     </resultMap>
 
     <!-- 포스트 상세 조회 -->
@@ -19,16 +18,17 @@
         <result property="recommendMenu" column="recommend_menu"/>
         <result property="price" column="price"/>
         <result property="post" column="post"/>
-        <result property="createAt" column="create_at"/>
-        <result property="updateAt" column="update_at"/>
-<!--        <result property="foodCategory" column="food_category"/>-->
-        <result property="placeName" column="place_name"/>
-<!--        <result property="xCoordinate" column="x_coordinate"/>-->
-<!--        <result property="yCoordinate" column="y_coordinate"/>-->
-        <!-- <result property="profileImg" column="profile_img"/> // user table -->
-        <!-- <result property="like" column="like"/> // like table -->
-        <!-- <result property="commentId" column="comment_id"/> // comment table -->
-        <!-- <result property="rating" column="rating"/> // rating table -->
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="placeId" column="place_id"/>
+        <result property="userId" column="user_id"/>
+        <collection property="images" ofType="com.tbp.honeyjar.image.dto.ImageDTO" resultMap="imageResultMap"/>
+    </resultMap>
+
+    <resultMap id="imageResultMap" type="com.tbp.honeyjar.image.dto.ImageDTO">
+        <id property="imageId" column="image_id"/>
+        <result property="url" column="url"/>
+        <result property="isMain" column="is_main"/>
     </resultMap>
 
     <!-- 포스트 리스트 조회 쿼리 -->
@@ -37,10 +37,8 @@
         p.post_id,
         p.title,
         p.post
-        <!-- u.profile_img // user table -->
         FROM
         post p
-        <!-- JOIN user u ON p.user_id = u.id // user table -->
     </select>
 
     <!-- 포스트 상세 조회 쿼리 -->
@@ -51,38 +49,31 @@
         p.recommend_menu,
         p.price,
         p.post,
-        p.create_at,
-        p.update_at,
-        <!--f.food_category,-->
-        <!-- m.place_name,-->
-        <!-- m.x_coordinate,-->
-        <!-- m.y_coordinate-->
-        <!-- u.profile_img, // user table -->
-        <!-- p.like, // like table -->
-        <!-- c.comment_id, // comment table -->
-        <!-- r.rating // rating table -->
+        p.created_at,
+        p.updated_at,
+        p.place_id,
+        p.user_id,
+        i.image_id,
+        i.url,
+        i.is_main
         FROM
         post p
-<!--        JOIN-->
-<!--        foodcategory f ON p.food_category_id = f.id-->
-        JOIN
-        map m ON p.map_id = m.id
-        <!-- JOIN user u ON p.user_id = u.id // user table -->
-        <!-- LEFT JOIN comment c ON p.post_id = c.post_id // comment table -->
-        <!-- LEFT JOIN rating r ON p.post_id = r.post_id // rating table -->
+        LEFT JOIN
+        image i ON p.post_id = i.post_id
         WHERE
         p.post_id = #{postId}
     </select>
 
     <!-- 포스트 등록 쿼리 -->
-    <insert id="createPost">
+    <insert id="createPost" useGeneratedKeys="true" keyProperty="postId">
         INSERT INTO post (
-            title,
-            recommend_menu,
-            price,
-            post,
-            create_at,
-            place_name
+        title,
+        recommend_menu,
+        price,
+        post,
+        created_at,
+        place_id,
+        user_id
         )
         VALUES (
         #{title},
@@ -90,7 +81,8 @@
         #{price},
         #{post},
         NOW(),
-        #{placeName},
+        #{placeId},
+        #{userId}
         )
     </insert>
 
@@ -102,12 +94,8 @@
         recommend_menu = #{recommendMenu},
         price = #{price},
         post = #{post},
-        update_at = #{updateAt},
-<!--        food_category_id = (SELECT id FROM foodcategory WHERE food_category = #{foodCategory}),-->
-        place_name = #{placeName},
-        x_coordinate = #{xCoordinate},
-        y_coordinate = #{yCoordinate}
-        <!-- user_id = #{userId} -->
+        updated_at = NOW(),
+        place_id = #{placeId}
         WHERE post_id = #{postId}
     </update>
 

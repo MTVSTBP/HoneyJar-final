@@ -8,8 +8,6 @@ import java.util.List;
 
 @Mapper
 public interface ImageMapper {
-
     void insertImages(@Param("images") List<ImageDTO> images);
-
     List<ImageDTO> findImagesByPostId(Long postId);
 }

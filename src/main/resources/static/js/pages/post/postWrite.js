@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const submitBtn = document.getElementById('submitBtn');
     const placeNameInput = document.getElementById('placeName');
     const placeNameButton = document.getElementById('openMap');
+    const postForm = document.getElementById('postForm');
+    const errorMessage = document.getElementById('errorMessage');
     const maxFiles = 5;
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
     let selectedFiles = JSON.parse(localStorage.getItem('selectedFiles')) || [];
@@ -20,10 +22,10 @@ document.addEventListener("DOMContentLoaded", function () {
             const img = document.createElement('img');
             img.src = fileData.dataURL;
             img.classList.toggle('thumbnail', thumbnailIndex === index);
-            img.addEventListener('click', function() {
+            img.addEventListener('click', function () {
                 thumbnailIndex = index;
                 updateThumbnail();
-                validateForm();  // 실시간으로 에러 메시지 숨기기 및 폼 검증
+                validateForm(); // 실시간으로 에러 메시지 숨기기 및 폼 검증
                 localStorage.setItem('thumbnailIndex', thumbnailIndex);
             });
             imageContainer.appendChild(img);
@@ -36,7 +38,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const deleteBtn = document.createElement('img');
             deleteBtn.src = "/assets/svg/close.svg";
             deleteBtn.classList.add('delete-button');
-            deleteBtn.addEventListener('click', function() {
+            deleteBtn.addEventListener('click', function () {
                 selectedFiles.splice(index, 1);
                 if (thumbnailIndex === index) {
                     thumbnailIndex = null;
@@ -44,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     thumbnailIndex--;
                 }
                 updateImagePreview();
-                validateForm();  // 실시간으로 에러 메시지 숨기기 및 폼 검증
+                validateForm(); // 실시간으로 에러 메시지 숨기기 및 폼 검증
                 resetFileInput();
                 localStorage.setItem('selectedFiles', JSON.stringify(selectedFiles));
                 localStorage.setItem('thumbnailIndex', thumbnailIndex);
@@ -206,42 +208,44 @@ document.addEventListener("DOMContentLoaded", function () {
         return urls;
     }
 
-    postForm.addEventListener('submit', async function(event) {
+    postForm.addEventListener('submit', async function (event) {
         event.preventDefault();
+        hideErrorMessage(errorMessage); // 이전 에러 메시지 숨기기
 
         if (!validateForm()) {
             return;
         }
 
-        try {
-            const imageUrls = await uploadFilesAndGetUrls();
-            const mainImageUrl = imageUrls[thumbnailIndex];
+        const imageUrls = await uploadFilesAndGetUrls();
+        const mainImageUrl = imageUrls[thumbnailIndex];
 
-            const formData = new FormData(postForm);
-            formData.append('imageUrls', JSON.stringify(imageUrls));
-            formData.append('mainImageUrl', mainImageUrl);
+        const formData = new FormData(postForm);
+        formData.append('imageUrls', new Blob([JSON.stringify(imageUrls)], { type: 'application/json' }));
+        formData.append('mainImageUrl', mainImageUrl);
 
-            const response = await fetch('/post/write', {  // 여기가 중요한 부분입니다.
-                method: 'POST',
-                body: formData
+        fetch('/post/write', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(result => { throw new Error(result.error || 'Failed to submit'); });
+                }
+                return response.json();
+            })
+            .then(result => {
+                if (result.error) {
+                    showErrorMessage(errorMessage, result.error);
+                } else {
+                    window.location.href = `/post/detail?postId=${result.postId}`;
+                }
+            })
+            .catch(error => {
+                console.error('Error submitting form:', error);
+                showErrorMessage(errorMessage, 'An error occurred while submitting the form.');
             });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const result = await response.json();
-
-            if (response.ok) {
-                window.location.href = `/post/detail?postId=${result.postId}`;
-            } else {
-                alert(`Error: ${result.message}\n${result.error}`);
-            }
-        } catch (error) {
-            console.error('Error submitting form:', error);
-            alert('An error occurred while submitting the form.');
-        }
     });
+
 
     function openMapPage() {
         localStorage.setItem('postFormState', JSON.stringify({

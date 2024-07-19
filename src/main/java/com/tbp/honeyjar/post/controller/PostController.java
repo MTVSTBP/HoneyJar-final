@@ -3,7 +3,6 @@ package com.tbp.honeyjar.post.controller;
 
 import com.tbp.honeyjar.post.dto.*;
 import com.tbp.honeyjar.post.service.PostService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,25 +37,16 @@ public class PostController {
     @PostMapping("/write")
     public ResponseEntity<Map<String, Object>> postCreate(
             @ModelAttribute PostRequestDTO postRequestDTO,
-            @RequestParam("imageUrls") String imageUrls,
+            @RequestParam("imageUrls") List<String> imageUrls,
             @RequestParam("mainImageUrl") String mainImageUrl) {
-        try {
-            // Process the image URLs and main image URL
-            postRequestDTO.setImageUrls(Arrays.asList(imageUrls.split(",")));
-            postRequestDTO.setMainImageUrl(mainImageUrl);
-
-            Long postId = postService.createPost(postRequestDTO);
-            Map<String, Object> response = new HashMap<>();
-            response.put("message", "Post created successfully");
-            response.put("postId", postId);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("message", "Failed to create post");
-            response.put("error", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-        }
+        postRequestDTO.setImageUrls(imageUrls);
+        postRequestDTO.setMainImageUrl(mainImageUrl);
+        Long postId = postService.createPost(postRequestDTO);
+        Map<String, Object> response = new HashMap<>();
+        response.put("postId", postId);
+        return ResponseEntity.ok(response);
     }
+
 
     @GetMapping("/detail")
     public String postDetail(@RequestParam Long postId, Model model) {
@@ -64,13 +54,13 @@ public class PostController {
         model.addAttribute("post", post);
         return "pages/post/postDetail";
     }
-
-    @GetMapping("/correction")
-    public String postCorrectionForm(@RequestParam Long postId, Model model) {
-        PostResponseDTO post = postService.findPostById(postId);
-        model.addAttribute("post", post);
-        return "pages/post/postCorrection";
-    }
+//
+//    @GetMapping("/correction")
+//    public String postCorrectionForm(@RequestParam Long postId, Model model) {
+//        PostResponseDTO post = postService.findPostById(postId);
+//        model.addAttribute("post", post);
+//        return "pages/post/postCorrection";
+//    }
 
 //    @PostMapping("/correction")
 //    public String postCorrection(AddPostRequestDTO addPostRequestDTO) {

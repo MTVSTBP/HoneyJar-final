@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tbp.honeyjar.place.dao.PlaceMapper">
+
+    <insert id="insertPlace" useGeneratedKeys="true" keyProperty="placeId">
+        INSERT INTO place (
+        name,
+        rating_avg,
+        x_coordinate,
+        y_coordinate,
+        created_at,
+        updated_at
+        )
+        VALUES (
+        #{name},
+        #{ratingAvg},
+        #{xCoordinate},
+        #{yCoordinate},
+        NOW(),
+        NOW()
+        )
+    </insert>
+
+    <select id="findPlaceById" resultType="com.tbp.honeyjar.place.dto.PlaceDTO">
+        SELECT
+        place_id,
+        name,
+        rating_avg,
+        x_coordinate,
+        y_coordinate,
+        created_at,
+        updated_at
+        FROM
+        place
+        WHERE
+        place_id = #{placeId}
+    </select>
+</mapper>

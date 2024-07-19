@@ -10,8 +10,8 @@ public class PostResponseDTO {
     private String recommendMenu;
     private int price;
     private String post;
-    private LocalDateTime createAt;
-    private LocalDateTime updateAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private String foodCategory;
     private String placeName; // place 이름
     private String xCoordinate; // x좌표
@@ -25,14 +25,14 @@ public class PostResponseDTO {
 
     public PostResponseDTO() {}
 
-    public PostResponseDTO(Long postId, String title, String recommendMenu, int price, String post, LocalDateTime createAt, LocalDateTime updateAt, String foodCategory, String placeName, String xCoordinate, String yCoordinate, String profileImg, int like, long commentId, int rating, List<String> imageUrls, String mainImageUrl) {
+    public PostResponseDTO(Long postId, String title, String recommendMenu, int price, String post, LocalDateTime createdAt, LocalDateTime updatedAt, String foodCategory, String placeName, String xCoordinate, String yCoordinate, String profileImg, int like, long commentId, int rating, List<String> imageUrls, String mainImageUrl) {
         this.postId = postId;
         this.title = title;
         this.recommendMenu = recommendMenu;
         this.price = price;
         this.post = post;
-        this.createAt = createAt;
-        this.updateAt = updateAt;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.foodCategory = foodCategory;
         this.placeName = placeName;
         this.xCoordinate = xCoordinate;
@@ -86,19 +86,19 @@ public class PostResponseDTO {
     }
 
     public LocalDateTime getCreateAt() {
-        return createAt;
+        return createdAt;
     }
 
     public void setCreateAt(LocalDateTime createAt) {
-        this.createAt = createAt;
+        this.createdAt = createAt;
     }
 
     public LocalDateTime getUpdateAt() {
-        return updateAt;
+        return updatedAt;
     }
 
     public void setUpdateAt(LocalDateTime updateAt) {
-        this.updateAt = updateAt;
+        this.updatedAt = updateAt;
     }
 
     public String getFoodCategory() {
@@ -189,8 +189,8 @@ public class PostResponseDTO {
                 ", recommendMenu='" + recommendMenu + '\'' +
                 ", price=" + price +
                 ", post='" + post + '\'' +
-                ", createAt=" + createAt +
-                ", updateAt=" + updateAt +
+                ", createAt=" + createdAt +
+                ", updateAt=" + updatedAt +
                 ", foodCategory='" + foodCategory + '\'' +
                 ", placeName='" + placeName + '\'' +
                 ", xCoordinate='" + xCoordinate + '\'' +

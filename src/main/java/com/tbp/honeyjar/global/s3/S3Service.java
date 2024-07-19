@@ -5,10 +5,12 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.Headers;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Date;
@@ -23,7 +25,7 @@ public class S3Service {
     private static final String INVALID_IMAGE_EXTENSION_EXCEPTION_MESSAGE = "jpg, jpeg, png, gif 확장자만을 지원합니다.";
     private static final String IMAGE_URL_PATH_FORMAT = "%s/%s";
 
-    @Value("${cloud.s3.bucket}")
+    @Value("${cloud.aws.s3.bucket}")
     private String bucket;
 
     private final AmazonS3 amazonS3;
@@ -47,6 +49,14 @@ public class S3Service {
         URL url = amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
 
         return url.toString();
+    }
+
+    public void uploadFile(File file) {
+        String fileName = file.getName();
+        validateFileName(fileName);
+
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucket, "images/" + fileName, file);
+        amazonS3.putObject(putObjectRequest);
     }
 
     private void validateFileName(String fileName) {
