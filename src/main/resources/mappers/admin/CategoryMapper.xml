@@ -4,11 +4,29 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tbp.honeyjar.admin.dao.CategoryMapper">
 
-    <resultMap id="adminCategoryResultMap" type="com.tbp.honeyjar.admin.dto.CategoryDto">
-        <id property="noticeId" column="notice_id"/>
-        <result property="title" column="title"/>
-        <result property="post" column="post"/>
-        <result property="createdAt" column="created_at"/>
-        <result property="updatedAt" column="updated_at"/>
+    <resultMap id="foodCategoryListResultMap" type="com.tbp.honeyjar.admin.dto.category.FoodCategoryListResponseDto">
+        <id property="id" column="category_id"/>
+        <result property="name" column="category_name"/>
     </resultMap>
+
+    <resultMap id="qnaCategoryListResultMap" type="com.tbp.honeyjar.admin.dto.category.QnaCategoryListResponseDto">
+        <id property="id" column="category_id"/>
+        <result property="name" column="category_name"/>
+    </resultMap>
+
+    <select id="findAllFoodCategory" resultMap="foodCategoryListResultMap">
+        select
+            category_id,
+            category_name
+        from food_category
+        order by category_id
+    </select>
+
+    <select id="findAllQnaCategory" resultMap="qnaCategoryListResultMap">
+        select
+            category_id,
+            category_name
+        from other_category
+        order by category_id
+    </select>
 </mapper>

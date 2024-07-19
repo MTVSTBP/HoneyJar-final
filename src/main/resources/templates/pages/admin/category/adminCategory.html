@@ -32,8 +32,8 @@
             </div>
         </div>
         <div class="categorybody">
-            <ul id="best_c_list">
-                <li th:text="${dto.text}"></li>
+            <ul th:each="food : ${foodList}" id="best_c_list">
+                <li th:class="item" th:text="${food.name}"></li>
             </ul>
         </div>
     </div>
@@ -42,7 +42,7 @@
     <!-- FAQ 카테고리 -->
     <div id="faq_c" class="category">
         <div class="category_header">
-            <h5>FAQ</h5>
+            <h5>FAQ & 문의</h5>
             <div class="plus">
                 <a href="/admin/category/write">
                     <img src="/assets/svg/plus.svg" alt="생성">
@@ -50,26 +50,28 @@
             </div>
         </div>
         <div class="categorybody">
-            <ul id="faq_c_list"></ul>
+            <ul th:each="qna : ${qnaList}" id="faq_c_list">
+                <li th:class="item" th:text="${qna.name}"></li>
+            </ul>
         </div>
     </div>
     <!-- //FAQ 카테고리 -->
 
-    <!-- 문의 카테고리 -->
-    <div id="notice_c" class="category">
-        <div class="category_header">
-            <h5>문의</h5>
-            <div class="plus">
-                <a href="/admin/category/write">
-                    <img src="/assets/svg/plus.svg" alt="생성">
-                </a>
-            </div>
-        </div>
-        <div class="categorybody">
-            <ul id="notice_c_list"></ul>
-        </div>
-    </div>
-    <!-- //문의 카테고리 -->
+<!--    &lt;!&ndash; 문의 카테고리 &ndash;&gt;-->
+<!--    <div id="notice_c" class="category">-->
+<!--        <div class="category_header">-->
+<!--            <h5>문의</h5>-->
+<!--            <div class="plus">-->
+<!--                <a href="/admin/category/write">-->
+<!--                    <img src="/assets/svg/plus.svg" alt="생성">-->
+<!--                </a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="categorybody">-->
+<!--            <ul id="notice_c_list"></ul>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    &lt;!&ndash; //문의 카테고리 &ndash;&gt;-->
 
     <!-- 삭제 확인 모달 -->
     <div id="deleteConfirmModal" class="modal">
