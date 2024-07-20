@@ -3,13 +3,18 @@ package com.tbp.honeyjar.comment.controller;
 import com.tbp.honeyjar.comment.dto.CommentListDTO;
 import com.tbp.honeyjar.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //@RequiredArgsConstructor
 @Controller
@@ -26,25 +31,22 @@ public class CommentController {
     @GetMapping
     public String commentList(Model model) {
 
-//        List<CommentListDTO> comments = getAllComments();
-//        model.addAttribute("comments", comments);
         List<CommentListDTO> commentList = commentService.findAllComment();
         model.addAttribute("commentList", commentList);
 
         return "pages/comment/comment";
     }
 
-//    @GetMapping
-    // 댓글 수정
-
     // 댓글 등록
-//    @PostMapping
-//    public String registComment(CommentListDTO commentDto, Model model) {
-//
-//        commentService.registComment(commentDto);
-//
-//
-//    }
+    @PostMapping("/regist")
+    public ResponseEntity<Map<String, String>> registerComment(@RequestBody CommentListDTO comment) {
+        System.out.println(comment.toString()); // 전달된 데이터 확인을 위해 로그 출력
+
+        Map<String, String> response = new HashMap<>();
+        response.put("postid", String.valueOf(comment.getPostId())); // 실제 저장된 포스트 ID를 반환.
+        return ResponseEntity.ok(response);
+    }
+}
 //    private List<CommentListDTO> getAllComments() {
 //        List<CommentListDTO> comments = new ArrayList<>();
 //        comments.add(CommentListDTO.builder()
@@ -70,4 +72,4 @@ public class CommentController {
 //
 //        return comments;
 //    }
-}
+//}

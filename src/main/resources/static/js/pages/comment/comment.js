@@ -1,21 +1,45 @@
 document.addEventListener("DOMContentLoaded", function() {
     const editIcon = document.querySelector('.edit_icon img');
     const editComment = document.querySelector('.input_area');
-    const editSubmit = document.querySelector('.submit_button');
+    const registSubmit = document.querySelector('.submit_button');
 
     // 초기 상태 설정
     editComment.style.display = "none";
-    editSubmit.style.display = "none";
+    registSubmit.style.display = "none";
 
     // editIcon 클릭 시 댓글 수정 영역 토글
     editIcon.addEventListener('click', function() {
         const isHidden = editComment.style.display === "none";
         editComment.style.display = isHidden ? "block" : "none";
-        editSubmit.style.display = isHidden ? "block" : "none";
+        registSubmit.style.display = isHidden ? "block" : "none";
     });
 
-    editSubmit.addEventListener('click', function() {
-        alert('등록되었습니다.');
+    // comment 클래스 또는 함수 정의
+    class Comment {
+        constructor(comment) {
+            this.comment = comment;
+        }
+    }
+
+    const commentInput = document.getElementById('commentInput'); // comment input 요소 정의
+    const formData = new Comment(commentInput.value);
+
+    registSubmit.addEventListener('click', async function () {
+        try {
+            const response = await fetch('/comment/regist', {
+                method: 'POST',
+                body: JSON.stringify(formData) // 객체를 JSON 문자열로 변환하여 전송
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok ㅇㅇㅁㄴㅇ');
+            }
+
+            const result = await response.json();
+            window.location.href = `comment/?postId=${result.postid}`;
+        } catch (error) {
+            console.error('There was a problem with the fetch operation:', error);
+        }
     });
 
     const moreHorizImages = document.querySelectorAll('.more_h img');

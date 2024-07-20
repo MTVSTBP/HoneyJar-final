@@ -17,7 +17,7 @@ public class CommentService {
         return commentMapper.findAllComment();
     }
 
-    public int registComment(CommentListDTO commentDto) {
-        return commentMapper.registComment();
+    public int registComment(CommentListDTO newComment) {
+        return commentMapper.registComment(newComment);
     }
 }

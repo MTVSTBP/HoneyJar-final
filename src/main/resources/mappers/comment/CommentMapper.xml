@@ -39,7 +39,7 @@
         )
         VALUES
         (
-        #{ commentId }
+           #{ commentId }
         ,  #{ comment }
         ,  #{ createdAt }
         ,  #{ updatedAt }
