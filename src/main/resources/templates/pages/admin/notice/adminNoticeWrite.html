@@ -18,12 +18,12 @@
     <!-- //헤더 영역 -->
 
     <div id="container">
-        <form id="Form">
+        <form id="Form" method="post">
             <!-- title -->
             <div class="form-group">
                 <div class="title">
                     <label for="title">제목</label>
-                    <input type="text" id="title" placeholder="제목을 입력하세요">
+                    <input type="text" id="title" th:name="title" placeholder="제목을 입력하세요">
                     <p class="error-message" id="titleError"></p>
                 </div>
             </div>
@@ -32,7 +32,7 @@
             <!-- content -->
             <div class="form-group">
                 <label for="content">내용</label>
-                <textarea id="content" placeholder="내용을 입력하세요" rows="5"></textarea>
+                <textarea id="content" th:name="post" placeholder="내용을 입력하세요" rows="5"></textarea>
                 <p class="error-message" id="contentError"></p>
             </div>
             <!-- //content -->
