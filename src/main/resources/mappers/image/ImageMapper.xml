@@ -34,5 +34,3 @@
         post_id = #{postId}
     </select>
 </mapper>
-
-

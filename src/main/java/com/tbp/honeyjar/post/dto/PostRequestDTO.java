@@ -1,7 +1,9 @@
 package com.tbp.honeyjar.post.dto;
 
 import com.tbp.honeyjar.image.dto.ImageDTO;
+import com.tbp.honeyjar.place.dto.PlaceDTO;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -11,24 +13,15 @@ public class PostRequestDTO {
     private String recommendMenu;
     private int price;
     private String post;
-    private Long placeId;
     private Long userId;
     private List<String> imageUrls;
     private String mainImageUrl;
+    private PlaceDTO place;
+    private Long placeId;
+    private LocalDateTime createdAt;
+    private Long categoryId;
 
     public PostRequestDTO() {}
-
-    public PostRequestDTO(Long postId, String title, String recommendMenu, int price, String post, Long placeId, Long userId, List<String> imageUrls, String mainImageUrl) {
-        this.postId = postId;
-        this.title = title;
-        this.recommendMenu = recommendMenu;
-        this.price = price;
-        this.post = post;
-        this.placeId = placeId;
-        this.userId = userId;
-        this.imageUrls = imageUrls;
-        this.mainImageUrl = mainImageUrl;
-    }
 
     public Long getPostId() {
         return postId;
@@ -70,14 +63,6 @@ public class PostRequestDTO {
         this.post = post;
     }
 
-    public Long getPlaceId() {
-        return placeId;
-    }
-
-    public void setPlaceId(Long placeId) {
-        this.placeId = placeId;
-    }
-
     public Long getUserId() {
         return userId;
     }
@@ -102,6 +87,38 @@ public class PostRequestDTO {
         this.mainImageUrl = mainImageUrl;
     }
 
+    public PlaceDTO getPlace() {
+        return place;
+    }
+
+    public void setPlace(PlaceDTO place) {
+        this.place = place;
+    }
+
+    public Long getPlaceId() {
+        return placeId;
+    }
+
+    public void setPlaceId(Long placeId) {
+        this.placeId = placeId;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Long getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Long categoryId) {
+        this.categoryId = categoryId;
+    }
+
     @Override
     public String toString() {
         return "PostRequestDTO{" +
@@ -110,10 +127,13 @@ public class PostRequestDTO {
                 ", recommendMenu='" + recommendMenu + '\'' +
                 ", price=" + price +
                 ", post='" + post + '\'' +
-                ", placeId=" + placeId +
                 ", userId=" + userId +
                 ", imageUrls=" + imageUrls +
                 ", mainImageUrl='" + mainImageUrl + '\'' +
+                ", place=" + place +
+                ", placeId=" + placeId +
+                ", createdAt=" + createdAt +
+                ", categoryId=" + categoryId +
                 '}';
     }
 }

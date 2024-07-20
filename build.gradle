@@ -36,10 +36,7 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	runtimeOnly('org.springframework.boot:spring-boot-devtools')
 
-	//aws
-	implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.4'
-	implementation 'io.awspring.cloud:spring-cloud-starter-aws-secrets-manager-config:2.4.4'
-	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '9.2.0'
 }
 
 tasks.named('test') {

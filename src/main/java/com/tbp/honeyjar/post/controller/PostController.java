@@ -1,13 +1,16 @@
 package com.tbp.honeyjar.post.controller;
 
 
+import com.tbp.honeyjar.admin.service.CategoryService;
 import com.tbp.honeyjar.post.dto.*;
 import com.tbp.honeyjar.post.service.PostService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 
 
@@ -16,9 +19,11 @@ import java.util.*;
 public class PostController {
 
     private final PostService postService;
+    private final CategoryService categoryService;
 
-    public PostController(PostService postService) {
+    public PostController(PostService postService, CategoryService categoryService) {
         this.postService = postService;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -31,17 +36,19 @@ public class PostController {
     @GetMapping("/write")
     public String postCreateForm(Model model) {
         model.addAttribute("postRequestDTO", new PostRequestDTO());
+//        model.addAttribute("categories", categoryService.findAllFoodCategory()); // 카테고리 목록 추가
         return "pages/post/postWrite";
     }
+
+
 
     @PostMapping("/write")
     public ResponseEntity<Map<String, Object>> postCreate(
             @ModelAttribute PostRequestDTO postRequestDTO,
-            @RequestParam("imageUrls") List<String> imageUrls,
-            @RequestParam("mainImageUrl") String mainImageUrl) {
-        postRequestDTO.setImageUrls(imageUrls);
-        postRequestDTO.setMainImageUrl(mainImageUrl);
-        Long postId = postService.createPost(postRequestDTO);
+            @RequestParam("files") List<MultipartFile> files,
+            @RequestParam("mainImageUrl") String mainImageUrl) throws IOException {
+
+        Long postId = postService.createPost(postRequestDTO, files, mainImageUrl);
         Map<String, Object> response = new HashMap<>();
         response.put("postId", postId);
         return ResponseEntity.ok(response);

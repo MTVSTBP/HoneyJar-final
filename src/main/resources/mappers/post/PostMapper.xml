@@ -73,7 +73,8 @@
         post,
         created_at,
         place_id,
-        user_id
+        user_id,
+        category_id  <!-- 추가 -->
         )
         VALUES (
         #{title},
@@ -82,7 +83,8 @@
         #{post},
         NOW(),
         #{placeId},
-        #{userId}
+        #{userId},
+        #{categoryId}  <!-- 추가 -->
         )
     </insert>
 
@@ -95,39 +97,7 @@
         price = #{price},
         post = #{post},
         updated_at = NOW(),
-        place_id = #{placeId}
+        place_id = #{placeId} <!-- placeId를 포함 -->
         WHERE post_id = #{postId}
     </update>
-
-    <!-- 이미지 삽입 쿼리 -->
-    <insert id="insertImages">
-        <foreach collection="images" item="image" separator=";">
-            INSERT INTO image (
-            url,
-            user_id,
-            post_id,
-            is_main
-            )
-            VALUES (
-            #{image.url},
-            #{image.userId},
-            #{image.postId},
-            #{image.isMain}
-            )
-        </foreach>
-    </insert>
-
-    <!-- 포스트 ID로 이미지 조회 쿼리 -->
-    <select id="findImagesByPostId" resultType="com.tbp.honeyjar.image.dto.ImageDTO">
-        SELECT
-        image_id,
-        url,
-        user_id,
-        post_id,
-        is_main
-        FROM
-        image
-        WHERE
-        post_id = #{postId}
-    </select>
 </mapper>

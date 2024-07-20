@@ -11,23 +11,20 @@
 </head>
 <body>
 <div id="container">
-    <form id="postForm" th:object="${postRequestDTO}" th:action="@{/posts/write}" method="post">
+    <form id="postForm" th:object="${postRequestDTO}" th:action="@{/post/write}" method="post">
         <div class="category_public_wrap">
-            <!-- category -->
-            <!--            <div class="category_wrap">-->
-            <!--                <label for="category">카테고리</label>-->
-            <!--                <div class="custom-select-wrapper">-->
-            <!--                    <select id="category" th:field="*{foodCategory}">-->
-            <!--                        <option value="">선택</option>-->
-            <!--                        <option th:each="category : ${categories}"-->
-            <!--                                th:value="${category.id}"-->
-            <!--                                th:text="${category.name}">카테고리</option>-->
-            <!--                    </select>-->
-            <!--                </div>-->
-            <!--                <p class="error-message" id="categoryError"></p>-->
-            <!--            </div>-->
-            <!-- //category -->
-
+                        <div class="category_wrap">
+                            <label for="category">카테고리</label>
+                            <div class="custom-select-wrapper">
+                                <select id="category" th:field="*{categoryId}">
+                                    <option value="">선택</option>
+                                    <option th:each="category : ${categories}"
+                                            th:value="${category.categoryId}"
+                                            th:text="${category.categoryName}">카테고리</option>
+                                </select>
+                            </div>
+                            <p class="error-message" id="categoryError"></p>
+                        </div>
             <!-- 공개 여부 -->
             <!--            <div class="public_wrap">-->
             <!--                <label for="publicPost">공개 여부</label>-->
@@ -80,11 +77,17 @@
         </div>
         <!-- //price -->
 
+        <!-- placeId and place fields -->
+        <input type="hidden" id="placeId" th:field="*{placeId}">
+        <input type="hidden" id="placeName" th:field="*{place.name}">
+        <input type="hidden" id="placeXCoordinate" th:field="*{place.xCoordinate}">
+        <input type="hidden" id="placeYCoordinate" th:field="*{place.yCoordinate}">
+
         <!-- placeName -->
         <div class="form-group placeName_wrap">
-            <label for="placeName">주소</label>
+            <label for="placeNameInput">주소</label>
             <div class="input-group">
-                <input type="text" id="placeName" th:field="*{placeId}" placeholder="주소를 입력하세요">
+                <input type="text" id="placeNameInput" placeholder="주소를 입력하세요">
                 <button type="button" id="openMap">
                     <img src="/assets/svg/place.svg" alt="마커이미지">
                 </button>

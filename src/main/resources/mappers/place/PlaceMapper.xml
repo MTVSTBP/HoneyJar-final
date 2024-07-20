@@ -6,35 +6,35 @@
 
     <insert id="insertPlace" useGeneratedKeys="true" keyProperty="placeId">
         INSERT INTO place (
-        name,
-        rating_avg,
-        x_coordinate,
-        y_coordinate,
-        created_at,
-        updated_at
+            name,
+            rating_avg,
+            x_coordinate,
+            y_coordinate,
+            created_at,
+            updated_at
         )
         VALUES (
-        #{name},
-        #{ratingAvg},
-        #{xCoordinate},
-        #{yCoordinate},
-        NOW(),
-        NOW()
+            #{name},
+            #{ratingAvg},
+            #{xCoordinate},
+            #{yCoordinate},
+            NOW(),
+            NOW()
         )
     </insert>
 
     <select id="findPlaceById" resultType="com.tbp.honeyjar.place.dto.PlaceDTO">
         SELECT
-        place_id,
-        name,
-        rating_avg,
-        x_coordinate,
-        y_coordinate,
-        created_at,
-        updated_at
+            place_id,
+            name,
+            rating_avg,
+            x_coordinate,
+            y_coordinate,
+            created_at,
+            updated_at
         FROM
-        place
+            place
         WHERE
-        place_id = #{placeId}
+            place_id = #{placeId}
     </select>
 </mapper>
