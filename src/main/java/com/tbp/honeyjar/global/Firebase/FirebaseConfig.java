@@ -29,15 +29,17 @@ public class FirebaseConfig {
                 .setStorageBucket(firebaseBucket)
                 .build();
 
+        FirebaseApp app;
         if (FirebaseApp.getApps().isEmpty()) {
-            FirebaseApp.initializeApp(options);
+            app = FirebaseApp.initializeApp(options);
+        } else {
+            app = FirebaseApp.getInstance();
         }
-
-        return FirebaseApp.getInstance();
+        return app;
     }
 
     @Bean
-    public Bucket bucket() {
-        return StorageClient.getInstance().bucket();
+    public Bucket bucket(FirebaseApp firebaseApp) {
+        return StorageClient.getInstance(firebaseApp).bucket();
     }
 }

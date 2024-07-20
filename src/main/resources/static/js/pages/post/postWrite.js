@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const placeNameField = document.getElementById('placeName');
     const placeXField = document.getElementById('placeXCoordinate');
     const placeYField = document.getElementById('placeYCoordinate');
+    const categoryField = document.getElementById('category'); // 카테고리 필드 추가
     const maxFiles = 5;
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
     let selectedFiles = JSON.parse(localStorage.getItem('selectedFiles')) || [];
@@ -243,15 +244,14 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-
-
     function openMapPage() {
         localStorage.setItem('postFormState', JSON.stringify({
             postTitle: document.getElementById('postTitle').value.trim(),
             content: document.getElementById('content').value.trim(),
             bestMenu: document.getElementById('bestMenu').value.trim(),
             price: document.getElementById('price').value.trim(),
-            placeName: document.getElementById('placeNameInput').value.trim()
+            placeName: document.getElementById('placeNameInput').value.trim(),
+            category: categoryField.value.trim() // 카테고리 저장 추가
         }));
         window.location.href = '/post/map';
     }
@@ -269,6 +269,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById('bestMenu').value = postFormState.bestMenu;
             document.getElementById('price').value = postFormState.price;
             document.getElementById('placeNameInput').value = postFormState.placeName;
+            categoryField.value = postFormState.category; // 카테고리 복원 추가
             localStorage.removeItem('postFormState');
         }
 
@@ -276,6 +277,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const selectedPlace = JSON.parse(localStorage.getItem('selectedPlace'));
         if (selectedPlace) {
             document.getElementById('placeNameInput').value = selectedPlace.place_name || selectedPlace.road_address_name;
+            placeNameField.value = selectedPlace.place_name || selectedPlace.road_address_name;
+            placeXField.value = selectedPlace.x;
+            placeYField.value = selectedPlace.y;
             localStorage.removeItem('selectedPlace');
         }
 

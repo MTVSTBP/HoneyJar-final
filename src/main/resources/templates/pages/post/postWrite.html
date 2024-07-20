@@ -13,29 +13,19 @@
 <div id="container">
     <form id="postForm" th:object="${postRequestDTO}" th:action="@{/post/write}" method="post">
         <div class="category_public_wrap">
-                        <div class="category_wrap">
-                            <label for="category">카테고리</label>
-                            <div class="custom-select-wrapper">
-                                <select id="category" th:field="*{categoryId}">
-                                    <option value="">선택</option>
-                                    <option th:each="category : ${categories}"
-                                            th:value="${category.categoryId}"
-                                            th:text="${category.categoryName}">카테고리</option>
-                                </select>
-                            </div>
-                            <p class="error-message" id="categoryError"></p>
-                        </div>
-            <!-- 공개 여부 -->
-            <!--            <div class="public_wrap">-->
-            <!--                <label for="publicPost">공개 여부</label>-->
-            <!--                <div class="toggle-switch">-->
-            <!--                    <input type="checkbox" id="publicPost" th:field="*{publicPost}">-->
-            <!--                    <label for="publicPost"></label>-->
-            <!--                </div>-->
-            <!--            </div>-->
-            <!-- //공개 여부 -->
+            <div class="category_wrap">
+                <label for="category">카테고리</label>
+                <div class="custom-select-wrapper">
+                    <select id="category" th:field="*{categoryId}">
+                        <option value="">선택</option>
+                        <option th:each="category : ${categories}"
+                                th:value="${category.id}"
+                                th:text="${category.name}">카테고리</option>
+                    </select>
+                </div>
+                <p class="error-message" id="categoryError"></p>
+            </div>
         </div>
-
 
         <!-- image upload -->
         <div class="form-group">
@@ -109,7 +99,6 @@
             <button type="submit" id="submitBtn">등록</button>
         </div>
         <!-- //submit button -->
-
     </form>
 
     <!-- Modal -->
@@ -127,6 +116,5 @@
 </div>
 
 <script th:inline="javascript" type="text/javascript" th:src="@{/js/pages/post/postWrite.js}"></script>
-
 </body>
 </html>

@@ -18,7 +18,7 @@ public class FireBaseController {
     }
 
     @PostMapping("/files")
-    public String uploadFile(@RequestParam("file") MultipartFile[] files, @RequestParam("nameFile") String nameFile) throws IOException, FirebaseException {
+    public String uploadFile(@RequestParam("file") MultipartFile[] files, @RequestParam("nameFile") String nameFile) throws IOException {
         if (files.length == 0) {
             return "is empty";
         }

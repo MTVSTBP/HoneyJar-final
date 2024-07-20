@@ -36,11 +36,9 @@ public class PostController {
     @GetMapping("/write")
     public String postCreateForm(Model model) {
         model.addAttribute("postRequestDTO", new PostRequestDTO());
-//        model.addAttribute("categories", categoryService.findAllFoodCategory()); // 카테고리 목록 추가
+        model.addAttribute("categories", categoryService.findAllFoodCategory()); // 카테고리 목록 추가
         return "pages/post/postWrite";
     }
-
-
 
     @PostMapping("/write")
     public ResponseEntity<Map<String, Object>> postCreate(
