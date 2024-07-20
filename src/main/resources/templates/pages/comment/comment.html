@@ -11,7 +11,9 @@
 </head>
 <body>
 <div id="container">
-    <form id="comment" th:object="${comDTO}" class="comment_create">
+    <!-- th:object="" -->
+    <!-- 댓글 작성 -->
+    <form id="comment" class="comment_create" method="post">
         <div class="comment_input">
             <div class="edit_icon">
                 <img src="/assets/svg/mode.svg" alt="edit">
@@ -20,21 +22,23 @@
                 댓글
             </div>
             <div class="input_area">
-                <textarea class="text" placeholder="댓글을 입력해주세요" th:field="*{content}"></textarea>
+                <textarea class="text" placeholder="댓글을 입력해주세요" required></textarea>    <!-- th:field="" -->
             </div>
             <div class="input_submit">
                 <button type="submit" class="submit_button">등록</button>
             </div>
         </div>
     </form>
+
+    <!-- 사용자 info -->
     <div class="comment_list">
-        <div class="user_details" th:each="comment, commentIndex : ${comments}">
+        <div class="user_details" th:each="comment, commentIndex : ${commentList}">
             <div class="user_record">
-                <img th:src="@{${comment.profileImg}}" alt="사용자프로필" class="user_profile">
+                <img th:src="@{${comment.profileImg}}" onerror=this.src="assets/svg/base_profile.svg" alt="" class="user_profile">
                 <div class="user">
                     <div class="user_info">
-                        <span class="user_name" th:text="${comment.nickName}">사용자</span>
-                        <span class="user_date" th:text="${comment.date}">date</span>
+                        <span class="user_name" th:text="${comment.userId}">사용자</span>
+                        <span class="user_date" th:text="${comment.createdAt}">date</span>
                     </div>
                     <div class="more_h">
                         <img src="/assets/svg/more_horiz.svg" alt="more_horiz">
@@ -47,13 +51,13 @@
                     </div>
                 </div>
             </div>
-
+            <!-- 댓글 내용 -->
             <div class="user_comment">
-                <p class="commentText" th:text="${comment.content}">
+                <p class="commentText" th:text="${comment.comment}">
                     댓글 내용이 여기에 출력됩니다.
                 </p>
             </div>
-
+            <!-- 댓글 수정 -->
             <div th:id="'edit_comment_' + ${commentIndex.index}" class="edit_comment">
                 <div class="user_edit">
                     <textarea class="edit_text" placeholder="댓글을 입력해주세요"></textarea>

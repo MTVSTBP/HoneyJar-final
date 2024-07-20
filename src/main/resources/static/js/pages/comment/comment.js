@@ -44,8 +44,8 @@ document.addEventListener("DOMContentLoaded", function() {
             event.stopPropagation(); // 클릭 이벤트 전파 방지
             const editCommentSection = this.closest('.user_details').querySelector('.edit_comment');
             const actionButtons = this.closest('.more_h').querySelector('.click_box'); // actionButtons
-        console.log(editCommentSection);
-        console.log(actionButtons)
+            console.log(editCommentSection);
+            console.log(actionButtons)
             if (editCommentSection) {
                 // actionButtons 숨기고 edit_comment 보이기
                 actionButtons.style.display = 'none'; // 다른 액션 버튼 숨기기
