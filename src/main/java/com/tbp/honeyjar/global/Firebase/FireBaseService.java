@@ -18,14 +18,12 @@ import java.io.InputStream;
 @Service
 public class FireBaseService {
 
-    private final Bucket bucket;
+    @Value("${app.firebase-bucket}")
+    private String firebaseBucket;
 
-    public FireBaseService(Bucket bucket) {
-        this.bucket = bucket;
-    }
-
-    public String uploadFile(MultipartFile file, String fileName) throws IOException {
-        InputStream content = file.getInputStream();
+    public String uploadFile(MultipartFile file, String fileName) throws IOException, FirebaseAuthException {
+        Bucket bucket = StorageClient.getInstance().bucket(firebaseBucket);
+        InputStream content = new ByteArrayInputStream(file.getBytes());
         Blob blob = bucket.create(fileName, content, file.getContentType());
         return blob.getMediaLink();
     }

@@ -37,8 +37,8 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	runtimeOnly('org.springframework.boot:spring-boot-devtools')
 
-	implementation 'com.google.cloud:google-cloud-storage:2.2.0'
-	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '9.2.0'
+	implementation 'com.google.firebase:firebase-admin:9.2.0'
+	implementation 'com.google.cloud:google-cloud-storage:2.6.0'
 }
 
 tasks.named('test') {

@@ -1,8 +1,9 @@
 package com.tbp.honeyjar.post.service;
 
 
+import com.google.firebase.auth.FirebaseAuthException;
 import com.tbp.honeyjar.global.Firebase.FireBaseService;
-import com.tbp.honeyjar.image.dto.ImageDTO;
+
 import com.tbp.honeyjar.image.service.ImageService;
 import com.tbp.honeyjar.place.dto.PlaceDTO;
 import com.tbp.honeyjar.place.service.PlaceService;
@@ -18,7 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
+
 
 @Service
 public class PostService {
@@ -50,9 +51,16 @@ public class PostService {
         // 3. 파일 업로드 및 이미지 URL 리스트 생성
         List<String> imageUrls = new ArrayList<>();
         for (MultipartFile file : files) {
-            String fileName = generateFileName(file); // 파일 이름 생성 로직 추가
-            String imageUrl = fireBaseService.uploadFile(file, fileName); // Firebase에 파일 업로드
-            imageUrls.add(imageUrl);
+            try {
+                String fileName = generateFileName(file); // 파일 이름 생성 로직 추가
+                String imageUrl = fireBaseService.uploadFile(file, fileName); // Firebase에 파일 업로드
+                imageUrls.add(imageUrl);
+            } catch (FirebaseAuthException e) {
+                // FirebaseAuthException 처리 로직 추가
+                e.printStackTrace();
+                // 예를 들어, 이미지 업로드 실패시 예외를 다시 던지거나 로그를 남길 수 있습니다.
+                throw new RuntimeException("Failed to upload file to Firebase", e);
+            }
         }
 
         postRequestDTO.setImageUrls(imageUrls);
