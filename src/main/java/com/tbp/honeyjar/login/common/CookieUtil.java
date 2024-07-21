@@ -59,7 +59,6 @@ public class CookieUtil {
             String name
     ) {
         Cookie[] cookies = request.getCookies();
-
         if (cookies != null) {
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals(name)) {
@@ -71,19 +70,6 @@ public class CookieUtil {
             }
         }
     }
-
-//    public static String serialize(Object obj) {
-//        return Base64.getUrlEncoder()
-//                .encodeToString(SerializationUtils.serialize(obj));
-//    }
-//
-//    public static <T> T deserialize(Cookie cookie, Class<T> cls) {
-//        return cls.cast(
-//                SerializationUtils.deserialize(
-//                        Base64.getUrlDecoder().decode(cookie.getValue())
-//                )
-//        );
-//    }
 
     public static String serialize(Object obj) {
         try {

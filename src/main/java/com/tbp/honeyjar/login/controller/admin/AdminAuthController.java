@@ -10,13 +10,18 @@ import com.tbp.honeyjar.login.mapper.admin.AdminMapper;
 import com.tbp.honeyjar.login.oauth.entity.RoleType;
 import com.tbp.honeyjar.login.oauth.token.AuthToken;
 import com.tbp.honeyjar.login.oauth.token.AuthTokenProvider;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.tbp.honeyjar.login.common.HeaderUtil.*;
 
@@ -64,9 +69,13 @@ public class AdminAuthController extends AbstractAuthController {
             int refreshTokenMaxAge = (int) refreshTokenExpiry / 1000;
             CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), refreshTokenMaxAge);
 
-            return ApiResponse.success(TOKEN_NAME, accessToken.getToken());
+            Map<String, String> resultMap = new HashMap<>();
+            resultMap.put(TOKEN_NAME, accessToken.getToken());
+            resultMap.put("redirectUrl", "/admin");
+
+            return ResponseEntity.ok(new ApiResponse<>(ApiResponse.SUCCESS_CODE, "Login Successful", resultMap));
         } else {
-            return ApiResponse.fail(ApiResponse.UNAUTHORIZED_CODE, "아이디 또는 비밀번호가 잘못 되었습니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>(ApiResponse.UNAUTHORIZED_CODE, "아이디 또는 비밀번호가 잘못되었습니다.", null));
         }
     }
 }

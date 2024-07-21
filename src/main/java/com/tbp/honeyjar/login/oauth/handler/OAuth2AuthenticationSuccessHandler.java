@@ -78,12 +78,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         OidcUser oidcUser = ((OidcUser) authentication.getPrincipal());
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerType, oidcUser.getAttributes());
 
-        String kakaoId = "Kakao_" + userInfo.getId();
-        log.debug("kakaoId: {}", kakaoId);
-
         Date now = new Date();
         AuthToken accessToken = tokenProvider.createAuthToken(
-                kakaoId,
+                userInfo.getId(),
                 RoleType.USER.getCode(),
                 new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
         );

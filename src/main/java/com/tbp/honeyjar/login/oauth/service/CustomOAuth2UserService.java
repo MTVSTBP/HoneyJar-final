@@ -45,8 +45,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     ) {
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(ProviderType.KAKAO, oAuth2User.getAttributes());
 
-        String kakaoId = "Kakao_" + userInfo.getId();
-        User user = userMapper.findByKakaoId(kakaoId);
+        User user = userMapper.findByKakaoId(userInfo.getId());
 
         if (user != null) {
             user = updateUser(user, userInfo);
@@ -59,8 +58,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private User createUser(OAuth2UserInfo userInfo) {
         User user = User.builder()
-                .kakaoId("Kakao_" + userInfo.getId())
+                .kakaoId(userInfo.getId())
                 .name(userInfo.getName())
+                .pr("자기소개를 입력해 주세요.") // 기본 자기소개(pr) 필드 텍스트
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .userStatus(true)

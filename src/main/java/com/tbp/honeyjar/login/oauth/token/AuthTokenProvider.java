@@ -32,31 +32,46 @@ public class AuthTokenProvider {
     }
 
     public AuthToken createAuthToken(String id, String role, Date expiry) {
+        log.debug("Creating auth token for id: {}, role: {}, expiry: {}", id, role, expiry);
         return new AuthToken(id, role, expiry, key);
     }
 
     public AuthToken convertAuthToken(String token) {
-        return new AuthToken(token, key);
+        if (token == null || token.isEmpty()) {
+            log.warn("Attempting to convert null or empty token");
+            return null;
+        }
+
+        try {
+            return new AuthToken(token, key);
+        } catch (Exception e) {
+            log.error("Error converting token: {}", token, e);
+            return null;
+        }
     }
 
     public Authentication getAuthentication(AuthToken authToken) {
         if (authToken.validate()) {
             Claims claims = authToken.getTokenClaims();
             String role = claims.get(AUTHORITIES_KEY, String.class); // 역할 정보 추출
+            log.debug("Extracted role from token: {}", role);
 
             // role이 null일 경우 기본값 설정
             if (role == null) {
                 role = RoleType.USER.getCode();
+                log.debug("No role found in token, using default: {}", role);
             }
 
             Collection<? extends GrantedAuthority> authorities =
                     Arrays.stream(role.split(",")) // 역할이 여러 개인 경우 처리
                             .map(SimpleGrantedAuthority::new)
                             .collect(Collectors.toList());
+            log.debug("Authorities extracted from token: {}", authorities);
 
             User principal = new User(claims.getSubject(), "", authorities);
             return new UsernamePasswordAuthenticationToken(principal, authToken, authorities);
         } else {
+            log.warn("Token validation failed");
             throw new TokenValidFailedException();
         }
     }

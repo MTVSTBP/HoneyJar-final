@@ -2,6 +2,7 @@ package com.tbp.honeyjar.login.service.user;
 
 import com.tbp.honeyjar.login.entity.user.User;
 import com.tbp.honeyjar.login.mapper.user.UserMapper;
+import com.tbp.honeyjar.login.oauth.handler.AuthenticationHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
