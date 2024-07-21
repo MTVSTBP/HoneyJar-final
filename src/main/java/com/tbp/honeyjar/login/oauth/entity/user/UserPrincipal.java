@@ -22,6 +22,7 @@ import java.util.Map;
 public class UserPrincipal implements OAuth2User, UserDetails, OidcUser {
     private Long userId;
     private String name;
+    private String pr;
     private Collection<GrantedAuthority> authorities;
     private OidcIdToken idToken;
     private OidcUserInfo userInfo;
@@ -93,6 +94,7 @@ public class UserPrincipal implements OAuth2User, UserDetails, OidcUser {
         return UserPrincipal.builder()
                 .userId(user.getUserId())
                 .name(user.getName())
+                .pr(user.getPr())
                 .authorities(Collections.singletonList(new SimpleGrantedAuthority(RoleType.USER.getCode())))
                 .build();
     }
