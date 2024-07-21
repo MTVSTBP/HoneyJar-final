@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 
 @Configuration
@@ -26,22 +25,26 @@ public class FirebaseConfig {
 
     @Bean
     public FirebaseApp firebaseApp() throws IOException {
-        ClassPathResource serviceAccountResource = new ClassPathResource(firebaseConfigPath);
+        // Use ClassPathResource to load the file from the classpath
+        ClassPathResource serviceAccount = new ClassPathResource(firebaseConfigPath);
+
         FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccountResource.getInputStream()))
+                .setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream()))
                 .setStorageBucket(firebaseBucket)
                 .build();
 
-        return FirebaseApp.initializeApp(options);
+        FirebaseApp app = FirebaseApp.initializeApp(options);
+
+        return app;
     }
 
     @Bean
-    public FirebaseAuth firebaseAuth(FirebaseApp firebaseApp) {
-        return FirebaseAuth.getInstance(firebaseApp);
+    public FirebaseAuth firebaseAuth() throws IOException {
+        return FirebaseAuth.getInstance(firebaseApp());
     }
 
     @Bean
-    public Bucket bucket(FirebaseApp firebaseApp) {
-        return StorageClient.getInstance(firebaseApp).bucket();
+    public Bucket bucket() throws IOException {
+        return StorageClient.getInstance(firebaseApp()).bucket();
     }
 }

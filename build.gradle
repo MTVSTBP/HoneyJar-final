@@ -39,6 +39,7 @@ dependencies {
 
 	implementation 'com.google.firebase:firebase-admin:9.2.0'
 	implementation 'com.google.cloud:google-cloud-storage:2.6.0'
+	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '8.0.1'
 }
 
 tasks.named('test') {
