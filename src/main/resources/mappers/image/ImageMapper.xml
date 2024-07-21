@@ -4,30 +4,26 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tbp.honeyjar.image.dao.ImageMapper">
 
+    <!-- 이미지 단건 삽입 -->
+    <insert id="insertImage" parameterType="com.tbp.honeyjar.image.dto.ImageDTO">
+        INSERT INTO image (url, user_id, post_id, is_main)
+        VALUES (#{url}, #{userId}, #{postId}, #{isMain})
+    </insert>
+
+    <!-- 여러 이미지 삽입 -->
     <insert id="insertImages" parameterType="java.util.List">
-        INSERT INTO image (
-        url,
-        user_id,
-        post_id,
-        is_main
-        ) VALUES
+        INSERT INTO image (url, user_id, post_id, is_main)
+        VALUES
         <foreach collection="images" item="image" separator=",">
-            (
-            #{image.url},
-            #{image.userId},
-            #{image.postId},
-            #{image.isMain}
-            )
+            (#{image.url}, #{image.userId}, #{image.postId}, #{image.isMain})
         </foreach>
     </insert>
 
+    <!-- 포스트 ID로 이미지 찾기 -->
     <select id="findImagesByPostId" resultType="com.tbp.honeyjar.image.dto.ImageDTO">
-        SELECT
-        url,
-        user_id,
-        post_id,
-        is_main
+        SELECT image_id, url, user_id, post_id, is_main
         FROM image
         WHERE post_id = #{postId}
     </select>
+
 </mapper>

@@ -6,8 +6,11 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
+
 @Mapper
 public interface ImageMapper {
+    void insertImage(ImageDTO image);
+
     void insertImages(@Param("images") List<ImageDTO> images);
 
     List<ImageDTO> findImagesByPostId(Long postId);

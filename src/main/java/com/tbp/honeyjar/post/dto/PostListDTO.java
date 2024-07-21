@@ -5,15 +5,18 @@ public class PostListDTO {
     private Long postId;
     private String postTitle;
     private String post;
-    private String profileImg;
+    private String mainImageUrl;
+    private Boolean bookmarked;
+//    private String profileImg;
 
     public PostListDTO() {}
 
-    public PostListDTO(Long postId, String postTitle, String post, String profileImg) {
+    public PostListDTO(Long postId, String postTitle, String post, String mainImageUrl, Boolean bookmarked) {
         this.postId = postId;
         this.postTitle = postTitle;
         this.post = post;
-        this.profileImg = profileImg;
+        this.mainImageUrl = mainImageUrl;
+        this.bookmarked = bookmarked;
     }
 
     public Long getPostId() {
@@ -40,12 +43,20 @@ public class PostListDTO {
         this.post = post;
     }
 
-    public String getProfileImg() {
-        return profileImg;
+    public String getMainImageUrl() {
+        return mainImageUrl;
     }
 
-    public void setProfileImg(String profileImg) {
-        this.profileImg = profileImg;
+    public void setMainImageUrl(String mainImageUrl) {
+        this.mainImageUrl = mainImageUrl;
+    }
+
+    public Boolean getBookmarked() {
+        return bookmarked;
+    }
+
+    public void setBookmarked(Boolean bookmarked) {
+        this.bookmarked = bookmarked;
     }
 
     @Override
@@ -54,7 +65,8 @@ public class PostListDTO {
                 "postId=" + postId +
                 ", postTitle='" + postTitle + '\'' +
                 ", post='" + post + '\'' +
-                ", profileImg='" + profileImg + '\'' +
+                ", mainImageUrl='" + mainImageUrl + '\'' +
+                ", bookmarked=" + bookmarked +
                 '}';
     }
 }

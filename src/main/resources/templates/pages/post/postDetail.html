@@ -2,28 +2,27 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/layout/writeLayout}"
-      layout:fragment="content"
->
+      layout:fragment="content">
 <head>
     <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/post/postDetail.css}"/>
     <th:block layout:fragment="title">
-        <title th:text="${postDetail.postTitle}">포스트 상세</title>
+        <title th:text="${post.title}">포스트 상세</title>
     </th:block>
 </head>
 <body>
-<div id="container">
+<div id="container" th:object="${post}">
     <!-- title -->
     <div class="title_wrap">
         <div class="title">
-            <span id="category" th:text="${postDetail.category}">카테고리명</span>
-            <h2 th:text="${postDetail.postTitle}">맛있다는 제목</h2>
-            <p id="date" th:text="${postDetail.date}">2024.06.24</p>
+            <span id="category" th:text="*{categoryName}">카테고리명</span>
+            <h2 th:text="*{title}">제목</h2>
+            <p id="date" th:text="*{createdAt}">2024.06.24</p>
         </div>
         <div class="more_h">
             <img src="/assets/svg/more_horiz.svg" alt="more_horiz">
             <div class="click_box">
                 <div class="d_flex">
-                    <a class="edit_p" onclick="location.href='/post/correction'">수정</a>
+                    <a class="edit_p" th:href="@{'/post/correction?postId=' + *{postId}}">수정</a>
                     <a id="deletePost" class="delete_p" href="javascript:void(0)">삭제</a>
                 </div>
             </div>
@@ -35,7 +34,12 @@
     <div class="kind_wrap">
         <div class="kind_slider">
             <ul class="slider">
-                <li th:each="image : ${postDetail.images}" th:text="${image}"></li>
+                <li th:if="*{mainImageUrl != null}">
+                    <img th:src="*{mainImageUrl}" alt="썸네일 이미지">
+                </li>
+                <li th:each="image : *{imageUrls}" th:if="${image != *{mainImageUrl}}">
+                    <img th:src="${image}" alt="이미지">
+                </li>
             </ul>
         </div>
         <div class="arrow">
@@ -54,17 +58,17 @@
         <div class="infos">
             <div class="best_menu info">
                 <h5>대표 메뉴</h5>
-                <p th:text="${postDetail.bestMenu}">교토식 오코노미야끼, 츄라이</p>
+                <p th:text="*{recommendMenu}">대표 메뉴</p>
             </div>
 
             <div class="price info">
                 <h5>가격</h5>
-                <p th:text="${postDetail.price}">30,000</p>
+                <p th:text="*{price}">가격</p>
             </div>
 
             <div class="address info">
                 <h5>주소</h5>
-                <p th:text="${postDetail.address}">경기도 성남시 수정구 대왕판교로 815</p>
+                <p th:text="*{placeName}">주소</p>
             </div>
         </div>
 
@@ -78,35 +82,39 @@
 
     <!-- map -->
     <div class="map">
-        <div class="map_box">
-            <p>map</p>
-        </div>
+        <div id="map"></div>
     </div>
 
     <!-- context -->
     <div class="post_context">
-        <p th:text="${postDetail.content}">맛있었다는 내용이 들어가는 구간! 텍스트가 짤리지 않고 그대로 작성되어 줄바꿈이 됨</p>
+        <p th:text="*{post}">내용</p>
     </div>
     <!--// context -->
 
     <!-- comment -->
     <div class="comment_box">
         <div class="like">
-            <button id="likeButton" data-post-id="${postDetail.id}">
+            <button id="likeButton" data-post-id="*{postId}">
                 <img src="/assets/svg/favorite.svg" alt="좋아요" id="likeImage">
-                <span id="likeCount" th:text="${postDetail.likeCount}">0</span>
+                <span id="likeCount" >
+<!--                    th:text="*{like}">-->
+                    0</span>
             </button>
         </div>
         <div class="comment">
             <button id="commentButton">
                 <img src="/assets/svg/mode_comment.svg" alt="댓글">
-                <span id="commentCount">0</span>
+                <span id="commentCount" >
+<!--                      th:text="*{commentId}">-->
+                    0</span>
             </button>
         </div>
         <div class="scope" id="rating">
-            <button id="openRatingModal" data-post-id="${postDetail.id}">
+            <button id="openRatingModal" data-post-id="*{postId}">
                 <img src="/assets/svg/star.svg" alt="별점" id="ratingStar">
-                <span id="averageRating" th:text="${postDetail.averageRating}">0</span> <!-- 초기 총점 0으로 설정 -->
+                <span id="averageRating" >
+<!-- th:text="*{rating}">-->
+                0</span>
             </button>
         </div>
 
@@ -137,7 +145,6 @@
         </div>
 
         <!-- Modal -->
-        <!-- 모달에 확인 버튼 추가 -->
         <div id="ratingModal" class="modal">
             <div class="modal-content">
                         <span class="close">

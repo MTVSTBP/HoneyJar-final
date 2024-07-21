@@ -2,8 +2,11 @@ package com.tbp.honeyjar.post.service;
 
 
 import com.google.firebase.auth.FirebaseAuthException;
+import com.tbp.honeyjar.admin.dao.CategoryMapper;
+import com.tbp.honeyjar.admin.dto.category.FoodResponseDto;
 import com.tbp.honeyjar.global.Firebase.FireBaseService;
 
+import com.tbp.honeyjar.image.dto.ImageDTO;
 import com.tbp.honeyjar.image.service.ImageService;
 import com.tbp.honeyjar.place.dto.PlaceDTO;
 import com.tbp.honeyjar.place.service.PlaceService;
@@ -28,52 +31,60 @@ public class PostService {
     private final ImageService imageService;
     private final PlaceService placeService;
     private final FireBaseService fireBaseService;
+    private final CategoryMapper categoryMapper;
 
-    public PostService(PostMapper postMapper, ImageService imageService, PlaceService placeService, FireBaseService fireBaseService) {
+    public PostService(PostMapper postMapper, ImageService imageService, PlaceService placeService, FireBaseService fireBaseService, CategoryMapper categoryMapper) {
         this.postMapper = postMapper;
         this.imageService = imageService;
         this.placeService = placeService;
         this.fireBaseService = fireBaseService;
+        this.categoryMapper = categoryMapper;
     }
 
     @Transactional
-    public Long createPost(PostRequestDTO postRequestDTO, List<MultipartFile> files, String mainImageUrl) throws IOException {
-        // 1. 새로운 장소 등록
+    public Long createPost(PostRequestDTO postRequestDTO, List<MultipartFile> files, MultipartFile mainImageFile, String mainImageUrl) throws IOException, FirebaseAuthException {
+        // 새로운 장소 등록
         PlaceDTO placeDTO = postRequestDTO.getPlace();
         placeService.createPlace(placeDTO);
         Long placeId = placeDTO.getPlaceId();
 
-        // 2. 포스트 등록 시 placeId를 설정
+        // 포스트 등록 시 placeId를 설정
         postRequestDTO.setPlaceId(placeId);
         postMapper.createPost(postRequestDTO);
         Long postId = postRequestDTO.getPostId();
 
-        // 3. 파일 업로드 및 이미지 URL 리스트 생성
-        List<String> imageUrls = new ArrayList<>();
+        // 파일 업로드 및 이미지 URL 리스트 생성
+        List<ImageDTO> imageDTOList = new ArrayList<>();
         for (MultipartFile file : files) {
-            try {
-                String fileName = generateFileName(file); // 파일 이름 생성 로직 추가
-                String imageUrl = fireBaseService.uploadFile(file, fileName); // Firebase에 파일 업로드
-                imageUrls.add(imageUrl);
-            } catch (FirebaseAuthException e) {
-                // FirebaseAuthException 처리 로직 추가
-                e.printStackTrace();
-                // 예를 들어, 이미지 업로드 실패시 예외를 다시 던지거나 로그를 남길 수 있습니다.
-                throw new RuntimeException("Failed to upload file to Firebase", e);
-            }
+            String fileName = generateFileName(file);
+            String imageUrl = fireBaseService.uploadFile(file, fileName);
+            ImageDTO imageDTO = new ImageDTO();
+            imageDTO.setUrl(imageUrl);
+            imageDTO.setUserId(postRequestDTO.getUserId());
+            imageDTO.setPostId(postId);
+            imageDTO.setMain(false);
+            imageDTOList.add(imageDTO);
         }
 
-        postRequestDTO.setImageUrls(imageUrls);
-        postRequestDTO.setMainImageUrl(mainImageUrl);
+        // 메인 이미지 업로드
+        String mainImageUploadUrl = fireBaseService.uploadFile(mainImageFile, generateFileName(mainImageFile));
+        ImageDTO mainImageDTO = new ImageDTO();
+        mainImageDTO.setUrl(mainImageUploadUrl);
+        mainImageDTO.setUserId(postRequestDTO.getUserId());
+        mainImageDTO.setPostId(postId);
+        mainImageDTO.setMain(true);
+        imageService.saveMainImage(mainImageDTO);
 
-        // 4. 썸네일 이미지를 포함한 모든 이미지를 삽입
-        imageService.saveImages(imageUrls, postRequestDTO.getUserId(), postId, postRequestDTO.getMainImageUrl());
+        // 나머지 이미지 저장
+        imageService.saveImages(imageDTOList);
 
         return postId;
     }
 
+
+
+
     private String generateFileName(MultipartFile file) {
-        // 파일 이름 생성 로직을 구현합니다.
         return UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
     }
 
@@ -82,6 +93,14 @@ public class PostService {
     }
 
     public PostResponseDTO findPostById(Long postId) {
-        return postMapper.findPostById(postId);
+        PostResponseDTO postResponseDTO = postMapper.findPostById(postId);
+        Long categoryId = postResponseDTO.getCategoryId();
+        if (categoryId != null) {
+            FoodResponseDto category = categoryMapper.findFoodById(categoryId);
+            if (category != null) {
+                postResponseDTO.setCategoryName(category.getName());
+            }
+        }
+        return postResponseDTO;
     }
 }

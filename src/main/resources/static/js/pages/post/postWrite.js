@@ -12,11 +12,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const placeNameField = document.getElementById('placeName');
     const placeXField = document.getElementById('placeXCoordinate');
     const placeYField = document.getElementById('placeYCoordinate');
-    const categoryField = document.getElementById('category'); // 카테고리 필드 추가
+    const categoryField = document.getElementById('category');
+    const modal = document.getElementById('Modal');
+    const completeBtn = document.getElementById('complete');
     const maxFiles = 5;
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
     let selectedFiles = JSON.parse(localStorage.getItem('selectedFiles')) || [];
     let thumbnailIndex = localStorage.getItem('thumbnailIndex') !== null ? parseInt(localStorage.getItem('thumbnailIndex')) : null;
+    let postId;
 
     function updateImagePreview() {
         imagePreview.innerHTML = '';
@@ -76,7 +79,57 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    imageUpload.addEventListener('change', function () {
+    function dataURLtoBlob(dataurl) {
+        const arr = dataurl.split(',');
+        const mime = arr[0].match(/:(.*?);/)[1];
+        const bstr = atob(arr[1]);
+        let n = bstr.length;
+        const u8arr = new Uint8Array(n);
+        while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
+        }
+        return new Blob([u8arr], { type: mime });
+    }
+
+    function compressImage(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const img = new Image();
+                img.onload = function () {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const maxWidth = 800; // 최대 너비
+                    const maxHeight = 800; // 최대 높이
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > height) {
+                        if (width > maxWidth) {
+                            height *= maxWidth / width;
+                            width = maxWidth;
+                        }
+                    } else {
+                        if (height > maxHeight) {
+                            width *= maxHeight / height;
+                            height = maxHeight;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+
+                    const dataURL = canvas.toDataURL('image/jpeg', 0.7); // 압축 품질 설정 (0.7은 70% 품질)
+                    resolve(dataURL);
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    imageUpload.addEventListener('change', async function () {
         fileCountMessage.style.display = 'none';
         fileTypeMessage.style.display = 'none';
 
@@ -94,18 +147,16 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        files.forEach(file => {
+        for (const file of files) {
             if (selectedFiles.length < maxFiles) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    selectedFiles.push({ name: file.name, dataURL: e.target.result });
-                    localStorage.setItem('selectedFiles', JSON.stringify(selectedFiles));
-                    updateImagePreview();
-                    validateForm();
-                };
-                reader.readAsDataURL(file);
+                const compressedDataURL = await compressImage(file);
+                selectedFiles.push({ name: file.name, dataURL: compressedDataURL });
+                localStorage.setItem('selectedFiles', JSON.stringify(selectedFiles));
+                updateImagePreview();
+                validateForm();
             }
-        });
+        }
+        resetFileInput();
     });
 
     function showErrorMessage(element, message) {
@@ -200,28 +251,21 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const formData = new FormData(postForm);
 
-        // 데이터 URL을 Blob으로 변환하는 함수
-        function dataURLtoBlob(dataurl) {
-            var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-                bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-            while (n--) {
-                u8arr[n] = bstr.charCodeAt(n);
-            }
-            return new Blob([u8arr], {type: mime});
-        }
-
         // Add selected files to formData
         selectedFiles.forEach((fileData, index) => {
             const blob = dataURLtoBlob(fileData.dataURL);
-            formData.append('files', blob, fileData.name); // 'file' -> 'files'로 수정
+            formData.append('files', blob, fileData.name);
         });
 
-        if (thumbnailIndex !== null && thumbnailIndex >= 0 && thumbnailIndex < selectedFiles.length) {
+        // Add main image URL
+        if (thumbnailIndex !== null) {
+            const mainImageBlob = dataURLtoBlob(selectedFiles[thumbnailIndex].dataURL);
             formData.append('mainImageUrl', selectedFiles[thumbnailIndex].name);
+            formData.append('mainImageFile', mainImageBlob, selectedFiles[thumbnailIndex].name);
         }
 
         try {
-            const response = await fetch('/post/write', {  // '/files'에서 '/post/write'로 수정
+            const response = await fetch('/post/write', {
                 method: 'POST',
                 body: formData
             });
@@ -235,7 +279,8 @@ document.addEventListener("DOMContentLoaded", function () {
             if (result.error) {
                 showErrorMessage(errorMessage, result.error);
             } else {
-                window.location.href = `/post/detail?postId=${result.postId}`;
+                postId = result.postId;
+                modal.style.display = 'block'; // 모달 표시
             }
         } catch (error) {
             console.error('Error submitting form:', error);
@@ -243,6 +288,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    // 모달 확인 버튼 클릭 시 상세 페이지로 이동
+    completeBtn.addEventListener('click', function () {
+        window.location.href = `/post/detail?postId=${postId}`;
+    });
 
     function openMapPage() {
         localStorage.setItem('postFormState', JSON.stringify({
@@ -251,7 +300,7 @@ document.addEventListener("DOMContentLoaded", function () {
             bestMenu: document.getElementById('bestMenu').value.trim(),
             price: document.getElementById('price').value.trim(),
             placeName: document.getElementById('placeNameInput').value.trim(),
-            category: categoryField.value.trim() // 카테고리 저장 추가
+            category: categoryField.value.trim()
         }));
         window.location.href = '/post/map';
     }
@@ -269,7 +318,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById('bestMenu').value = postFormState.bestMenu;
             document.getElementById('price').value = postFormState.price;
             document.getElementById('placeNameInput').value = postFormState.placeName;
-            categoryField.value = postFormState.category; // 카테고리 복원 추가
+            categoryField.value = postFormState.category;
             localStorage.removeItem('postFormState');
         }
 

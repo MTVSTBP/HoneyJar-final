@@ -1,23 +1,20 @@
 package com.tbp.honeyjar.image.dto;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 public class ImageDTO {
     private Long imageId;
-    private String url;
     private Long userId;
+    private String url;
     private Long postId;
     private boolean isMain;
 
     public ImageDTO() {}
 
-    public ImageDTO(Long imageId, String url, Long userId, Long postId, boolean isMain) {
+    public ImageDTO(Long imageId, Long userId, String url, Long postId, boolean isMain) {
         this.imageId = imageId;
-        this.url = url;
         this.userId = userId;
+        this.url = url;
         this.postId = postId;
         this.isMain = isMain;
     }

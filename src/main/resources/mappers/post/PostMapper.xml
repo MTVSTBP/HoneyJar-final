@@ -7,21 +7,30 @@
     <!-- 포스트 리스트 조회 -->
     <resultMap id="postListResultMap" type="com.tbp.honeyjar.post.dto.PostListDTO">
         <id property="postId" column="post_id"/>
-        <result property="title" column="title"/>
+        <result property="postTitle" column="title"/>
         <result property="post" column="post"/>
+        <result property="mainImageUrl" column="main_image_url"/>
+        <result property="bookmarked" column="bookmarked"/>
+        <!-- <result property="profileImg" column="profile_img"/> -->
     </resultMap>
 
     <!-- 포스트 상세 조회 -->
     <resultMap id="postResponseResultMap" type="com.tbp.honeyjar.post.dto.PostResponseDTO">
         <id property="postId" column="post_id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="categoryName" column="name"/>
         <result property="title" column="title"/>
         <result property="recommendMenu" column="recommend_menu"/>
         <result property="price" column="price"/>
         <result property="post" column="post"/>
-        <result property="createdAt" column="created_at"/>
-        <result property="updatedAt" column="updated_at"/>
         <result property="placeId" column="place_id"/>
-        <result property="userId" column="user_id"/>
+        <result property="placeName" column="placeName"/>
+        <result property="xCoordinate" column="x_coordinate"/>
+        <result property="yCoordinate" column="y_coordinate"/>
+        <result property="createdAt" column="createdAt"/>
+        <result property="updatedAt" column="updatedAt"/>
+        <result property="imageUrls" column="imageUrls" typeHandler="com.tbp.honeyjar.global.mybatis.StringListTypeHandler"/>
+        <result property="mainImageUrl" column="mainImageUrl"/>
         <collection property="images" ofType="com.tbp.honeyjar.image.dto.ImageDTO" resultMap="imageResultMap"/>
     </resultMap>
 
@@ -36,55 +45,79 @@
         SELECT
         p.post_id,
         p.title,
-        p.post
-        FROM
-        post p
+        p.post,
+        i.url AS main_image_url,
+        CASE
+        WHEN b.post_id IS NOT NULL THEN true
+        ELSE false
+        END AS bookmarked
+        FROM post p
+        LEFT JOIN (
+        SELECT post_id, url
+        FROM image
+        WHERE is_main = 1
+        ) i ON p.post_id = i.post_id
+        LEFT JOIN bookmark b ON p.post_id = b.post_id
+        <!--LEFT JOIN user u ON p.user_id = u.user_id-->
     </select>
 
     <!-- 포스트 상세 조회 쿼리 -->
     <select id="findPostById" resultMap="postResponseResultMap">
         SELECT
-        p.post_id,
-        p.title,
-        p.recommend_menu,
-        p.price,
-        p.post,
-        p.created_at,
-        p.updated_at,
-        p.place_id,
-        p.user_id,
-        i.image_id,
-        i.url,
-        i.is_main
-        FROM
-        post p
-        LEFT JOIN
-        image i ON p.post_id = i.post_id
+            p.post_id,
+            p.category_id,
+            p.title,
+            p.recommend_menu,
+            p.price,
+            p.post,
+            p.created_at,
+            p.updated_at,
+            p.place_id,
+            pl.place_name,
+            pl.x_coordinate,
+            pl.y_coordinate,
+            p.image_urls,
+            p.main_image_url,
+            -- u.profile_img,
+            -- l.like_count,
+            -- c.comment_count,
+            -- r.rating,
+            i.image_id,
+            i.url,
+            i.is_main
+        FROM post p
+            LEFT JOIN image i ON p.post_id = i.post_id
+            LEFT JOIN place pl ON p.place_id = pl.place_id
+            -- LEFT JOIN user u ON p.user_id = u.user_id
+            -- LEFT JOIN (SELECT post_id, COUNT(*) AS like_count FROM likes GROUP BY post_id) l ON p.post_id = l.post_id
+            -- LEFT JOIN (SELECT post_id, COUNT(*) AS comment_count FROM comments GROUP BY post_id) c ON p.post_id = c.post_id
+            -- LEFT JOIN (SELECT post_id, AVG(rating) AS rating FROM ratings GROUP BY post_id) r ON p.post_id = r.post_id
         WHERE
-        p.post_id = #{postId}
+            p.post_id = #{postId}
     </select>
+
 
     <!-- 포스트 등록 쿼리 -->
     <insert id="createPost" useGeneratedKeys="true" keyProperty="postId">
         INSERT INTO post (
-        title,
-        recommend_menu,
-        price,
-        post,
-        created_at,
-        place_id,
-        user_id,
-        category_id  <!-- 추가 -->
+            title,
+            recommend_menu,
+            price,
+            post,
+            created_at,
+            place_id,
+            user_id,
+            category_id
         )
         VALUES (
-        #{title},
-        #{recommendMenu},
-        #{price},
-        #{post},
-        NOW(),
-        #{placeId},
-        #{userId},
-        #{categoryId}  <!-- 추가 -->
+            #{title},
+            #{recommendMenu},
+            #{price},
+            #{post},
+            NOW(),
+            #{placeId},
+            #{userId},
+            #{categoryId}
         )
     </insert>
 
@@ -92,12 +125,13 @@
     <update id="updatePost">
         UPDATE post
         SET
-        title = #{title},
-        recommend_menu = #{recommendMenu},
-        price = #{price},
-        post = #{post},
-        updated_at = NOW(),
-        place_id = #{placeId} <!-- placeId를 포함 -->
+            title = #{title},
+            recommend_menu = #{recommendMenu},
+            price = #{price},
+            post = #{post},
+            updated_at = NOW(),
+            place_id = #{placeId},
+            category_id = #{categoryId}
         WHERE post_id = #{postId}
     </update>
 </mapper>

@@ -1,9 +1,11 @@
 package com.tbp.honeyjar.post.controller;
 
 
+import com.google.firebase.auth.FirebaseAuthException;
 import com.tbp.honeyjar.admin.service.CategoryService;
 import com.tbp.honeyjar.post.dto.*;
 import com.tbp.honeyjar.post.service.PostService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,9 +29,14 @@ public class PostController {
     }
 
     @GetMapping
-    public String postList(Model model) {
+    public String postList(Model model, @RequestParam(required = false) Long selectedCategory) {
         List<PostListDTO> posts = postService.findAllPost();
         model.addAttribute("posts", posts);
+
+        // 카테고리 목록 추가
+        model.addAttribute("categories", categoryService.findAllFoodCategory());
+        model.addAttribute("selectedCategory", selectedCategory);
+
         return "pages/post/post";
     }
 
@@ -44,12 +51,18 @@ public class PostController {
     public ResponseEntity<Map<String, Object>> postCreate(
             @ModelAttribute PostRequestDTO postRequestDTO,
             @RequestParam("files") List<MultipartFile> files,
+            @RequestParam("mainImageFile") MultipartFile mainImageFile,
             @RequestParam("mainImageUrl") String mainImageUrl) throws IOException {
 
-        Long postId = postService.createPost(postRequestDTO, files, mainImageUrl);
         Map<String, Object> response = new HashMap<>();
-        response.put("postId", postId);
-        return ResponseEntity.ok(response);
+        try {
+            Long postId = postService.createPost(postRequestDTO, files, mainImageFile, mainImageUrl);
+            response.put("postId", postId);
+            return ResponseEntity.ok(response);
+        } catch (FirebaseAuthException e) {
+            response.put("error", "Failed to upload file to Firebase: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
 
 
@@ -57,8 +70,10 @@ public class PostController {
     public String postDetail(@RequestParam Long postId, Model model) {
         PostResponseDTO post = postService.findPostById(postId);
         model.addAttribute("post", post);
+
         return "pages/post/postDetail";
     }
+
 //
 //    @GetMapping("/correction")
 //    public String postCorrectionForm(@RequestParam Long postId, Model model) {

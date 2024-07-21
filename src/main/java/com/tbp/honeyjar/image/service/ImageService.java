@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
+
 @Service
 public class ImageService {
 
@@ -21,17 +22,13 @@ public class ImageService {
     }
 
     @Transactional
-    public void saveImages(List<String> imageUrls, Long userId, Long postId, String mainImageUrl) {
-        List<ImageDTO> images = new ArrayList<>();
-        for (String imageUrl : imageUrls) {
-            ImageDTO image = new ImageDTO();
-            image.setUrl(imageUrl);
-            image.setUserId(userId);
-            image.setPostId(postId);
-            image.setMain(imageUrl.equals(mainImageUrl));
-            images.add(image);
-        }
+    public void saveImages(List<ImageDTO> images) {
         imageMapper.insertImages(images);
+    }
+
+    @Transactional
+    public void saveMainImage(ImageDTO mainImage) {
+        imageMapper.insertImage(mainImage);
     }
 
     public List<ImageDTO> getImagesByPostId(Long postId) {
