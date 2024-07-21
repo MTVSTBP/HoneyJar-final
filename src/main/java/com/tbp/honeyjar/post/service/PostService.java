@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -41,6 +42,7 @@ public class PostService {
         this.categoryMapper = categoryMapper;
     }
 
+
     @Transactional
     public Long createPost(PostRequestDTO postRequestDTO, List<MultipartFile> files, MultipartFile mainImageFile, String mainImageUrl) throws IOException, FirebaseAuthException {
         // 새로운 장소 등록
@@ -53,34 +55,31 @@ public class PostService {
         postMapper.createPost(postRequestDTO);
         Long postId = postRequestDTO.getPostId();
 
+        // 메인 이미지 업로드
+        String mainImageUploadUrl = fireBaseService.uploadFile(mainImageFile, UUID.randomUUID().toString());
+
         // 파일 업로드 및 이미지 URL 리스트 생성
-        List<ImageDTO> imageDTOList = new ArrayList<>();
+        List<String> imageUrls = new ArrayList<>();
         for (MultipartFile file : files) {
-            String fileName = generateFileName(file);
+            String fileName = UUID.randomUUID().toString();
             String imageUrl = fireBaseService.uploadFile(file, fileName);
-            ImageDTO imageDTO = new ImageDTO();
-            imageDTO.setUrl(imageUrl);
-            imageDTO.setUserId(postRequestDTO.getUserId());
-            imageDTO.setPostId(postId);
-            imageDTO.setMain(false);
-            imageDTOList.add(imageDTO);
+            imageUrls.add(imageUrl);
         }
 
-        // 메인 이미지 업로드
-        String mainImageUploadUrl = fireBaseService.uploadFile(mainImageFile, generateFileName(mainImageFile));
-        ImageDTO mainImageDTO = new ImageDTO();
-        mainImageDTO.setUrl(mainImageUploadUrl);
-        mainImageDTO.setUserId(postRequestDTO.getUserId());
-        mainImageDTO.setPostId(postId);
-        mainImageDTO.setMain(true);
-        imageService.saveMainImage(mainImageDTO);
+        // 메인 이미지 URL을 리스트에서 제외
+        imageUrls = imageUrls.stream()
+                .filter(imageUrl -> !imageUrl.equals(mainImageUploadUrl))
+                .collect(Collectors.toList());
 
-        // 나머지 이미지 저장
-        imageService.saveImages(imageDTOList);
+        postRequestDTO.setImageUrls(imageUrls);
+        postRequestDTO.setMainImageUrl(mainImageUploadUrl);
+
+        // 썸네일 이미지를 포함한 모든 이미지를 삽입
+        imageService.saveMainImage(mainImageUploadUrl, postRequestDTO.getUserId(), postId);
+        imageService.saveImages(imageUrls, postRequestDTO.getUserId(), postId);
 
         return postId;
     }
-
 
 
 

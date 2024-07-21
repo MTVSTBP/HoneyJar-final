@@ -3,6 +3,7 @@ package com.tbp.honeyjar.post.controller;
 
 import com.google.firebase.auth.FirebaseAuthException;
 import com.tbp.honeyjar.admin.service.CategoryService;
+import com.tbp.honeyjar.image.service.ImageService;
 import com.tbp.honeyjar.post.dto.*;
 import com.tbp.honeyjar.post.service.PostService;
 import org.springframework.http.HttpStatus;
@@ -22,10 +23,12 @@ public class PostController {
 
     private final PostService postService;
     private final CategoryService categoryService;
+    private final ImageService imageService;
 
-    public PostController(PostService postService, CategoryService categoryService) {
+    public PostController(PostService postService, CategoryService categoryService, ImageService imageService) {
         this.postService = postService;
         this.categoryService = categoryService;
+        this.imageService = imageService;
     }
 
     @GetMapping

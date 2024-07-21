@@ -253,11 +253,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Add selected files to formData
         selectedFiles.forEach((fileData, index) => {
-            const blob = dataURLtoBlob(fileData.dataURL);
-            formData.append('files', blob, fileData.name);
+            if (index !== thumbnailIndex) {
+                const blob = dataURLtoBlob(fileData.dataURL);
+                formData.append('files', blob, fileData.name);
+            }
         });
 
-        // Add main image URL
+        // Add main image URL and file
         if (thumbnailIndex !== null) {
             const mainImageBlob = dataURLtoBlob(selectedFiles[thumbnailIndex].dataURL);
             formData.append('mainImageUrl', selectedFiles[thumbnailIndex].name);

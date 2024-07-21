@@ -15,16 +15,21 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+
 @Service
 public class FireBaseService {
 
-    @Value("${app.firebase-bucket}")
-    private String firebaseBucket;
+    private final Bucket bucket;
+
+    public FireBaseService(Bucket bucket) {
+        this.bucket = bucket;
+    }
 
     public String uploadFile(MultipartFile file, String fileName) throws IOException, FirebaseAuthException {
-        Bucket bucket = StorageClient.getInstance().bucket(firebaseBucket);
         InputStream content = new ByteArrayInputStream(file.getBytes());
         Blob blob = bucket.create(fileName, content, file.getContentType());
         return blob.getMediaLink();
     }
+
+
 }
