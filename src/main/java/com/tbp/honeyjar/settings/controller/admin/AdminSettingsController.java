@@ -2,17 +2,13 @@ package com.tbp.honeyjar.settings.controller.admin;
 
 import com.tbp.honeyjar.login.common.CookieUtil;
 import com.tbp.honeyjar.login.entity.admin.Admin;
-import com.tbp.honeyjar.login.entity.user.User;
 import com.tbp.honeyjar.login.mapper.admin.AdminMapper;
-import com.tbp.honeyjar.login.mapper.user.UserMapper;
 import com.tbp.honeyjar.login.oauth.token.AuthToken;
 import com.tbp.honeyjar.login.oauth.token.AuthTokenProvider;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,7 +43,7 @@ public class AdminSettingsController {
                     if (admin != null) {
                         model.addAttribute("admin", admin);
                         log.debug("# model: {}", model);
-                        return "pages/setting/adminSetting";
+                        return "pages/settings/adminSettings";
                     }
                 }
             } catch (Exception e) {

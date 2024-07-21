@@ -43,7 +43,7 @@ public class SettingsController {
 //                }
 //                model.addAttribute("profileImageUrl", profileImageUrl);
 
-                return "pages/setting/setting";
+                return "pages/settings/settings";
             } else {
                 log.warn("Kakao ID not found: {}", kakaoId);
                 return "redirect:/login";
