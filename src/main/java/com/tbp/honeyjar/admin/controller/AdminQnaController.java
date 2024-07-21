@@ -1,21 +1,28 @@
 package com.tbp.honeyjar.admin.controller;
 
-import com.tbp.honeyjar.admin.dto.QnADto;
+import com.tbp.honeyjar.admin.dto.qna.QnaListResponseDto;
+import com.tbp.honeyjar.admin.service.QnAService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
+@RequiredArgsConstructor
 @Controller
 @RequestMapping("/admin/qna")
 public class AdminQnaController {
 
+    private final QnAService qnAService;
+
     @GetMapping
     public String qna(Model model) {
 
-        QnADto dto = new QnADto(1L, "Title Test", "Content Test");
+        List<QnaListResponseDto> qnaList = qnAService.findAllQna();
 
-        model.addAttribute("dto", dto);
+        model.addAttribute("qnaList", qnaList);
 
         return "pages/admin/qna/adminQna";
     }
