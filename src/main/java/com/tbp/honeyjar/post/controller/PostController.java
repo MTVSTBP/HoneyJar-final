@@ -1,179 +1,97 @@
 package com.tbp.honeyjar.post.controller;
 
-import com.tbp.honeyjar.bookmark.DTO.BookmarkDTO;
-import com.tbp.honeyjar.like.DTO.LikeDTO;
-import com.tbp.honeyjar.post.DTO.*;
-import com.tbp.honeyjar.rating.DTO.RatingDTO;
+
+import com.google.firebase.auth.FirebaseAuthException;
+import com.tbp.honeyjar.admin.service.CategoryService;
+import com.tbp.honeyjar.image.service.ImageService;
+import com.tbp.honeyjar.post.dto.*;
+import com.tbp.honeyjar.post.service.PostService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.io.IOException;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+
 
 @Controller
 @RequestMapping("/post")
 public class PostController {
 
+    private final PostService postService;
+    private final CategoryService categoryService;
+    private final ImageService imageService;
+
+    public PostController(PostService postService, CategoryService categoryService, ImageService imageService) {
+        this.postService = postService;
+        this.categoryService = categoryService;
+        this.imageService = imageService;
+    }
+
     @GetMapping
-    public String postList(@RequestParam(name = "category", required = false) String category,
-                           @RequestParam(name = "sortOption", required = false) String sortOption,
-                           @RequestParam(name = "goodRestaurant", required = false) Boolean goodRestaurant,
-                           Model model) {
-        List<PostsDTO> posts = getAllPosts();
-        List<BookmarkDTO> bookmarks = getBookmarks();
-        List<PostWithBookmarkDTO> postWithBookmarks = mergePostsAndBookmarks(posts, bookmarks);
+    public String postList(Model model, @RequestParam(required = false) Long selectedCategory) {
+        List<PostListDTO> posts = postService.findAllPost();
+        model.addAttribute("posts", posts);
 
-        // 필터링 로직 추가
-        if (category != null && !category.isEmpty()) {
-            postWithBookmarks = postWithBookmarks.stream()
-                    .filter(postWithBookmark -> postWithBookmark.getPost().getCategory().equals(category))
-                    .collect(Collectors.toList());
-        }
-
-        // 정렬 로직 추가
-        if (sortOption != null && !sortOption.isEmpty()) {
-            postWithBookmarks.sort(getComparator(sortOption));
-        }
-
-        // 체크박스 상태 및 선택된 옵션 유지
-        model.addAttribute("selectedCategory", category != null ? category : "");
-        model.addAttribute("selectedSortOption", sortOption != null ? sortOption : "");
-        model.addAttribute("goodRestaurant", goodRestaurant != null ? goodRestaurant : false);
-        model.addAttribute("postWithBookmarks", postWithBookmarks);
-
-        List<CategoryDTO> categories = getCategories();
-        model.addAttribute("categories", categories);
-
-        List<SortOptionDTO> sortOptions = getSortOptions();
-        model.addAttribute("sortOptions", sortOptions);
+        // 카테고리 목록 추가
+        model.addAttribute("categories", categoryService.findAllFoodCategory());
+        model.addAttribute("selectedCategory", selectedCategory);
 
         return "pages/post/post";
     }
 
-    private List<PostWithBookmarkDTO> mergePostsAndBookmarks(List<PostsDTO> posts, List<BookmarkDTO> bookmarks) {
-        Map<Long, BookmarkDTO> bookmarkMap = bookmarks.stream()
-                .collect(Collectors.toMap(BookmarkDTO::getPostId, Function.identity()));
-
-        return posts.stream()
-                .map(post -> PostWithBookmarkDTO.builder()
-                        .post(post)
-                        .bookmark(bookmarkMap.getOrDefault(post.getId(), BookmarkDTO.builder().postId(post.getId()).bookmarked(false).build()))
-                        .build())
-                .collect(Collectors.toList());
+    @GetMapping("/write")
+    public String postCreateForm(Model model) {
+        model.addAttribute("postRequestDTO", new PostRequestDTO());
+        model.addAttribute("categories", categoryService.findAllFoodCategory()); // 카테고리 목록 추가
+        return "pages/post/postWrite";
     }
 
-    private List<PostsDTO> getAllPosts() {
-        List<PostsDTO> posts = new ArrayList<>();
-        posts.add(PostsDTO.builder().id(1L).img1("/assets/svg/img_01.JPG").postTitle("Post 1").nickname("User1").category("category1").build());
-        posts.add(PostsDTO.builder().id(2L).img1("/assets/svg/img_02.JPG").postTitle("Post 2").nickname("User2").category("category4").build());
-        return posts;
-    }
+    @PostMapping("/write")
+    public ResponseEntity<Map<String, Object>> postCreate(
+            @ModelAttribute PostRequestDTO postRequestDTO,
+            @RequestParam("files") List<MultipartFile> files,
+            @RequestParam("mainImageFile") MultipartFile mainImageFile,
+            @RequestParam("mainImageUrl") String mainImageUrl) throws IOException {
 
-    private List<CategoryDTO> getCategories() {
-        List<CategoryDTO> categories = new ArrayList<>();
-        categories.add(CategoryDTO.builder().id("category1").name("일식").build());
-        categories.add(CategoryDTO.builder().id("category2").name("한식").build());
-        categories.add(CategoryDTO.builder().id("category3").name("중식").build());
-        categories.add(CategoryDTO.builder().id("category4").name("양식").build());
-        return categories;
-    }
-
-    private List<SortOptionDTO> getSortOptions() {
-        List<SortOptionDTO> sortOptions = new ArrayList<>();
-        sortOptions.add(SortOptionDTO.builder().id("recommendation").name("추천순").build());
-        sortOptions.add(SortOptionDTO.builder().id("rating").name("별점순").build());
-        sortOptions.add(SortOptionDTO.builder().id("distance").name("거리순").build());
-        return sortOptions;
-    }
-
-    private List<BookmarkDTO> getBookmarks() {
-        List<BookmarkDTO> bookmarks = new ArrayList<>();
-        bookmarks.add(BookmarkDTO.builder().postId(1L).bookmarked(true).build());
-        bookmarks.add(BookmarkDTO.builder().postId(2L).bookmarked(false).build());
-        return bookmarks;
-    }
-
-    private Comparator<PostWithBookmarkDTO> getComparator(String sortOption) {
-        switch (sortOption) {
-            case "recommendation":
-                return Comparator.comparing(postWithBookmarkDTO -> postWithBookmarkDTO.getPost().getRecommendation());
-            case "rating":
-                return Comparator.comparing(postWithBookmarkDTO -> postWithBookmarkDTO.getPost().getRating());
-            case "distance":
-                return Comparator.comparing(postWithBookmarkDTO -> postWithBookmarkDTO.getPost().getDistance());
-            default:
-                return Comparator.comparing(postWithBookmarkDTO -> postWithBookmarkDTO.getPost().getId());
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Long postId = postService.createPost(postRequestDTO, files, mainImageFile, mainImageUrl);
+            response.put("postId", postId);
+            return ResponseEntity.ok(response);
+        } catch (FirebaseAuthException e) {
+            response.put("error", "Failed to upload file to Firebase: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
 
-    @GetMapping("/write")
-    public String selectImageList(Model model) {
-        // 초기 데이터 설정
-        PostRequestDTO postRequestDTO = new PostRequestDTO();
-        model.addAttribute("postRequestDTO", postRequestDTO);
-
-        // 카테고리 목록 설정
-        List<CategoryDTO> categories = getCategories();
-        model.addAttribute("categories", categories);
-
-        return "pages/post/postWrite";
-    }
-
     @GetMapping("/detail")
-    public String detail(Model model) {
-        // 테스트용 데이터 생성
-        PostResponseDTO postResponseDTO = PostResponseDTO.builder()
-                .id(1L)
-                .img1("/assets/svg/img_01.JPG")
-                .images(Arrays.asList("/assets/svg/img_01.JPG", "/assets/svg/img_02.JPG"))
-                .postTitle("맛있다는 제목")
-                .nickname("작성자닉네임")
-                .category("일식")
-                .bestMenu("교토식 오코노미야끼, 츄라이")
-                .price(30000)
-                .address("경기도 성남시 수정구 대왕판교로 815")
-                .content("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Corrupisti temperantia porta deserunt solida facilius verear mediocris ignoratione eveniet. Eosdem artes exhorrescere moribus imperitorum. Quales vocant familias, disciplinam tamquam proficiscuntur timidiores, quondam pellentesque peccant, audiam. Scribendi licet omnino, caeco filium teneam curis amicitia. Ita dialectica certae sophocles tantalo invidi atomorum solida. Rationem quoniam o miser inhaererent dixi torqueantur animum. Sale tortor officiis videatur beateque liberabuntur posse accusantium terentii coniunctione summum. Censes percipi probabis medium ante comprobavit, iusto diogenem tempora momenti aequitatem. Multam orci, sciscat odia perpessio nocet asperum.")
-                .publicPost(true)
-                .date(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")))
-                .likeCount(10) // 임시 데이터
-                .averageRating(4.5) // 임시 데이터
-                .build();
-
-        model.addAttribute("postDetail", postResponseDTO);
+    public String getPostDetail(@RequestParam Long postId, Model model) {
+        PostResponseDTO post = postService.findPostById(postId);
+        model.addAttribute("post", post);
         return "pages/post/postDetail";
     }
 
-    @GetMapping("/correction")
-    public String postCorrection(Model model) {
-        PostRequestDTO postRequestDTO = PostRequestDTO.builder()
-                .category("category1")
-                .postTitle("맛있다는 제목")
-                .bestMenu("교토식 오코노미야끼")
-                .price(30000)
-                .address("경기도 성남시 수정구 대왕판교로 815")
-                .content("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Corrupisti temperantia porta deserunt solida facilius verear mediocris ignoratione eveniet. Eosdem artes exhorrescere moribus imperitorum. Quales vocant familias, disciplinam tamquam proficiscuntur timidiores, quondam pellentesque peccant, audiam. Scribendi licet omnino, caeco filium teneam curis amicitia. Ita dialectica certae sophocles tantalo invidi atomorum solida. Rationem quoniam o miser inhaererent dixi torqueantur animum. Sale tortor officiis videatur beateque liberabuntur posse accusantium terentii coniunctione summum. Censes percipi probabis medium ante comprobavit, iusto diogenem tempora momenti aequitatem. Multam orci, sciscat odia perpessio nocet asperum.")
-                .img1("/assets/svg/img_01.JPG")
-                .publicPost(true) // 공개 여부 설정
-                .build();
+//
+//    @GetMapping("/correction")
+//    public String postCorrectionForm(@RequestParam Long postId, Model model) {
+//        PostResponseDTO post = postService.findPostById(postId);
+//        model.addAttribute("post", post);
+//        return "pages/post/postCorrection";
+//    }
 
-        model.addAttribute("postRequestDTO", postRequestDTO);
-
-        List<CategoryDTO> categories = getCategories();
-        model.addAttribute("categories", categories);
-
-        return "pages/post/postCorrection";
-    }
-
-
+//    @PostMapping("/correction")
+//    public String postCorrection(AddPostRequestDTO addPostRequestDTO) {
+//        postService.updatePost(addPostRequestDTO);
+//        return "redirect:/post/detail?postId=" + addPostRequestDTO.getPostId();
+//    }
 
     @GetMapping("/map")
     public String findAddress() {
         return "pages/post/findAddress";
     }
-
 }

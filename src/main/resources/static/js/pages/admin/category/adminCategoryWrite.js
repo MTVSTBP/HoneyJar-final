@@ -70,26 +70,26 @@ document.addEventListener("DOMContentLoaded", function () {
         validateForm(false);
         hideErrorMessage(document.getElementById(event.target.id + 'Error'));
     });
-    postForm.addEventListener('submit', function (event) {
-        event.preventDefault();
+    // postForm.addEventListener('submit', function (event) {
+    //     event.preventDefault();
+    //
+    //     if (!validateForm(true)) {
+    //         return;
+    //     }
 
-        if (!validateForm(true)) {
-            return;
-        }
+        // // 폼 데이터 백엔드로 전송 (현재는 로컬 스토리지 사용)
+        // const category = document.getElementById('category').value;
+        // const categoryCreated = document.getElementById('categoryCreated').value.trim();
+        //
+        // // 로컬 스토리지에 카테고리 저장
+        // const categories = JSON.parse(localStorage.getItem('categories')) || {};
+        // if (!categories[category]) {
+        //     categories[category] = [];
+        // }
+        // categories[category].push(categoryCreated);
+        // localStorage.setItem('categories', JSON.stringify(categories));
 
-        // 폼 데이터 백엔드로 전송 (현재는 로컬 스토리지 사용)
-        const category = document.getElementById('category').value;
-        const categoryCreated = document.getElementById('categoryCreated').value.trim();
-
-        // 로컬 스토리지에 카테고리 저장
-        const categories = JSON.parse(localStorage.getItem('categories')) || {};
-        if (!categories[category]) {
-            categories[category] = [];
-        }
-        categories[category].push(categoryCreated);
-        localStorage.setItem('categories', JSON.stringify(categories));
-
-        openModal();
+        // openModal();
     });
 
     // 모달 열기 함수
@@ -120,4 +120,3 @@ document.addEventListener("DOMContentLoaded", function () {
             closeModal();
         }
     });
-});

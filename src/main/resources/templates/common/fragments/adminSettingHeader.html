@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<!-- Thymeleaf 선언 / headerFragment 임을 선언-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="adminSettingHeader(title)">
+<link rel="stylesheet" th:href="@{/css/layout/adminSettingHeader.css}"/>
+<header class="header">
+    <div class="header-container">
+        <img class="mini-logo" src="/assets/svg/mini_logo.svg" alt="Mini Logo">
+        <p class="header-title" th:text="${title}">Admin</p>
+    </div>
+    <div class="profile-container">
+        <span class="admin-label">관리자</span>
+        <img class="edit-icon" src="/assets/svg/mode_in_circle.svg" alt="Edit">
+        <span class="admin-name">홍길동</span>
+        <img class="profile-icon" src="/assets/svg/base_profile.svg" alt="Profile">
+    </div>
+</header>
+</html>

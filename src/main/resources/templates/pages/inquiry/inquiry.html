@@ -1,4 +1,3 @@
-<!-- inquiry list 페이지 -->
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -6,7 +5,6 @@
       layout:fragment="content"
       th:with="pageTitle='1:1문의'"
 >
-
 <head>
     <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/inquiry/inquiry.css}"/>
     <th:block layout:fragment="title">
@@ -18,10 +16,10 @@
     <div class="inquiry_sub_title">
         <h4>1:1 문의</h4>
         <div class="add-button">
-            <button th:onclick="'location.href=\'/settings/inquiry/write\' '">
+            <button th:onclick="'location.href=\'/settings/inquiry/write?userId=' + ${userId} + '\''">
                 <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="9" width="4" height="22" rx="2" fill="#FF8243" />
-                    <rect x="22" y="9" width="4" height="22" rx="2" transform="rotate(90 22 9)" fill="#FF8243" />
+                    <rect x="9" width="4" height="22" rx="2" fill="#FF8243"/>
+                    <rect x="22" y="9" width="4" height="22" rx="2" transform="rotate(90 22 9)" fill="#FF8243"/>
                 </svg>
             </button>
         </div>
@@ -29,7 +27,6 @@
     <div class="inquiry">
         <div th:each="inquiry : ${inquiryList}" class="list">
             <li>
-<!--                <a th:href="'/settings/inquiry/detail'" class="inquiry_link">-->
                 <a th:href="@{'/settings/inquiry/detail/' + ${inquiry.id}}" class="inquiry_link">
                     <div class="item">
                         <div class="title" th:text="${inquiry.title}">Title</div>
@@ -46,6 +43,3 @@
 <script th:inline="javascript" type="text/javascript" th:src="@{/js/pages/inquiry.js}"></script>
 </body>
 </html>
-
-
-<!--    <script th:inline="javascript" type="text/javascript" th:src="@{/js/pages/inquiry.js}"></script>-->

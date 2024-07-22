@@ -27,6 +27,20 @@
         ORDER BY created_at DESC
     </select>
 
+    <select id="getInquiryListByUserId" parameterType="java.lang.Long" resultMap="inquiryResultMap">
+        SELECT
+        inquiry_id,
+        title,
+        post,
+        created_at,
+        updated_at,
+        user_id,
+        category_id
+        FROM inquiry
+        WHERE user_id = #{userId}
+        ORDER BY created_at DESC
+    </select>
+
     <select id="getInquiryById" parameterType="java.lang.Long" resultMap="inquiryResultMap">
         SELECT
         inquiry_id,

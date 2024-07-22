@@ -2,98 +2,88 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/layout/defaultLayout}"
-      layout:fragment="content">
+      layout:fragment="content"
+      th:with="pageTitle='Setting'">
 <head>
     <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/settings/settings.css}"/>
     <th:block layout:fragment="title">
-        <title>1:1 문의 상세</title>
+        <title>설정</title>
     </th:block>
-    <script defer="defer" th:src="@{/js/pages/settings/settings.js}"></script>
+    <th:block layout:fragment="script">
+        <script th:src="@{/js/pages/settings/settings.js}"></script>
+    </th:block>
 </head>
 <body>
-<!-- Header 시작(주석 처리 후 사용하세요) -->
-<header class="header"></header>
-<!-- Header 끝 -->
 <div class="page-container">
     <div class="content-wrapper">
-        <main>
-            <div class="main">
-                <!-- 사용자 정보 시작 -->
-                <section class="user-info">
-                    <div class="user-info__profile">
-                        <img class="user-info__image"
-                             th:src="${user.profileImage != null ? user.profileImage : '/assets/svg/base_profile.svg'}"
-                             th:alt="${user.profileImage != null ? user.name : '프로필 사진'}"/>
-                        <div class="user-info__container">
-                            <div class="user-info__row">
-                                <div class="user-info__column">
-                                    <span class="user-info__label">회원정보</span>
-                                </div>
-                                <div class="user-info__column">
-                                    <span class="user-info__nickname" th:text="${user.name}">Kamil Lee</span>
-                                </div>
+        <div class="wrapper">
+            <!-- 사용자 정보 시작 -->
+            <section class="user-info">
+                <div class="user-info__profile">
+                    <img class="user-info__image" th:src="@{/assets/svg/base_profile.svg}" alt="프로필 사진"/>
+                    <div class="user-info__container">
+                        <div class="user-info__row">
+                            <div class="user-info__column">
+                                <span class="user-info__label">회원정보</span>
                             </div>
-                            <div class="user-info__row">
-                                <div class="user-info__column">
-                                    <span class="user-info__introduction"
-                                          th:text="${#strings.abbreviate(user.introduction, 30)}">자기소개가 길어지는 경우에는 어떻게 표시될까요? 얄리얄리 얄랴셩</span>
-                                </div>
+                            <div class="user-info__column">
+                                <span class="user-info__nickname" th:text="${user.name}">로딩 중...</span>
+                            </div>
+                        </div>
+                        <div class="user-info__row">
+                            <div class="user-info__column">
+                                <span class="user-info__introduction" th:text="${user.pr}">로딩 중...</span>
                             </div>
                         </div>
                     </div>
-                </section>
-                <!-- 사용자 정보 끝 -->
+                </div>
+            </section>
+            <!-- 사용자 정보 끝 -->
 
-                <!-- 팔로우 탭 시작 -->
-                <section id="followTab" class="setting-tab">
-                    <div class="setting-tab__container">
-                        <span class="setting-tab__text">팔로우</span>
-                        <div class="setting-tab__notification"></div>
-                    </div>
-                </section>
-                <!-- 팔로우 탭 끝 -->
+            <!-- 로그아웃 탭 시작 -->
+            <section id="logoutTab" class="setting-tab">
+                <div class="setting-tab__container">
+                    <span class="setting-tab__text" th:href="@{/logout}">로그아웃</span>
+                </div>
+            </section>
+            <!-- 로그아웃 탭 끝 -->
 
-                <!-- 공지사항 탭 시작 -->
-                <section id="noticeTab" class="setting-tab">
-                    <div class="setting-tab__container">
-                        <span class="setting-tab__text">공지사항</span>
-                        <div class="setting-tab__notification"></div>
-                    </div>
-                </section>
-                <!-- 공지사항 탭 끝 -->
+            <!-- 공지사항 탭 시작 -->
+            <section id="noticeTab" class="setting-tab">
+                <div class="setting-tab__container">
+                    <span class="setting-tab__text">공지사항</span>
+                    <div class="setting-tab__notification"></div>
+                </div>
+            </section>
+            <!-- 공지사항 탭 끝 -->
 
-                <!-- 1:1 문의 탭 시작 -->
-                <section id="contactTab" class="setting-tab">
-                    <div class="setting-tab__container">
-                        <span class="setting-tab__text">1:1 문의</span>
-                        <div class="setting-tab__notification"></div>
-                    </div>
-                </section>
-                <!-- 1:1 문의 탭 끝 -->
+            <!-- 1:1 문의 탭 시작 -->
+            <section id="contactTab" class="setting-tab">
+                <div class="setting-tab__container">
+                    <span class="setting-tab__text">1:1 문의</span>
+                    <div class="setting-tab__notification"></div>
+                </div>
+            </section>
+            <!-- 1:1 문의 탭 끝 -->
 
-                <!-- FAQ 탭 시작 -->
-                <section id="faqTab" class="setting-tab">
-                    <div class="setting-tab__container">
-                        <span class="setting-tab__text" >FAQ</span>
-                        <div class="setting-tab__notification"></div>
-                    </div>
-                </section>
-                <!-- FAQ 탭 끝 -->
+            <!-- FAQ 탭 시작 -->
+            <section id="faqTab" class="setting-tab">
+                <div class="setting-tab__container">
+                    <span class="setting-tab__text">FAQ</span>
+                    <div class="setting-tab__notification"></div>
+                </div>
+            </section>
+            <!-- FAQ 탭 끝 -->
 
-                <!-- 회원탈퇴 탭 시작 -->
-                <section id="withdrawTab" class="setting-tab">
-                    <div class="setting-tab__container">
-                        <span class="setting-tab__text">회원탈퇴</span>
-                    </div>
-                </section>
-                <!-- 회원탈퇴 탭 끝 -->
-            </div>
-        </main>
+            <!-- 회원탈퇴 탭 시작 -->
+            <section id="withdrawTab" class="setting-tab">
+                <div class="setting-tab__container">
+                    <span class="setting-tab__text">회원탈퇴</span>
+                </div>
+            </section>
+            <!-- 회원탈퇴 탭 끝 -->
+        </div>
     </div>
 </div>
-
-<!-- Footer 시작(주석 처리 후 사용하세요) -->
-<footer class="footer"></footer>
-<!-- Footer 끝 -->
 </body>
 </html>

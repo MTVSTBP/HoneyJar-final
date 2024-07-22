@@ -4,20 +4,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const closeBtn = document.querySelector(".close");
     const completeBtn = document.getElementById('complete');
 
-    // 초기 데이터 불러오기 (임시 데이터 사용)
-    function loadInitialData() {
-        // 예시 데이터
-        const data = {
-            title: '기존 제목',
-            content: '기존 내용'
-        };
-
-        document.getElementById('title').value = data.title;
-        document.getElementById('content').value = data.content;
-    }
-
-    loadInitialData();
-
     function showErrorMessage(element, message) {
         if (element) {
             element.textContent = message;
@@ -80,15 +66,15 @@ document.addEventListener("DOMContentLoaded", function () {
         validateForm(false);
         hideErrorMessage(document.getElementById(event.target.id + 'Error'));
     });
-    postForm.addEventListener('submit', function (event) {
-        event.preventDefault();
-
-        if (!validateForm(true)) {
-            return;
-        }
-
-        openModal();
-    });
+    // postForm.addEventListener('submit', function (event) {
+    //     event.preventDefault();
+    //
+    //     if (!validateForm(true)) {
+    //         return;
+    //     }
+    //
+    //     openModal();
+    // });
 
     function openModal() {
         modal.style.display = "block";

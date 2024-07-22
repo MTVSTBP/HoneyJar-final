@@ -43,8 +43,8 @@
         </div>
         <!-- 관리자인 경우에만 보이게 추후 적용해야됨. -->
         <div class="button_list">
-            <button id="edit-button" class="btn">수정</button>
-            <button id="delete-button" class="btn">삭제</button>
+            <button id="edit-button" th:href="@{|/admin/notice/correction/${notice.noticeId}|}" class="btn">수정</button>
+            <button id="delete-button" th:href="@{|/admin/notice/delete/${notice.noticeId}|}" class="btn">삭제</button>
         </div>
 
         <!-- 삭제 확인 모달 -->

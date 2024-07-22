@@ -17,15 +17,17 @@ public class InquiryController {
     @Autowired
     private InquiryService inquiryService;
 
-    @GetMapping
-    public String getInquiries(Model model) {
-        List<InquiryDto> inquiryList = inquiryService.getInquiryList();
+    @GetMapping("/{userId}")
+    public String getInquiriesByUserId(@PathVariable Long userId, Model model) {
+        List<InquiryDto> inquiryList = inquiryService.getInquiryListByUserId(userId);
         model.addAttribute("inquiryList", inquiryList);
+        model.addAttribute("userId", userId);  // 사용자 ID를 모델에 추가
         return "pages/inquiry/inquiry";
     }
 
     @GetMapping("/write")
-    public String inquiryWrite() {
+    public String inquiryWrite(@RequestParam Long userId, Model model) {
+        model.addAttribute("userId", userId);  // 사용자 ID를 모델에 추가
         return "pages/inquiry/inquiryWrite";
     }
 
@@ -41,7 +43,7 @@ public class InquiryController {
                 .post(post)
                 .build();
         inquiryService.createInquiry(inquiryWriteDto);
-        return "redirect:/settings/inquiry";
+        return "redirect:/settings/inquiry/" + userId;
     }
 
     @GetMapping("/detail/{id}")
@@ -75,7 +77,8 @@ public class InquiryController {
 
     @PostMapping("/delete/{id}")
     public String deleteInquiry(@PathVariable Long id) {
+        InquiryDto inquiry = inquiryService.getInquiryById(id);
         inquiryService.deleteInquiry(id);
-        return "redirect:/settings/inquiry";
+        return "redirect:/settings/inquiry/" + inquiry.getUserId();
     }
 }

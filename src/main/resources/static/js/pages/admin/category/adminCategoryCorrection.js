@@ -13,13 +13,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const categories = JSON.parse(localStorage.getItem('categories')) || {};
 
     // 폼에 기존 데이터 채우기
-    if (category && !isNaN(index) && categories[category] && categories[category][index]) {
-        document.getElementById('category').value = category;
-        document.getElementById('categoryCreated').value = categories[category][index];
-    } else {
-        alert('유효하지 않은 접근입니다.');
-        window.location.href = "/src/pages/html/adminCategory.html";
-    }
+    // if (category && !isNaN(index) && categories[category] && categories[category][index]) {
+    //     document.getElementById('category').value = category;
+    //     document.getElementById('categoryCreated').value = categories[category][index];
+    // } else {
+    //     alert('유효하지 않은 접근입니다.');
+    //     window.location.href = "/src/pages/html/adminCategory.html";
+    // }
 
     // 에러 메시지 표시 함수
     function showErrorMessage(element, message) {
