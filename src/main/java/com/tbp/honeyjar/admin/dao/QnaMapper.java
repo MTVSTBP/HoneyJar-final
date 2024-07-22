@@ -18,4 +18,6 @@ public interface QnaMapper {
     Long save(QnaSaveRequestDto requestDto);
 
     Long correction(QnaCorrectionRequestDto requestDto);
+
+    Long delete(Long qnaId);
 }

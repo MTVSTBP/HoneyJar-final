@@ -69,4 +69,10 @@
         where
         qna_id = #{id}
     </update>
+
+    <delete id="delete" parameterType="_long">
+        delete from qna
+        where
+        qna_id = #{id}
+    </delete>
 </mapper>
