@@ -327,7 +327,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // 주소 복원
         const selectedPlace = JSON.parse(localStorage.getItem('selectedPlace'));
         if (selectedPlace) {
-            document.getElementById('placeNameInput').value = selectedPlace.road_address_name || selectedPlace.address_name;
+            document.getElementById('placeNameInput').value = selectedPlace.place_name || selectedPlace.road_address_name;
             placeNameField.value = selectedPlace.place_name || selectedPlace.road_address_name;
             placeXField.value = selectedPlace.x;
             placeYField.value = selectedPlace.y;

@@ -11,9 +11,8 @@
 </head>
 <body>
 <div id="container">
-    <form id="postForm" th:object="${postRequestDTO}" th:action="@{/posts/update}" method="post">
+    <form id="postForm" th:object="${postRequestDTO}" th:action="@{/post/update}" method="post">
         <div class="category_public_wrap">
-            <!-- category -->
             <div class="category_wrap">
                 <label for="category">카테고리</label>
                 <div class="custom-select-wrapper">
@@ -26,8 +25,6 @@
                 </div>
                 <p class="error-message" id="categoryError"></p>
             </div>
-            <!-- //category -->
-
         </div>
 
         <!-- image upload -->
@@ -37,11 +34,7 @@
                 <img src="/assets/svg/camera_enhance.svg" alt="Upload Icon">
             </label>
             <input type="file" id="imageUpload" accept="image/jpeg, image/png, image/gif" multiple>
-            <div id="imagePreview">
-                <div th:each="image : ${postRequestDTO.imageUrls}">
-                    <img th:src="${image}" alt="이미지">
-                </div>
-            </div>
+            <div id="imagePreview"></div>
             <p id="fileCountMessage">최대 5개까지 업로드할 수 있습니다.</p>
             <p id="fileTypeMessage">jpg, png, gif 파일만 업로드할 수 있습니다.</p>
             <p class="error-message" id="imageError"></p>
@@ -60,9 +53,9 @@
 
         <!-- recommended menu -->
         <div class="form-group">
-            <label for="recommendMenu">대표 메뉴</label>
-            <input type="text" id="recommendMenu" th:field="*{recommendMenu}" placeholder="추천 메뉴를 입력하세요">
-            <p class="error-message" id="recommendMenuError"></p>
+            <label for="bestMenu">대표 메뉴</label>
+            <input type="text" id="bestMenu" th:field="*{recommendMenu}" placeholder="추천 메뉴를 입력하세요">
+            <p class="error-message" id="bestMenuError"></p>
         </div>
         <!-- //recommended menu -->
 
@@ -74,18 +67,25 @@
         </div>
         <!-- //price -->
 
-        <!-- address -->
-        <div class="form-group address_wrap">
-            <label for="address">주소</label>
+        <!-- placeId and place fields -->
+        <input type="hidden" id="placeId" th:field="*{placeId}">
+        <input type="hidden" id="placeName" th:field="*{place.name}">
+        <input type="hidden" id="placeXCoordinate" th:field="*{place.xCoordinate}">
+        <input type="hidden" id="placeYCoordinate" th:field="*{place.yCoordinate}">
+
+
+        <!-- placeName -->
+        <div class="form-group placeName_wrap">
+            <label for="placeNameInput">주소</label>
             <div class="input-group">
-                <input type="text" id="address" th:field="*{place.name}" placeholder="주소를 입력하세요">
+                <input type="text" id="placeNameInput" th:field="*{place.name}"  placeholder="주소를 입력하세요">
                 <button type="button" id="openMap">
                     <img src="/assets/svg/place.svg" alt="마커이미지">
                 </button>
             </div>
-            <p class="error-message" id="addressError"></p>
+            <p class="error-message" id="placeNameError"></p>
         </div>
-        <!-- //address -->
+        <!-- //placeName -->
 
         <!-- content -->
         <div class="form-group">
@@ -97,20 +97,19 @@
 
         <!-- submit button -->
         <div class="submit_wrap">
-            <button type="submit" id="submitBtn">수정</button>
+            <button type="submit" id="submitBtn">등록</button>
         </div>
         <!-- //submit button -->
-
     </form>
 
     <!-- Modal -->
-    <div id="Modal" class="modal">
+    <div id="Modal" class="modal" style="display:none;">
         <div class="modal-content">
             <span class="close">
                 <img src="/assets/svg/close.svg" alt="닫기">
             </span>
             <div class="modal-text">
-                <p>수정이 완료되었어요!</p>
+                <p>등록이 완료되었어요!</p>
             </div>
             <button id="complete" class="complete">확인</button>
         </div>
