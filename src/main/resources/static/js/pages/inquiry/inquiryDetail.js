@@ -1,3 +1,5 @@
+import {testSendCookie} from "../utils/auth";
+
 document.addEventListener('DOMContentLoaded', function() {
     // 뒤로 가기 버튼 기능
     var backButton = document.getElementById('back-button');
@@ -68,3 +70,32 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
 });
+
+function getCookie(cookieName) {
+    cookieName = cookieName + '=';
+    let cookieData = doument.cookie;
+    let start = cookeData.indexOf(cookieName);
+    let cValue = '';
+    if (start !== -1) {
+        start += cookieName.length;
+        let end = cookieData.indexOf(';', start);
+        if(end === -1) end = cookieData.length;
+        cValue = cookieData.substring(start,end);
+    }
+    return decodeURI(cValue);
+    // return unescape(cValue);// Use decodeURI() or decodeURIComponent() instead.
+}
+
+function testSendCookie() {
+    //
+    if (getCookie("access_token") !== "") {
+        const response = fetch(`/settings/inquiry/detail/4`, {
+            method: 'POST',
+            header: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getCookie("access_token")}`,
+            }
+        });
+    }
+
+}
