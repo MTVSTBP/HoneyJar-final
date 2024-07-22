@@ -125,6 +125,7 @@ public class AdminCategoryController {
 
     @GetMapping("/delete/qna/{id}")
     public String deleteQnaCategory(@PathVariable Long id) {
+        
         QnaResponseDto qna = categoryService.findQnaById(id);
 
         if (qna != null) {
