@@ -58,4 +58,15 @@
         #{updatedAt}
         )
     </insert>
+
+    <update id="correction" parameterType="com.tbp.honeyjar.admin.dto.qna.QnaCorrectionRequestDto">
+        update qna
+        set
+        title = #{title},
+        post = #{post},
+        category_id = #{categoryId},
+        updated_at = #{updatedAt}
+        where
+        qna_id = #{id}
+    </update>
 </mapper>

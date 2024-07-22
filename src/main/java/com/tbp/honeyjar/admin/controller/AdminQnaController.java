@@ -1,5 +1,6 @@
 package com.tbp.honeyjar.admin.controller;
 
+import com.tbp.honeyjar.admin.dto.qna.QnaCorrectionRequestDto;
 import com.tbp.honeyjar.admin.dto.qna.QnaListResponseDto;
 import com.tbp.honeyjar.admin.dto.qna.QnaResponseDto;
 import com.tbp.honeyjar.admin.dto.qna.QnaSaveRequestDto;
@@ -50,13 +51,8 @@ public class AdminQnaController {
         return "redirect:/admin/qna";
     }
 
-    @GetMapping("/correction")
-    public String correction() {
-        return "pages/admin/qna/adminQnaCorrection";
-    }
-
     @GetMapping("/correction/{qna_id}")
-    public String qnaDetail(@PathVariable Long qna_id, Model model) {
+    public String qnaCorrection(@PathVariable Long qna_id, Model model) {
         QnaResponseDto dto = qnaService.findById(qna_id);
 
         if (dto != null) {
@@ -64,5 +60,18 @@ public class AdminQnaController {
         }
 
         return "pages/admin/qna/adminQnaCorrection";
+    }
+
+    @PostMapping("/correction/{qna_id}")
+    public String qnaCorrection(@PathVariable Long qna_id, QnaCorrectionRequestDto requestDto) {
+        QnaResponseDto qna = qnaService.findById(qna_id);
+
+        if (qna != null) {
+            requestDto.setUpdatedAt(now());
+            requestDto.setId(qna.getId());
+            qnaService.correction(requestDto);
+        }
+
+        return "redirect:/admin/qna";
     }
 }

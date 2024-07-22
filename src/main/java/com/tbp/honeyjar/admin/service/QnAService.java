@@ -1,6 +1,7 @@
 package com.tbp.honeyjar.admin.service;
 
 import com.tbp.honeyjar.admin.dao.QnaMapper;
+import com.tbp.honeyjar.admin.dto.qna.QnaCorrectionRequestDto;
 import com.tbp.honeyjar.admin.dto.qna.QnaListResponseDto;
 import com.tbp.honeyjar.admin.dto.qna.QnaResponseDto;
 import com.tbp.honeyjar.admin.dto.qna.QnaSaveRequestDto;
@@ -25,5 +26,9 @@ public class QnaService {
 
     public Long save(QnaSaveRequestDto requestDto) {
         return qnaMapper.save(requestDto);
+    }
+
+    public Long correction(QnaCorrectionRequestDto requestDto) {
+        return qnaMapper.correction(requestDto);
     }
 }
