@@ -14,8 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (editButton) {
         editButton.addEventListener('click', function() {
-            // 수정 페이지로 이동 (수정 페이지 URL로 변경)
-            window.location.href = "/settings/inquiry/correction";
+            // var inquiryId = editButton.getAttribute('data-id'); // 수정할 문의 ID 가져오기
+            // window.location.href = `/settings/inquiry/correction/${inquiryId}`; // 수정 페이지로 이동 (ID 포함)
         });
     }
 
@@ -65,7 +65,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // 수정 버튼 클릭 시 이벤트
     editSubmit.addEventListener('click', function() {
         alert('등록되었습니다.');
-
     });
 
 });
