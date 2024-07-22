@@ -7,35 +7,35 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class CommentListDTO {
-    private Long commentId; //
-    private String comment; //
-    private String createdAt; //
+    private long userId;
+    private long postId;
+    private Long commentId;
+    private String comment;
     private String updatedAt;
-    private Long postId;
-    private String userId; //
-    private String profileImg; // DB 컬럼 추가후 수정예정
+    private String userName;
+    private String url;
 
     @Builder
-    public CommentListDTO(Long commentId, String comment, String createdAt, String updatedAt, Long postId, String userId, String profileImg) {
+    public CommentListDTO(long userId, long postId, Long commentId, String comment, String updatedAt, String userName, String url) {
+        this.userId = userId;
+        this.postId = postId;
         this.commentId = commentId;
         this.comment = comment;
-        this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.postId = postId;
-        this.userId = userId;
-        this.profileImg = "assets/svg/base_profile.svg";
+        this.userName = userName;
+        this.url = url;
     }
 
     @Override
     public String toString() {
         return "CommentListDTO{" +
-                "commentId=" + commentId +
-                ", comment='" + comment + '\'' +
-                ", createdAt='" + createdAt + '\'' +
-                ", updatedAt='" + updatedAt + '\'' +
+                "userId=" + userId +
                 ", postId=" + postId +
-                ", userId='" + userId + '\'' +
-                ", profileImg='" + profileImg + '\'' +
+                ", commentId=" + commentId +
+                ", comment='" + comment + '\'' +
+                ", updatedAt='" + updatedAt + '\'' +
+                ", userName='" + userName + '\'' +
+                ", url='" + url + '\'' +
                 '}';
     }
 }

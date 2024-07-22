@@ -38,15 +38,23 @@ public class CommentController {
     }
 
     // 댓글 등록
-    @PostMapping("/regist")
-    public ResponseEntity<Map<String, String>> registerComment(@RequestBody CommentListDTO comment) {
-        System.out.println(comment.toString()); // 전달된 데이터 확인을 위해 로그 출력
+    @PostMapping("regist")
+    public String registComment(CommentListDTO newComment) {
 
-        Map<String, String> response = new HashMap<>();
-        response.put("postid", String.valueOf(comment.getPostId())); // 실제 저장된 포스트 ID를 반환.
-        return ResponseEntity.ok(response);
+        commentService.registComment(newComment);
+
+        return "redirect:/comment";
     }
+//    @PostMapping("/regist")
+//    public ResponseEntity<Map<String, String>> registerComment(@RequestBody CommentListDTO comment) {
+//        System.out.println(comment.toString()); // 전달된 데이터 확인을 위해 로그 출력
+//
+//        Map<String, String> response = new HashMap<>();
+//        response.put("postId", String.valueOf(comment.getPostId())); // 실제 저장된 포스트 ID를 반환.
+//        return ResponseEntity.ok(response);
+//    }
 }
+
 //    private List<CommentListDTO> getAllComments() {
 //        List<CommentListDTO> comments = new ArrayList<>();
 //        comments.add(CommentListDTO.builder()

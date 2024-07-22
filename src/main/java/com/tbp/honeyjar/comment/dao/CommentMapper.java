@@ -10,5 +10,8 @@ public interface CommentMapper {
 
     List<CommentListDTO> findAllComment();
 
-    int registComment(CommentListDTO newComment);
+    void registComment(CommentListDTO newComment);
+//    List<CommentListDTO> registComment();
+
+//    publiic int registComment(CommentListDTO newComment);
 }

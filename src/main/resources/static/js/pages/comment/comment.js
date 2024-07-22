@@ -24,23 +24,23 @@ document.addEventListener("DOMContentLoaded", function() {
     const commentInput = document.getElementById('commentInput'); // comment input 요소 정의
     const formData = new Comment(commentInput.value);
 
-    registSubmit.addEventListener('click', async function () {
-        try {
-            const response = await fetch('/comment/regist', {
-                method: 'POST',
-                body: JSON.stringify(formData) // 객체를 JSON 문자열로 변환하여 전송
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok ㅇㅇㅁㄴㅇ');
-            }
-
-            const result = await response.json();
-            window.location.href = `comment/?postId=${result.postid}`;
-        } catch (error) {
-            console.error('There was a problem with the fetch operation:', error);
-        }
-    });
+    // registSubmit.addEventListener('click', async function () {
+    //     try {
+    //         const response = await fetch('/comment/regist', {
+    //             method: 'POST',
+    //             body: JSON.stringify(formData) // 객체를 JSON 문자열로 변환하여 전송
+    //         });
+    //
+    //         if (!response.ok) {
+    //             throw new Error('Network response was not ok');
+    //         }
+    //
+    //         const result = await response.json();
+    //         window.location.href = `comment/?postId=${result.postId}`;
+    //     } catch (error) {
+    //         console.error('There was a problem with the fetch operation:', error);
+    //     }
+    // });
 
     const moreHorizImages = document.querySelectorAll('.more_h img');
 

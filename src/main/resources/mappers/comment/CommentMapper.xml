@@ -3,49 +3,41 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tbp.honeyjar.comment.dao.CommentMapper">
-
+<!--    private Long commentId; //
+    private String comment; //
+    private String updatedAt;
+    private String userName;
+    private String url; // DB 컬럼 추가후 수정예정-->
     <resultMap id="commentListResultMap" type="com.tbp.honeyjar.comment.dto.CommentListDTO">
         <id property="commentId" column="comment_id"/>
         <!--        <result property="profileImg" column=""/>-->
         <result property="comment" column="comment"/>
-        <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
-        <result property="postId" column="post_id"/>
-        <result property="userId" column="user_id"/>
+        <result property="userName" column="name"/>
+        <result property="url" column="url"/>
     </resultMap>
 
     <select id="findAllComment" resultMap="commentListResultMap">
-        SELECT
-        COMMENT_ID
-        , COMMENT
-        , CREATED_AT
-        , UPDATED_AT
-        , POST_ID
-        , USER_ID
-        FROM
-        COMMENT
-        ORDER BY CREATED_AT
+        SELECT C.comment_id, C.comment, C.updated_at, U.name, I.url
+        FROM comment as C, user as U, image as I
+        WHERE C.user_id = U.user_id and C.user_id = (SELECT user_id
+        FROM image
+        WHERE post_id is null)
+        ORDER BY C.updated_at;
     </select>
 
     <insert id="registComment" parameterType="com.tbp.honeyjar.comment.dto.CommentListDTO">
         INSERT INTO COMMENT
         (
-        , COMMENT_ID
-        , COMMENT
-        , CREATED_AT
-        , UPDATED_AT
+         COMMENT
         , POST_ID
         , USER_ID
         )
         VALUES
         (
-           #{ commentId }
-        ,  #{ comment }
-        ,  #{ createdAt }
-        ,  #{ updatedAt }
+           #{ comment }
         ,  #{ postId }
         ,  #{ userId }
         )
     </insert>
-
 </mapper>
