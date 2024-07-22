@@ -243,6 +243,13 @@ button {
     height: 218px;
 }
 
+.info_map{
+    width:150px;
+    text-align:center;
+    padding:6px 0;
+}
+
+
 /* post 내용 */
 
 .post_context {
