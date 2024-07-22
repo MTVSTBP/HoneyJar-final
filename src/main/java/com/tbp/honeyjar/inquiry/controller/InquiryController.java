@@ -20,7 +20,6 @@ public class InquiryController {
     @GetMapping
     public String getInquiries(Model model) {
         List<InquiryDto> inquiryList = inquiryService.getInquiryList();
-        inquiryList.forEach(System.out::println);
         model.addAttribute("inquiryList", inquiryList);
         return "pages/inquiry/inquiry";
     }
@@ -42,7 +41,6 @@ public class InquiryController {
                 .post(post)
                 .build();
         inquiryService.createInquiry(inquiryWriteDto);
-        System.out.println("write postmapping call! : " + inquiryWriteDto);
         return "redirect:/settings/inquiry";
     }
 
