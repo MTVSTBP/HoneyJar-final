@@ -1,13 +1,12 @@
 document.addEventListener("DOMContentLoaded", function () {
     const tabs = {
         noticeTab: {redirect: "notice.html", hasNotification: false},
-        contactTab: {redirect: "qna.html", hasNotification: false},
+        contactTab: {redirect: (id) => `settings/inquiry/${id}`, hasNotification: false},
         faqTab: {redirect: "qna.html", hasNotification: false},
-        // logoutTab: {redirect: "qna.html"},
-        leaveTab: {redirect: "/settings/leave"}
+        withdrawTab: {redirect: "withdraw.html"}
     };
 
-    const logoutTab = document.getElementById("logoutTab");
+    const logoutTab = document.getElementById("logoutTab") || document.getElementById("adminLogoutTab");
     if (logoutTab) {
         logoutTab.addEventListener("click", function (event) {
             event.preventDefault();
@@ -44,11 +43,12 @@ document.addEventListener("DOMContentLoaded", function () {
      * @param {Object} config - 탭의 설정 (redirect URL 포함)
      * @returns {Element|null} 알림 요소 또는 null (탭이 존재하지 않는 경우)
      */
-    function setupTab(id, {redirect}) {
+    function setupTab(id, config) {
         const tab = document.getElementById(id);
         if (tab) {
             tab.addEventListener("click", () => {
-                window.location.href = redirect;
+                const redirectUrl = typeof config.redirect === 'function' ? config.redirect(getId()) : config.redirect;
+                window.location.href = redirectUrl;
             });
             return tab.querySelector('.setting-tab__notification');
         }
@@ -79,6 +79,16 @@ document.addEventListener("DOMContentLoaded", function () {
      * @param {string} id - 알림을 숨길 탭의 ID
      */
     window.hideNotification = id => updateNotification(id, false);
+
+    /**
+     * 사용자 ID를 가져오는 함수
+     * @returns {string} 사용자 ID
+     */
+    function getId() {
+        // 사용자 ID를 가져오는 로직을 구현하세요.
+        // 예시: 서버에서 가져온 사용자 정보를 이용할 수 있습니다.
+        return '사용자 ID를 여기에 입력하세요';
+    }
 });
 
 // [예시] 해당 페이지를 조회 후 1초 후에 알림 표시
