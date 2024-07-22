@@ -1,0 +1,79 @@
+a {
+    text-decoration: none;
+}
+
+#inquiry_container {
+    max-width: 480px;
+    min-width: 320px;
+    width: 95%;
+    position: relative;
+    margin: 0 auto;
+}
+
+.inquiry_sub_title {
+    display: flex;
+    margin: 3.8rem 0 2.5rem 0;
+    color: #FF8243;
+    font-size: 1.1rem;
+    font-weight: 600;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.inquiry li {
+    line-height: 3;
+    border-bottom: 1px solid #ddd;
+}
+
+.inquiry li+li {
+    margin-top: 2rem;
+}
+
+.inquiry li .item .title {
+    color: #737373;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+.inquiry li .item .context_text {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.inquiry li .item .context_text .context {
+    display: block;
+    width: 70%;
+    color: #989898;
+    font-size: 1rem;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.inquiry li .item .context_text span {
+    display: block;
+    width: 15%;
+    font-size: 0.8rem;
+    color: #989898;
+    line-height: 1;
+}
+
+.add-button button {
+
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    outline: none;
+}
+
+.add-button svg {
+    font-size: 2em;
+    /*width: 22px;
+    height: 22px;*/
+}

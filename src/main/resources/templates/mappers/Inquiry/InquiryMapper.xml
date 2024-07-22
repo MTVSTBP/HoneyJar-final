@@ -1,0 +1,38 @@
+<!--inquiryMapper setting-->
+<mapper namespace="com.tbp.honeyjar.inquiry.mapper.InquiryMapper">
+    <resultMap id="inquiryResultMap" type="com.tbp.model.Inquiry">
+        <id column="inquiry_id" property="inquiryId" jdbcType="INTEGER"/>
+        <result column="title" property="inquiryTitle" jdbcType="VARCHAR"/>
+        <result column="post" property="inquiryContent" jdbcType="VARCHAR"/>
+        <result column="inquiry_date" property="inquiryDate" jdbcType="TIMESTAMP"/>
+        <result column="inquiry_date" property="inquiryDate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="getInquiryList" resultMap="inquiryResultMap">
+        SELECT * FROM inquiry
+    </select>
+    <update id="updateInquiry" resultMap="inquiryResult">
+        UPDATE
+        SET
+            inquiry (
+                title, post,
+                inquiry_date
+            )
+        VALUES (
+            #{inquiryTitle},
+            #{inquiryContent},
+            now()
+        )
+    </update>
+
+    <!--
+        inquiryWrite : InquiryMapper.
+
+        -->
+<!--    <insert in>-->
+
+<!--    </insert>-->
+    <delete>
+
+    </delete>
+</mapper>

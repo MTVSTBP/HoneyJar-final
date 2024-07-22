@@ -26,6 +26,7 @@ public class HoneyJarApplication {
     }
 
     @Bean
+
     public CommandLineRunner commandLineRunner(AdminService adminService) {
 
         return args -> {
