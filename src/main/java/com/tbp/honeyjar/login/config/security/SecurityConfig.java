@@ -1,5 +1,6 @@
 package com.tbp.honeyjar.login.config.security;
 
+import com.tbp.honeyjar.login.common.CookieUtil;
 import com.tbp.honeyjar.login.config.properties.AppProperties;
 import com.tbp.honeyjar.login.config.properties.CorsProperties;
 import com.tbp.honeyjar.login.oauth.entity.RoleType;
@@ -24,12 +25,18 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.io.IOException;
+
+import static com.tbp.honeyjar.login.common.HeaderUtil.ACCESS_TOKEN;
+import static com.tbp.honeyjar.login.common.HeaderUtil.REFRESH_TOKEN;
 
 @Configuration
 @EnableWebSecurity
@@ -58,42 +65,31 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화 (RestAPI 이므로)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 사용 안 함
                 .formLogin(AbstractHttpConfigurer::disable)
-//                .formLogin(form -> form
-//                        .loginPage("/login") // 로그인 페이지 URL 설정
-//                        // TODO: 관리자 로그인은 어떻게 해야 할까?
-//                        .permitAll()
-//                )
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(restAuthenticationEntryPoint)
                         .accessDeniedHandler(tokenAccessDeniedHandler)
                 )
-//                .exceptionHandling(exceptions -> exceptions
-//                        .authenticationEntryPoint(new RestAuthenticationEntryPoint() {
-//                            @Override
-//                            public void commence(
-//                                    HttpServletRequest request,
-//                                    HttpServletResponse response,
-//                                    AuthenticationException authException
-//                            ) throws IOException {
-//                                // TODO: 관리자 로그인은 어떻게 해야 할까?
-//                                response.sendRedirect("/login");  // 인증되지 않은 사용자를 로그인 페이지로 리다이렉트
-//                            }
-//                        })
-//                        .accessDeniedHandler(tokenAccessDeniedHandler)
-//                )
                 .authorizeHttpRequests(auth -> auth
-                                // !!! 순서가 중요함 !!!
-//                        .requestMatchers("/**").permitAll() // TODO: 모든 엔드포인트 허용 (개발 중 임시 설정)
-                                .requestMatchers("/assets/**", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.*", "/*/icon-*").permitAll()
-                                .requestMatchers("/login").permitAll()
+                                // 정적 리소스에 대한 접근 허용
+                                .requestMatchers("/assets/**", "/css/**", "/js/**", "/images/**", "/favicon.*").permitAll()
+
+                                // 인증이 필요 없는 public 엔드포인트
+                                .requestMatchers("/login", "/admin/login").permitAll()
                                 .requestMatchers("/oauth2/authorization/**", "/login/oauth2/code/**").permitAll()
-                                .requestMatchers("/post/**").authenticated()  // '/post'로 시작하는 URL은 인증 필요(사용자 로그인이 완료 후 토큰(액세스/리프레시)이 발급된 이후에 접속 가능)
+
+                                // 관리자 전용 엔드포인트
                                 .requestMatchers("/admin").hasAuthority(RoleType.ADMIN.getCode())
                                 .requestMatchers("/admin/**").hasAuthority(RoleType.ADMIN.getCode())
-                                .requestMatchers("/admin/login").permitAll()
-//                        .anyRequest().permitAll() // TODO: 나머지 요청은 모두 허용 (개발 중 임시 설정)
-                                .anyRequest().authenticated() // 이게 맞는 설정임!
+//                                .requestMatchers("/admin/**").permitAll()
+
+                                // 인증이 필요한 사용자 엔드포인트
+                                .requestMatchers("/home", "/post/**", "/mypage/**", "/follow/**", "/settings/**").authenticated()
+
+                                // 그 외 모든 요청은 인증 필요
+                                .anyRequest().authenticated()
+//                        // 개발 중에 임시로 모든 엔드포인트를 허용
+//                                .anyRequest().permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(authorization -> authorization
@@ -109,6 +105,15 @@ public class SecurityConfig {
                         .successHandler(oAuth2AuthenticationSuccessHandler()) // OAuth2 로그인 성공 핸들러
                         .failureHandler(oAuth2AuthenticationFailureHandler()) // OAuth2 로그인 실패 핸들러
                 )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .addLogoutHandler(this::customLogoutHandler)
+                        .logoutSuccessHandler(this::customLogoutSuccessHandler)
+                        .deleteCookies(ACCESS_TOKEN, REFRESH_TOKEN)
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                )
+                .addFilterBefore(loginPageFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class); // 토큰 인증 필터 추가
 
         return http.build();
@@ -179,5 +184,34 @@ public class SecurityConfig {
     @Bean
     public OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler() {
         return new OAuth2AuthenticationFailureHandler(authorizationRequestRepository());
+    }
+
+    @Bean
+    public LoginPageFilter loginPageFilter() {
+        return new LoginPageFilter();
+    }
+
+    private void customLogoutHandler(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Authentication authentication
+    ) {
+        // 토큰 삭제 등의 커스텀 로그아웃 로직
+        CookieUtil.deleteCookie(request, response, ACCESS_TOKEN);
+        CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
+    }
+
+    private void customLogoutSuccessHandler(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Authentication authentication
+    ) throws IOException {
+        boolean isAdmin = authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals(RoleType.ADMIN.getCode()));
+
+        String redirectUrl = isAdmin ? "/admin/login" : "/login";
+        response.setContentType("application/json");
+        response.getWriter().write("{\"status\":200,\"message\":\"Logout successful\",\"data\":{\"redirectUrl\":\"" + redirectUrl + "\"}}");
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 }

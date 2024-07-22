@@ -32,50 +32,50 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // 로컬 스토리지에서 카테고리 목록 불러오기
-    function loadCategories() {
-        const categories = JSON.parse(localStorage.getItem('categories')) || {};
-
-        Object.keys(categories).forEach(category => {
-            const categoryList = document.getElementById(`${category}_list`);
-            if (categoryList) {
-                categories[category].forEach((item, index) => {
-                    const newItem = document.createElement('li');
-                    newItem.classList.add('item');
-                    newItem.innerHTML = `
-                        <p>${item}</p>
-                        <div class="more_h">
-                            <img src="/assets/svg/more_horiz.svg" alt="more_horiz">
-                            <div class="click_box">
-                                <div class="d_flex">
-                                    <a class="edit_p" href="/src/pages/html/adminCategroyCorrection.html?category=${category}&index=${index}">수정</a>
-                                    <a class="delete_p" href="javascript:void(0)" data-category="${category}" data-index="${index}">삭제</a>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    categoryList.appendChild(newItem);
-                });
-            }
-        });
+    // function loadCategories() {
+    //     const categories = JSON.parse(localStorage.getItem('categories')) || {};
+    //
+    //     Object.keys(categories).forEach(category => {
+    //         const categoryList = document.getElementById(`${category}_list`);
+    //         if (categoryList) {
+    //             categories[category].forEach((item, index) => {
+    //                 const newItem = document.createElement('li');
+    //                 newItem.classList.add('item');
+    //                 newItem.innerHTML = `
+    //                     <p>${item}</p>
+    //                     <div class="more_h">
+    //                         <img src="/assets/svg/more_horiz.svg" alt="more_horiz">
+    //                         <div class="click_box">
+    //                             <div class="d_flex">
+    //                                 <a class="edit_p" href="/src/pages/html/adminCategroyCorrection.html?category=${category}&index=${index}">수정</a>
+    //                                 <a class="delete_p" href="javascript:void(0)" data-category="${category}" data-index="${index}">삭제</a>
+    //                             </div>
+    //                         </div>
+    //                     </div>
+    //                 `;
+    //                 categoryList.appendChild(newItem);
+    //             });
+    //         }
+    //     });
 
         // 새로운 항목에 대해 클릭 이벤트 등록
         registerMoreHorizClickEvents();
         registerDeleteClickEvents();
-    }
+
 
     // 삭제 클릭 이벤트 등록
-    function registerDeleteClickEvents() {
-        const deleteButtons = document.querySelectorAll('.delete_p');
-
-        deleteButtons.forEach(function(deleteButton) {
-            deleteButton.addEventListener('click', function(event) {
-                event.preventDefault();
-                const category = this.getAttribute('data-category');
-                const index = this.getAttribute('data-index');
-                openDeleteConfirmModal(category, index);
-            });
-        });
-    }
+    // function registerDeleteClickEvents() {
+    //     const deleteButtons = document.querySelectorAll('.delete_p');
+    //
+    //     deleteButtons.forEach(function(deleteButton) {
+    //         deleteButton.addEventListener('click', function(event) {
+    //             event.preventDefault();
+    //             const category = this.getAttribute('data-category');
+    //             const index = this.getAttribute('data-index');
+    //             openDeleteConfirmModal(category, index);
+    //         });
+    //     });
+    // }
 
     // 삭제 확인 모달 열기
     function openDeleteConfirmModal(category, index) {
@@ -103,61 +103,61 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // 카테고리 항목 삭제
-    function deleteCategoryItem() {
-        const deleteConfirmModal = document.getElementById('deleteConfirmModal');
-        const category = deleteConfirmModal.getAttribute('data-category');
-        const index = deleteConfirmModal.getAttribute('data-index');
-
-        const categories = JSON.parse(localStorage.getItem('categories')) || {};
-        if (categories[category] && categories[category][index]) {
-            categories[category].splice(index, 1);
-            localStorage.setItem('categories', JSON.stringify(categories));
-            showDeleteSuccessModal();
-            reloadCategories();
-        }
-
-        deleteConfirmModal.style.display = 'none';
-    }
+    // function deleteCategoryItem() {
+    //     const deleteConfirmModal = document.getElementById('deleteConfirmModal');
+    //     const category = deleteConfirmModal.getAttribute('data-category');
+    //     const index = deleteConfirmModal.getAttribute('data-index');
+    //
+    //     const categories = JSON.parse(localStorage.getItem('categories')) || {};
+    //     if (categories[category] && categories[category][index]) {
+    //         categories[category].splice(index, 1);
+    //         localStorage.setItem('categories', JSON.stringify(categories));
+    //         showDeleteSuccessModal();
+    //         reloadCategories();
+    //     }
+    //
+    //     deleteConfirmModal.style.display = 'none';
+    // }
 
     // 삭제 완료 모달 열기
-    function showDeleteSuccessModal() {
-        const deleteSuccessModal = document.getElementById('deleteSuccessModal');
-        deleteSuccessModal.style.display = 'block';
-
-        const completeDeleteButton = document.getElementById('completeDelete');
-        completeDeleteButton.onclick = function() {
-            deleteSuccessModal.style.display = 'none';
-        };
-
-        const closeButtons = deleteSuccessModal.querySelectorAll('.close');
-        closeButtons.forEach(function(closeButton) {
-            closeButton.addEventListener('click', function() {
-                deleteSuccessModal.style.display = 'none';
-            });
-        });
-
-        window.addEventListener('click', function(event) {
-            if (event.target === deleteSuccessModal) {
-                deleteSuccessModal.style.display = 'none';
-            }
-        }, { once: true });
-    }
+    // function showDeleteSuccessModal() {
+    //     const deleteSuccessModal = document.getElementById('deleteSuccessModal');
+    //     deleteSuccessModal.style.display = 'block';
+    //
+    //     const completeDeleteButton = document.getElementById('completeDelete');
+    //     completeDeleteButton.onclick = function() {
+    //         deleteSuccessModal.style.display = 'none';
+    //     };
+    //
+    //     const closeButtons = deleteSuccessModal.querySelectorAll('.close');
+    //     closeButtons.forEach(function(closeButton) {
+    //         closeButton.addEventListener('click', function() {
+    //             deleteSuccessModal.style.display = 'none';
+    //         });
+    //     });
+    //
+    //     window.addEventListener('click', function(event) {
+    //         if (event.target === deleteSuccessModal) {
+    //             deleteSuccessModal.style.display = 'none';
+    //         }
+    //     }, { once: true });
+    // }
 
     // 카테고리 목록 다시 불러오기
-    function reloadCategories() {
-        const categoryLists = document.querySelectorAll('.categorybody ul');
-        categoryLists.forEach(function(list) {
-            list.innerHTML = '';
-        });
-        loadCategories();
-    }
+    // function reloadCategories() {
+    //     const categoryLists = document.querySelectorAll('.categorybody ul');
+    //     categoryLists.forEach(function(list) {
+    //         list.innerHTML = '';
+    //     });
+    //     loadCategories();
+    // }
 
     // 삭제 확인 버튼 이벤트 리스너 등록 (한 번만)
-    const confirmDeleteButton = document.getElementById('confirmDelete');
-    confirmDeleteButton.addEventListener('click', function() {
-        deleteCategoryItem();
-    });
+    // const confirmDeleteButton = document.getElementById('confirmDelete');
+    // confirmDeleteButton.addEventListener('click', function() {
+    //     deleteCategoryItem();
+    // });
 
     // 초기화
-    loadCategories();
+    // loadCategories();
 });

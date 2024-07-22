@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/adminSettingLayout}"
+      layout:fragment="content"
+      th:with="pageTitle='Admin'">
+<head>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/settings/adminSettings.css}"/>
+    <th:block layout:fragment="title">
+        <title>관리자 설정</title>
+    </th:block>
+    <th:block layout:fragment="script">
+        <script th:src="@{/js/pages/settings/adminSettings.js}"></script>
+    </th:block>
+</head>
+<body>
+<div class="page-container">
+    <div class="content-wrapper">
+        <div class="wrapper">
+            <!-- 관리자 정보 시작 -->
+            <div class="info-box">
+                <div class="stats">
+                    <div class="stats__item">
+                        <div class="stats__label-container">
+                            <div class="stats__label">문의 수</div>
+                            <div class="stats__notification"></div>
+                        </div>
+                        <div class="stats__value-container">
+                            <img src="/assets/svg/assignment.svg" alt="Assignment Icon" class="assignment-icon">
+                            <div class="stats__value">12</div>
+                        </div>
+                    </div>
+                    <div class="vertical-line"></div>
+                    <div class="stats__item">
+                        <div class="stats__label">공지사항</div>
+                        <div class="stats__value-container">
+                            <img src="/assets/svg/assignment.svg" alt="Assignment Icon" class="assignment-icon">
+                            <div class="stats__value">6</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 관리자 정보 끝 -->
+
+            <div class="page-label">admin page</div>
+            <!-- 1:1 문의 답변 탭 시작 -->
+            <section id="adminContactTab" class="setting-tab">
+                <div class="setting-tab__container">
+                    <span class="setting-tab__text">1:1 문의 답변</span>
+                    <div class="setting-tab__notification"></div>
+                </div>
+            </section>
+            <!-- 1:1 문의 답변 탭 끝 -->
+
+            <!-- 공지사항 등록 탭 시작 -->
+            <section id="adminNoticeTab" class="setting-tab">
+                <div class="setting-tab__container">
+                    <span class="setting-tab__text">공지사항 등록</span>
+                    <div class="setting-tab__notification"></div>
+                </div>
+            </section>
+            <!-- 공지사항 등록 탭 시작 -->
+
+            <!-- 카테고리 등록 탭 시작 -->
+            <section id="adminCategoryTab" class="setting-tab">
+                <div class="setting-tab__container">
+                    <span class="setting-tab__text">카테고리 등록</span>
+                    <div class="setting-tab__notification"></div>
+                </div>
+            </section>
+            <!-- 카테고리 등록 탭 끝 -->
+
+            <!-- FAQ 등록 탭 시작 -->
+            <section id="adminFaqTab" class="setting-tab">
+                <div class="setting-tab__container">
+                    <span class="setting-tab__text">FAQ 등록</span>
+                </div>
+            </section>
+            <!-- FAQ 등록 탭 끝 -->
+
+            <!-- 로그아웃 탭 시작 -->
+            <section id="adminLogoutTab" class="setting-tab">
+                <div class="setting-tab__container">
+                    <span class="setting-tab__text" th:href="@{/logout}">로그아웃</span>
+                </div>
+            </section>
+            <!-- 로그아웃 탭 끝 -->
+        </div>
+    </div>
+</div>
+</body>
+</html>

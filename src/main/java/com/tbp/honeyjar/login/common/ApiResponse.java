@@ -36,7 +36,6 @@ public class ApiResponse<T> {
     private final String message;
     private final Map<String, T> data;
 
-    // 생성자: HttpStatusCode를 받도록 수정
     public ApiResponse(HttpStatusCode statusCode, String message, Map<String, T> data) {
         this.status = statusCode.value();
         this.message = message;
@@ -44,10 +43,9 @@ public class ApiResponse<T> {
     }
 
     public ApiResponse(HttpStatusCode statusCode, String message) {
-        this(statusCode, message, null); // data를 null로 설정하는 생성자 호출
+        this(statusCode, message, null); // data 를 null 로 설정하는 생성자 호출
     }
 
-    // 생성 성공 응답 (201 Created)
     public static <T> ResponseEntity<ApiResponse<T>> created(String name, T body) {
         Map<String, T> map = new HashMap<>();
         map.put(name, body);
@@ -62,7 +60,6 @@ public class ApiResponse<T> {
         return ResponseEntity.ok(new ApiResponse<>(SUCCESS_CODE, SUCCESS_MESSAGE, map));
     }
 
-    // 실패 응답
     public static <T> ResponseEntity<ApiResponse<T>> fail(HttpStatusCode statusCode, String message) {
         return new ResponseEntity<>(new ApiResponse<>(statusCode, message, null), statusCode);
     }
