@@ -1,5 +1,5 @@
 <!--inquiryMapper setting-->
-<mapper namespace="com.tbp.mapper.InquiryMapper">
+<mapper namespace="com.tbp.honeyjar.inquiry.mapper.InquiryMapper">
     <resultMap id="inquiryResultMap" type="com.tbp.model.Inquiry">
         <id column="inquiry_id" property="inquiryId" jdbcType="INTEGER"/>
         <result column="title" property="inquiryTitle" jdbcType="VARCHAR"/>
@@ -34,5 +34,5 @@
 <!--    </insert>-->
     <delete>
 
-    </delete>>
+    </delete>
 </mapper>
