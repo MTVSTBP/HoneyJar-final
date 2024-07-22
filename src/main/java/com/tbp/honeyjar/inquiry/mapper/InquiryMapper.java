@@ -10,11 +10,9 @@ import java.util.List;
 
 @Mapper
 public interface InquiryMapper {
-    @Select("SELECT * FROM inquiry")
     List<InquiryDto> getInquiryList();
 
-    @Select("SELECT * FROM inquiry WHERE inquiry_id = #{id}")
-    InquiryDto getInquiryById(@Param("id") Long id);
+    InquiryDto getInquiryById(Long id);
 
     int create(InquiryDto inquiryDto);
 
