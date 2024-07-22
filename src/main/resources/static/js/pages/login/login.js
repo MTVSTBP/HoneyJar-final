@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (accessToken) {
         console.log('User is logged in');
         // 로그인 상태에 따른 UI 업데이트 등을 수행
-        window.location.href = '/home'; // 이미 로그인된 경우 홈페이지로 리다이렉트
+        window.location.href = '/'; // 이미 로그인된 경우 홈페이지로 리다이렉트
     } else {
         console.log('User is not logged in');
         // 비로그인 상태에 따른 처리

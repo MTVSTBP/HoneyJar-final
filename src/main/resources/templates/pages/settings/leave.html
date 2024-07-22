@@ -96,7 +96,10 @@
         <div class="modal__content">
             <p class="modal__text">정말 탈퇴하시겠어요?</p>
             <p class="modal__text">탈퇴 버튼 선택 시, 계정은 삭제되면 복구되지 않습니다.</p>
-            <button id="confirmButton" class="button button--confirm" type="submit">탈퇴</button>
+            <div class="modal__buttons">
+                <button id="cancelButton" class="button button--cancel" type="button" disabled>취소</button>
+                <button id="confirmButton" class="button button--confirm" type="submit" disabled>탈퇴</button>
+            </div>
         </div>
     </div>
     <!-- Modal 끝 -->

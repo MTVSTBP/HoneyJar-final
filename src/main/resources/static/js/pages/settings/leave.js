@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const leaveTextarea = document.querySelector('textarea[name="leave-textbox"]');
 
     const modalContainer = document.querySelector('.modal-container');
-    const confirmButton = document.getElementById('confirmButton');
+    const cancelButton = document.getElementById('cancelButton');
+    const confirmButton = document.getElementById('confirmButton')
 
     let modalConfirmOpenTime;
 
@@ -22,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log("Opening modal");
         modalContainer.style.display = "flex";
         document.body.style.overflow = "hidden";
+        cancelButton.disabled = true;
         confirmButton.disabled = true;
         modalConfirmOpenTime = Date.now();
         setTimeout(enableConfirmButton, 3000);
@@ -42,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function enableConfirmButton() {
         const elapsedTime = Date.now() - modalConfirmOpenTime;
         if (elapsedTime >= 3000) {
+            cancelButton.disabled = false;
             confirmButton.disabled = false;
         } else {
             setTimeout(enableConfirmButton, 3000 - elapsedTime);
@@ -76,7 +79,6 @@ document.addEventListener('DOMContentLoaded', function () {
         window.history.back();
     });
 
-
     // 동의 체크박스 상태 변경 시 폼 유효성 검사
     agreeCheckbox.addEventListener('change', checkFormValidity);
 
@@ -89,6 +91,9 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log('Withdraw button clicked');
         openModal();
     });
+    
+    // 모달창의 취소 버튼 클릭 시 모달창을 닫음
+    cancelButton.addEventListener('click', closeModal);
 
     // 확인 버튼 클릭 시 회원탈퇴 처리
     confirmButton.addEventListener("click", function () {
