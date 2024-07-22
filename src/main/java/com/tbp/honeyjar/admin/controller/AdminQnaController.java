@@ -42,9 +42,10 @@ public class AdminQnaController {
 
     @PostMapping("/write")
     public String write(QnaSaveRequestDto requestDto) {
+
         requestDto.setCreatedAt(now());
         requestDto.setUpdatedAt(now());
-        requestDto.setUserId(1);
+        requestDto.setUserId(1L);
 
         qnaService.save(requestDto);
 
@@ -53,6 +54,7 @@ public class AdminQnaController {
 
     @GetMapping("/correction/{qna_id}")
     public String qnaCorrection(@PathVariable Long qna_id, Model model) {
+
         QnaResponseDto dto = qnaService.findById(qna_id);
 
         if (dto != null) {
@@ -64,6 +66,7 @@ public class AdminQnaController {
 
     @PostMapping("/correction/{qna_id}")
     public String qnaCorrection(@PathVariable Long qna_id, QnaCorrectionRequestDto requestDto) {
+
         QnaResponseDto qna = qnaService.findById(qna_id);
 
         if (qna != null) {
@@ -77,6 +80,7 @@ public class AdminQnaController {
 
     @GetMapping("/delete/{qna_id}")
     public String delete(@PathVariable Long qna_id) {
+
         QnaResponseDto qna = qnaService.findById(qna_id);
 
         if (qna != null) {
