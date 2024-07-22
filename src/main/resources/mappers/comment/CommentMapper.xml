@@ -18,11 +18,10 @@
     </resultMap>
 
     <select id="findAllComment" resultMap="commentListResultMap">
-        SELECT C.comment_id, C.comment, C.updated_at, U.name, I.url
-        FROM comment as C, user as U, image as I
-        WHERE C.user_id = U.user_id and C.user_id = (SELECT user_id
-        FROM image
-        WHERE post_id is null)
+        SELECT DISTINCT C.comment_id, C.comment, C.updated_at, U.name, I.url
+        FROM comment as C
+        JOIN user as U ON C.user_id = U.user_id
+        LEFT JOIN image as I ON C.user_id = I.user_id AND I.post_id IS NULL
         ORDER BY C.updated_at;
     </select>
 
@@ -36,8 +35,18 @@
         VALUES
         (
            #{ comment }
-        ,  #{ postId }
-        ,  #{ userId }
+        ,  1
+        ,  1
         )
     </insert>
+
+    <update id="modifyComment" parameterType="com.tbp.honeyjar.comment.dto.CommentListDTO">
+        UPDATE COMMENT
+        SET
+                COMMENT
+
+        WHERE
+                COMMENT_ID = #{ comment_id }
+
+    </update>
 </mapper>

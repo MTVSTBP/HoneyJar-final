@@ -3,20 +3,21 @@ package com.tbp.honeyjar.comment.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @NoArgsConstructor
 public class CommentListDTO {
     private long userId;
     private long postId;
-    private Long commentId;
+    private long commentId;
     private String comment;
     private String updatedAt;
     private String userName;
     private String url;
 
-    @Builder
-    public CommentListDTO(long userId, long postId, Long commentId, String comment, String updatedAt, String userName, String url) {
+    public CommentListDTO(long userId, long postId, long commentId, String comment, String updatedAt, String userName, String url) {
         this.userId = userId;
         this.postId = postId;
         this.commentId = commentId;

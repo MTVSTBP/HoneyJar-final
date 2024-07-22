@@ -15,14 +15,14 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     // comment 클래스 또는 함수 정의
-    class Comment {
-        constructor(comment) {
-            this.comment = comment;
-        }
-    }
+    // class Comment {
+    //     constructor(comment) {
+    //         this.comment = comment;
+    //     }
+    // }
 
-    const commentInput = document.getElementById('commentInput'); // comment input 요소 정의
-    const formData = new Comment(commentInput.value);
+    // const commentInput = document.getElementById('commentInput'); // comment input 요소 정의
+    // const formData = new Comment(commentInput.value);
 
     // registSubmit.addEventListener('click', async function () {
     //     try {
@@ -42,9 +42,9 @@ document.addEventListener("DOMContentLoaded", function() {
     //     }
     // });
 
-    const moreHorizImages = document.querySelectorAll('.more_h img');
+    const moreHorizImages2 = document.querySelectorAll('.more_h img');
 
-    moreHorizImages.forEach(function(moreHorizImage) {
+    moreHorizImages2.forEach(function(moreHorizImage) {
         moreHorizImage.addEventListener('click', function(event) {
             event.stopPropagation(); // 클릭 이벤트 전파 방지
             const clickBox = this.nextElementSibling;
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     document.addEventListener('click', function(event) {
-        moreHorizImages.forEach(function(moreHorizImage) {
+        moreHorizImages2.forEach(function(moreHorizImage) {
             const clickBox = moreHorizImage.nextElementSibling;
             if (!clickBox.contains(event.target)) {
                 clickBox.style.display = 'none';
@@ -71,6 +71,7 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log(editCommentSection);
             console.log(actionButtons)
             if (editCommentSection) {
+    const editButtons = document.querySelectorAll('.editButton');
                 // actionButtons 숨기고 edit_comment 보이기
                 actionButtons.style.display = 'none'; // 다른 액션 버튼 숨기기
                 editCommentSection.style.display = (editCommentSection.style.display === 'block') ? 'none' : 'block';

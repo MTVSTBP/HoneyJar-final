@@ -6,10 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.util.HashMap;
@@ -39,12 +36,22 @@ public class CommentController {
 
     // 댓글 등록
     @PostMapping("regist")
-    public String registComment(CommentListDTO newComment) {
-
+    public String registComment(@ModelAttribute CommentListDTO newComment) {
+        System.out.println(newComment);
         commentService.registComment(newComment);
 
         return "redirect:/comment";
     }
+
+    @PostMapping("modify")
+    public String modifyComment(@ModelAttribute CommentListDTO newComment) {
+        System.out.println(newComment);
+        commentService.modifyComment(newComment);
+
+        return "redirect:/comment";
+    }
+
+
 //    @PostMapping("/regist")
 //    public ResponseEntity<Map<String, String>> registerComment(@RequestBody CommentListDTO comment) {
 //        System.out.println(comment.toString()); // 전달된 데이터 확인을 위해 로그 출력
