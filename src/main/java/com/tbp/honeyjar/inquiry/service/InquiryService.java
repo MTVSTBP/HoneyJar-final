@@ -1,6 +1,8 @@
 package com.tbp.honeyjar.inquiry.service;
 
 import com.tbp.honeyjar.inquiry.dto.InquiryDto;
+import com.tbp.honeyjar.inquiry.dto.InquiryWriteDto;
+import com.tbp.honeyjar.inquiry.dto.InquiryUpdateDto;
 import com.tbp.honeyjar.inquiry.mapper.InquiryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,25 +48,31 @@ public class InquiryService {
     }
 
     public InquiryDto getInquiryById(Long id) {
-        return getDummyInquiries().stream()
-                .filter(inquiry -> inquiry.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+        return inquiryMapper.getInquiryById(id);
     }
 
-    /* inquiryWrite.html */
-    public int createInquiry(InquiryDto inquiryDto) {
-        int result;
-        InquiryDto inquirydto;
-        result = inquiryMapper.create(inquiryDto);
+    public int createInquiry(InquiryWriteDto inquiryWriteDto) {
+        InquiryDto inquiryDto = InquiryDto.builder()
+                .userId(inquiryWriteDto.getUserId())
+                .title(inquiryWriteDto.getTitle())
+                .categoryId(inquiryWriteDto.getCategoryId())
+                .post(inquiryWriteDto.getPost())
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .build();
+        int result = inquiryMapper.create(inquiryDto);
 
-        System.out.println("Save inquiry called : " + inquiryDto);
+        System.out.println("Save inquiry called : " + inquiryDto.toString());
         return result;
     }
 
+    public void updateInquiry(InquiryUpdateDto inquiryUpdateDto) {
+        System.out.println("Updating inquiry: " + inquiryUpdateDto);
+        inquiryMapper.update(inquiryUpdateDto);
+    }
 
-    public void updateInquiry(Long id, String title, Long categoryId, String content) {
-        // 실제 구현에서는 DB에서 데이터를 수정해야 함
-        System.out.println("Updating inquiry id: " + id + ", title: " + title + ", categoryId: " + categoryId + ", content: " + content);
+    public void deleteInquiry(Long id) {
+        System.out.println("Deleting inquiry id: " + id);
+        inquiryMapper.delete(id);
     }
 }
