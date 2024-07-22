@@ -24,15 +24,16 @@
         <result property="price" column="price"/>
         <result property="post" column="post"/>
         <result property="placeId" column="place_id"/>
-        <result property="placeName" column="placeName"/>
+        <result property="placeName" column="place_name"/>
         <result property="xCoordinate" column="x_coordinate"/>
         <result property="yCoordinate" column="y_coordinate"/>
-        <result property="createdAt" column="createdAt"/>
-        <result property="updatedAt" column="updatedAt"/>
-        <result property="imageUrls" column="imageUrls" typeHandler="com.tbp.honeyjar.global.mybatis.StringListTypeHandler"/>
-        <result property="mainImageUrl" column="mainImageUrl"/>
-        <collection property="images" ofType="com.tbp.honeyjar.image.dto.ImageDTO" resultMap="imageResultMap"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <collection property="imageUrls" ofType="java.lang.String">
+            <result column="url"/>
+        </collection>
     </resultMap>
+
 
     <resultMap id="imageResultMap" type="com.tbp.honeyjar.image.dto.ImageDTO">
         <id property="imageId" column="image_id"/>
@@ -43,20 +44,21 @@
     <!-- 포스트 리스트 조회 쿼리 -->
     <select id="findAllPost" resultMap="postListResultMap">
         SELECT
-        p.post_id,
-        p.title,
-        p.post,
-        i.url AS main_image_url,
+            p.post_id,
+            p.title,
+            p.post,
+            i.url AS main_image_url,
         CASE
         WHEN b.post_id IS NOT NULL THEN true
         ELSE false
         END AS bookmarked
         FROM post p
-        LEFT JOIN (
-        SELECT post_id, url
-        FROM image
-        WHERE is_main = 1
-        ) i ON p.post_id = i.post_id
+            LEFT JOIN (
+                SELECT post_id, url
+                FROM image
+                WHERE is_main = 1
+        )
+        i ON p.post_id = i.post_id
         LEFT JOIN bookmark b ON p.post_id = b.post_id
         <!--LEFT JOIN user u ON p.user_id = u.user_id-->
     </select>
@@ -73,27 +75,15 @@
             p.created_at,
             p.updated_at,
             p.place_id,
-            pl.place_name,
+            pl.name AS place_name,
             pl.x_coordinate,
             pl.y_coordinate,
-            p.image_urls,
-            p.main_image_url,
-            -- u.profile_img,
-            -- l.like_count,
-            -- c.comment_count,
-            -- r.rating,
-            i.image_id,
-            i.url,
-            i.is_main
+            i.url
         FROM post p
-            LEFT JOIN image i ON p.post_id = i.post_id
-            LEFT JOIN place pl ON p.place_id = pl.place_id
-            -- LEFT JOIN user u ON p.user_id = u.user_id
-            -- LEFT JOIN (SELECT post_id, COUNT(*) AS like_count FROM likes GROUP BY post_id) l ON p.post_id = l.post_id
-            -- LEFT JOIN (SELECT post_id, COUNT(*) AS comment_count FROM comments GROUP BY post_id) c ON p.post_id = c.post_id
-            -- LEFT JOIN (SELECT post_id, AVG(rating) AS rating FROM ratings GROUP BY post_id) r ON p.post_id = r.post_id
-        WHERE
-            p.post_id = #{postId}
+        LEFT JOIN place pl ON p.place_id = pl.place_id
+        LEFT JOIN image i ON p.post_id = i.post_id
+        WHERE p.post_id = #{postId}
+        ORDER BY i.is_main DESC, i.image_id ASC
     </select>
 
 

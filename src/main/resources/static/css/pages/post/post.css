@@ -137,6 +137,7 @@ input:focus, select:focus, textarea:focus {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    padding-bottom: 7rem;
 }
 
 .my_list ul .item {

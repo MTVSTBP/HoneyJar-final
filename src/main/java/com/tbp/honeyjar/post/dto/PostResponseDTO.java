@@ -19,7 +19,6 @@ public class PostResponseDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<String> imageUrls;  // 이미지 URL 리스트
-    private String mainImageUrl;  // 썸네일 이미지 URL
 
     //    private String profileImg;  // user table
 //    private int like;  // like table
@@ -29,7 +28,7 @@ public class PostResponseDTO {
     public PostResponseDTO() {}
 
 
-    public PostResponseDTO(Long postId, Long categoryId, String categoryName, String title, String recommendMenu, int price, String post, Long placeId, String placeName, String xCoordinate, String yCoordinate, LocalDateTime createdAt, LocalDateTime updatedAt, List<String> imageUrls, String mainImageUrl) {
+    public PostResponseDTO(Long postId, Long categoryId, String categoryName, String title, String recommendMenu, int price, String post, Long placeId, String placeName, String xCoordinate, String yCoordinate, LocalDateTime createdAt, LocalDateTime updatedAt, List<String> imageUrls) {
         this.postId = postId;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
@@ -44,7 +43,7 @@ public class PostResponseDTO {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.imageUrls = imageUrls;
-        this.mainImageUrl = mainImageUrl;
+
     }
 
     public Long getPostId() {
@@ -159,13 +158,6 @@ public class PostResponseDTO {
         this.imageUrls = imageUrls;
     }
 
-    public String getMainImageUrl() {
-        return mainImageUrl;
-    }
-
-    public void setMainImageUrl(String mainImageUrl) {
-        this.mainImageUrl = mainImageUrl;
-    }
 
     @Override
     public String toString() {
@@ -184,7 +176,6 @@ public class PostResponseDTO {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", imageUrls=" + imageUrls +
-                ", mainImageUrl='" + mainImageUrl + '\'' +
                 '}';
     }
 }

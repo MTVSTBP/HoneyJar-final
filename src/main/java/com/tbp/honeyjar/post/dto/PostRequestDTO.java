@@ -23,6 +23,21 @@ public class PostRequestDTO {
 
     public PostRequestDTO() {}
 
+    public PostRequestDTO(Long postId, String title, String recommendMenu, int price, String post, Long userId, List<String> imageUrls, String mainImageUrl, PlaceDTO place, Long placeId, LocalDateTime createdAt, Long categoryId) {
+        this.postId = postId;
+        this.title = title;
+        this.recommendMenu = recommendMenu;
+        this.price = price;
+        this.post = post;
+        this.userId = userId;
+        this.imageUrls = imageUrls;
+        this.mainImageUrl = mainImageUrl;
+        this.place = place;
+        this.placeId = placeId;
+        this.createdAt = createdAt;
+        this.categoryId = categoryId;
+    }
+
     public Long getPostId() {
         return postId;
     }
