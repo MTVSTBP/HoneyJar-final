@@ -37,4 +37,25 @@
         from qna
         where qna_id = #{id}
     </select>
+
+    <insert id="save" parameterType="com.tbp.honeyjar.admin.dto.qna.QnaSaveRequestDto">
+        insert into qna
+        (
+        title,
+        post,
+        category_id,
+        user_id,
+        created_at,
+        updated_at
+        )
+        values
+        (
+        #{title},
+        #{post},
+        #{categoryId},
+        #{userId},
+        #{createdAt},
+        #{updatedAt}
+        )
+    </insert>
 </mapper>
