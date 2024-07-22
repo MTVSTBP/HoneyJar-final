@@ -74,4 +74,15 @@ public class AdminQnaController {
 
         return "redirect:/admin/qna";
     }
+
+    @GetMapping("/delete/{qna_id}")
+    public String delete(@PathVariable Long qna_id) {
+        QnaResponseDto qna = qnaService.findById(qna_id);
+
+        if (qna != null) {
+            qnaService.delete(qna_id);
+        }
+
+        return "redirect:/admin/qna";
+    }
 }

@@ -31,4 +31,8 @@ public class QnaService {
     public Long correction(QnaCorrectionRequestDto requestDto) {
         return qnaMapper.correction(requestDto);
     }
+
+    public Long delete(Long qnaId) {
+        return qnaMapper.delete(qnaId);
+    }
 }
