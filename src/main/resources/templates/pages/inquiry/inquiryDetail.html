@@ -29,16 +29,19 @@
                     <img src="/assets/svg/base_profile.svg" alt="관리자프로필">
                     <p th:text="${inquiry.userId}">사용자</p>
                 </div>
-                <span th:text="${#temporals.format(inquiry.createdDate, 'yyyy-MM-dd')}">2024.07.01</span>
+                <span th:text="${#temporals.format(inquiry.createdAt, 'yyyy-MM-dd')}">2024.07.01</span>
             </div>
         </div>
         <div class="inquiry_context">
-            <p th:text="${inquiry.content}">팔로우 차단할 수 있는 기능은 없나요??</p>
+            <p th:text="${inquiry.post}">팔로우 차단할 수 있는 기능은 없나요??</p>
         </div>
     </div>
     <!-- 관리자인 경우에만 보이게 추후 적용해야됨. -->
     <div class="button_list">
-        <button id="edit-button" class="btn">수정</button>
+        <a th:href="@{'/settings/inquiry/correction/' + ${inquiry.id}}" class="inquiry_link">
+            <button>수정</button>
+        </a>
+            <!--        <button id="edit-button" class="btn" th:attr="onclick='window.location.href=\'@ds{/settings/inquiry/correction/{id}(id=${inquiry.id})}\''">수정</button>-->
     </div>
 
     <!-- 삭제 확인 모달 -->
