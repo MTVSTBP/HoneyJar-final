@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}"
+      layout:fragment="content"
+      th:with="pageTitle='Setting'">
+<head>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/settings/leave.css}"/>
+    <th:block layout:fragment="title">
+        <title>회원탈퇴</title>
+    </th:block>
+    <th:block layout:fragment="script">
+        <script th:src="@{/js/pages/settings/leave.js}"></script>
+    </th:block>
+</head>
+<body>
+<div class="page-container">
+    <div class="page-header">
+        <img id="arrowBack" src="/assets/svg/arrow_back.svg" alt="뒤로가기 버튼"/>
+        <span>회원탈퇴</span>
+    </div>
+    <!-- 사용자명 및 탈퇴 확인 시작 -->
+    <div class="leave-confirmation">
+
+        <span class="text" th:text="|${user.name}님|"></span>
+        <span class="text">정말 탈퇴하시겠어요?</span>
+    </div>
+    <!-- 사용자명 및 탈퇴 확인 끝 -->
+
+    <!-- 탈퇴 시 주의사항 Section 시작 -->
+    <section class="notice-section">
+        <img class="error_outline" src="/assets/svg/error_outline.svg" alt="주의사항 아이콘"/>
+        <div class="notice-content">
+                <span class="text text--normal">
+                    회원님, 저희 꿀단지 서비스를 이용하시는데 불편함이 있으셨나요?
+                </span>
+            <p class="text text--small">
+                1) 꿀단지에서 발송하는 메일 수신거부는 '꿀단지' > 마이페이지'에서
+                확인하세요.
+            </p>
+            <p class="text text--small">
+                2) 이용 불편 및 각종 문의 사항은 '1:1 문의'로 문의 주시면 성심
+                성의껏 답변 드리겠습니다.
+            </p>
+            <p class="text text--small">
+                - FAQ / 1:1 온라인 문의 / 전화 문의: 1577-1577 (365일 오전
+                9시~오후 6시)
+            </p>
+        </div>
+    </section>
+    <section class="notice-section">
+        <img class="error_outline" src="/assets/svg/error_outline.svg" alt="주의사항 아이콘"/>
+        <div class="notice-content">
+                <span class="text text--normal">
+                    회원탈퇴 전, 아래의 유의사항을 확인해 주시기 바랍니다.
+                </span>
+            <p class="text text--small">
+                - 회원탈퇴 시 회원전용 웹 서비스 이용이 불가합니다.
+            </p>
+            <p class="text text--small">
+                - 거래정보가 있는 경우, 전자상거래 등에서의 소비자 보호에 관한
+                법률에 따라 계약 또는 청약철회에 관한 기록, 대금결제 및 재화 등의
+                공급에 관한 기록은 5년동안 보존됩니다.
+            </p>
+            <p class="text text--small">
+                - 회원탈퇴 후 꿀단지 서비스에 입력하신 문의 및 후기, 댓글은
+                삭제되지 않으며, 회원정보 삭제로 인해 작성자 본인을 확인할 수 없어
+                편집 및 삭제처리가 원천적으로 불가능 합니다.
+            </p>
+            <p class="text text--small">
+                - 문의 및 후기, 댓글 삭제를 원하시는 경우에는 먼저 해당 게시물을
+                삭제하신 후 탈퇴를 신청하시기 바랍니다.
+            </p>
+        </div>
+    </section>
+    <section class="notice-section checkbox-section">
+        <label class="custom-checkbox">
+            <input id="agreeCheckbox" type="checkbox" alt="동의여부 체크박스"/>
+            <span class="text text--normal">
+                    회원탈퇴 유의사항을 확인하였으며 동의합니다.
+                </span>
+        </label>
+    </section>
+    <div class="leave-confirmation">
+        <span class="text">탈퇴 사유</span>
+        <textarea name="leave-textbox" placeholder="여기에 탈퇴 사유를 작성해 주세요."></textarea>
+    </div>
+    <!-- 탈퇴 시 주의사항 Section 끝 -->
+
+    <!-- 탈퇴 버튼 시작 -->
+    <button id="leaveButton" class="button button--submit" type="submit" disabled>탈퇴</button>
+    <!-- 탈퇴 버튼 끝 -->
+
+    <!-- Modal 시작 -->
+    <div class="modal-container">
+        <div class="modal__content">
+            <p class="modal__text">정말 탈퇴하시겠어요?</p>
+            <p class="modal__text">탈퇴 버튼 선택 시, 계정은 삭제되면 복구되지 않습니다.</p>
+            <button id="confirmButton" class="button button--confirm" type="submit">탈퇴</button>
+        </div>
+    </div>
+    <!-- Modal 끝 -->
+</div>
+</body>
+</html>

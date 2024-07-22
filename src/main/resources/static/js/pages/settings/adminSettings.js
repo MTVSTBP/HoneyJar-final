@@ -4,14 +4,14 @@ document.addEventListener("DOMContentLoaded", function () {
         contactTab: {redirect: "qna.html", hasNotification: false},
         faqTab: {redirect: "qna.html", hasNotification: false},
         // logoutTab: {redirect: "qna.html"},
-        withdrawTab: {redirect: "withdraw.html"}
+        // withdrawTab: {redirect: "withdraw.html"}
     };
 
-    const logoutTab = document.getElementById("logoutTab") || document.getElementById("adminLogoutTab");
-    if (logoutTab) {
-        logoutTab.addEventListener("click", function (event) {
+    const adminLogoutTab = document.getElementById("adminLogoutTab");
+    if (adminLogoutTab) {
+        adminLogoutTab.addEventListener("click", function (event) {
             event.preventDefault();
-            logout();
+            adminLogout();
         });
     }
 
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
         Object.entries(tabs).map(([id, config]) => [id, setupTab(id, config)])
     );
 
-    function logout() {
+    function adminLogout() {
         if (confirm('정말로 로그아웃 하시겠습니까?')) {
             fetch('/logout', {
                 method: 'POST',

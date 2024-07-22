@@ -4,10 +4,10 @@ document.addEventListener("DOMContentLoaded", function () {
         contactTab: {redirect: "qna.html", hasNotification: false},
         faqTab: {redirect: "qna.html", hasNotification: false},
         // logoutTab: {redirect: "qna.html"},
-        withdrawTab: {redirect: "withdraw.html"}
+        leaveTab: {redirect: "/settings/leave"}
     };
 
-    const logoutTab = document.getElementById("logoutTab") || document.getElementById("adminLogoutTab");
+    const logoutTab = document.getElementById("logoutTab");
     if (logoutTab) {
         logoutTab.addEventListener("click", function (event) {
             event.preventDefault();

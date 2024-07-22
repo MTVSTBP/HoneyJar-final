@@ -75,7 +75,7 @@ public class UserAuthController extends AbstractAuthController {
         resultMap.put(TOKEN_NAME, accessToken.getToken());
         // TODO: 지금은 리다이렉트 되는 주소가 "localhost:8080"
         //  -> 이를 "localhost:8080/home"으로 되게끔 수정
-        //  -> 별도의 home.html 파일을 생성 후 수정하면 될 듯
+        //  -> 별도의 index.html 파일을 생성 후 수정하면 될 듯
         resultMap.put("redirectUrl", "/home");  // 일반 사용자는 홈페이지로 리다이렉트
 //        resultMap.put("redirectUrl", "");  // 일반 사용자는 홈페이지로 리다이렉트
 
