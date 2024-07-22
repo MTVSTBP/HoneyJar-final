@@ -11,12 +11,4 @@ public class NoticeSaveRequestDto {
     private String post;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
-    @Builder
-    public NoticeSaveRequestDto(String title, String post, LocalDateTime createdAt, LocalDateTime updatedAt) {
-        this.title = title;
-        this.post = post;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-    }
 }
