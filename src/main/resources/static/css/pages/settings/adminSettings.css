@@ -1,0 +1,207 @@
+/* Common Styles */
+.page-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    min-height: 100vh;
+    height: 580px;
+    box-sizing: border-box;
+}
+
+.content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 18px 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Common Styles End */
+
+/* Info Box Styles Start */
+.info-box {
+    background-color: #FFFEFE;
+    border: 1px solid #C7C7C7;
+    border-radius: 18px;
+    width: 100%;
+    height: 125px;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: relative;
+    height: 100%;
+}
+
+.vertical-line {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 2px;
+    height: 95px;
+    background-color: #424242;
+}
+
+.stats__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+}
+
+.stats__value-container {
+    display: flex;
+    align-items: center;
+}
+
+.assignment-icon {
+    width: 30px;
+    margin-right: 8px;
+}
+
+.stats__label-container {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.stats__label {
+    font-family: "Pretendard-Bold";
+    font-size: 16px;
+    color: #565656;
+    margin-bottom: 15px;
+}
+
+/* Info Box Styles End */
+
+.stats__notification {
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    transform: translate(-50%, -50%);
+    width: 9px;
+    height: 9px;
+    background-color: #ff8243;
+    border-radius: 50%;
+    display: none;
+}
+
+.stats__notification.active {
+    display: block;
+}
+
+.stats__value {
+    font-family: "Pretendard-Bold";
+    font-size: 36px;
+    color: #262424;
+}
+
+/* Info Box Styles End */
+
+/* Setting Tab Styles Start */
+.page-label {
+    margin-top: 30px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    font-family: "Pretendard-Bold";
+    font-size: 18px;
+    color: #565656;
+}
+
+.setting-tab {
+    width: 100%;
+    position: relative;
+}
+
+.setting-tab::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 15px; /* 좌측 여백 */
+    right: 15px; /* 우측 여백 */
+    height: 1px;
+    background-color: #e8e8e8;
+}
+
+.setting-tab__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+    padding: 0 20px;
+}
+
+.setting-tab__notification {
+    width: 9px;
+    height: 9px;
+    background-color: #ff8243;
+    border-radius: 50%;
+    display: none;
+}
+
+.setting-tab__notification.active {
+    display: block;
+}
+
+.setting-tab__text {
+    font-family: "Pretendard-Bold";
+    font-size: 14px;
+}
+
+/* Setting Tab Styles End */
+
+
+/*!* Setting Tab Styles Start *!*/
+/*.page-label {*/
+/*    margin-top: 30px;*/
+/*    margin-left: 10px;*/
+/*    margin-bottom: 10px;*/
+/*    font-family: "Pretendard-Bold";*/
+/*    font-size: 18px;*/
+/*    color: #565656;*/
+/*}*/
+
+/*.setting-tab {*/
+/*    width: 100%;*/
+/*    position: relative;*/
+/*    border-bottom: 1px solid #e8e8e8;*/
+/*}*/
+
+/*.setting-tab__container {*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*    align-items: center;*/
+/*    margin: 20px 20px;*/
+/*}*/
+
+/*.setting-tab__notification {*/
+/*    width: 9px;*/
+/*    height: 9px;*/
+/*    background-color: #ff8243;*/
+/*    border-radius: 50%;*/
+/*    display: none;*/
+/*}*/
+
+/*.setting-tab__notification.active {*/
+/*    display: block;*/
+/*}*/
+
+/*.setting-tab__text {*/
+/*    font-family: "Pretendard-Bold";*/
+/*    font-size: 14px;*/
+/*}*/
+
+/*!* Setting Tab Styles End *!*/
