@@ -95,8 +95,18 @@ public class PostController {
 //        return "redirect:/post/detail?postId=" + addPostRequestDTO.getPostId();
 //    }
 
+//    @GetMapping("/map")
+//    public String findAddress() {
+//        return "pages/post/findAddress";
+//    }
+
+
     @GetMapping("/map")
-    public String findAddress() {
+    public String findAddress(@RequestParam(required = false) String source, @RequestParam(required = false) Long postId, Model model) {
+        model.addAttribute("source", source != null ? source : "write");
+        if (postId != null) {
+            model.addAttribute("postId", postId);
+        }
         return "pages/post/findAddress";
     }
 }
