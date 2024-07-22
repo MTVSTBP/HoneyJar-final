@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tbp.honeyjar.mypage.dao.MyPageMapper">
+    <resultMap id="MyPageListMap" type="com.tbp.honeyjar.mypage.DTO.MyPageDTO">
+        <id property="userId" column="user_id"/>
+        <result property="userName" column="name"/>
+        <result property="userPr" column="pr"/>
+        <result property="profileImage" column="url"/>
+        <result property="numberOfPosts" column="numberOfPosts"/>
+        <result property="numberOfFollowers" column="numberOfFollowers"/>
+        <result property="numberOfFollowees" column="numberOfFollowees"/>
+    </resultMap>
+    <select id="getUserDetail" resultMap="MyPageListMap">
+        SELECT U.user_id, U.name, U.pr, I.url,
+               (SELECT COUNT(*) FROM post as P WHERE P.user_id = U.user_id) AS numberOfPosts,
+               (SELECT COUNT(*) FROM follow WHERE followee_id = U.user_id) AS numberOfFollowers,
+               (SELECT COUNT(*) FROM follow WHERE follower_id = U.user_id) AS numberOfFollowees
+        FROM user as U, image as I
+        WHERE U.user_id = #{userId}
+    </select>
+</mapper>
+<!--
+        private Long userId;
+        private String userName;
+        private String userPr;
+        private String profileImage;
+        private Integer numberOfPosts;
+        private Integer numberOfFollowers;
+        private Integer numberOfFollowees;
+        private List<PostDTO> BookmarkedPosts;-->
