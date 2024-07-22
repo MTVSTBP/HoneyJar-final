@@ -28,6 +28,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
+        log.debug("OAuth2User loaded: {}", oAuth2User);
 
         try {
             return processOAuth2User(userRequest, oAuth2User);
@@ -45,11 +46,24 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     ) {
         OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(ProviderType.KAKAO, oAuth2User.getAttributes());
 
+        log.info("Processing OAuth2User: {}", userInfo.getId());
+        log.info("OAuth2User attributes: {}", oAuth2User.getAttributes());
+
         User user = userMapper.findByKakaoId(userInfo.getId());
 
         if (user != null) {
+            log.info("Existing user found: {}", user);
+            if (!user.isUserStatus()) {
+                // 탈퇴한 사용자가 다시 로그인한 경우
+                log.info("Attempting to reactivate user account. User details: {}", user);
+                user.setUserStatus(true);
+                user.setFiredAt(null);
+                userMapper.reactivateUser(user);
+                log.info("User after reactivation: {}", user);
+            }
             user = updateUser(user, userInfo);
         } else {
+            log.info("Creating new user for KakaoId: {}", userInfo.getId());
             user = createUser(userInfo);
         }
 
@@ -71,7 +85,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private User updateUser(User user, OAuth2UserInfo userInfo) {
-        user.setName(userInfo.getName());
+        if (userInfo.getName() != null && !user.getName().equals(userInfo.getName())) {
+            user.setName(userInfo.getName());
+        }
         user.setUpdatedAt(LocalDateTime.now());
 
         userMapper.updateUser(user);

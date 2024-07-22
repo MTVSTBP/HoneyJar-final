@@ -14,6 +14,9 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
+    public void updateUser(String kakaoId) {
+    }
+
     public void deleteUser(String kakaoId) {
         userMapper.deleteUser(kakaoId, LocalDate.now());
     }

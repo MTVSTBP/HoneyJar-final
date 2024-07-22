@@ -15,7 +15,6 @@ import com.tbp.honeyjar.login.oauth.service.CustomOAuth2UserService;
 import com.tbp.honeyjar.login.oauth.token.AuthTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,7 +25,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -79,9 +77,7 @@ public class SecurityConfig {
                                 .requestMatchers("/oauth2/authorization/**", "/login/oauth2/code/**").permitAll()
 
                                 // 관리자 전용 엔드포인트
-                                .requestMatchers("/admin").hasAuthority(RoleType.ADMIN.getCode())
-                                .requestMatchers("/admin/**").hasAuthority(RoleType.ADMIN.getCode())
-//                                .requestMatchers("/admin/**").permitAll()
+                                .requestMatchers("/admin", "/admin/**").hasAuthority(RoleType.ADMIN.getCode())
 
                                 // 인증이 필요한 사용자 엔드포인트
                                 .requestMatchers("/home", "/post/**", "/mypage/**", "/follow/**", "/settings/**").authenticated()
@@ -188,7 +184,7 @@ public class SecurityConfig {
 
     @Bean
     public LoginPageFilter loginPageFilter() {
-        return new LoginPageFilter();
+        return new LoginPageFilter(tokenProvider);
     }
 
     private void customLogoutHandler(

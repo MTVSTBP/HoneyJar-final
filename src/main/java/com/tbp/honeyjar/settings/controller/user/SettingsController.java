@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import static com.tbp.honeyjar.login.common.ApiResponse.SUCCESS_CODE;
 import static com.tbp.honeyjar.login.common.HeaderUtil.ACCESS_TOKEN;
 import static com.tbp.honeyjar.login.common.HeaderUtil.REFRESH_TOKEN;
 
@@ -49,13 +50,6 @@ public class SettingsController {
             if (user != null) {
                 model.addAttribute("user", user);
                 model.addAttribute("name", user.getName());
-
-//                // 프로필 이미지 URL 추가
-//                String profileImageUrl = user.getProfileImageUrl(); // User 엔티티에 이 필드가 있다고 가정
-//                if (profileImageUrl == null || profileImageUrl.isEmpty()) {
-//                    profileImageUrl = "/assets/svg/base_profile.svg"; // 기본 이미지 경로
-//                }
-//                model.addAttribute("profileImageUrl", profileImageUrl);
 
                 return "pages/settings/settings";
             } else {
@@ -111,9 +105,9 @@ public class SettingsController {
             CookieUtil.deleteCookie(request, response, ACCESS_TOKEN);
             CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
 
-            return ResponseEntity.ok().body(new ApiResponse<>(ApiResponse.SUCCESS_CODE, "User leave successfully", null));
+            return ResponseEntity.ok().body(new ApiResponse<>(SUCCESS_CODE, "User leave successfully", null));
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>(ApiResponse.SUCCESS_CODE, "User not authenticated", null));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>(SUCCESS_CODE, "User not authenticated", null));
         }
     }
 }

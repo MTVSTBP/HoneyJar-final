@@ -13,4 +13,5 @@ public interface UserMapper {
     void insertUser(User user);
     void updateUser(User user);
     void deleteUser(String kakaoId, LocalDate firedAt);
+    void reactivateUser(User user);
 }
