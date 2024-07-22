@@ -34,10 +34,7 @@
     <div class="kind_wrap">
         <div class="kind_slider">
             <ul class="slider">
-                <li th:if="*{mainImageUrl != null}">
-                    <img th:src="*{mainImageUrl}" alt="썸네일 이미지">
-                </li>
-                <li th:each="image : *{imageUrls}" th:if="${image != *{mainImageUrl}}">
+                <li th:each="image : *{imageUrls}">
                     <img th:src="${image}" alt="이미지">
                 </li>
             </ul>
@@ -82,8 +79,9 @@
 
     <!-- map -->
     <div class="map">
-        <div id="map"></div>
+        <div id="map" class="map_box" ></div>
     </div>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fa5ef4c8b53367d10238f7d505c2a083&libraries=services"></script>
 
     <!-- context -->
     <div class="post_context">
@@ -96,77 +94,63 @@
         <div class="like">
             <button id="likeButton" data-post-id="*{postId}">
                 <img src="/assets/svg/favorite.svg" alt="좋아요" id="likeImage">
-                <span id="likeCount" >
-<!--                    th:text="*{like}">-->
-                    0</span>
+                <span id="likeCount">0</span>
             </button>
         </div>
         <div class="comment">
             <button id="commentButton">
                 <img src="/assets/svg/mode_comment.svg" alt="댓글">
-                <span id="commentCount" >
-<!--                      th:text="*{commentId}">-->
-                    0</span>
+                <span id="commentCount">0</span>
             </button>
         </div>
         <div class="scope" id="rating">
             <button id="openRatingModal" data-post-id="*{postId}">
                 <img src="/assets/svg/star.svg" alt="별점" id="ratingStar">
-                <span id="averageRating" >
-<!-- th:text="*{rating}">-->
-                0</span>
+                <span id="averageRating">0</span>
             </button>
         </div>
-
-        <!-- 삭제 확인 모달 -->
-        <div id="deleteConfirmModal" class="modal">
-            <div class="modal-content">
-                        <span class="close">
-                            <img src="/assets/svg/close.svg" alt="닫기">
-                        </span>
-                <div class="modal-text">
-                    <p>정말로 삭제 하시겠어요?</p>
-                </div>
-                <button id="confirmDelete" class="complete">삭제</button>
-            </div>
-        </div>
-
-        <!-- 삭제 완료 모달 -->
-        <div id="deleteSuccessModal" class="modal">
-            <div class="modal-content">
-                        <span class="close">
-                            <img src="/assets/svg/close.svg" alt="닫기">
-                        </span>
-                <div class="modal-text">
-                    <p>삭제가 완료되었습니다!</p>
-                </div>
-                <button id="completeDelete" class="complete">확인</button>
-            </div>
-        </div>
-
-        <!-- Modal -->
-        <div id="ratingModal" class="modal">
-            <div class="modal-content">
-                        <span class="close">
-                            <img src="/assets/svg/close.svg" alt="">
-                        </span>
-                <div class="rating">
-                    <p>평점을 남겨주세요!</p>
-                </div>
-                <div class="modal-rating">
-                    <span class="star" data-value="1">&#9733;</span>
-                    <span class="star" data-value="2">&#9733;</span>
-                    <span class="star" data-value="3">&#9733;</span>
-                    <span class="star" data-value="4">&#9733;</span>
-                    <span class="star" data-value="5">&#9733;</span>
-                </div>
-                <button id="confirmRating" class="confirmRating">확인</button>
-            </div>
-        </div>
-
     </div>
 
 </div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var placeName = /*[[${post.placeName}]]*/ '장소 이름 없음';
+
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+        mapOption = {
+            center: new kakao.maps.LatLng([[${post.yCoordinate}]], [[${post.xCoordinate}]]), // 지도의 중심좌표
+            level: 4 // 지도의 확대 레벨
+        };
+
+    var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+    var imageSrc = '/assets/img/marker.png', // 마커이미지의 주소입니다
+        imageSize = new kakao.maps.Size(54, 59), // 마커이미지의 크기입니다
+        imageOption = {offset: new kakao.maps.Point(27, 69)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+
+    // 마커의 이미지정보를 가지고 있는 마커이미지를 생성합니다
+    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
+        markerPosition = new kakao.maps.LatLng([[${post.yCoordinate}]], [[${post.xCoordinate}]]); // 마커가 표시될 위치입니다
+
+    // 마커를 생성합니다
+    var marker = new kakao.maps.Marker({
+        position: markerPosition,
+        image: markerImage // 마커이미지 설정
+    });
+
+    // 인포윈도우를 생성합니다
+    var infowindow = new kakao.maps.InfoWindow({
+        content: '<div class="info_map">' + placeName + '</div>'
+    });
+
+    // 인포윈도우를 마커와 연결합니다
+    infowindow.open(map, marker);
+
+    // 마커가 지도 위에 표시되도록 설정합니다
+    marker.setMap(map);
+    /*]]>*/
+</script>
 
 <script th:inline="javascript" type="text/javascript" th:src="@{/js/pages/post/postDetail.js}"></script>
 

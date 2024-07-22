@@ -70,10 +70,9 @@ public class PostController {
 
 
     @GetMapping("/detail")
-    public String postDetail(@RequestParam Long postId, Model model) {
+    public String getPostDetail(@RequestParam Long postId, Model model) {
         PostResponseDTO post = postService.findPostById(postId);
         model.addAttribute("post", post);
-
         return "pages/post/postDetail";
     }
 
