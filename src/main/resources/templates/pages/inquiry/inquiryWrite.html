@@ -11,7 +11,7 @@
 </head>
 <body>
 <div id="container">
-    <form id="Form">
+    <form id="Form" method="post">
         <div class="sub_title">
             <a th:href="@{/settings/inquiry}" id="back-button">
                 <img src="/assets/svg/arrow_back.svg" alt="뒤로가기">
@@ -20,12 +20,12 @@
         </div>
         <!-- category -->
         <div class="category_wrap">
-            <label for="category">카테고리</label>
+            <label for="category" name>카테고리</label>
             <div class="custom-select-wrapper">
-                <select id="category">
+                <select id="category" name="category">
                     <option value="">선택</option>
-                    <option value="category1">카테고리1</option>
-                    <option value="category2">카테고리2</option>
+                    <option value="1">카테고리1</option>
+                    <option value="2">카테고리2</option>
                     <!-- 다른 카테고리 옵션들 -->
                 </select>
             </div>
@@ -46,7 +46,7 @@
         <!-- content -->
         <div class="form-group">
             <label for="content">내용</label>
-            <textarea id="content" name="content" placeholder="내용을 입력하세요" rows="5"></textarea>
+            <textarea id="content" name="post" placeholder="내용을 입력하세요" rows="5"></textarea>
             <p class="error-message" id="contentError"></p>
         </div>
         <!-- //content -->
@@ -74,6 +74,6 @@
         </div>
     </div>
 </div>
-<script th:src="@{/js/pages/inquiryWrite.js}"></script>
+<script th:src="@{/js/pages/inquiry/inquiryWrite.js}"></script>
 </body>
 </html>

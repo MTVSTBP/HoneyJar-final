@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
         hideErrorMessage(document.getElementById(event.target.id + 'Error'));
     });
     postForm.addEventListener('submit', function (event) {
-        event.preventDefault();
+        // event.preventDefault();
 
         if (!validateForm(true)) {
             return;
