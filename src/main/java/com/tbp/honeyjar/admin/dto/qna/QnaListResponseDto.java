@@ -5,8 +5,8 @@ import lombok.Data;
 @Data
 public class QnaListResponseDto {
 
-    private long id;
+    private Long id;
     private String title;
     private String post;
-    private int categoryId;
+    private Long categoryId;
 }
