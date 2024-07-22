@@ -22,10 +22,10 @@
         <div class="category_wrap">
             <label for="category">카테고리</label>
             <div class="custom-select-wrapper">
-                <select id="category">
+                <select th:name="categoryId" id="category">
                     <option value="">선택</option>
-                    <option value="category1">카테고리1</option>
-                    <option value="category2">카테고리2</option>
+                    <option value="1">카테고리1</option>
+                    <option value="2">카테고리2</option>
                     <!-- 다른 카테고리 옵션들 -->
                 </select>
             </div>
@@ -37,7 +37,7 @@
         <div class="form-group">
             <div class="title">
                 <label for="title">제목</label>
-                <input type="text" th:value="${dto.title}" id="title" placeholder="제목을 입력하세요">
+                <input type="text" th:value="${dto.title}" th:name="title" id="title" placeholder="제목을 입력하세요">
                 <p class="error-message" id="titleError"></p>
             </div>
         </div>
@@ -46,7 +46,7 @@
         <!-- content -->
         <div class="form-group">
             <label for="content">내용</label>
-            <textarea id="content" th:text="${dto.post}" placeholder="내용을 입력하세요" rows="5"></textarea>
+            <textarea id="content" th:text="${dto.post}" th:name="post" placeholder="내용을 입력하세요" rows="5"></textarea>
             <p class="error-message" id="contentError"></p>
         </div>
         <!-- //content -->

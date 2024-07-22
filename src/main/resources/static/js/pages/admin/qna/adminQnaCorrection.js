@@ -72,35 +72,35 @@ document.addEventListener("DOMContentLoaded", function () {
             if (content) hideErrorMessage(contentError);
         }
 
-        if (isValid) {
-            submitBtn.classList.add('active');
-            submitBtn.disabled = false; // 버튼 활성화
-        } else {
-            submitBtn.classList.remove('active');
-            submitBtn.disabled = true; // 버튼 비활성화
-        }
-
-        return isValid;
+        // if (isValid) {
+        //     submitBtn.classList.add('active');
+        //     submitBtn.disabled = false; // 버튼 활성화
+        // } else {
+        //     submitBtn.classList.remove('active');
+        //     submitBtn.disabled = true; // 버튼 비활성화
+        // }
+        //
+        // return isValid;
     }
 
-    const postForm = document.getElementById('Form');
-    postForm.addEventListener('input', (event) => {
-        validateForm(false);
-        hideErrorMessage(document.getElementById(event.target.id + 'Error'));
-    });
-    postForm.addEventListener('change', (event) => {
-        validateForm(false);
-        hideErrorMessage(document.getElementById(event.target.id + 'Error'));
-    });
-    postForm.addEventListener('submit', function (event) {
-        event.preventDefault();
-
-        if (!validateForm(true)) {
-            return;
-        }
-
-        openModal();
-    });
+    // const postForm = document.getElementById('Form');
+    // postForm.addEventListener('input', (event) => {
+    //     validateForm(false);
+    //     hideErrorMessage(document.getElementById(event.target.id + 'Error'));
+    // });
+    // postForm.addEventListener('change', (event) => {
+    //     validateForm(false);
+    //     hideErrorMessage(document.getElementById(event.target.id + 'Error'));
+    // });
+    // postForm.addEventListener('submit', function (event) {
+    //     event.preventDefault();
+    //
+    //     if (!validateForm(true)) {
+    //         return;
+    //     }
+    //
+    //     openModal();
+    // });
 
     function openModal() {
         modal.style.display = "block";
