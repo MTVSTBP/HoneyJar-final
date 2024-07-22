@@ -62,17 +62,14 @@ public class InquiryService {
                 .build();
         int result = inquiryMapper.create(inquiryDto);
 
-        System.out.println("Save inquiry called : " + inquiryDto.toString());
         return result;
     }
 
     public void updateInquiry(InquiryUpdateDto inquiryUpdateDto) {
-        System.out.println("Updating inquiry: " + inquiryUpdateDto);
         inquiryMapper.update(inquiryUpdateDto);
     }
 
     public void deleteInquiry(Long id) {
-        System.out.println("Deleting inquiry id: " + id);
         inquiryMapper.delete(id);
     }
 }
