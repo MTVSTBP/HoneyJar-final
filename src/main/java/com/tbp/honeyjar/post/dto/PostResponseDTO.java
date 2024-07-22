@@ -117,7 +117,6 @@ public class PostResponseDTO {
     public void setPlaceName(String placeName) {
         this.placeName = placeName;
     }
-
     public String getxCoordinate() {
         return xCoordinate;
     }

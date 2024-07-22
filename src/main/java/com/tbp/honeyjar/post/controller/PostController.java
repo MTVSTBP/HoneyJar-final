@@ -76,13 +76,18 @@ public class PostController {
         return "pages/post/postDetail";
     }
 
-//
-//    @GetMapping("/correction")
-//    public String postCorrectionForm(@RequestParam Long postId, Model model) {
-//        PostResponseDTO post = postService.findPostById(postId);
-//        model.addAttribute("post", post);
-//        return "pages/post/postCorrection";
-//    }
+
+    @GetMapping("/correction")
+    public String postCorrectionForm(@RequestParam Long postId, Model model) {
+        PostResponseDTO post = postService.findPostById(postId);
+        PostRequestDTO postRequestDTO = postService.convertToPostRequestDTO(post);
+        model.addAttribute("postRequestDTO", postRequestDTO);
+        model.addAttribute("categories", categoryService.findAllFoodCategory()); // 카테고리 목록 추가
+        return "pages/post/postCorrection";
+    }
+
+
+
 
 //    @PostMapping("/correction")
 //    public String postCorrection(AddPostRequestDTO addPostRequestDTO) {

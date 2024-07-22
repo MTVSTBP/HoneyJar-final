@@ -95,6 +95,7 @@
             price,
             post,
             created_at,
+            updated_at,
             place_id,
             user_id,
             category_id
@@ -104,6 +105,7 @@
             #{recommendMenu},
             #{price},
             #{post},
+            NOW(),
             NOW(),
             #{placeId},
             #{userId},

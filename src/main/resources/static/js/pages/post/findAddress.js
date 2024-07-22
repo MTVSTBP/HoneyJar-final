@@ -180,7 +180,7 @@ function storeAndRedirect() {
     if (selectedPlace) {
         const placeData = {
             address_name: selectedPlace.address_name,
-            road_address_name: selectedPlace.road_address_name || selectedPlace.address_name,
+            road_address_name: selectedPlace.road_address_name,
             place_name: selectedPlace.place_name,
             y: selectedPlace.y,
             x: selectedPlace.x

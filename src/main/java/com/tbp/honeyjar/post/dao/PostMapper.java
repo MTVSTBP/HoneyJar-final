@@ -1,6 +1,5 @@
 package com.tbp.honeyjar.post.dao;
 
-import com.tbp.honeyjar.post.dto.AddPostRequestDTO;
 import com.tbp.honeyjar.post.dto.PostListDTO;
 import com.tbp.honeyjar.post.dto.PostRequestDTO;
 import com.tbp.honeyjar.post.dto.PostResponseDTO;
@@ -17,6 +16,6 @@ public interface PostMapper {
 
     PostResponseDTO findPostById(Long postId);
 
-    void updatePost(AddPostRequestDTO addPostRequestDTO);
+    void updatePost(PostRequestDTO addPostRequestDTO);
 
 }
