@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Bean;
         CorsProperties.class,
         AppProperties.class
 })
+@MapperScan(basePackages = "com.tbp.honeyjar")
 public class HoneyJarApplication {
     public static void main(String[] args) {
         SpringApplication.run(HoneyJarApplication.class, args);
