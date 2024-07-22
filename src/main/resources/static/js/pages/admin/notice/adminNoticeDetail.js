@@ -11,11 +11,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 수정 버튼 클릭 시
     var editButton = document.getElementById('edit-button');
-    
+
     if (editButton) {
         editButton.addEventListener('click', function() {
             // 수정 페이지로 이동 (수정 페이지 URL로 변경)
-            window.location.href = '/src/pages/html/adminNoticeCorrection.html';
+            window.location.href = "/admin/notice/correction/" + window.location.pathname.split("/").reverse()[0];
         });
     }
 
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
         completeDeleteButton.addEventListener('click', function () {
             deleteSuccessModal.style.display = 'none';
             // 페이지를 리다이렉트하거나 필요한 후속 작업을 수행
-            window.location.href = '/src/pages/html/adminNotice.html';
+            window.location.href = "/admin/notice/delete/" + window.location.pathname.split("/").reverse()[0];
         });
     }
 });

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/loginLayout}"
+      layout:fragment="content"
+      th:with="pageTitle='AdminLogin'">
+<head>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/login/adminLogin.css}"/>
+    <th:block layout:fragment="title">
+        <title>관리자 로그인</title>
+    </th:block>
+    <th:block layout:fragment="script">
+        <script th:src="@{/js/pages/login/adminLogin.js}"></script>
+    </th:block>
+</head>
+<body>
+<div class="page-container">
+    <div class="logo"></div>
+    <img id="adminLoginButton" class="admin_login" src="/assets/svg/admin_login.svg" alt="관리자로 로그인하기"/>
+    <div id="loginForm" class="login-form hidden">
+        <form id="adminLoginForm" th:action="@{/admin/login}" method="post">
+            <div class="input-group">
+                <label for="email">아이디 및 이메일</label>
+                <input type="text" id="email" name="email" placeholder="아이디" required aria-describedby="email-error"/>
+                <span id="email-error" class="error-message" th:text="${error}"></span>
+            </div>
+            <div class="input-group">
+                <label for="password">비밀번호</label>
+                <input type="password" id="password" name="password" placeholder="비밀번호" required
+                       aria-describedby="password-error"/>
+                <span id="password-error" class="error-message" th:text="${error}"></span>
+            </div>
+            <button th:href="@{/}" id="submitLoginButton" type="submit" disabled>로그인</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

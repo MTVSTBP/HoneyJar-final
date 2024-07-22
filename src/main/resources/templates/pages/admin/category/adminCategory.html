@@ -26,14 +26,25 @@
         <div class="category_header">
             <h5>맛집</h5>
             <div class="plus">
-                <a href="/admin/category/write">
+                <a href="/admin/category/write/food">
                     <img src="/assets/svg/plus.svg" alt="생성">
                 </a>
             </div>
         </div>
         <div class="categorybody">
-            <ul id="best_c_list">
-                <li th:text="${dto.text}"></li>
+            <ul th:each="food : ${foodList}" id="best_c_list">
+                <li th:class="item">
+                    <p th:text="${food.name}"></p>
+                    <div th:class="more_h">
+                        <img src="/assets/svg/more_horiz.svg" alt="more_horiz">
+                        <div th:class="click_box">
+                            <div th:class="d_flex">
+                                <a th:class="edit_p" th:href="@{|/admin/category/correction/food/${food.id}|}">수정</a>
+                                <a th:class="delete_p" th:href="@{|/admin/category/delete/food/${food.id}|}">삭제</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
             </ul>
         </div>
     </div>
@@ -42,34 +53,47 @@
     <!-- FAQ 카테고리 -->
     <div id="faq_c" class="category">
         <div class="category_header">
-            <h5>FAQ</h5>
+            <h5>FAQ & 문의</h5>
             <div class="plus">
-                <a href="/admin/category/write">
+                <a href="/admin/category/write/qna">
                     <img src="/assets/svg/plus.svg" alt="생성">
                 </a>
             </div>
         </div>
         <div class="categorybody">
-            <ul id="faq_c_list"></ul>
+            <ul th:each="qna : ${qnaList}" id="faq_c_list">
+                <li th:class="item">
+                    <p th:text="${qna.name}"></p>
+                    <div th:class="more_h">
+                        <img src="/assets/svg/more_horiz.svg" alt="more_horiz">
+                        <div th:class="click_box">
+                            <div th:class="d_flex">
+                                <a th:class="edit_p" th:href="@{|/admin/category/correction/qna/${qna.id}|}">수정</a>
+                                <a th:class="delete_p" th:href="@{|/admin/category/delete/qna/${qna.id}|}">삭제</a>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
     <!-- //FAQ 카테고리 -->
 
-    <!-- 문의 카테고리 -->
-    <div id="notice_c" class="category">
-        <div class="category_header">
-            <h5>문의</h5>
-            <div class="plus">
-                <a href="/admin/category/write">
-                    <img src="/assets/svg/plus.svg" alt="생성">
-                </a>
-            </div>
-        </div>
-        <div class="categorybody">
-            <ul id="notice_c_list"></ul>
-        </div>
-    </div>
-    <!-- //문의 카테고리 -->
+<!--    &lt;!&ndash; 문의 카테고리 &ndash;&gt;-->
+<!--    <div id="notice_c" class="category">-->
+<!--        <div class="category_header">-->
+<!--            <h5>문의</h5>-->
+<!--            <div class="plus">-->
+<!--                <a href="/admin/category/write">-->
+<!--                    <img src="/assets/svg/plus.svg" alt="생성">-->
+<!--                </a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <div class="categorybody">-->
+<!--            <ul id="notice_c_list"></ul>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    &lt;!&ndash; //문의 카테고리 &ndash;&gt;-->
 
     <!-- 삭제 확인 모달 -->
     <div id="deleteConfirmModal" class="modal">
