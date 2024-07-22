@@ -47,7 +47,7 @@
         <!-- content -->
         <div class="form-group">
             <label for="content">내용</label>
-            <textarea id="content" name="content" placeholder="내용을 입력하세요" rows="5" th:text="${inquiry.content}"></textarea>
+            <textarea id="content" name="post" placeholder="내용을 입력하세요" rows="5" th:text="${inquiry.post}"></textarea>
             <p class="error-message" id="contentError"></p>
         </div>
         <!-- //content -->
@@ -75,6 +75,6 @@
     </div>
 </div>
 
-<script th:src="@{/js/pages/inquiryCorrection.js}"></script>
+<script th:src="@{/js/pages/inquiry/inquiryCorrection.js}"></script>
 </body>
 </html>
