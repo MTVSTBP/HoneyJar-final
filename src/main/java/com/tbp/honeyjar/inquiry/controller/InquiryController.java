@@ -1,6 +1,8 @@
 package com.tbp.honeyjar.inquiry.controller;
 
 import com.tbp.honeyjar.inquiry.dto.InquiryDto;
+import com.tbp.honeyjar.inquiry.dto.InquiryWriteDto;
+import com.tbp.honeyjar.inquiry.dto.InquiryUpdateDto;
 import com.tbp.honeyjar.inquiry.service.InquiryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,7 @@ public class InquiryController {
     @GetMapping
     public String getInquiries(Model model) {
         List<InquiryDto> inquiryList = inquiryService.getInquiryList();
+        inquiryList.forEach(System.out::println);
         model.addAttribute("inquiryList", inquiryList);
         return "pages/inquiry/inquiry";
     }
@@ -32,13 +35,14 @@ public class InquiryController {
                                 @RequestParam("title") String title,
                                 @RequestParam("category") String category,
                                 @RequestParam("post") String post) {
-        InquiryDto inquiryDto = InquiryDto.builder()
+        InquiryWriteDto inquiryWriteDto = InquiryWriteDto.builder()
                 .userId(userId)
                 .title(title)
                 .categoryId(Long.parseLong(category))
                 .post(post)
                 .build();
-        inquiryService.createInquiry(inquiryDto);
+        inquiryService.createInquiry(inquiryWriteDto);
+        System.out.println("write postmapping call! : " + inquiryWriteDto);
         return "redirect:/settings/inquiry";
     }
 
@@ -61,8 +65,19 @@ public class InquiryController {
                                 @RequestParam("title") String title,
                                 @RequestParam("category") String category,
                                 @RequestParam("post") String post) {
-        inquiryService.updateInquiry(id, title, Long.parseLong(category), post);
+        InquiryUpdateDto inquiryUpdateDto = InquiryUpdateDto.builder()
+                .id(id)
+                .title(title)
+                .categoryId(Long.parseLong(category))
+                .post(post)
+                .build();
+        inquiryService.updateInquiry(inquiryUpdateDto);
         return "redirect:/settings/inquiry/detail/" + id;
     }
 
+    @PostMapping("/delete/{id}")
+    public String deleteInquiry(@PathVariable Long id) {
+        inquiryService.deleteInquiry(id);
+        return "redirect:/settings/inquiry";
+    }
 }
