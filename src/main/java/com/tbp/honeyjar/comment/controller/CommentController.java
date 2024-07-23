@@ -58,10 +58,9 @@ public class CommentController {
         return "redirect:/comment";
     }
 
-    @GetMapping("delete/{comment_id}")
+    @GetMapping("{comment_id}")
     public String deleteComment(@PathVariable Long comment_id) {
 
-//      CommentRequestDTO comment = commentService.findCommentById(comment_id);
         System.out.println("comment_id = " + comment_id);
         commentService.deleteComment(comment_id);
 

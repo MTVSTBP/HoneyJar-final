@@ -8,7 +8,6 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-@Data
 public class CommentModifyDTO {
     private Long commentId;
     private String comment;

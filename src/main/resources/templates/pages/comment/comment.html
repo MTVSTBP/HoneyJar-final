@@ -43,7 +43,7 @@
                         <div class="click_box">
                             <div class="d_flex">
                                 <a class="edit_p editButton">수정</a>
-                                <a id="deletePost" class="delete_p deleteButton" th:href="@{|/comment/${comment.commentId}|}">삭제</a>
+                                <a id="deletePost" class="delete_p deleteButton" th:href="@{|/comment/${comment.getCommentId()}|}">삭제</a>
                             </div>
                         </div>
                     </div>

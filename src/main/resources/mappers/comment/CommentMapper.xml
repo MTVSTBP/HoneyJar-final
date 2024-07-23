@@ -80,7 +80,7 @@
     </update>
 
     <delete id="deleteCommentById" parameterType="java.lang.Long">
-        DELETE FROM
+        DELETE FROM COMMENT
         WHERE
                 COMMENT_ID = #{ commentId }
     </delete>

@@ -78,4 +78,28 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
+    // const deleteButtons = document.querySelectorAll('.deleteButton');
+    // deleteButtons.forEach(function(deleteButton) {
+    //     deleteButton.addEventListener('click', async function(event) {
+    //         event.stopPropagation(); // 클릭 이벤트 전파 방지
+    //
+    //         const commentId = this.getAttribute('th:action');
+    //         try {
+    //             const response = await fetch(commentId, {
+    //                 method: 'POST'
+    //             });
+    //
+    //             if (!response.ok) {
+    //                 throw new Error('Network response was not ok');
+    //             }
+    //
+    //             // 삭제 성공 후 처리 로직 추가
+    //             console.log('Comment deleted successfully');
+    //             // 예를 들어, 삭제된 댓글을 DOM에서 제거하는 등의 추가 작업 수행
+    //         } catch (error) {
+    //             console.error('There was a problem with the fetch operation:', error);
+    //         }
+    //     });
+    // });
+
 });
