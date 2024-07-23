@@ -32,8 +32,12 @@ public class AuthTokenProvider {
     }
 
     public AuthToken createAuthToken(String id, String role, Date expiry) {
-        log.debug("Creating auth token for id: {}, role: {}, expiry: {}", id, role, expiry);
-        return new AuthToken(id, role, expiry, key);
+        if (id == null || id.isEmpty()) {
+            throw new IllegalArgumentException("ID cannot be null or empty");
+        }
+        AuthToken token = new AuthToken(id, role, expiry, key);
+        log.debug("Created AuthToken: id={}, role={}, expiry={}", id, role, expiry);
+        return token;
     }
 
     public AuthToken convertAuthToken(String token) {
