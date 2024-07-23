@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}"
+      layout:fragment="content"
+      th:with="pageTitle='Setting'">
+<head>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/settings/settings.css}"/>
+    <th:block layout:fragment="title">
+        <title>설정</title>
+    </th:block>
+    <th:block layout:fragment="script">
+        <script th:src="@{/js/pages/settings/settings.js}"></script>
+    </th:block>
+</head>
+<body>
+<div class="page-container">
+    <div class="content-wrapper">
+        <div class="wrapper">
+            <!-- 사용자 정보 시작 -->
+            <section class="user-info">
+                <div class="user-info__profile">
+                    <img class="user-info__image" th:src="@{/assets/svg/base_profile.svg}" alt="프로필 사진"/>
+                    <div class="user-info__container">
+                        <div class="user-info__row">
+                            <div class="user-info__column">
+                                <span class="user-info__label">회원정보</span>
+                            </div>
+                            <div class="user-info__column">
+                                <span class="user-info__nickname" th:text="${user.name}">로딩 중...</span>
+                            </div>
+                        </div>
+                        <div class="user-info__row">
+                            <div class="user-info__column">
+                                <span class="user-info__introduction" th:text="${user.pr}">로딩 중...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- 사용자 정보 끝 -->
+
+            <!-- 공지사항 탭 시작 -->
+            <section id="noticeTab" class="setting-tab">
+                <div class="setting-tab__container">
+                    <span class="setting-tab__text">공지사항</span>
+                    <div class="setting-tab__notification"></div>
+                </div>
+            </section>
+            <!-- 공지사항 탭 끝 -->
+
+            <!-- 1:1 문의 탭 시작 -->
+            <section id="inquiryTab" class="setting-tab">
+                <div class="setting-tab__container">
+                    <span class="setting-tab__text">1:1 문의</span>
+                    <div class="setting-tab__notification"></div>
+                </div>
+            </section>
+            <!-- 1:1 문의 탭 끝 -->
+
+            <!-- FAQ 탭 시작 -->
+            <section id="faqTab" class="setting-tab">
+                <div class="setting-tab__container">
+                    <span class="setting-tab__text">FAQ</span>
+                    <div class="setting-tab__notification"></div>
+                </div>
+            </section>
+            <!-- FAQ 탭 끝 -->
+
+            <!-- 로그아웃 탭 시작 -->
+            <section id="logoutTab" class="setting-tab">
+                <div class="setting-tab__container">
+                    <span class="setting-tab__text" th:href="@{/logout}">로그아웃</span>
+                </div>
+            </section>
+            <!-- 로그아웃 탭 끝 -->
+
+            <!-- 회원탈퇴 탭 시작 -->
+            <section id="leaveTab" class="setting-tab">
+                <div class="setting-tab__container">
+                    <span class="setting-tab__text">회원탈퇴</span>
+                </div>
+            </section>
+            <!-- 회원탈퇴 탭 끝 -->
+
+            <!-- Modal 시작 -->
+            <div class="modal-container">
+                <div class="modal__content">
+                    <p class="modal__text">로그아웃 하시겠습니까?</p>
+                    <div class="modal__buttons">
+                        <button id="cancelButton" class="button button--cancel" type="button">취소</button>
+                        <button id="confirmButton" class="button button--confirm" type="submit">확인</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal 끝 -->
+        </div>
+    </div>
+</div>
+</body>
+</html>

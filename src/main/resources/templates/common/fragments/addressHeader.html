@@ -9,10 +9,12 @@
                 <img src="/assets/svg/arrow_back_ios.svg" alt="뒤로가기">
                 <p>주소</p>
             </div>
-            <div class="address_search">
+            <div class="option address_search">
                 <div class="search">
-                    <input placeholder="검색">
-                    <img src="/assets/svg/search.svg" alt="검색">
+                    <form onsubmit="searchPlaces(); return false;">
+                        <input type="text" value="" id="keyword" placeholder = "장소를 검색해주세요.">
+                        <button type="submit"><img src="/assets/svg/search.svg" alt="검색"></button>
+                    </form>
                 </div>
             </div>
         </div>

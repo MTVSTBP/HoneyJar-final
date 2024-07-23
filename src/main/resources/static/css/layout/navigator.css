@@ -22,6 +22,7 @@ a {
     height: 90px;
     border-top: 1px solid #B4B4B4;
     background-color: #fff;
+    z-index: 1;
 }
 
 .nav {

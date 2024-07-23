@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tbp.honeyjar.inquiry.mapper.InquiryMapper">
+    <resultMap id="inquiryResultMap" type="com.tbp.honeyjar.inquiry.dto.InquiryDto">
+        <id property="id" column="inquiry_id"/>
+        <result property="title" column="title"/>
+        <result property="post" column="post"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="userId" column="user_id"/>
+        <result property="categoryId" column="category_id"/>
+    </resultMap>
+
+    <select id="getInquiryList" resultMap="inquiryResultMap">
+        SELECT
+        inquiry_id,
+        title,
+        post,
+        created_at,
+        updated_at,
+        user_id,
+        category_id
+        FROM inquiry
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="getInquiryListByUserId" parameterType="java.lang.Long" resultMap="inquiryResultMap">
+        SELECT
+        inquiry_id,
+        title,
+        post,
+        created_at,
+        updated_at,
+        user_id,
+        category_id
+        FROM inquiry
+        WHERE user_id = #{userId}
+        ORDER BY created_at DESC
+    </select>
+
+    <select id="getInquiryById" parameterType="java.lang.Long" resultMap="inquiryResultMap">
+        SELECT
+        inquiry_id,
+        title,
+        post,
+        created_at,
+        updated_at,
+        user_id,
+        category_id
+        FROM inquiry
+        WHERE inquiry_id = #{id}
+    </select>
+
+    <insert id="create" parameterType="com.tbp.honeyjar.inquiry.dto.InquiryDto">
+        INSERT INTO inquiry (
+        title,
+        post,
+        created_at,
+        updated_at,
+        user_id,
+        category_id
+        )
+        VALUES (
+        #{title},
+        #{post},
+        #{createdAt},
+        #{updatedAt},
+        #{userId},
+        #{categoryId}
+        )
+    </insert>
+
+    <update id="update" parameterType="com.tbp.honeyjar.inquiry.dto.InquiryUpdateDto">
+        UPDATE inquiry
+        SET
+        title = #{title},
+        post = #{post},
+        category_id = #{categoryId},
+        updated_at = now()
+        WHERE
+        inquiry_id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Long">
+        DELETE FROM inquiry
+        WHERE inquiry_id = #{id}
+    </delete>
+</mapper>
