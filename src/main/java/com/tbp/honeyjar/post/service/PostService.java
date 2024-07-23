@@ -516,10 +516,9 @@ public class PostService {
         return Arrays.stream(parts).distinct().collect(Collectors.joining(","));
     }
 
-
-
-
-
-
+    @Transactional
+    public void softDeletePost(Long postId) {
+        postMapper.softDeletePost(postId);
+    }
 
 }

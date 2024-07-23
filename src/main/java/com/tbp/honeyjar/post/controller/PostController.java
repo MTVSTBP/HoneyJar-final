@@ -111,5 +111,11 @@ public class PostController {
         }
         return "pages/post/findAddress";
     }
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<?> softDeletePost(@PathVariable Long postId) {
+        postService.softDeletePost(postId);
+        return ResponseEntity.ok("Post deleted successfully");
+    }
 }
 

@@ -32,4 +32,6 @@ public interface PostMapper {
     void updatePost(PostRequestDTO addPostRequestDTO);
 
     Long findPlaceIdByPostId(Long postId);
+
+    void softDeletePost(Long postId);
 }
