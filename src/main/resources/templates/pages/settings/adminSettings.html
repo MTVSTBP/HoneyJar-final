@@ -44,7 +44,7 @@
 
             <div class="page-label">admin page</div>
             <!-- 1:1 문의 답변 탭 시작 -->
-            <section id="adminContactTab" class="setting-tab">
+            <section id="adminContactTab" class="admin-setting-tab">
                 <div class="setting-tab__container">
                     <span class="setting-tab__text">1:1 문의 답변</span>
                     <div class="setting-tab__notification"></div>
@@ -53,7 +53,7 @@
             <!-- 1:1 문의 답변 탭 끝 -->
 
             <!-- 공지사항 등록 탭 시작 -->
-            <section id="adminNoticeTab" class="setting-tab">
+            <section id="adminNoticeTab" class="admin-setting-tab">
                 <div class="setting-tab__container">
                     <span class="setting-tab__text">공지사항 등록</span>
                     <div class="setting-tab__notification"></div>
@@ -62,7 +62,7 @@
             <!-- 공지사항 등록 탭 시작 -->
 
             <!-- 카테고리 등록 탭 시작 -->
-            <section id="adminCategoryTab" class="setting-tab">
+            <section id="adminCategoryTab" class="admin-setting-tab">
                 <div class="setting-tab__container">
                     <span class="setting-tab__text">카테고리 등록</span>
                     <div class="setting-tab__notification"></div>
@@ -71,7 +71,7 @@
             <!-- 카테고리 등록 탭 끝 -->
 
             <!-- FAQ 등록 탭 시작 -->
-            <section id="adminFaqTab" class="setting-tab">
+            <section id="adminFaqTab" class="admin-setting-tab">
                 <div class="setting-tab__container">
                     <span class="setting-tab__text">FAQ 등록</span>
                 </div>
@@ -79,12 +79,24 @@
             <!-- FAQ 등록 탭 끝 -->
 
             <!-- 로그아웃 탭 시작 -->
-            <section id="adminLogoutTab" class="setting-tab">
+            <section id="adminLogoutTab" class="admin-setting-tab">
                 <div class="setting-tab__container">
                     <span class="setting-tab__text" th:href="@{/logout}">로그아웃</span>
                 </div>
             </section>
             <!-- 로그아웃 탭 끝 -->
+
+            <!-- Modal 시작 -->
+            <div class="modal-container">
+                <div class="modal__content">
+                    <p class="modal__text">로그아웃 하시겠습니까?</p>
+                    <div class="modal__buttons">
+                        <button id="cancelButton" class="button button--cancel" type="button">취소</button>
+                        <button id="confirmButton" class="button button--confirm" type="submit">확인</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal 끝 -->
         </div>
     </div>
 </div>

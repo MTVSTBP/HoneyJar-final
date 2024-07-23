@@ -16,7 +16,6 @@ public class MyPageCorrectionDTO {
     private List<CategoryDTO> likeCategories;
     private List<CategoryDTO> categories;
 
-    @Builder
     public MyPageCorrectionDTO(Long userId, String userName, String userPr, String profileImage, List<CategoryDTO> likeCategories, List<CategoryDTO> categories) {
         this.userId = userId;
         this.userName = userName;
