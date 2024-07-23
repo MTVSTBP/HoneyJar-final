@@ -20,20 +20,20 @@
 
     <select id="findAllNotices" resultMap="adminNoticeListResultMap">
         select
-        notice_id,
-        title,
-        post,
-        created_at
+            notice_id,
+            title,
+            post,
+            created_at
         from notice
         order by notice_id
     </select>
 
     <select id="findById" resultMap="adminNoticeResultMap">
         select
-        notice_id,
-        title,
-        post,
-        created_at
+            notice_id,
+            title,
+            post,
+            created_at
         from notice
         where notice_id = #{noticeId}
     </select>
@@ -41,26 +41,26 @@
     <insert id="save" parameterType="com.tbp.honeyjar.admin.dto.notice.NoticeSaveRequestDto">
         insert into notice
         (
-        title,
-        post,
-        created_at,
-        updated_at
+            title,
+            post,
+            created_at,
+            updated_at
         )
         values
         (
-        #{title},
-        #{post},
-        #{createdAt},
-        #{updatedAt}
+            #{title},
+            #{post},
+            #{createdAt},
+            #{updatedAt}
         )
     </insert>
 
     <update id="correction" parameterType="com.tbp.honeyjar.admin.dto.notice.NoticeCorrectionRequestDto">
         update notice
         set
-        title = #{title},
-        post = #{post},
-        updated_at = #{updatedAt}
+            title = #{title},
+            post = #{post},
+            updated_at = #{updatedAt}
         where
         notice_id = #{noticeId}
     </update>
