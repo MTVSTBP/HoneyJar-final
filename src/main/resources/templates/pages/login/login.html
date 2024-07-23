@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/loginLayout}"
+      layout:fragment="content"
+      th:with="pageTitle='Login'">
+<head>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/login/login.css}"/>
+    <th:block layout:fragment="title">
+    </th:block>
+    <th:block layout:fragment="script">
+        <script th:src="@{/js/pages/login/login.js}"></script>
+    </th:block>
+</head>
+<body>
+<div class="page-container">
+    <img class="logo" src="/assets/svg/logo.svg" alt="꿀단지 - 맛과 가격 모두 달콤한 맛집리스트"/>
+    <a th:href="@{/oauth2/authorization/kakao}" class="kakao-login-link">
+        <img id="kakaoLoginButton" class="kakao_login" src="/assets/svg/kakao_login.svg" alt="카카오로 로그인하기"/>
+    </a>
+</div>
+</body>
+</html>

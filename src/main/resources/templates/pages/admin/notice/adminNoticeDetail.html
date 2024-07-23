@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}"
+      layout:fragment="content"
+>
+
+<head>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/admin/notice/adminNoticeDetail.css}"/>
+    <th:block layout:fragment="title">
+        <title>adminCategory</title>
+    </th:block>
+</head>
+
+<body>
+    <!-- 헤더영역 -->
+    <div></div>
+    <!-- //헤더영역 -->
+    <div id="container">
+        <div class="sub_title">
+            <a href="#" id="back-button">
+                <img src="/assets/svg/arrow_back.svg" alt="뒤로가기">
+                <h4>공지사항</h4>
+            </a>
+        </div>
+        <div class="noticeDetail">
+            <div class="info">
+                <div class="title">
+                    <h2 th:text="${notice.title}">정기 업로드 예정</h2>
+                    <div class="user_info">
+                        <img src="/assets/svg/base_profile.svg" alt="관리자프로필">
+                        <p>관리자</p>
+                    </div>
+                    <span th:text="${notice.createdAt}">
+                        2024.07.01
+                    </span>
+                </div>
+            </div>
+            <div th:text="${notice.post}" class="notice_context">
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Generibusque nostris malo faciam arare quod praeclarorum. Timentis quosdam, addidisti donec iucunda curiosi detracto vitiis inani. Iam summo m statuat moderatius aliqua utriusque copulatas graecum intellegebat, t. Susceperant saepe zenonem naturales ponderum ne arbitrer tamen oblivione. Illae dapibus plus, nemo, senectus, pertinaces cupiditates suscipiet potest. Motus sponte democriti suspicor, unde sinat, altera. Verborum philosophorum pro malint mandamus, efflorescere, pecuniae delicata doctus. Aliter vindicet constituant faciendi conficiuntur imperitos, probatus. </p>
+            </div>
+            
+        </div>
+        <!-- 관리자인 경우에만 보이게 추후 적용해야됨. -->
+        <div class="button_list">
+            <button id="edit-button" th:href="@{|/admin/notice/correction/${notice.noticeId}|}" class="btn">수정</button>
+            <button id="delete-button" th:href="@{|/admin/notice/delete/${notice.noticeId}|}" class="btn">삭제</button>
+        </div>
+
+        <!-- 삭제 확인 모달 -->
+        <div id="deleteConfirmModal" class="modal">
+            <div class="modal-content">
+                <span class="close">
+                    <img src="/assets/svg/close.svg" alt="닫기">
+                </span>
+                <div class="modal-text">
+                    <p>정말로 삭제 하시겠어요?</p>
+                </div>
+                <button id="confirmDelete" class="complete">삭제</button>
+            </div>
+        </div>
+
+        <!-- 삭제 완료 모달 -->
+        <div id="deleteSuccessModal" class="modal">
+            <div class="modal-content">
+                <span class="close">
+                    <img src="/assets/svg/close.svg" alt="닫기">
+                </span>
+                <div class="modal-text">
+                    <p>삭제가 완료되었습니다!</p>
+                </div>
+                <button id="completeDelete" class="complete">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript" th:src="@{/js/pages/admin/notice/adminNoticeDetail.js}"></script>
+
+
+</body>
+
+</html>

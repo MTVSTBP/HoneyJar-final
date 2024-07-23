@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tbp.honeyjar.admin.dao.CategoryMapper">
+
+    <resultMap id="foodCategoryListResultMap" type="com.tbp.honeyjar.admin.dto.category.FoodCategoryListResponseDto">
+        <id property="id" column="category_id"/>
+        <result property="name" column="category_name"/>
+    </resultMap>
+
+    <resultMap id="qnaCategoryListResultMap" type="com.tbp.honeyjar.admin.dto.category.QnaCategoryListResponseDto">
+        <id property="id" column="category_id"/>
+        <result property="name" column="category_name"/>
+    </resultMap>
+
+    <resultMap id="foodCategoryResultMap" type="com.tbp.honeyjar.admin.dto.category.FoodResponseDto">
+        <id property="id" column="category_id"/>
+        <result property="name" column="category_name"/>
+    </resultMap>
+
+    <resultMap id="qnaCategoryResultMap" type="com.tbp.honeyjar.admin.dto.category.QnaResponseDto">
+        <id property="id" column="category_id"/>
+        <result property="name" column="category_name"/>
+    </resultMap>
+
+    <select id="findAllFoodCategory" resultMap="foodCategoryListResultMap">
+        select
+            category_id,
+            category_name
+        from food_category
+        order by category_id
+    </select>
+
+    <select id="findAllQnaCategory" resultMap="qnaCategoryListResultMap">
+        select
+            category_id,
+            category_name
+        from other_category
+        order by category_id
+    </select>
+
+    <insert id="saveFoodCategory" parameterType="com.tbp.honeyjar.admin.dto.category.FoodCategorySaveRequestDto">
+        insert into food_category
+        (
+            category_name,
+            created_at,
+            updated_at
+        )
+        values
+        (
+            #{name},
+            #{createdAt},
+            #{updatedAt}
+        )
+    </insert>
+
+    <insert id="saveQnaCategory" parameterType="com.tbp.honeyjar.admin.dto.category.QnaCategorySaveRequestDto">
+        insert into other_category
+        (
+            category_name,
+            created_at,
+            updated_at
+        )
+        values
+        (
+            #{name},
+            #{createdAt},
+            #{updatedAt}
+        )
+    </insert>
+
+    <select id="findFoodById" resultMap="foodCategoryResultMap">
+        select
+            category_id,
+            category_name
+        from food_category
+        where category_id = #{id}
+    </select>
+
+    <select id="findQnaById" resultMap="qnaCategoryResultMap">
+        select
+            category_id,
+            category_name
+        from other_category
+        where category_id = #{id}
+    </select>
+
+    <update id="correctionFoodCategory" parameterType="com.tbp.honeyjar.admin.dto.category.FoodCategoryCorrectionDto">
+        update food_category
+        set
+            category_name = #{name}
+        where
+            category_id = #{id}
+    </update>
+
+    <update id="correctionQnaCategory" parameterType="com.tbp.honeyjar.admin.dto.category.QnaCategoryCorrectionDto">
+        update other_category
+        set
+            category_name = #{name}
+        where
+            category_id = #{id}
+    </update>
+
+    <delete id="deleteFoodCategory" parameterType="_long">
+        delete from food_category
+        where
+            category_id = #{id}
+    </delete>
+
+    <delete id="deleteQnaCategory" parameterType="_long">
+        delete from other_category
+        where
+            category_id = #{id}
+    </delete>
+</mapper>
