@@ -114,6 +114,7 @@ public class AdminCategoryController {
 
     @GetMapping("/delete/food/{id}")
     public String deleteFoodCategory(@PathVariable Long id) {
+        
         FoodResponseDto food = categoryService.findFoodById(id);
 
         if (food != null) {
