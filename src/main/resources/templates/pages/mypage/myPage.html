@@ -17,12 +17,12 @@
         <div id="detailContainer">
             <div id="userDetail">
                 <div th:text="${myPage.userName}">유저 이름</div>
-                <img id="pencil" src="/assets/svg/mypage_profile_correction.svg"  alt="사진이 없습니다."/>
+                <img id="pencil"  src="/assets/svg/pencil.svg" alt="사진이 없습니다."/>
             </div>
-            <div id="pr" th:text="${myPage.userPr}">자기소개</div>
+            <div id="pr" th:text="${myPage.userPr}" th:onclick="open()">자기소개</div>
         </div>
         <div id="profileImage">
-            <img id="profileSvg" src="/assets/svg/base_profile.svg"  alt="사진이 없습니다."/>
+            <img id="profileSvg" th:src="${myPage.profileImage != null ? myPage.profileImage : '/assets/svg/base_profile.svg'}"  alt="사진이 없습니다."/>
         </div>
     </div>
     <div id="post_data">
@@ -63,6 +63,7 @@
         </div>
         <div id="postData"></div>
     </div>
+<!--    <div th:replace="components/modal :: modal(props=${props})"></div>-->
     <div id="navigate"></div>
 </div>
 </body>
