@@ -4,7 +4,7 @@
     width: 95%;
     position: relative;
     margin: 0 auto;
-    margin-top: 3rem;
+    margin-top: 1rem;
 }
 
 input, textarea {
@@ -58,7 +58,7 @@ input:focus, select:focus, textarea:focus {
     height: 40px;
     border: 1px solid #ededed;
     border-radius: 5px;
-    background: #fff url(/assets/svg/arrow_back_orange.svg) no-repeat right 10px center;
+    background: #fff url(../../../assets/svg/arrow_back_orange.svg) no-repeat right 10px center;
     background-size: 20px 20px;
 }
 
@@ -86,14 +86,14 @@ input:focus, select:focus, textarea:focus {
     display: inline-block;
     width: 20px;
     height: 20px;
-    background-image: url('/assets/svg/checkbox.svg');
+    background-image: url('../../../assets/svg/checkbox.svg');
     background-size: cover;
     cursor: pointer;
     vertical-align: middle;
 }
 
 .checkbox input[type="checkbox"]:checked + .board_check_box {
-    background-image: url('/assets/svg/checkbox_color.svg');
+    background-image: url('../../../assets/svg/checkbox_color.svg');
 }
 
 .checkbox span {
@@ -128,23 +128,28 @@ input:focus, select:focus, textarea:focus {
     max-width: 20px;
     width: 100%;
 }
-
+.post_div {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding-bottom: 7rem;
+}
 .my_list {
     width: 100%;
 }
 
 .my_list ul {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
     padding-bottom: 7rem;
+    margin-top: 1rem;
 }
 
 .my_list ul .item {
     width: 48%;
     height: 250px;
     position: relative;
-    margin-top: 2rem;
+    margin-bottom: 1rem;
 
 }
 
