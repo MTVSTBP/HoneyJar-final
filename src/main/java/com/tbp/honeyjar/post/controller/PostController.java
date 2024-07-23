@@ -88,25 +88,41 @@ public class PostController {
 
 
 
-
 //    @PostMapping("/correction")
-//    public String postCorrection(AddPostRequestDTO addPostRequestDTO) {
-//        postService.updatePost(addPostRequestDTO);
-//        return "redirect:/post/detail?postId=" + addPostRequestDTO.getPostId();
+//    public String postCorrection(
+//            @ModelAttribute PostRequestDTO postRequestDTO,
+//            @RequestParam("files") List<MultipartFile> files,
+//            @RequestParam("mainImageFile") MultipartFile mainImageFile,
+//            @RequestParam("mainImageUrl") String mainImageUrl) throws IOException, FirebaseAuthException {
+//
+//        postService.updatePost(postRequestDTO, files, mainImageFile, mainImageUrl);
+//        return "redirect:/post/detail?postId=" + postRequestDTO.getPostId();
 //    }
 
-//    @GetMapping("/map")
-//    public String findAddress() {
-//        return "pages/post/findAddress";
-//    }
+    @PostMapping("/correction")
+    public ResponseEntity<?> postCorrection(@ModelAttribute PostRequestDTO postRequestDTO,
+                                            @RequestParam("files") List<MultipartFile> files,
+                                            @RequestParam("mainImageFile") MultipartFile mainImageFile,
+                                            @RequestParam("mainImageUrl") String mainImageUrl) throws IOException, FirebaseAuthException {
+        if (postRequestDTO.getPlaceId() == null) {
+            throw new IllegalArgumentException("placeId가 설정되지 않았습니다.");
+        }
 
+        postService.updatePost(postRequestDTO, files, mainImageFile, mainImageUrl);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("postId", postRequestDTO.getPostId());
+        response.put("message", "Post updated successfully");
+
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping("/map")
-    public String findAddress(@RequestParam(required = false) String source, @RequestParam(required = false) Long postId, Model model) {
-        model.addAttribute("source", source != null ? source : "write");
-        if (postId != null) {
-            model.addAttribute("postId", postId);
+    public String findAddress(@RequestParam(required = false) String redirectTo, Model model) {
+        if (redirectTo != null) {
+            model.addAttribute("redirectTo", redirectTo);
         }
         return "pages/post/findAddress";
     }
 }
+

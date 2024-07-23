@@ -388,6 +388,29 @@ function removeAllChildNods(el) {
     }
 }
 
+// // 선택된 주소를 로컬스토리지에 저장하고 페이지를 전환하는 함수
+// function storeAndRedirect() {
+//     if (selectedPlace) {
+//         const placeData = {
+//             address_name: selectedPlace.address_name,
+//             road_address_name: selectedPlace.road_address_name,
+//             place_name: selectedPlace.place_name,
+//             y: selectedPlace.y,
+//             x: selectedPlace.x
+//         };
+//         localStorage.setItem("selectedPlace", JSON.stringify(placeData));
+//
+//         // URL로 리다이렉트
+//         if (redirectTo) {
+//             window.location.href = redirectTo;
+//         } else {
+//             console.error("redirectTo URL is not set");
+//         }
+//     } else {
+//         alert("장소를 선택해 주세요.");
+//     }
+// }
+
 // 선택된 주소를 로컬스토리지에 저장하고 페이지를 전환하는 함수
 function storeAndRedirect() {
     if (selectedPlace) {

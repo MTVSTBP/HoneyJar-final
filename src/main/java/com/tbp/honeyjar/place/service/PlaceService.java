@@ -23,4 +23,9 @@ public class PlaceService {
     public PlaceDTO getPlaceById(Long placeId) {
         return placeMapper.findPlaceById(placeId);
     }
+
+    @Transactional
+    public void updatePlace(PlaceDTO placeDTO) {
+        placeMapper.updatePlace(placeDTO);
+    }
 }

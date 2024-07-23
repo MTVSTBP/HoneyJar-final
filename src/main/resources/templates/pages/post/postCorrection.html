@@ -1,3 +1,136 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="ko" xmlns:th="http://www.thymeleaf.org"-->
+<!--      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"-->
+<!--      layout:decorate="~{common/layout/writeLayout}"-->
+<!--      layout:fragment="content">-->
+<!--<head>-->
+<!--    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/post/postCorrection.css}"/>-->
+<!--    <th:block layout:fragment="title">-->
+<!--        <title th:text="${postRequestDTO.title}">포스트 수정</title>-->
+<!--    </th:block>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div id="container">-->
+<!--    <form id="postForm" th:object="${postRequestDTO}" th:action="@{/post/correction}" method="post">-->
+<!--        <div class="category_public_wrap">-->
+<!--            <div class="category_wrap">-->
+<!--                <label for="category">카테고리</label>-->
+<!--                <div class="custom-select-wrapper">-->
+<!--                    <select id="category" th:field="*{categoryId}">-->
+<!--                        <option value="">선택</option>-->
+<!--                        <option th:each="category : ${categories}"-->
+<!--                                th:value="${category.id}"-->
+<!--                                th:text="${category.name}">카테고리</option>-->
+<!--                    </select>-->
+<!--                </div>-->
+<!--                <p class="error-message" id="categoryError"></p>-->
+<!--            </div>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; image upload &ndash;&gt;-->
+<!--        <div class="form-group">-->
+<!--            <label for="imageUpload">사진 첨부 (최대 5개)</label>-->
+<!--            <label for="imageUpload" class="custom-file-upload">-->
+<!--                <img src="/assets/svg/camera_enhance.svg" alt="Upload Icon">-->
+<!--            </label>-->
+<!--            <input type="file" id="imageUpload" accept="image/jpeg, image/png, image/gif" multiple>-->
+<!--            <div id="imagePreview"></div>-->
+<!--            <p id="fileCountMessage">최대 5개까지 업로드할 수 있습니다.</p>-->
+<!--            <p id="fileTypeMessage">jpg, png, gif 파일만 업로드할 수 있습니다.</p>-->
+<!--            <p class="error-message" id="imageError"></p>-->
+<!--        </div>-->
+<!--        &lt;!&ndash; //image upload &ndash;&gt;-->
+
+<!--        &lt;!&ndash; titles &ndash;&gt;-->
+<!--        <div class="form-group">-->
+<!--            <div class="post_title">-->
+<!--                <label for="postTitle">제목</label>-->
+<!--                <input type="text" id="postTitle" th:field="*{title}" placeholder="제목을 입력하세요">-->
+<!--                <p class="error-message" id="postTitleError"></p>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        &lt;!&ndash; //titles &ndash;&gt;-->
+
+<!--        &lt;!&ndash; recommended menu &ndash;&gt;-->
+<!--        <div class="form-group">-->
+<!--            <label for="bestMenu">대표 메뉴</label>-->
+<!--            <input type="text" id="bestMenu" th:field="*{recommendMenu}" placeholder="추천 메뉴를 입력하세요">-->
+<!--            <p class="error-message" id="bestMenuError"></p>-->
+<!--        </div>-->
+<!--        &lt;!&ndash; //recommended menu &ndash;&gt;-->
+
+<!--        &lt;!&ndash; price &ndash;&gt;-->
+<!--        <div class="form-group">-->
+<!--            <label for="price">가격</label>-->
+<!--            <input type="number" id="price" th:field="*{price}" placeholder="가격을 입력하세요">-->
+<!--            <p class="error-message" id="priceError"></p>-->
+<!--        </div>-->
+<!--        &lt;!&ndash; //price &ndash;&gt;-->
+
+<!--        &lt;!&ndash; placeId and place fields &ndash;&gt;-->
+<!--        <input type="hidden" id="placeId" th:field="*{place.placeId}">-->
+<!--        <input type="hidden" id="placeName" th:field="*{place.name}">-->
+<!--        <input type="hidden" id="placeXCoordinate" th:field="*{place.xCoordinate}">-->
+<!--        <input type="hidden" id="placeYCoordinate" th:field="*{place.yCoordinate}">-->
+<!--        <input type="hidden" id="placeRoadAddressName" th:field="*{place.roadAddressName}">-->
+
+
+<!--        &lt;!&ndash; placeName &ndash;&gt;-->
+<!--        <div class="form-group placeName_wrap">-->
+<!--            <label for="placeNameInput">주소</label>-->
+<!--            <div class="input-group">-->
+<!--                <input type="text" id="placeNameInput" th:field="*{place.roadAddressName}"  placeholder="주소를 입력하세요">-->
+<!--                <button type="button" id="openMap">-->
+<!--                    <img src="/assets/svg/place.svg" alt="마커이미지">-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <p class="error-message" id="placeNameError"></p>-->
+<!--        </div>-->
+<!--        &lt;!&ndash; //placeName &ndash;&gt;-->
+
+<!--        &lt;!&ndash; content &ndash;&gt;-->
+<!--        <div class="form-group">-->
+<!--            <label for="content">내용</label>-->
+<!--            <textarea id="content" th:field="*{post}" placeholder="내용을 입력하세요" rows="5"></textarea>-->
+<!--            <p class="error-message" id="contentError"></p>-->
+<!--        </div>-->
+<!--        &lt;!&ndash; //content &ndash;&gt;-->
+
+<!--        &lt;!&ndash; submit button &ndash;&gt;-->
+<!--        <div class="submit_wrap">-->
+<!--            <button type="submit" id="submitBtn">수정</button>-->
+<!--        </div>-->
+<!--        &lt;!&ndash; //submit button &ndash;&gt;-->
+<!--    </form>-->
+
+<!--    &lt;!&ndash; Modal &ndash;&gt;-->
+<!--    <div id="Modal" class="modal" style="display:none;">-->
+<!--        <div class="modal-content">-->
+<!--            <span class="close">-->
+<!--                <img src="/assets/svg/close.svg" alt="닫기">-->
+<!--            </span>-->
+<!--            <div class="modal-text">-->
+<!--                <p>수정이 완료되었어요!</p>-->
+<!--            </div>-->
+<!--            <button id="complete" class="complete">확인</button>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<script th:inline="javascript">-->
+<!--    /*<![CDATA[*/-->
+<!--    document.addEventListener("DOMContentLoaded", function() {-->
+<!--        var placeId = /*[[${postRequestDTO.placeId}]]*/ 'N/A';-->
+<!--        console.log("Place ID:", placeId);-->
+<!--    });-->
+<!--    /*]]>*/-->
+<!--</script>-->
+<!--<script th:inline="javascript" type="text/javascript" th:src="@{/js/pages/post/postCorrection.js}"></script>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
@@ -11,7 +144,7 @@
 </head>
 <body>
 <div id="container">
-    <form id="postForm" th:object="${postRequestDTO}" th:action="@{/post/update}" method="post">
+    <form id="postForm" th:object="${postRequestDTO}" th:action="@{/post/correction}" method="post">
         <div class="category_public_wrap">
             <div class="category_wrap">
                 <label for="category">카테고리</label>
@@ -68,17 +201,19 @@
         <!-- //price -->
 
         <!-- placeId and place fields -->
+        <input type="hidden" id="postId" th:field="*{postId}">
         <input type="hidden" id="placeId" th:field="*{placeId}">
         <input type="hidden" id="placeName" th:field="*{place.name}">
         <input type="hidden" id="placeXCoordinate" th:field="*{place.xCoordinate}">
         <input type="hidden" id="placeYCoordinate" th:field="*{place.yCoordinate}">
+        <input type="hidden" id="placeRoadAddressName" th:field="*{place.roadAddressName}">
 
 
         <!-- placeName -->
         <div class="form-group placeName_wrap">
             <label for="placeNameInput">주소</label>
             <div class="input-group">
-                <input type="text" id="placeNameInput" th:field="*{place.name}"  placeholder="주소를 입력하세요">
+                <input type="text" id="placeNameInput" th:field="*{place.roadAddressName}"  placeholder="주소를 입력하세요">
                 <button type="button" id="openMap">
                     <img src="/assets/svg/place.svg" alt="마커이미지">
                 </button>
@@ -97,7 +232,7 @@
 
         <!-- submit button -->
         <div class="submit_wrap">
-            <button type="submit" id="submitBtn">등록</button>
+            <button type="submit" id="submitBtn">수정</button>
         </div>
         <!-- //submit button -->
     </form>
@@ -109,13 +244,21 @@
                 <img src="/assets/svg/close.svg" alt="닫기">
             </span>
             <div class="modal-text">
-                <p>등록이 완료되었어요!</p>
+                <p>수정이 완료되었어요!</p>
             </div>
             <button id="complete" class="complete">확인</button>
         </div>
     </div>
 </div>
 
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    document.addEventListener("DOMContentLoaded", function() {
+        var placeId = /*[[${postRequestDTO.placeId}]]*/ 'N/A';
+        console.log("Place ID:", placeId);
+    });
+    /*]]>*/
+</script>
 <script th:inline="javascript" type="text/javascript" th:src="@{/js/pages/post/postCorrection.js}"></script>
 
 </body>

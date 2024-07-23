@@ -25,6 +25,7 @@
         <result property="post" column="post"/>
         <result property="placeId" column="place_id"/>
         <result property="placeName" column="place_name"/>
+        <result property="roadAddressName" column="road_address_name"/> <!-- 도로명 주소 추가 -->
         <result property="xCoordinate" column="x_coordinate"/>
         <result property="yCoordinate" column="y_coordinate"/>
         <result property="createdAt" column="created_at"/>
@@ -33,7 +34,6 @@
             <result column="url"/>
         </collection>
     </resultMap>
-
 
     <resultMap id="imageResultMap" type="com.tbp.honeyjar.image.dto.ImageDTO">
         <id property="imageId" column="image_id"/>
@@ -44,19 +44,19 @@
     <!-- 포스트 리스트 조회 쿼리 -->
     <select id="findAllPost" resultMap="postListResultMap">
         SELECT
-            p.post_id,
-            p.title,
-            p.post,
-            i.url AS main_image_url,
+        p.post_id,
+        p.title,
+        p.post,
+        i.url AS main_image_url,
         CASE
         WHEN b.post_id IS NOT NULL THEN true
         ELSE false
         END AS bookmarked
         FROM post p
-            LEFT JOIN (
-                SELECT post_id, url
-                FROM image
-                WHERE is_main = 1
+        LEFT JOIN (
+        SELECT post_id, url
+        FROM image
+        WHERE is_main = 1
         )
         i ON p.post_id = i.post_id
         LEFT JOIN bookmark b ON p.post_id = b.post_id
@@ -66,19 +66,20 @@
     <!-- 포스트 상세 조회 쿼리 -->
     <select id="findPostById" resultMap="postResponseResultMap">
         SELECT
-            p.post_id,
-            p.category_id,
-            p.title,
-            p.recommend_menu,
-            p.price,
-            p.post,
-            p.created_at,
-            p.updated_at,
-            p.place_id,
-            pl.name AS place_name,
-            pl.x_coordinate,
-            pl.y_coordinate,
-            i.url
+        p.post_id,
+        p.category_id,
+        p.title,
+        p.recommend_menu,
+        p.price,
+        p.post,
+        p.created_at,
+        p.updated_at,
+        p.place_id,
+        pl.name AS place_name,
+        pl.road_address_name, <!-- 도로명 주소 추가 -->
+        pl.x_coordinate,
+        pl.y_coordinate,
+        i.url
         FROM post p
         LEFT JOIN place pl ON p.place_id = pl.place_id
         LEFT JOIN image i ON p.post_id = i.post_id
@@ -86,30 +87,29 @@
         ORDER BY i.is_main DESC, i.image_id ASC
     </select>
 
-
     <!-- 포스트 등록 쿼리 -->
     <insert id="createPost" useGeneratedKeys="true" keyProperty="postId">
         INSERT INTO post (
-            title,
-            recommend_menu,
-            price,
-            post,
-            created_at,
-            updated_at,
-            place_id,
-            user_id,
-            category_id
+        title,
+        recommend_menu,
+        price,
+        post,
+        created_at,
+        updated_at,
+        place_id,
+        user_id,
+        category_id
         )
         VALUES (
-            #{title},
-            #{recommendMenu},
-            #{price},
-            #{post},
-            NOW(),
-            NOW(),
-            #{placeId},
-            #{userId},
-            #{categoryId}
+        #{title},
+        #{recommendMenu},
+        #{price},
+        #{post},
+        NOW(),
+        NOW(),
+        #{placeId},
+        #{userId},
+        #{categoryId}
         )
     </insert>
 
@@ -123,7 +123,7 @@
             post = #{post},
             updated_at = NOW(),
             place_id = #{placeId},
-            category_id = #{categoryId}
+        category_id = #{categoryId}
         WHERE post_id = #{postId}
     </update>
 </mapper>

@@ -11,4 +11,7 @@ public interface PlaceMapper {
 
     // Place 조회
     PlaceDTO findPlaceById(Long placeId);
+
+    // Place 수정
+    void updatePlace(PlaceDTO placeDTO);
 }

@@ -10,6 +10,7 @@
             rating_avg,
             x_coordinate,
             y_coordinate,
+            road_address_name,
             created_at,
             updated_at
         )
@@ -18,6 +19,7 @@
             #{ratingAvg},
             #{xCoordinate},
             #{yCoordinate},
+            #{roadAddressName},
             NOW(),
             NOW()
         )
@@ -30,6 +32,7 @@
             rating_avg,
             x_coordinate,
             y_coordinate,
+            road_address_name,
             created_at,
             updated_at
         FROM
@@ -37,4 +40,16 @@
         WHERE
             place_id = #{placeId}
     </select>
+
+    <update id="updatePlace">
+        UPDATE place
+        SET
+        name = #{name},
+        rating_avg = #{ratingAvg},
+        x_coordinate = #{xCoordinate},
+        y_coordinate = #{yCoordinate},
+        road_address_name = #{roadAddressName},
+        updated_at = NOW()
+        WHERE place_id = #{placeId}
+    </update>
 </mapper>

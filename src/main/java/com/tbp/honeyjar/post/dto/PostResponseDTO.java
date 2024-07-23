@@ -14,6 +14,7 @@ public class PostResponseDTO {
     private String post;
     private Long placeId;
     private String placeName; // place 이름
+    private String roadAddressName;
     private String xCoordinate; // x좌표
     private String yCoordinate; // y좌표
     private LocalDateTime createdAt;
@@ -28,7 +29,7 @@ public class PostResponseDTO {
     public PostResponseDTO() {}
 
 
-    public PostResponseDTO(Long postId, Long categoryId, String categoryName, String title, String recommendMenu, int price, String post, Long placeId, String placeName, String xCoordinate, String yCoordinate, LocalDateTime createdAt, LocalDateTime updatedAt, List<String> imageUrls) {
+    public PostResponseDTO(Long postId, Long categoryId, String categoryName, String title, String recommendMenu, int price, String post, Long placeId, String placeName, String xCoordinate, String yCoordinate, String roadAddressName, LocalDateTime createdAt, LocalDateTime updatedAt, List<String> imageUrls) {
         this.postId = postId;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
@@ -40,6 +41,7 @@ public class PostResponseDTO {
         this.placeName = placeName;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
+        this.roadAddressName = roadAddressName;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.imageUrls = imageUrls;
@@ -133,6 +135,14 @@ public class PostResponseDTO {
         this.yCoordinate = yCoordinate;
     }
 
+    public String getRoadAddressName() {
+        return roadAddressName;
+    }
+
+    public void setRoadAddressName(String roadAddressName) {
+        this.roadAddressName = roadAddressName;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -170,6 +180,7 @@ public class PostResponseDTO {
                 ", post='" + post + '\'' +
                 ", placeId=" + placeId +
                 ", placeName='" + placeName + '\'' +
+                ", roadAddressName='" + roadAddressName + '\'' +
                 ", xCoordinate='" + xCoordinate + '\'' +
                 ", yCoordinate='" + yCoordinate + '\'' +
                 ", createdAt=" + createdAt +

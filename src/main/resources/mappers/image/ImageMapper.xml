@@ -26,4 +26,21 @@
         WHERE post_id = #{postId}
     </select>
 
+    <!-- 포스트 ID로 메인 이미지 찾기 -->
+    <select id="findMainImageByPostId" resultType="com.tbp.honeyjar.image.dto.ImageDTO">
+        SELECT image_id, url, user_id, post_id, is_main
+        FROM image
+        WHERE post_id = #{postId} AND is_main = 1
+    </select>
+
+    <!-- 포스트 ID로 이미지 삭제 -->
+    <delete id="deleteImagesByPostId">
+        DELETE FROM image WHERE post_id = #{postId}
+    </delete>
+
+    <!-- 이미지 단건 삭제 -->
+    <delete id="deleteImage">
+        DELETE FROM image WHERE image_id = #{imageId}
+    </delete>
+
 </mapper>
