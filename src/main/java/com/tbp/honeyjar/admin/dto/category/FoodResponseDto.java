@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class FoodResponseDto {
 
-    private long id;
+    private Long id;
     private String name;
 }

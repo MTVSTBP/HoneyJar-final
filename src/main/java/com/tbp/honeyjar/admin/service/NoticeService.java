@@ -28,11 +28,11 @@ public class NoticeService {
         return noticeMapper.findById(id);
     }
 
-    public void save(NoticeSaveRequestDto requestDto) {
-        noticeMapper.save(requestDto);
+    public Long save(NoticeSaveRequestDto requestDto) {
+        return noticeMapper.save(requestDto);
     }
 
-    public Long delete(int postId) {
+    public Long delete(Long postId) {
         return noticeMapper.delete(postId);
     }
 
