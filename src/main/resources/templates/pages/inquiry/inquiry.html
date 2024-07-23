@@ -28,7 +28,7 @@
     <div class="inquiry">
         <div th:each="inquiry : ${inquiryList}" class="list">
             <li>
-                <a th:href="@{'/settings/inquiry/detail'}" class="inquiry_link">
+                <a th:href="@{'/settings/inquiry/detail/' + ${inquiry.id}}" class="inquiry_link">
 <!--                <a th:href="@{'/settings/inquiry/detail/' + ${inquiry.id}}" class="inquiry_link">-->
                     <div class="item">
                         <div class="title" th:text="${inquiry.title}">Title</div>

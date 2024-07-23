@@ -28,7 +28,6 @@ public class InquiryController {
         this.userMapper = userMapper;
     }
 
-
     @GetMapping
     public String getInquiriesByUserId(Model model, Principal principal) {
         String kakaoId = principal.getName();
@@ -36,15 +35,6 @@ public class InquiryController {
         model.addAttribute("inquiryList", inquiryList);
         return "pages/inquiry/inquiry";
     }
-//    @GetMapping("/{userId}")
-//    public String getInquiriesByUserId(@PathVariable Long userId, Model model, Principal principal) {
-//        List<InquiryDto> inquiryList = inquiryService.getInquiryListByUserId(userId);
-//        model.addAttribute("inquiryList", inquiryList);
-//        //principal.getName으로 kakao_id 칼럼을 얻게되는데 같은 테이블의 kakao_id가 일치하는 row의 user_id를 가져오는 코드를 짜라
-//        principal.getName();
-//        model.addAttribute("userId", userId);  // 사용자 ID를 모델에 추가
-//        return "pages/inquiry/inquiry";
-//    }
 
     @GetMapping("/write")
     public String inquiryWrite(Model model, Principal principal) {
@@ -69,12 +59,17 @@ public class InquiryController {
         return "redirect:/settings/inquiry";
     }
 
-    @GetMapping("/detail")
-    public String getInquiryDetail(Model model, Principal principal) {
+    //principl 을 사용하여 id찾기
+    //
+    @GetMapping("/detail/{inquiryId}")
+    public String getInquiryDetail(@PathVariable Long inquiryId, Model model, Principal principal) {
         String kakaoId = principal.getName();
         Long userId = userMapper.findByKakaoId(kakaoId).getUserId();
-        InquiryDto inquiry = inquiryService.getInquiryById(userId);
-        System.out.println("");
+        InquiryDto inquiry = inquiryService.getInquiryById(inquiryId);
+
+        if (!inquiry.getUserId().equals(userId)) {
+            return "redirect:/settings/inquiry";
+        }
         model.addAttribute("inquiry", inquiry);
         return "pages/inquiry/inquiryDetail";
     }
