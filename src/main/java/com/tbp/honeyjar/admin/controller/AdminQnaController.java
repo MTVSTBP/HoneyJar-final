@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
-import static java.time.LocalDateTime.*;
-
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/admin/qna")
@@ -42,8 +40,6 @@ public class AdminQnaController {
     @PostMapping("/write")
     public String write(QnaSaveRequestDto requestDto) {
 
-        requestDto.setCreatedAt(now());
-        requestDto.setUpdatedAt(now());
         requestDto.setUserId(1L);
 
         qnaService.save(requestDto);
@@ -69,7 +65,6 @@ public class AdminQnaController {
         QnaResponseDto qna = qnaService.findById(qna_id);
 
         if (qna != null) {
-            requestDto.setUpdatedAt(now());
             requestDto.setId(qna.getId());
             qnaService.correction(requestDto);
         }
