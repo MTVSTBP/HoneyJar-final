@@ -352,6 +352,29 @@ button {
     top: 5%;
 }
 
+.button-box {
+    height: 50px;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+}
+.button-box .confirm {
+    width: 40%;
+    text-align: center;
+    background: #FF8243;
+    color: #fff;
+    font-size: 1rem;
+    border-radius: 0px 50px 50px 0px;
+    cursor: pointer;
+}
+
+.button-box .confirm.close2 {
+    background: #fff;
+    color: #FF8243;
+    border: 1px solid #FF8243;
+    border-radius: 50px 0px 0px 50px;
+}
+
 .rating {
     margin: 2rem 0;
 }

@@ -75,6 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const confirmDeleteButton = document.getElementById('confirmDelete');
     const completeDeleteButton = document.getElementById('completeDelete');
     const closeModalButtons = document.querySelectorAll('.close');
+    const confirmCloseButton = document.getElementById('confirmClose');
 
     // 모달 열기
     if (deletePostButton) {
@@ -90,6 +91,13 @@ document.addEventListener("DOMContentLoaded", function () {
             deleteSuccessModal.style.display = 'none';
         });
     });
+
+    // 취소 버튼 클릭 시 모달 닫기
+    if (confirmCloseButton) {
+        confirmCloseButton.addEventListener('click', function () {
+            deleteConfirmModal.style.display = 'none';
+        });
+    }
 
     window.addEventListener('click', function (event) {
         if (event.target === deleteConfirmModal) {
