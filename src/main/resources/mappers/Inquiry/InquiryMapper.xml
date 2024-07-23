@@ -81,7 +81,7 @@
             category_id = #{categoryId},
             updated_at = now()
         WHERE
-            inquiry_id = #{id}
+            inquiry_id = #{inquiryId}
     </update>
 
     <delete id="delete" parameterType="java.lang.Long">
