@@ -1,6 +1,6 @@
 package com.tbp.honeyjar.comment.controller;
 
-import com.tbp.honeyjar.comment.dto.CommentListDTO;
+import com.tbp.honeyjar.comment.dto.*;
 import com.tbp.honeyjar.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -35,56 +35,36 @@ public class CommentController {
     }
 
     // 댓글 등록
-    @PostMapping("regist")
-    public String registComment(@ModelAttribute CommentListDTO newComment) {
-        System.out.println(newComment);
+    @PostMapping("regist") // long id?????
+    public String registComment(@ModelAttribute CommentRegistDTO newComment) {
+//        System.out.println(newComment);
+
         commentService.registComment(newComment);
+//        commentService.findAllComment();
 
         return "redirect:/comment";
     }
 
-    @PostMapping("modify")
-    public String modifyComment(@ModelAttribute CommentListDTO newComment) {
-        System.out.println(newComment);
-        commentService.modifyComment(newComment);
+    @PostMapping("modify/{comment_id}")
+    public String modifyComment(@PathVariable Long comment_id, CommentModifyDTO modifyComment) {
+//        System.out.println(modifyComment);
+
+        CommentRequestDTO comment = commentService.findCommentById(comment_id);
+        if (comment != null) {
+            modifyComment.setCommentId(comment.getCommentId());
+            commentService.modifyComment(modifyComment);
+        }
 
         return "redirect:/comment";
     }
 
+    @GetMapping("delete/{comment_id}")
+    public String deleteComment(@PathVariable Long comment_id) {
 
-//    @PostMapping("/regist")
-//    public ResponseEntity<Map<String, String>> registerComment(@RequestBody CommentListDTO comment) {
-//        System.out.println(comment.toString()); // 전달된 데이터 확인을 위해 로그 출력
-//
-//        Map<String, String> response = new HashMap<>();
-//        response.put("postId", String.valueOf(comment.getPostId())); // 실제 저장된 포스트 ID를 반환.
-//        return ResponseEntity.ok(response);
-//    }
+//      CommentRequestDTO comment = commentService.findCommentById(comment_id);
+        System.out.println("comment_id = " + comment_id);
+        commentService.deleteComment(comment_id);
+
+        return "redirect:/comment";
+    }
 }
-
-//    private List<CommentListDTO> getAllComments() {
-//        List<CommentListDTO> comments = new ArrayList<>();
-//        comments.add(CommentListDTO.builder()
-//                .commentId(1L)
-//                .nickName("홍길동")
-//                .profileImg("/assets/svg/base_profile.svg")
-//                .content("Lorem Ipsum is simply dummy text of the printing and typesetting industry.\n" +
-//                        "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,\n" +
-//                        "when an unknown printer took a galley of type and scrambled it to make a type specimen book.\n" +
-//                        "It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.")
-//                .date(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")))
-//                .build());
-//        comments.add(CommentListDTO.builder()
-//                .commentId(2L)
-//                .nickName("Seok")
-//                .profileImg("/assets/svg/base_profile.svg")
-//                .content("Lorem Ipsum is simply dummy text of the printing and typesetting industry.\n" +
-//                        "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,\n" +
-//                        "when an unknown printer took a galley of type and scrambled it to make a type specimen book.\n" +
-//                        "It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.")
-//                .date(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")))
-//                .build());
-//
-//        return comments;
-//    }
-//}

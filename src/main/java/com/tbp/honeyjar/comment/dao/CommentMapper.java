@@ -1,6 +1,9 @@
 package com.tbp.honeyjar.comment.dao;
 
 import com.tbp.honeyjar.comment.dto.CommentListDTO;
+import com.tbp.honeyjar.comment.dto.CommentModifyDTO;
+import com.tbp.honeyjar.comment.dto.CommentRegistDTO;
+import com.tbp.honeyjar.comment.dto.CommentRequestDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -10,10 +13,11 @@ public interface CommentMapper {
 
     List<CommentListDTO> findAllComment();
 
-    void registComment(CommentListDTO newComment);
+    void registComment(CommentRegistDTO newComment);
 
-    void modifyComment(CommentListDTO newComment);
-//    List<CommentListDTO> registComment();
+    void modifyComment(CommentModifyDTO modifyComment);
 
-//    publiic int registComment(CommentListDTO newComment);
+    CommentRequestDTO findById(Long commentId);
+
+    void deleteCommentById(Long commentId);
 }

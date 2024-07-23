@@ -17,36 +17,71 @@
         <result property="url" column="url"/>
     </resultMap>
 
+    <resultMap id="commentResultMap" type="com.tbp.honeyjar.comment.dto.CommentRequestDTO">
+        <id property="commentId" column="comment_id"/>
+        <result property="content" column="content"/>
+    </resultMap>
+
     <select id="findAllComment" resultMap="commentListResultMap">
-        SELECT DISTINCT C.comment_id, C.comment, C.updated_at, U.name, I.url
-        FROM comment as C
-        JOIN user as U ON C.user_id = U.user_id
-        LEFT JOIN image as I ON C.user_id = I.user_id AND I.post_id IS NULL
-        ORDER BY C.updated_at;
+        SELECT DISTINCT
+                C.COMMENT_ID
+              , C.COMMENT
+              , C.UPDATED_AT
+              , C.CREATED_AT
+              , U.NAME
+              , I.URL
+        FROM
+                COMMENT AS C
+        JOIN
+                USER AS U ON C.USER_ID = U.USER_ID
+        LEFT JOIN
+                IMAGE AS I ON C.USER_ID = I.USER_ID AND I.POST_ID IS NULL
+        ORDER BY
+                C.CREATED_AT;
+<!--        SELECT DISTINCT -->
+<!--                C.comment_id, C.comment, C.updated_at, U.name, I.url-->
+<!--        FROM comment as C-->
+<!--        JOIN user as U ON C.user_id = U.user_id-->
+<!--        LEFT JOIN image as I ON C.user_id = I.user_id AND I.post_id IS NULL-->
+<!--        ORDER BY C.updated_at;-->
     </select>
 
-    <insert id="registComment" parameterType="com.tbp.honeyjar.comment.dto.CommentListDTO">
+    <insert id="registComment" parameterType="com.tbp.honeyjar.comment.dto.CommentRegistDTO">
         INSERT INTO COMMENT
         (
-         COMMENT
-        , POST_ID
-        , USER_ID
+                COMMENT
+              , USER_ID
         )
         VALUES
         (
-           #{ comment }
-        ,  1
-        ,  1
+                #{ comment }
+              , 3
         )
     </insert>
 
-    <update id="modifyComment" parameterType="com.tbp.honeyjar.comment.dto.CommentListDTO">
+    <select id="findById" resultMap="commentResultMap">
+        SELECT
+                COMMENT_ID
+              , COMMENT
+        FROM
+                COMMENT
+        WHERE
+                COMMENT_ID = #{ commentId };
+    </select>
+
+    <update id="modifyComment" parameterType="com.tbp.honeyjar.comment.dto.CommentModifyDTO">
         UPDATE COMMENT
         SET
-                COMMENT
-
+                COMMENT = #{ comment }
+              , POST_ID = 1
+              , USER_ID = 1
         WHERE
-                COMMENT_ID = #{ comment_id }
-
+                COMMENT_ID = #{ commentId }
     </update>
+
+    <delete id="deleteCommentById" parameterType="java.lang.Long">
+        DELETE FROM
+        WHERE
+                COMMENT_ID = #{ commentId }
+    </delete>
 </mapper>

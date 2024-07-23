@@ -43,7 +43,7 @@
                         <div class="click_box">
                             <div class="d_flex">
                                 <a class="edit_p editButton">수정</a>
-                                <a id="deletePost" class="delete_p deleteButton" href="javascript:void(0)">삭제</a>
+                                <a id="deletePost" class="delete_p deleteButton" th:href="@{|/comment/${comment.commentId}|}">삭제</a>
                             </div>
                         </div>
                     </div>
@@ -56,13 +56,13 @@
                 </p>
             </div>
             <!-- 댓글 수정 -->
-            <form action="/comment/modify" method="post">
+            <form th:action="@{|/comment/modify/${comment.getCommentId()}|}" method="post">
             <div class="edit_comment">
                 <div class="user_edit">
-                    <input class="edit_text" placeholder="댓글을 입력해주세요"/>
+                    <input class="edit_text" placeholder="댓글을 입력해주세요" name="comment"/>
                 </div>
                 <div class="edit_submit">
-                    <button type="submit" class="edit_button" name="comment">수정</button>
+                    <button type="submit" class="edit_button" >수정</button>
                 </div>
             </div>
             </form>
