@@ -5,7 +5,6 @@ import com.tbp.honeyjar.login.config.properties.CorsProperties;
 import com.tbp.honeyjar.login.entity.admin.Admin;
 import com.tbp.honeyjar.login.service.admin.AdminService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -26,7 +25,6 @@ public class HoneyJarApplication {
     }
 
     @Bean
-
     public CommandLineRunner commandLineRunner(AdminService adminService) {
 
         return args -> {
