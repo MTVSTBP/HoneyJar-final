@@ -6,7 +6,6 @@ import com.tbp.honeyjar.admin.dao.CategoryMapper;
 import com.tbp.honeyjar.admin.dto.category.FoodResponseDto;
 import com.tbp.honeyjar.global.Firebase.FireBaseService;
 
-import com.tbp.honeyjar.image.dto.ImageDTO;
 import com.tbp.honeyjar.image.service.ImageService;
 import com.tbp.honeyjar.place.dto.PlaceDTO;
 import com.tbp.honeyjar.place.service.PlaceService;
@@ -102,4 +101,32 @@ public class PostService {
         }
         return postResponseDTO;
     }
+
+    public PostRequestDTO convertToPostRequestDTO(PostResponseDTO post) {
+        PostRequestDTO postRequestDTO = new PostRequestDTO();
+        postRequestDTO.setPostId(post.getPostId());
+        postRequestDTO.setTitle(post.getTitle());
+        postRequestDTO.setRecommendMenu(post.getRecommendMenu());
+        postRequestDTO.setPrice(post.getPrice());
+        postRequestDTO.setPost(post.getPost());
+        postRequestDTO.setImageUrls(post.getImageUrls());
+        postRequestDTO.setPlaceId(post.getPlaceId());
+        postRequestDTO.setCategoryId(post.getCategoryId());
+        postRequestDTO.setCreatedAt(post.getCreatedAt());
+        postRequestDTO.setUpdatedAt(post.getUpdatedAt());
+
+        // post.getMainImageUrl()와 post.getPlace()는 PostResponseDTO에 없으므로,
+        // 필요하다면 추가적인 로직으로 설정
+        if (post.getImageUrls() != null && !post.getImageUrls().isEmpty()) {
+            postRequestDTO.setMainImageUrl(post.getImageUrls().get(0)); // 예시: 첫 번째 이미지 URL을 메인 이미지로 사용
+        }
+
+        if (post.getPlaceId() != null) {
+            PlaceDTO place = placeService.getPlaceById(post.getPlaceId());
+            postRequestDTO.setPlace(place);
+        }
+
+        return postRequestDTO;
+    }
+
 }
