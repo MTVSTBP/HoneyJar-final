@@ -64,40 +64,47 @@ public class InquiryController {
     @GetMapping("/detail/{inquiryId}")
     public String getInquiryDetail(@PathVariable Long inquiryId, Model model, Principal principal) {
         String kakaoId = principal.getName();
-        Long userId = userMapper.findByKakaoId(kakaoId).getUserId();
+        User userInfo = userMapper.findByKakaoId(kakaoId);
         InquiryDto inquiry = inquiryService.getInquiryById(inquiryId);
 
-        if (!inquiry.getUserId().equals(userId)) {
+        if (!inquiry.getUserId().equals(userInfo.getUserId())) {
             return "redirect:/settings/inquiry";
         }
         model.addAttribute("inquiry", inquiry);
+        model.addAttribute("username", userInfo.getName());
         return "pages/inquiry/inquiryDetail";
     }
 
-    @GetMapping("/correction")
-    public String inquiryCorrection(Model model, Principal principal) {
+    @GetMapping("/correction/{inquiryId}")
+    public String inquiryCorrection(@PathVariable Long inquiryId,Model model, Principal principal) {
         String kakaoId = principal.getName();
-        Long userId = userMapper.findByKakaoId(kakaoId).getUserId();
-        InquiryDto inquiry = inquiryService.getInquiryById(userId);
+        User userInfo = userMapper.findByKakaoId(kakaoId);
+        InquiryDto inquiry = inquiryService.getInquiryById(inquiryId);
         model.addAttribute("inquiry", inquiry);
+        model.addAttribute("username", userInfo.getName());
         return "pages/inquiry/inquiryCorrection";
     }
 
-    @PostMapping("/correction")
-    public String updateInquiry(@RequestParam("title") String title,
+    @PostMapping("/correction/{inquiryId}")
+    public String updateInquiry(@PathVariable Long inquiryId,
+                                @RequestParam("title") String title,
                                 @RequestParam("category") String category,
                                 @RequestParam("post") String post,
                                 Principal principal) {
         String kakaoId = principal.getName();
-        Long userId = userMapper.findByKakaoId(kakaoId).getUserId();
+        InquiryDto inquiry = inquiryService.getInquiryById(inquiryId);
+        User userInfo = userMapper.findByKakaoId(kakaoId);
+        if (!inquiry.getUserId().equals(userInfo.getUserId())) {
+            return "redirect:/settings/inquiry";
+        }
         InquiryUpdateDto inquiryUpdateDto = InquiryUpdateDto.builder()
-                .id(userId)
+                .inquiryId(inquiryId)
                 .title(title)
                 .categoryId(Long.parseLong(category))
                 .post(post)
                 .build();
         inquiryService.updateInquiry(inquiryUpdateDto);
-        return "redirect:/settings/inquiry/detail";
+        return "redirect:/settings/inquiry/detail/" + inquiryId;
     }
 
     @PostMapping("/delete")
