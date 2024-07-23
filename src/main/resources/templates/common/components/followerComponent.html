@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/components/followerComponent.css}"/>
+</head>
+<body>
+<div id="backGround">
+    <div id="container">
+        <div id="leftContainer">
+            <div>
+                <img th:src="${follow.profileImage != null ? follow.profileImage : '/assets/svg/base_profile.svg'}" />
+            </div>
+            <div id="text" th:text="${follow.userName}"></div>
+        </div>
+        <div id="rightContainer">
+            <div>
+                <button id="decline">팔로워 삭제</button>
+            </div>
+        </div>
+    </div>
+    <div id="border">
+        <hr />
+    </div>
+</div>
+</body>
+</html>
