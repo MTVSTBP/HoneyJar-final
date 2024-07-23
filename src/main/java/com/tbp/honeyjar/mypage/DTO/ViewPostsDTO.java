@@ -5,6 +5,8 @@ import lombok.*;
 import java.util.List;
 
 @Data
+@Getter
+@Setter
 @NoArgsConstructor
 public class ViewPostsDTO {
     private Long userId;
@@ -13,7 +15,6 @@ public class ViewPostsDTO {
     private List<PostDTO> posts;
     private List<CategoryDTO> categories;
 
-    @Builder
     public ViewPostsDTO(Long userId, String userName, String userPr, List<PostDTO> posts, List<CategoryDTO> categories) {
         this.userId = userId;
         this.userName = userName;
@@ -22,25 +23,6 @@ public class ViewPostsDTO {
         this.categories = categories;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getUserPr() {
-        return userPr;
-    }
-
-    public List<PostDTO> getPosts() {
-        return posts;
-    }
-
-    public List<CategoryDTO> getCategories() {
-        return categories;
-    }
     @Override
     public String toString() {
         return "BookmarkDTO{" +

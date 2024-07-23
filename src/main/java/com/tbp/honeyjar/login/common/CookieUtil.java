@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
-import org.springframework.util.SerializationUtils;
 
 import java.util.Base64;
 import java.util.Optional;
@@ -50,7 +49,9 @@ public class CookieUtil {
         cookie.setHttpOnly(true); // XSS 공격 방지를 위해 HttpOnly 설정
         cookie.setSecure(true); // HTTPS 환경에서만 쿠키 전송
         cookie.setMaxAge(maxAge);
+        cookie.setAttribute("SameSite", "Strict"); // 또는 "Lax"
         response.addCookie(cookie);
+        log.debug("Added cookie: name={}, value={}, maxAge={}", name, value, maxAge);
     }
 
     public static void deleteCookie(

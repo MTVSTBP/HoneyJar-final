@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @Data
 public class NoticeCorrectionRequestDto {
 
-    private int noticeId;
+    private Long noticeId;
     private String title;
     private String post;
     private LocalDateTime updatedAt;
