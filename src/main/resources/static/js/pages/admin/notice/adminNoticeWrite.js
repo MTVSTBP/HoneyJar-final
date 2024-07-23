@@ -66,12 +66,12 @@ document.addEventListener("DOMContentLoaded", function () {
         validateForm(false);
         hideErrorMessage(document.getElementById(event.target.id + 'Error'));
     });
-    postForm.addEventListener('submit', function (event) {
-        event.preventDefault();
-
-        if (!validateForm(true)) {
-            return;
-        }
+    // postForm.addEventListener('submit', function (event) {
+    //     event.preventDefault();
+    //
+    //     if (!validateForm(true)) {
+    //         return;
+    //     }
 
         openModal();
     });
@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     completeBtn.addEventListener("click", function() {
         closeModal();
-        window.location.href = "/src/pages/html/adminNoticeDetail.html";
+        window.location.href = "/admin/notice";
     });
 
     window.addEventListener("click", function(event) {
