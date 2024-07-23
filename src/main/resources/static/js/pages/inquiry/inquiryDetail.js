@@ -89,7 +89,7 @@ function getCookie(cookieName) {
 function testSendCookie() {
     //
     if (getCookie("access_token") !== "") {
-        const response = fetch(`/settings/inquiry/detail/4`, {
+        const response = fetch(`/settings/inquiry/detail`, {
             method: 'POST',
             header: {
                 'Content-Type': 'application/json',
