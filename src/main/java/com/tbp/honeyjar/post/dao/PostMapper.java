@@ -7,6 +7,19 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
+//@Mapper
+//public interface PostMapper {
+//
+//    void createPost(PostRequestDTO postRequestDTO);
+//
+//    List<PostListDTO> findAllPost();
+//
+//    PostResponseDTO findPostById(Long postId);
+//
+//    void updatePost(PostRequestDTO addPostRequestDTO);
+//
+//}
+
 @Mapper
 public interface PostMapper {
 
@@ -18,4 +31,5 @@ public interface PostMapper {
 
     void updatePost(PostRequestDTO addPostRequestDTO);
 
+    Long findPlaceIdByPostId(Long postId);
 }

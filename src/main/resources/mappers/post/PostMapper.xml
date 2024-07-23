@@ -113,6 +113,13 @@
         )
     </insert>
 
+    <!-- postId로 placeId 조회 -->
+    <select id="findPlaceIdByPostId" resultType="java.lang.Long">
+        SELECT place_id
+        FROM post
+        WHERE post_id = #{postId}
+    </select>
+
     <!-- 포스트 수정 쿼리 -->
     <update id="updatePost">
         UPDATE post
@@ -123,7 +130,7 @@
             post = #{post},
             updated_at = NOW(),
             place_id = #{placeId},
-        category_id = #{categoryId}
+            category_id = #{categoryId}
         WHERE post_id = #{postId}
     </update>
 </mapper>

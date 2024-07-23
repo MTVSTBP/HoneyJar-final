@@ -86,19 +86,6 @@ public class PostController {
         return "pages/post/postCorrection";
     }
 
-
-
-//    @PostMapping("/correction")
-//    public String postCorrection(
-//            @ModelAttribute PostRequestDTO postRequestDTO,
-//            @RequestParam("files") List<MultipartFile> files,
-//            @RequestParam("mainImageFile") MultipartFile mainImageFile,
-//            @RequestParam("mainImageUrl") String mainImageUrl) throws IOException, FirebaseAuthException {
-//
-//        postService.updatePost(postRequestDTO, files, mainImageFile, mainImageUrl);
-//        return "redirect:/post/detail?postId=" + postRequestDTO.getPostId();
-//    }
-
     @PostMapping("/correction")
     public ResponseEntity<?> postCorrection(@ModelAttribute PostRequestDTO postRequestDTO,
                                             @RequestParam("files") List<MultipartFile> files,

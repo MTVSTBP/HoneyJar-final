@@ -52,4 +52,9 @@
         updated_at = NOW()
         WHERE place_id = #{placeId}
     </update>
+
+    <delete id="deletePlaceById">
+        DELETE FROM place
+        WHERE place_id = #{placeId}
+    </delete>
 </mapper>
