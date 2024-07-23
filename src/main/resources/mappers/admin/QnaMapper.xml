@@ -20,20 +20,20 @@
 
     <select id="findAllQna" resultMap="adminQnaListResultMap">
         select
-        qna_id,
-        title,
-        post,
-        category_id
+            qna_id,
+            title,
+            post,
+            category_id
         from qna
         order by qna_id
     </select>
 
     <select id="findById" resultMap="adminQnaResultMap">
         select
-        qna_id,
-        title,
-        post,
-        category_id
+            qna_id,
+            title,
+            post,
+            category_id
         from qna
         where qna_id = #{id}
     </select>
@@ -41,31 +41,31 @@
     <insert id="save" parameterType="com.tbp.honeyjar.admin.dto.qna.QnaSaveRequestDto">
         insert into qna
         (
-        title,
-        post,
-        category_id,
-        user_id,
-        created_at,
-        updated_at
+            title,
+            post,
+            category_id,
+            user_id,
+            created_at,
+            updated_at
         )
         values
         (
-        #{title},
-        #{post},
-        #{categoryId},
-        #{userId},
-        #{createdAt},
-        #{updatedAt}
+            #{title},
+            #{post},
+            #{categoryId},
+            #{userId},
+            #{createdAt},
+            #{updatedAt}
         )
     </insert>
 
     <update id="correction" parameterType="com.tbp.honeyjar.admin.dto.qna.QnaCorrectionRequestDto">
         update qna
         set
-        title = #{title},
-        post = #{post},
-        category_id = #{categoryId},
-        updated_at = #{updatedAt}
+            title = #{title},
+            post = #{post},
+            category_id = #{categoryId},
+            updated_at = #{updatedAt}
         where
         qna_id = #{id}
     </update>
