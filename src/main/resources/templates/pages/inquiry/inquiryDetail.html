@@ -28,7 +28,7 @@
                 <div class="user_info">
                     <img src="/assets/svg/base_profile.svg" alt="관리자프로필">
 <!--                    user.name 출력-->
-                    <p th:text="${inquiry.userId}">사용자</p>
+                    <p th:text="${username}">사용자</p>
                 </div>
                 <span th:text="${#temporals.format(inquiry.createdAt, 'yyyy-MM-dd')}">2024.07.01</span>
             </div>
@@ -38,8 +38,9 @@
         </div>
     </div>
     <div class="button_list">
-        <a th:href="|@{'/settings/inquiry/correction'}|" type="submit" class="btn">수정</a>
+        <a th:href="@{'/settings/inquiry/correction/' + ${inquiry.id}}" type="submit" class="btn">수정</a>
     </div>
+
 
 </div>
 

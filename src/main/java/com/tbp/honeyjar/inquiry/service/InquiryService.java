@@ -21,8 +21,6 @@ public class InquiryService {
         this.inquiryMapper = inquiryMapper;
     }
 
-
-
     public List<InquiryDto> getInquiryList() {
         return inquiryMapper.getInquiryList();
     }
