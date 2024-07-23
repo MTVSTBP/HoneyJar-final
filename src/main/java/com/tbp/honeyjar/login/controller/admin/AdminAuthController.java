@@ -21,7 +21,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.tbp.honeyjar.login.common.ApiResponse.*;
 import static com.tbp.honeyjar.login.common.HeaderUtil.*;
 
 @Slf4j
@@ -47,24 +46,14 @@ public class AdminAuthController extends AbstractAuthController {
 
         Admin admin = adminMapper.findByEmail(adminAuthenticationDTO.getEmail());
 
-        if (admin != null) {
-            log.debug("Admin found: {}", admin);
-
-            if (passwordEncoder.matches(adminAuthenticationDTO.getPassword(), admin.getPassword())) {
-                log.debug("Password matched for admin: {}", admin.getEmail());
-
-                if (admin.getAdminId() == null) {
-                    log.error("Admin found but adminId is null for email: {}", admin.getEmail());
-                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                            .body(new ApiResponse<>(ApiResponse.INTERNAL_SERVER_ERROR_CODE, "Internal server error", null));
-                }
-
-                Date now = new Date();
-                AuthToken accessToken = tokenProvider.createAuthToken(
-                        admin.getAdminId().toString(),
-                        RoleType.ADMIN.getCode(),
-                        new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
-                );
+        if (admin != null && passwordEncoder.matches(adminAuthenticationDTO.getPassword(), admin.getPassword())) {
+            // 로그인 성공 시, 액세스 토큰 및 리프레시 토큰 생성 및 반환
+            Date now = new Date();
+            AuthToken accessToken = tokenProvider.createAuthToken(
+                    admin.getAdminId().toString(), // 관리자 ID를 이용하여 토큰 생성
+                    RoleType.ADMIN.getCode(),
+                    new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
+            );
 
                 log.info("Created access token for admin: {}", accessToken.getToken());
 
@@ -88,17 +77,9 @@ public class AdminAuthController extends AbstractAuthController {
                 resultMap.put(TOKEN_NAME, accessToken.getToken());
                 resultMap.put("redirectUrl", "/admin");
 
-                log.info("Admin login successful for email: {}", admin.getEmail());
-                return ResponseEntity.ok(new ApiResponse<>(SUCCESS_CODE, "Login Successful", resultMap));
-            } else {
-                log.debug("Password does not match for admin: {}", admin.getEmail());
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(new ApiResponse<>(UNAUTHORIZED_CODE, "아이디 또는 비밀번호가 잘못되었습니다.", null));
-            }
+            return ResponseEntity.ok(new ApiResponse<>(ApiResponse.SUCCESS_CODE, "Login Successful", resultMap));
         } else {
-            log.debug("No admin found for email: {}", adminAuthenticationDTO.getEmail());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new ApiResponse<>(UNAUTHORIZED_CODE, "아이디 또는 비밀번호가 잘못되었습니다.", null));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>(ApiResponse.UNAUTHORIZED_CODE, "아이디 또는 비밀번호가 잘못되었습니다.", null));
         }
     }
 }
