@@ -10,7 +10,11 @@
     <div class="profile-container">
         <span class="admin-label">관리자</span>
         <img class="edit-icon" src="/assets/svg/mode_in_circle.svg" alt="Edit">
-        <span class="admin-name">홍길동</span>
+        <!--
+            TODO: 현재, admin 테이블의 필드가 admin_id(PK), email, password 밖에 없기 때문에
+                임시로 admin-name 필드에 email을 사용하였음
+        -->
+        <span class="admin-name" th:text="${admin.email}">관리자 이메일</span>
         <img class="profile-icon" src="/assets/svg/base_profile.svg" alt="Profile">
     </div>
 </header>
