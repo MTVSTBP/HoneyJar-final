@@ -31,18 +31,6 @@ public class PostController {
         this.imageService = imageService;
     }
 
-//    @GetMapping
-//    public String postList(Model model, @RequestParam(required = false) Long selectedCategory) {
-//        List<PostListDTO> posts = postService.findAllPost();
-//        model.addAttribute("posts", posts);
-//
-//        // 카테고리 목록 추가
-//        model.addAttribute("categories", categoryService.findAllFoodCategory());
-//        model.addAttribute("selectedCategory", selectedCategory);
-//
-//        return "pages/post/post";
-//    }
-
     @GetMapping
     public String postList(Model model, @RequestParam(required = false) Long category) {
         List<PostListDTO> posts = postService.findAllPost(category);
