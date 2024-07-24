@@ -6,22 +6,12 @@ import com.tbp.honeyjar.post.dto.PostResponseDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
-
-//@Mapper
-//public interface PostMapper {
-//
-//    void createPost(PostRequestDTO postRequestDTO);
-//
-//    List<PostListDTO> findAllPost();
-//
-//    PostResponseDTO findPostById(Long postId);
-//
-//    void updatePost(PostRequestDTO addPostRequestDTO);
-//
-//}
+import java.util.Map;
 
 @Mapper
 public interface PostMapper {
+
+    List<PostListDTO> findAllPost(Map<String, Object> params);
 
     void createPost(PostRequestDTO postRequestDTO);
 

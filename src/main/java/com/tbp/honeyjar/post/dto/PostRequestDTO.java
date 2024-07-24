@@ -1,6 +1,5 @@
 package com.tbp.honeyjar.post.dto;
 
-import com.tbp.honeyjar.image.dto.ImageDTO;
 import com.tbp.honeyjar.place.dto.PlaceDTO;
 
 import java.time.LocalDateTime;
