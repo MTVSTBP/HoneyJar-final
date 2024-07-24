@@ -121,7 +121,7 @@
     </select>
 
     <!-- 포스트 수정 쿼리 -->
-    <update id="updatePost">
+    <update id="updatePost" parameterType="com.tbp.honeyjar.post.dto.PostRequestDTO">
         UPDATE post
         SET
             title = #{title},

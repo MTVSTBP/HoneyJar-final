@@ -63,6 +63,7 @@ public class PlaceService {
     @Transactional
     public void updatePlace(PlaceDTO placeDTO) {
         System.out.println("Before update: " + placeMapper.findPlaceById(placeDTO.getPlaceId()));
+        System.out.println("placeDTO = " + placeDTO);
         placeMapper.updatePlace(placeDTO);
         System.out.println("After update: " + placeMapper.findPlaceById(placeDTO.getPlaceId()));
     }

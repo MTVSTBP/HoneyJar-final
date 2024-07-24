@@ -187,6 +187,7 @@ function storeAndRedirect() {
             y: selectedPlace.y,
             x: selectedPlace.x
         };
+        console.log(placeData)
         localStorage.setItem("selectedPlace", JSON.stringify(placeData));
 
         // URL로 리다이렉트
