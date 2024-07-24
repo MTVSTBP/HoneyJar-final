@@ -63,7 +63,7 @@
         FROM user
         WHERE user_id = 1;
     </select>
-    <update id="updateMyPage" parameterType="com.tbp.honeyjar.mypage.DTO.">
+    <update id="updateMyPage" parameterType="com.tbp.honeyjar.mypage.DTO.MyPageCorrectionDTO">
         UPDATE user
         SET name = #{userName},
             pr = #{userPr}
