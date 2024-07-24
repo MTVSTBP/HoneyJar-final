@@ -62,8 +62,6 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())  // CORS 설정 적용
                 .csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화 (RestAPI 이므로)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 사용 안 함
-                .formLogin(AbstractHttpConfigurer::disable)
-                .httpBasic(AbstractHttpConfigurer::disable)
                 .exceptionHandling(exceptions -> exceptions
                         .authenticationEntryPoint(restAuthenticationEntryPoint)
                         .accessDeniedHandler(tokenAccessDeniedHandler)
@@ -87,19 +85,32 @@ public class SecurityConfig {
 //                        // 개발 중에 임시로 모든 엔드포인트를 허용
 //                                .anyRequest().permitAll()
                 )
+                .formLogin(form -> form
+                        .loginPage("/admin/login")
+                        .loginProcessingUrl("/admin/login")
+                        .successHandler((request, response, authentication) -> {
+                            response.sendRedirect("/admin");
+                        })
+                        .failureUrl("/admin/login?error=true")
+                        .permitAll()
+                )
                 .oauth2Login(oauth2 -> oauth2
-                        .authorizationEndpoint(authorization -> authorization
-                                .baseUri("/oauth2/authorization") // OAuth2 로그인 시작 URI
-                                .authorizationRequestRepository(authorizationRequestRepository()) // 쿠키 기반 인증 요청 저장소
-                        )
-                        .redirectionEndpoint(redirection -> redirection
-                                .baseUri("/login/oauth2/code/*") // OAuth2 로그인 후 리디렉션 URI
-                        )
-                        .userInfoEndpoint(userInfo -> userInfo
-                                .userService(oAuth2UserService) // OAuth2 사용자 정보 처리 서비스
-                        )
-                        .successHandler(oAuth2AuthenticationSuccessHandler()) // OAuth2 로그인 성공 핸들러
-                        .failureHandler(oAuth2AuthenticationFailureHandler()) // OAuth2 로그인 실패 핸들러
+//                                .loginPage("/login")
+                                .authorizationEndpoint(authorization -> authorization
+                                        .baseUri("/oauth2/authorization") // OAuth2 로그인 시작 URI
+                                        .authorizationRequestRepository(authorizationRequestRepository()) // 쿠키 기반 인증 요청 저장소
+                                )
+                                .redirectionEndpoint(redirection -> redirection
+                                        .baseUri("/login/oauth2/code/*") // OAuth2 로그인 후 리디렉션 URI
+                                )
+                                .userInfoEndpoint(userInfo -> userInfo
+                                        .userService(oAuth2UserService) // OAuth2 사용자 정보 처리 서비스
+                                )
+//                        .successHandler((request, response, authentication) -> {
+//                            response.sendRedirect("/home");
+//                        })
+                                .successHandler(oAuth2AuthenticationSuccessHandler()) // OAuth2 로그인 성공 핸들러
+                                .failureHandler(oAuth2AuthenticationFailureHandler()) // OAuth2 로그인 실패 핸들러
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
