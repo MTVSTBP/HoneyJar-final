@@ -56,7 +56,7 @@
             WHERE is_main = 1
         ) i ON p.post_id = i.post_id
                  LEFT JOIN bookmark b ON p.post_id = b.post_id
-        WHERE p.user_id = #{userId}
+        WHERE p.user_id = #{userId} and p.deleted = false
     </select>
     <select id="getMyProfile" resultMap="MyPageCorrectionMap">
         SELECT user_id, name, pr
