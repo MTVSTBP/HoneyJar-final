@@ -22,7 +22,7 @@
             </div>
             <p id="date" th:text="*{createdAt}">2024.06.24</p>
         </div>
-        <div class="more_h">
+        <div class="more_h" th:if="${isAuthor}">
             <img src="/assets/svg/more_horiz.svg" alt="more_horiz">
             <div class="click_box">
                 <div class="d_flex">

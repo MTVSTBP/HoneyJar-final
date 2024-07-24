@@ -21,6 +21,7 @@ public class PostResponseDTO {
     private LocalDateTime updatedAt;
     private List<String> imageUrls;  // 이미지 URL 리스트
     private String userName;
+    private Long userId;
 
     //    private String profileImg;  // user table
 //    private int like;  // like table
@@ -30,7 +31,7 @@ public class PostResponseDTO {
     public PostResponseDTO() {}
 
 
-    public PostResponseDTO(Long postId, Long categoryId, String categoryName, String title, String recommendMenu, int price, String post, Long placeId, String placeName, String roadAddressName, String xCoordinate, String yCoordinate, LocalDateTime createdAt, LocalDateTime updatedAt, List<String> imageUrls, String userName) {
+    public PostResponseDTO(Long postId, Long categoryId, String categoryName, String title, String recommendMenu, int price, String post, Long placeId, String placeName, String roadAddressName, String xCoordinate, String yCoordinate, LocalDateTime createdAt, LocalDateTime updatedAt, List<String> imageUrls, String userName, Long userId) {
         this.postId = postId;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
@@ -47,6 +48,7 @@ public class PostResponseDTO {
         this.updatedAt = updatedAt;
         this.imageUrls = imageUrls;
         this.userName = userName;
+        this.userId = userId;
     }
 
     public Long getPostId() {
@@ -177,6 +179,14 @@ public class PostResponseDTO {
         this.userName = userName;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "PostResponseDTO{" +
@@ -196,6 +206,7 @@ public class PostResponseDTO {
                 ", updatedAt=" + updatedAt +
                 ", imageUrls=" + imageUrls +
                 ", userName='" + userName + '\'' +
+                ", userId=" + userId +
                 '}';
     }
 }

@@ -19,13 +19,14 @@
     <!-- 포스트 상세 조회 -->
     <resultMap id="postResponseResultMap" type="com.tbp.honeyjar.post.dto.PostResponseDTO">
         <id property="postId" column="post_id"/>
+        <id property="placeId" column="place_id"/>
+        <id property="userId" column="user_id"/>
         <result property="categoryId" column="category_id"/>
         <result property="categoryName" column="name"/>
         <result property="title" column="title"/>
         <result property="recommendMenu" column="recommend_menu"/>
         <result property="price" column="price"/>
         <result property="post" column="post"/>
-        <result property="placeId" column="place_id"/>
         <result property="placeName" column="place_name"/>
         <result property="roadAddressName" column="road_address_name"/> <!-- 도로명 주소 추가 -->
         <result property="xCoordinate" column="x_coordinate"/>
@@ -75,21 +76,22 @@
     <!-- 포스트 상세 조회 쿼리 -->
     <select id="findPostById" resultMap="postResponseResultMap">
         SELECT
-            p.post_id,
-            p.category_id,
-            p.title,
-            p.recommend_menu,
-            p.price,
-            p.post,
-            p.created_at,
-            p.updated_at,
-            p.place_id,
-            pl.name AS place_name,
-            pl.road_address_name,
-            pl.x_coordinate,
-            pl.y_coordinate,
-            i.url,
-            u.name AS user_name
+        p.post_id,
+        p.category_id,
+        p.title,
+        p.recommend_menu,
+        p.price,
+        p.post,
+        p.created_at,
+        p.updated_at,
+        p.place_id,
+        pl.name AS place_name,
+        pl.road_address_name,
+        pl.x_coordinate,
+        pl.y_coordinate,
+        i.url,
+        u.name AS user_name,
+        p.user_id <!-- 추가된 부분 -->
         FROM post p
         LEFT JOIN place pl ON p.place_id = pl.place_id
         LEFT JOIN image i ON p.post_id = i.post_id
