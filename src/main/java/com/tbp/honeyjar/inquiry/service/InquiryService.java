@@ -7,11 +7,13 @@ import com.tbp.honeyjar.inquiry.mapper.InquiryMapper;
 import com.tbp.honeyjar.login.mapper.user.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+@Transactional
 public class InquiryService {
     InquiryMapper inquiryMapper;
     UserMapper userMapper;
@@ -21,15 +23,18 @@ public class InquiryService {
         this.inquiryMapper = inquiryMapper;
     }
 
+    @Transactional(readOnly = true)
     public List<InquiryDto> getInquiryList() {
         return inquiryMapper.getInquiryList();
     }
 
+    @Transactional(readOnly = true)
     public List<InquiryDto> getInquiryListByUserId(String kakaoId) {
         Long userId = userMapper.findByKakaoId(kakaoId).getUserId();
         return inquiryMapper.getInquiryListByUserId(userId);
     }
 
+    @Transactional(readOnly = true)
     public InquiryDto getInquiryById(Long id) {
         return inquiryMapper.getInquiryById(id);
     }
