@@ -19,10 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -45,6 +42,11 @@ public class PostService {
         this.categoryMapper = categoryMapper;
     }
 
+    public List<PostListDTO> findAllPost(Long category) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("category", category);
+        return postMapper.findAllPost(params);
+    }
 
     @Transactional
     public Long createPost(PostRequestDTO postRequestDTO, List<MultipartFile> files, MultipartFile mainImageFile, String mainImageUrl) throws IOException, FirebaseAuthException {

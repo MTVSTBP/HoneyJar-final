@@ -11,6 +11,7 @@
         <result property="post" column="post"/>
         <result property="mainImageUrl" column="main_image_url"/>
         <result property="bookmarked" column="bookmarked"/>
+        <result property="categoryId" column="category_id"/>
         <!-- <result property="profileImg" column="profile_img"/> -->
     </resultMap>
 
@@ -42,25 +43,49 @@
     </resultMap>
 
     <!-- 포스트 리스트 조회 쿼리 -->
+<!--    <select id="findAllPost" resultMap="postListResultMap">-->
+<!--        SELECT-->
+<!--            p.post_id,-->
+<!--            p.title,-->
+<!--            p.post,-->
+<!--            i.url AS main_image_url,-->
+<!--        CASE-->
+<!--            WHEN b.post_id IS NOT NULL THEN true-->
+<!--            ELSE false-->
+<!--        END AS bookmarked-->
+<!--        FROM post p-->
+<!--        LEFT JOIN (-->
+<!--            SELECT post_id, url-->
+<!--            FROM image-->
+<!--            WHERE is_main = 1-->
+<!--        ) i ON p.post_id = i.post_id-->
+<!--        LEFT JOIN bookmark b ON p.post_id = b.post_id-->
+<!--        WHERE p.deleted = FALSE-->
+<!--        &lt;!&ndash; LEFT JOIN user u ON p.user_id = u.user_id &ndash;&gt;-->
+<!--    </select>-->
     <select id="findAllPost" resultMap="postListResultMap">
         SELECT
-            p.post_id,
-            p.title,
-            p.post,
-            i.url AS main_image_url,
+        p.post_id,
+        p.title,
+        p.post,
+        i.url AS main_image_url,
         CASE
-            WHEN b.post_id IS NOT NULL THEN true
-            ELSE false
-        END AS bookmarked
+        WHEN b.post_id IS NOT NULL THEN true
+        ELSE false
+        END AS bookmarked,
+        p.category_id
         FROM post p
         LEFT JOIN (
-            SELECT post_id, url
-            FROM image
-            WHERE is_main = 1
+        SELECT post_id, url
+        FROM image
+        WHERE is_main = 1
         ) i ON p.post_id = i.post_id
         LEFT JOIN bookmark b ON p.post_id = b.post_id
         WHERE p.deleted = FALSE
-        <!-- LEFT JOIN user u ON p.user_id = u.user_id -->
+        <if test="category != null">
+            AND p.category_id = #{category}
+        </if>
+        ORDER BY p.created_at DESC
     </select>
 
     <!-- 포스트 상세 조회 쿼리 -->
