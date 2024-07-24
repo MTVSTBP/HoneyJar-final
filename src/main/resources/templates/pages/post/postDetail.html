@@ -92,7 +92,7 @@
     <!-- comment -->
     <div class="comment_box">
         <div class="like">
-            <button id="likeButton" data-post-id="*{postId}">
+            <button id="likeButton" th:data-post-id="${post.postId}" th:data-user-id="${userId}">
                 <img src="/assets/svg/favorite.svg" alt="좋아요" id="likeImage">
                 <span id="likeCount">0</span>
             </button>

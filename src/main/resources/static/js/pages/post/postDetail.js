@@ -156,6 +156,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const likeImage = document.getElementById("likeImage");
     const likeCount = document.getElementById("likeCount");
 
+    const userId = parseInt(likeButton.getAttribute("data-user-id"))
+    const postId = parseInt(likeButton.getAttribute("data-post-id"))
+
     if (likeButton && likeImage && likeCount) {
         likeButton.addEventListener("click", function () {
             let isLiked = likeImage.src.includes("favorite_color.svg");
@@ -164,10 +167,27 @@ document.addEventListener("DOMContentLoaded", function () {
             likeImage.src = isLiked ? "/assets/svg/favorite.svg" : "/assets/svg/favorite_color.svg";
 
             // AJAX 요청 보내기 (좋아요 상태 변경)
-            /*
-            sendLikeData(!isLiked, newCount);
-            */
+            likePost(userId, postId)
         });
+    }
+
+    function likePost(userId, postId) {
+        fetch('/post/like/' + postId, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'charset': 'UTF-8'
+            },
+            body: JSON.stringify({
+                'user-id': userId,
+                'post-id': postId
+            })
+        }).then(res => {
+            if (!res.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return res.json();
+        })
     }
 
     const commentButton = document.getElementById("commentButton");
