@@ -1,6 +1,5 @@
 package com.tbp.honeyjar.post.dto;
 
-import com.tbp.honeyjar.image.dto.ImageDTO;
 import com.tbp.honeyjar.place.dto.PlaceDTO;
 
 import java.time.LocalDateTime;
@@ -19,11 +18,12 @@ public class PostRequestDTO {
     private PlaceDTO place;
     private Long placeId;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private Long categoryId;
 
     public PostRequestDTO() {}
 
-    public PostRequestDTO(Long postId, String title, String recommendMenu, int price, String post, Long userId, List<String> imageUrls, String mainImageUrl, PlaceDTO place, Long placeId, LocalDateTime createdAt, Long categoryId) {
+    public PostRequestDTO(Long postId, String title, String recommendMenu, int price, String post, Long userId, List<String> imageUrls, String mainImageUrl, PlaceDTO place, Long placeId, LocalDateTime createdAt, LocalDateTime updatedAt, Long categoryId) {
         this.postId = postId;
         this.title = title;
         this.recommendMenu = recommendMenu;
@@ -35,6 +35,7 @@ public class PostRequestDTO {
         this.place = place;
         this.placeId = placeId;
         this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.categoryId = categoryId;
     }
 
@@ -126,6 +127,14 @@ public class PostRequestDTO {
         this.createdAt = createdAt;
     }
 
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
     public Long getCategoryId() {
         return categoryId;
     }
@@ -148,6 +157,7 @@ public class PostRequestDTO {
                 ", place=" + place +
                 ", placeId=" + placeId +
                 ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
                 ", categoryId=" + categoryId +
                 '}';
     }

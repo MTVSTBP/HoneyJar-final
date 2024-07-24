@@ -1,4 +1,14 @@
 document.addEventListener("DOMContentLoaded", function () {
+
+    document.getElementById('category').addEventListener('change', function() {
+        document.getElementById('filterForm').submit();
+    });
+
+    // 추천순 등..
+    // document.getElementById('goodRestaurant').addEventListener('change', function() {
+    //     document.getElementById('filterForm').submit();
+    // });
+
     // 슬라이더 이미지 설정
     const container = document.getElementById('container');
     const kindWrap = container.querySelector('.kind_wrap');
@@ -75,6 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const confirmDeleteButton = document.getElementById('confirmDelete');
     const completeDeleteButton = document.getElementById('completeDelete');
     const closeModalButtons = document.querySelectorAll('.close');
+    const confirmCloseButton = document.getElementById('confirmClose');
 
     // 모달 열기
     if (deletePostButton) {
@@ -91,6 +102,13 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
+    // 취소 버튼 클릭 시 모달 닫기
+    if (confirmCloseButton) {
+        confirmCloseButton.addEventListener('click', function () {
+            deleteConfirmModal.style.display = 'none';
+        });
+    }
+
     window.addEventListener('click', function (event) {
         if (event.target === deleteConfirmModal) {
             deleteConfirmModal.style.display = 'none';
@@ -101,29 +119,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 삭제 확인 버튼 클릭 시
     if (confirmDeleteButton) {
-        confirmDeleteButton.addEventListener('click', function () {
-            deleteConfirmModal.style.display = 'none';
-            deleteSuccessModal.style.display = 'block';
+        confirmDeleteButton.addEventListener('click', async function () {
+            // 실제 삭제 작업 수행 (소프트 삭제)
+            try {
+                const response = await fetch(`/post/${postId}`, {
+                    method: 'DELETE',
+                });
 
-            // 삭제 작업을 여기서 수행
-            /*
-            performDeleteAction().then(response => {
-                if (response.success) {
+                if (response.ok) {
+                    deleteConfirmModal.style.display = 'none';
                     deleteSuccessModal.style.display = 'block';
                 } else {
-                    console.error('Deletion failed');
+                    console.error('삭제 실패');
                 }
-            });
-            */
+            } catch (error) {
+                console.error('삭제 오류:', error);
+            }
         });
     }
+
 
     // 삭제 완료 모달의 확인 버튼 클릭 시
     if (completeDeleteButton) {
         completeDeleteButton.addEventListener('click', function () {
             deleteSuccessModal.style.display = 'none';
-            // 페이지를 리다이렉트하거나 필요한 후속 작업을 수행
-            window.location.href = '/src/pages/html/postList.html';
+            // 페이지를 리다이렉트하거나 필요한 후속 작업 수행
+            window.location.href = '/post';
         });
     }
 

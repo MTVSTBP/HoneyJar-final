@@ -43,15 +43,11 @@
     <insert id="saveFoodCategory" parameterType="com.tbp.honeyjar.admin.dto.category.FoodCategorySaveRequestDto">
         insert into food_category
         (
-            category_name,
-            created_at,
-            updated_at
+            category_name
         )
         values
         (
-            #{name},
-            #{createdAt},
-            #{updatedAt}
+            #{name}
         )
     </insert>
 
@@ -59,14 +55,10 @@
         insert into other_category
         (
             category_name,
-            created_at,
-            updated_at
         )
         values
         (
             #{name},
-            #{createdAt},
-            #{updatedAt}
         )
     </insert>
 

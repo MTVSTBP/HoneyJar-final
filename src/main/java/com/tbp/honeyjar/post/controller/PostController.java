@@ -32,14 +32,11 @@ public class PostController {
     }
 
     @GetMapping
-    public String postList(Model model, @RequestParam(required = false) Long selectedCategory) {
-        List<PostListDTO> posts = postService.findAllPost();
+    public String postList(Model model, @RequestParam(required = false) Long category) {
+        List<PostListDTO> posts = postService.findAllPost(category);
         model.addAttribute("posts", posts);
-
-        // 카테고리 목록 추가
         model.addAttribute("categories", categoryService.findAllFoodCategory());
-        model.addAttribute("selectedCategory", selectedCategory);
-
+        model.addAttribute("selectedCategory", category);
         return "pages/post/post";
     }
 
@@ -76,22 +73,46 @@ public class PostController {
         return "pages/post/postDetail";
     }
 
-//
-//    @GetMapping("/correction")
-//    public String postCorrectionForm(@RequestParam Long postId, Model model) {
-//        PostResponseDTO post = postService.findPostById(postId);
-//        model.addAttribute("post", post);
-//        return "pages/post/postCorrection";
-//    }
 
-//    @PostMapping("/correction")
-//    public String postCorrection(AddPostRequestDTO addPostRequestDTO) {
-//        postService.updatePost(addPostRequestDTO);
-//        return "redirect:/post/detail?postId=" + addPostRequestDTO.getPostId();
-//    }
+    @GetMapping("/correction")
+    public String postCorrectionForm(@RequestParam Long postId, Model model) {
+        PostResponseDTO post = postService.findPostById(postId);
+        PostRequestDTO postRequestDTO = postService.convertToPostRequestDTO(post);
+        model.addAttribute("postRequestDTO", postRequestDTO);
+        model.addAttribute("categories", categoryService.findAllFoodCategory()); // 카테고리 목록 추가
+        return "pages/post/postCorrection";
+    }
+
+    @PostMapping("/correction")
+    public ResponseEntity<?> postCorrection(@ModelAttribute PostRequestDTO postRequestDTO,
+                                            @RequestParam("files") List<MultipartFile> files,
+                                            @RequestParam("mainImageFile") MultipartFile mainImageFile,
+                                            @RequestParam("mainImageUrl") String mainImageUrl) throws IOException, FirebaseAuthException {
+        if (postRequestDTO.getPlaceId() == null) {
+            throw new IllegalArgumentException("placeId가 설정되지 않았습니다.");
+        }
+
+        postService.updatePost(postRequestDTO, files, mainImageFile, mainImageUrl);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("postId", postRequestDTO.getPostId());
+        response.put("message", "Post updated successfully");
+
+        return ResponseEntity.ok(response);
+    }
 
     @GetMapping("/map")
-    public String findAddress() {
+    public String findAddress(@RequestParam(required = false) String redirectTo, Model model) {
+        if (redirectTo != null) {
+            model.addAttribute("redirectTo", redirectTo);
+        }
         return "pages/post/findAddress";
     }
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<?> softDeletePost(@PathVariable Long postId) {
+        postService.softDeletePost(postId);
+        return ResponseEntity.ok("Post deleted successfully");
+    }
 }
+

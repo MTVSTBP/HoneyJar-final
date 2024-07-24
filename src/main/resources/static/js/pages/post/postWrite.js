@@ -267,7 +267,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         try {
-            const response = await fetch('/post/write', {
+            const response = await fetch(postForm.action, {
                 method: 'POST',
                 body: formData
             });
@@ -296,6 +296,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     function openMapPage() {
+        // 주소 값을 초기화
+        localStorage.removeItem('selectedPlace');
+
         localStorage.setItem('postFormState', JSON.stringify({
             postTitle: document.getElementById('postTitle').value.trim(),
             content: document.getElementById('content').value.trim(),
@@ -304,9 +307,9 @@ document.addEventListener("DOMContentLoaded", function () {
             placeName: document.getElementById('placeNameInput').value.trim(),
             category: categoryField.value.trim()
         }));
-        window.location.href = '/post/map';
+        const currentUrl = window.location.href;
+        window.location.href = '/post/map?redirectTo=' + encodeURIComponent(currentUrl);
     }
-
     // 주소 입력 필드 클릭 시
     placeNameInput.addEventListener('click', openMapPage);
     placeNameButton.addEventListener('click', openMapPage);
@@ -319,7 +322,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById('content').value = postFormState.content;
             document.getElementById('bestMenu').value = postFormState.bestMenu;
             document.getElementById('price').value = postFormState.price;
-            document.getElementById('placeNameInput').value = postFormState.placeName;
+            document.getElementById('placeNameInput').value = postFormState.placeName.replace(/^,/, '');
             categoryField.value = postFormState.category;
             localStorage.removeItem('postFormState');
         }
@@ -327,7 +330,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // 주소 복원
         const selectedPlace = JSON.parse(localStorage.getItem('selectedPlace'));
         if (selectedPlace) {
-            document.getElementById('placeNameInput').value = selectedPlace.place_name || selectedPlace.road_address_name;
+            document.getElementById('placeNameInput').value = selectedPlace.road_address_name.replace(/^,/, '') || selectedPlace.address_name.replace(/^,/, '');
             placeNameField.value = selectedPlace.place_name || selectedPlace.road_address_name;
             placeXField.value = selectedPlace.x;
             placeYField.value = selectedPlace.y;
