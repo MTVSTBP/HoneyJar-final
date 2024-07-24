@@ -1,4 +1,4 @@
-package com.tbp.honeyjar.bookmark.DTO;
+package com.tbp.honeyjar.bookmark.dto;
 
 import lombok.Builder;
 import lombok.Getter;

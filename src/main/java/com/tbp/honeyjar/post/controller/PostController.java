@@ -32,14 +32,11 @@ public class PostController {
     }
 
     @GetMapping
-    public String postList(Model model, @RequestParam(required = false) Long selectedCategory) {
-        List<PostListDTO> posts = postService.findAllPost();
+    public String postList(Model model, @RequestParam(required = false) Long category) {
+        List<PostListDTO> posts = postService.findAllPost(category);
         model.addAttribute("posts", posts);
-
-        // 카테고리 목록 추가
         model.addAttribute("categories", categoryService.findAllFoodCategory());
-        model.addAttribute("selectedCategory", selectedCategory);
-
+        model.addAttribute("selectedCategory", category);
         return "pages/post/post";
     }
 
