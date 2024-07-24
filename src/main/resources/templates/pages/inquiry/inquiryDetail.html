@@ -16,7 +16,7 @@
 <!-- //헤더영역 -->
 <div id="container">
     <div class="sub_title">
-        <a href="/" id="back-button">
+        <a href="/settings/inquiry" id="back-button">
             <img src="/assets/svg/arrow_back.svg" alt="뒤로가기">
             <h4>1:1 문의</h4>
         </a>
@@ -27,7 +27,8 @@
                 <h2 th:text="${inquiry.title}">문의 드립니다.</h2>
                 <div class="user_info">
                     <img src="/assets/svg/base_profile.svg" alt="관리자프로필">
-                    <p th:text="${inquiry.userId}">사용자</p>
+<!--                    user.name 출력-->
+                    <p th:text="${username}">사용자</p>
                 </div>
                 <span th:text="${#temporals.format(inquiry.createdAt, 'yyyy-MM-dd')}">2024.07.01</span>
             </div>
@@ -36,13 +37,12 @@
             <p th:text="${inquiry.post}">팔로우 차단할 수 있는 기능은 없나요??</p>
         </div>
     </div>
-    <!-- 관리자인 경우에만 보이게 추후 적용해야됨. -->
     <div class="button_list">
-        <a th:href="@{'/settings/inquiry/correction/' + ${inquiry.id}}" class="inquiry_link">
-            <button>수정</button>
-        </a>
-            <!--        <button id="edit-button" class="btn" th:attr="onclick='window.location.href=\'@ds{/settings/inquiry/correction/{id}(id=${inquiry.id})}\''">수정</button>-->
+        <a th:href="@{'/settings/inquiry/correction/' + ${inquiry.id}}" type="submit" class="btn">수정</a>
     </div>
+
+
+</div>
 
     <!-- 삭제 확인 모달 -->
     <div id="deleteConfirmModal" class="modal">
