@@ -32,7 +32,7 @@
     <select id="getUserDetail" resultMap="MyPageListMap">
         SELECT U.user_id, U.name, U.pr, I.url,
                (SELECT COUNT(*) FROM post AS P WHERE P.user_id = U.user_id) AS numberOfPosts,
-               (SELECT COUNT(*) FROM follow WHERE followee_id = U.user_id) AS numberOfFollowers,
+               (SELECT COUNT(*) FROM follow WHERE followee_id = U.user_id and request_status = 0) AS numberOfFollowers,
                (SELECT COUNT(*) FROM follow WHERE follower_id = U.user_id) AS numberOfFollowees
         FROM user AS U
                  LEFT JOIN image AS I ON U.user_id = I.user_id AND I.post_id IS NULL
@@ -69,13 +69,43 @@
             pr = #{userPr}
         WHERE user_id=#{userId}
     </update>
+    <select id="getMyBookmark" resultMap="postListResultMap">
+        SELECT
+        p.post_id,
+        p.title,
+        p.post,
+        i.url AS main_image_url,
+        COALESCE(b.post_id IS NOT NULL, false) AS bookmarked
+        FROM post p
+        LEFT JOIN (
+        SELECT post_id, url
+        FROM image
+        WHERE is_main = 1
+        ) i ON p.post_id = i.post_id
+        LEFT JOIN bookmark b ON p.post_id = b.post_id
+        WHERE p.user_id = #{userId} AND b.user_id = #{userId}
+        <if test="params.category != null">
+            AND p.category_id = #{params.category}
+        </if>
+    </select>
+    <select id="getMyPosts" resultMap="postListResultMap">
+        SELECT
+        p.post_id,
+        p.title,
+        p.post,
+        i.url AS main_image_url,
+        COALESCE(b.post_id IS NOT NULL, false) AS bookmarked
+        FROM post p
+        LEFT JOIN (
+        SELECT post_id, url
+        FROM image
+        WHERE is_main = 1
+        ) i ON p.post_id = i.post_id
+        LEFT JOIN bookmark b ON p.post_id = b.post_id AND b.user_id = #{userId}
+        WHERE p.user_id = #{userId} AND p.deleted = false
+        <if test="params.category != null">
+            AND p.category_id = #{params.category}
+        </if>
+    </select>
+
 </mapper>
-<!--
-        private Long userId;
-        private String userName;
-        private String userPr;
-        private String profileImage;
-        private Integer numberOfPosts;
-        private Integer numberOfFollowers;
-        private Integer numberOfFollowees;
-        private List<PostDTO> BookmarkedPosts;-->
