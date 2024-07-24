@@ -92,10 +92,12 @@ public class PostController {
         PostResponseDTO post = postService.findPostById(postId);
         Long userId = userService.findByKakaoId(principal.getName()).getUserId();
 
-        requestDto.setPostId(post.getPostId());
-        requestDto.setUserId(userId);
+        if (post != null && userId != null) {
+            requestDto.setPostId(post.getPostId());
+            requestDto.setUserId(userId);
 
-        postService.likePost(requestDto);
+            postService.likePost(requestDto);
+        }
     }
 
     @DeleteMapping("/like/{postId}")
@@ -105,10 +107,12 @@ public class PostController {
         PostResponseDTO post = postService.findPostById(postId);
         Long userId = userService.findByKakaoId(principal.getName()).getUserId();
 
-        requestDto.setPostId(post.getPostId());
-        requestDto.setUserId(userId);
+        if (post != null && userId != null) {
+            requestDto.setPostId(post.getPostId());
+            requestDto.setUserId(userId);
 
-        postService.unlikePost(requestDto);
+            postService.unlikePost(requestDto);
+        }
     }
 
 //
