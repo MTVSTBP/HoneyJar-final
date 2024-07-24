@@ -12,27 +12,6 @@ import java.util.List;
 import java.util.UUID;
 
 
-//@RestController
-//public class FireBaseController {
-//
-//    private final FireBaseService fireBaseService;
-//
-//    public FireBaseController(FireBaseService fireBaseService) {
-//        this.fireBaseService = fireBaseService;
-//    }
-//
-//    @PostMapping("/files")
-//    public List<String> uploadFiles(@RequestParam("file") MultipartFile[] files) throws IOException, FirebaseAuthException {
-//        List<String> fileUrls = new ArrayList<>();
-//        for (MultipartFile file : files) {
-//            String fileName = UUID.randomUUID().toString();
-//            String fileUrl = fireBaseService.uploadFile(file, fileName);
-//            fileUrls.add(fileUrl);
-//        }
-//        return fileUrls;
-//    }
-//}
-
 @RestController
 public class FireBaseController {
 
