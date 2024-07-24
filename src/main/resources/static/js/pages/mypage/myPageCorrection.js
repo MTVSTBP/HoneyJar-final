@@ -12,15 +12,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const modifyButton = document.getElementById('modifyButton');
     const completeButton = document.getElementById('completeButton');
 
-    const data = {
-        profileImage: '/assets/svg/base_profile.svg',
-        nickName: 'Kamil Lee',
-        introduction: '한 달이나 남았어요! 여러분 힘냅시다!',
-        category: [
-            'category-1', 'category-3', 'category-6', 'category-8'
-        ]
-    };
-
     /*
     페이지 로드 시 초기 데이터를 설정합니다.
     사용자의 프로필 이미지, 닉네임, 소개, 선호 카테고리를 설정하고
@@ -79,31 +70,6 @@ document.addEventListener("DOMContentLoaded", function () {
             alert('JPEG, PNG, GIF 형식의 이미지 파일만 업로드 가능합니다.');
         }
     }
-
-    /*
-    addCategoryListeners 함수는 카테고리 체크박스 요소에 이벤트 리스너를 추가합니다.
-    체크박스 선택 상태에 따라 카테고리 레이블의 스타일을 변경하고 폼 유효성 검사를 수행합니다.
-    */
-    function addCategoryListeners() {
-        const categoryCheckboxes = document.querySelectorAll('.category__checkbox');
-        categoryCheckboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                const label = this.closest('.category__label');
-                const customCheckbox = label.querySelector('.category__custom-checkbox');
-                const categoryText = label.querySelector('.category__text');
-
-                if (this.checked) {
-                    customCheckbox.style.borderColor = '#ff8243';
-                    categoryText.style.color = '#ff8243';
-                } else {
-                    customCheckbox.style.borderColor = '#979797';
-                    categoryText.style.color = '#979797';
-                }
-                validateForm();
-            });
-        });
-    }
-
     /*
     addFormValidationListeners 함수는 폼 필드(닉네임, 소개, 카테고리)에 입력 이벤트 리스너를 추가합니다.
     이 리스너들은 폼 유효성 검사를 트리거합니다.
@@ -220,6 +186,37 @@ document.addEventListener("DOMContentLoaded", function () {
 
     loadInitialData();
     addFormValidationListeners();
-    addCategoryListeners();
     validateForm();
+    const postForm = document.getElementById('postForm');
+    postForm.addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        if (!validateForm()) {
+            return;
+        }
+
+
+        const formData = new FormData(postForm);
+
+        try {
+            const response = await fetch('/post/write', {
+                method: 'POST',
+                body: formData
+            });
+
+            const result = await response.json();
+            if (result.error) {
+            } else {
+                userId = result.userId;
+                modal.style.display = 'block'; // 모달 표시
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+        }
+    });
+
+    // 모달 확인 버튼 클릭 시 상세 페이지로 이동
+    completeBtn.addEventListener('click', function () {
+        window.location.href = `/mypage/${userId}`;
+    });
 });

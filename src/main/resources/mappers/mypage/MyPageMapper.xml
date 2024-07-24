@@ -11,14 +11,64 @@
         <result property="numberOfFollowers" column="numberOfFollowers"/>
         <result property="numberOfFollowees" column="numberOfFollowees"/>
     </resultMap>
+    <resultMap id="CategoryListMap" type="com.tbp.honeyjar.mypage.DTO.CategoryDTO">
+        <id property="categoryId" column="category_id"/>
+        <result property="categoryName" column="cateogory_name"/>
+    </resultMap>
+    <resultMap id="postListResultMap" type="com.tbp.honeyjar.post.dto.PostListDTO">
+        <id property="postId" column="post_id"/>
+        <result property="postTitle" column="title"/>
+        <result property="post" column="post"/>
+        <result property="mainImageUrl" column="main_image_url"/>
+        <result property="bookmarked" column="bookmarked"/>
+        <result property="profileImg" column="profile_img"/>
+    </resultMap>
+    <resultMap id="MyPageCorrectionMap" type="com.tbp.honeyjar.mypage.DTO.MyPageCorrectionDTO">
+        <id property="userId" column="user_id"/>
+        <result property="userName" column="name"/>
+        <result property="userPr" column="pr"/>
+        <result property="profileImage" column="url"/>
+    </resultMap>
     <select id="getUserDetail" resultMap="MyPageListMap">
         SELECT U.user_id, U.name, U.pr, I.url,
-               (SELECT COUNT(*) FROM post as P WHERE P.user_id = U.user_id) AS numberOfPosts,
+               (SELECT COUNT(*) FROM post AS P WHERE P.user_id = U.user_id) AS numberOfPosts,
                (SELECT COUNT(*) FROM follow WHERE followee_id = U.user_id) AS numberOfFollowers,
                (SELECT COUNT(*) FROM follow WHERE follower_id = U.user_id) AS numberOfFollowees
-        FROM user as U, image as I
-        WHERE U.user_id = #{userId}
+        FROM user AS U
+                 LEFT JOIN image AS I ON U.user_id = I.user_id AND I.post_id IS NULL
+        WHERE U.user_id = #{userId};
     </select>
+    <select id="getCategoryList" resultMap="CategoryListMap">
+        SELECT category_id, category_name
+        FROM category
+    </select>
+    <select id="getMyPost" resultMap="postListResultMap">
+        SELECT
+            p.post_id,
+            p.title,
+            p.post,
+            i.url AS main_image_url,
+            COALESCE(b.post_id IS NOT NULL, false) AS bookmarked
+        FROM post p
+                 LEFT JOIN (
+            SELECT post_id, url
+            FROM image
+            WHERE is_main = 1
+        ) i ON p.post_id = i.post_id
+                 LEFT JOIN bookmark b ON p.post_id = b.post_id
+        WHERE p.user_id = #{userId}
+    </select>
+    <select id="getMyProfile" resultMap="MyPageCorrectionMap">
+        SELECT user_id, name, pr
+        FROM user
+        WHERE user_id = 1;
+    </select>
+    <update id="updateMyPage" parameterType="com.tbp.honeyjar.mypage.DTO.MyPageCorrectionDTO">
+        UPDATE user
+        SET name = #{userName},
+            pr = #{userPr}
+        WHERE user_id=#{userId}
+    </update>
 </mapper>
 <!--
         private Long userId;
