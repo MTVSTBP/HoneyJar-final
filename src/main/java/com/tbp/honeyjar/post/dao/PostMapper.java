@@ -17,4 +17,6 @@ public interface PostMapper {
     void updatePost(AddPostRequestDTO addPostRequestDTO);
 
     void likePost(PostLikeRequestDto requestDto);
+
+    void unlikePost(PostLikeRequestDto requestDto);
 }

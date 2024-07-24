@@ -138,4 +138,11 @@
         #{userId}
         )
     </insert>
+
+    <!-- 포스트 좋아요 취소 쿼리 -->
+    <delete id="unlikePost" parameterType="com.tbp.honeyjar.post.dto.PostLikeRequestDto">
+        DELETE FROM LIKED
+        WHERE
+            post_id = #{postId} and user_id = #{userId}
+    </delete>
 </mapper>

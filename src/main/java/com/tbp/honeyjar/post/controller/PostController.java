@@ -97,6 +97,18 @@ public class PostController {
         postService.likePost(requestDto);
     }
 
+    @DeleteMapping("/like/{postId}")
+    public void postUnlike(@PathVariable Long postId, Principal principal, PostLikeRequestDto requestDto) {
+
+        PostResponseDTO post = postService.findPostById(postId);
+        Long userId = userService.findByKakaoId(principal.getName()).getUserId();
+
+        requestDto.setPostId(post.getPostId());
+        requestDto.setUserId(userId);
+
+        postService.unlikePost(requestDto);
+    }
+
 //
 //    @GetMapping("/correction")
 //    public String postCorrectionForm(@RequestParam Long postId, Model model) {

@@ -107,4 +107,8 @@ public class PostService {
     public void likePost(PostLikeRequestDto requestDto) {
         postMapper.likePost(requestDto);
     }
+
+    public void unlikePost(PostLikeRequestDto requestDto) {
+        postMapper.unlikePost(requestDto);
+    }
 }

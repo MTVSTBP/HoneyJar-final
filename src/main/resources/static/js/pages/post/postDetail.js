@@ -167,13 +167,36 @@ document.addEventListener("DOMContentLoaded", function () {
             likeImage.src = isLiked ? "/assets/svg/favorite.svg" : "/assets/svg/favorite_color.svg";
 
             // AJAX 요청 보내기 (좋아요 상태 변경)
-            likePost(userId, postId)
+            if (!isLiked){
+                likePost(userId, postId);
+            } else {
+                unlikePost(userId, postId);
+            }
         });
     }
 
     function likePost(userId, postId) {
         fetch('/post/like/' + postId, {
             method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'charset': 'UTF-8'
+            },
+            body: JSON.stringify({
+                'user-id': userId,
+                'post-id': postId
+            })
+        }).then(res => {
+            if (!res.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return res.json();
+        })
+    }
+
+    function unlikePost(userId, postId) {
+        fetch('/post/like/' + postId, {
+            method: "DELETE",
             headers: {
                 'Content-Type': 'application/json',
                 'charset': 'UTF-8'
