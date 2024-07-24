@@ -6,7 +6,6 @@
     margin: 0 auto;
 }
 
-
 #container  a {
     text-decoration: none;
     display: flex;
@@ -69,7 +68,7 @@
 .inquiryDetail .inquiry_context {
     width: 90%;
     line-height: 1.8;
-    /*color: #989898;*/
+    color: #989898;
     font-size: 0.9rem;
     font-weight: 400;
     word-break: break-all;
@@ -93,13 +92,6 @@
 }
 
 #delete-button {
-    margin-left: 0.5rem;
-    background-color: #fff;
-    color: #FF8243;
-    border: 1px solid #FF8243;
-}
-
-#edit-button {
     margin-left: 0.5rem;
     background-color: #fff;
     color: #FF8243;

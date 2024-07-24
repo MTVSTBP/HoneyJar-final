@@ -9,9 +9,9 @@ import java.time.LocalDate;
 public interface UserMapper {
     User findByUserName(String name);
     User findByKakaoId(String kakaoId);
+    Long findUserIdByKakaoId(String kakaoId);
     void insertUser(User user);
     void updateUser(User user);
     void deleteUser(String kakaoId, LocalDate firedAt);
     void reactivateUser(User user);
-    Long findUserIdByKakaoId(String kakaoId);
 }
