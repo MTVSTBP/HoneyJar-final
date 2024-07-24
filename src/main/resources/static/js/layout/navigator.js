@@ -43,11 +43,11 @@ function initNav() {
 
         item.addEventListener('click', () => {
             if (href !== "/templates/pages/post/postWrite.html") {
-                navItems.forEach(navItem => {
-                    navItem.classList.remove('active');
-                    const navImg = navItem.querySelector('img');
-                    navImg.src = navImg.src.replace('_color.svg', '.svg');
-                });
+                // navItems.forEach(navItem => {
+                //     navItem.classList.remove('active');
+                //     const navImg = navItem.querySelector('img');
+                //     navImg.src = navImg.src.replace('_color.svg', '.svg');
+                // });
                 item.classList.add('active');
                 img.src = img.src.replace('.svg', '_color.svg');
             }

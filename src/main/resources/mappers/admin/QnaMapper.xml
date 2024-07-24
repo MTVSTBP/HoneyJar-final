@@ -44,18 +44,14 @@
             title,
             post,
             category_id,
-            user_id,
-            created_at,
-            updated_at
+            user_id
         )
         values
         (
             #{title},
             #{post},
             #{categoryId},
-            #{userId},
-            #{createdAt},
-            #{updatedAt}
+            #{userId}
         )
     </insert>
 
@@ -64,8 +60,7 @@
         set
             title = #{title},
             post = #{post},
-            category_id = #{categoryId},
-            updated_at = #{updatedAt}
+            category_id = #{categoryId}
         where
         qna_id = #{id}
     </update>
