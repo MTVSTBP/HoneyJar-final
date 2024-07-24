@@ -7,7 +7,6 @@ import java.time.LocalDate;
 
 @Mapper
 public interface UserMapper {
-    User getUserByUserId(Long userId);
     User findByUserName(String name);
     User findByKakaoId(String kakaoId);
     void insertUser(User user);

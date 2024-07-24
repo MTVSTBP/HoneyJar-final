@@ -15,8 +15,8 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public User getUserById(Long userId) {
-        return userMapper.getUserByUserId(userId);
+    public User findByKakaoId(String kakaoId) {
+        return userMapper.findByKakaoId(kakaoId);
     }
 
     public void deleteUser(String kakaoId) {
