@@ -14,7 +14,8 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public void updateUser(String kakaoId) {
+    public Long findUserIdByKakaoId(String kakaoId) {
+        return userMapper.findUserIdByKakaoId(kakaoId);
     }
 
     public void deleteUser(String kakaoId) {
