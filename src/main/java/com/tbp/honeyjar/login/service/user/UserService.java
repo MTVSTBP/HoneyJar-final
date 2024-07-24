@@ -1,5 +1,6 @@
 package com.tbp.honeyjar.login.service.user;
 
+import com.tbp.honeyjar.login.entity.user.User;
 import com.tbp.honeyjar.login.mapper.user.UserMapper;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,8 @@ public class UserService {
         this.userMapper = userMapper;
     }
 
-    public void updateUser(String kakaoId) {
+    public User findByKakaoId(String kakaoId) {
+        return userMapper.findByKakaoId(kakaoId);
     }
 
     public void deleteUser(String kakaoId) {
