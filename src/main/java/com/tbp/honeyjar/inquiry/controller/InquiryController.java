@@ -1,5 +1,7 @@
 package com.tbp.honeyjar.inquiry.controller;
 
+import com.tbp.honeyjar.admin.dto.category.QnaCategoryListResponseDto;
+import com.tbp.honeyjar.admin.service.CategoryService;
 import com.tbp.honeyjar.inquiry.dto.InquiryDto;
 import com.tbp.honeyjar.inquiry.dto.InquiryWriteDto;
 import com.tbp.honeyjar.inquiry.dto.InquiryUpdateDto;
@@ -7,6 +9,7 @@ import com.tbp.honeyjar.inquiry.service.InquiryService;
 import com.tbp.honeyjar.login.entity.user.User;
 import com.tbp.honeyjar.login.mapper.user.UserMapper;
 import com.tbp.honeyjar.login.service.user.UserService;
+import com.tbp.honeyjar.mypage.DTO.CategoryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,11 +24,13 @@ public class InquiryController {
     private InquiryService inquiryService;
     private UserService userService;
     private UserMapper userMapper;
+    private CategoryService categoryService;
 
-    public InquiryController(InquiryService inquiryService, UserService userService, UserMapper userMapper) {
+    public InquiryController(InquiryService inquiryService, UserService userService, UserMapper userMapper, CategoryService categoryService) {
         this.inquiryService = inquiryService;
         this.userService = userService;
         this.userMapper = userMapper;
+        this.categoryService = categoryService;
     }
 
     @GetMapping
@@ -39,6 +44,8 @@ public class InquiryController {
     @GetMapping("/write")
     public String inquiryWrite(Model model, Principal principal) {
         String kakaoId = principal.getName();
+        List<QnaCategoryListResponseDto> categories = categoryService.findAllQnaCategory();
+        model.addAttribute("categories", categories);
         return "pages/inquiry/inquiryWrite";
     }
 
