@@ -29,7 +29,7 @@
         WHERE kakao_id = #{kakaoId}
     </select>
 
-    <select id="findUserIdByKakaoId" parameterType="long" resultType="com.tbp.honeyjar.login.entity.user.User">
+    <select id="findUserIdByKakaoId" parameterType="String" resultType="Long">
         SELECT user_id as userId
         FROM user
         WHERE kakao_id = #{kakaoId}
