@@ -6,17 +6,19 @@ public class PlaceDTO {
     private float ratingAvg;
     private String xCoordinate;
     private String yCoordinate;
+    private String roadAddressName;
     private String createdAt;
     private String updatedAt;
 
     public PlaceDTO() {}
 
-    public PlaceDTO(Long placeId, String name, float ratingAvg, String xCoordinate, String yCoordinate, String createdAt, String updatedAt) {
+    public PlaceDTO(Long placeId, String name, float ratingAvg, String xCoordinate, String yCoordinate, String roadAddressName, String createdAt, String updatedAt) {
         this.placeId = placeId;
         this.name = name;
         this.ratingAvg = ratingAvg;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
+        this.roadAddressName = roadAddressName;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -61,6 +63,14 @@ public class PlaceDTO {
         this.yCoordinate = yCoordinate;
     }
 
+    public String getRoadAddressName() {
+        return roadAddressName;
+    }
+
+    public void setRoadAddressName(String roadAddressName) {
+        this.roadAddressName = roadAddressName;
+    }
+
     public String getCreatedAt() {
         return createdAt;
     }
@@ -85,6 +95,7 @@ public class PlaceDTO {
                 ", ratingAvg=" + ratingAvg +
                 ", xCoordinate='" + xCoordinate + '\'' +
                 ", yCoordinate='" + yCoordinate + '\'' +
+                ", roadAddressName='" + roadAddressName + '\'' +
                 ", createdAt='" + createdAt + '\'' +
                 ", updatedAt='" + updatedAt + '\'' +
                 '}';
