@@ -13,9 +13,13 @@ import java.util.Objects;
 
 @Mapper
 public interface BookmarkMapper {
-    void insertBookmark(BookmarkDTO bookmark);
+
+    BookmarkDTO findBookmarkByPostIdAndUserId(HashMap<String, Object> params);
+
+    void insertBookmark(HashMap<String, Object> params);
+
     void deleteBookmark(HashMap<String, Object> params);
-    List<BookmarkDTO> findBookmarksByUserId(Long userId);
-    BookmarkDTO findBookmark(HashMap<String, Object> params);
-    List<BookmarkDTO> findTopBookmarksByUserId(HashMap<String, Object> params);
+
+    List<PostListDTO> findBookmarkedPostsByUserId(HashMap<String, Object> params);
+
 }

@@ -24,4 +24,5 @@ public interface PostMapper {
     Long findPlaceIdByPostId(Long postId);
 
     void softDeletePost(Long postId);
+
 }
