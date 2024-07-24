@@ -1,4 +1,14 @@
 document.addEventListener("DOMContentLoaded", function () {
+
+    document.getElementById('category').addEventListener('change', function() {
+        document.getElementById('filterForm').submit();
+    });
+
+    // 추천순 등..
+    // document.getElementById('goodRestaurant').addEventListener('change', function() {
+    //     document.getElementById('filterForm').submit();
+    // });
+
     // 슬라이더 이미지 설정
     const container = document.getElementById('container');
     const kindWrap = container.querySelector('.kind_wrap');
