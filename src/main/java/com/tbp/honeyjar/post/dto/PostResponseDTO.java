@@ -22,6 +22,7 @@ public class PostResponseDTO {
     private List<String> imageUrls;  // 이미지 URL 리스트
     private String userName;
     private Long userId;
+    private boolean bookmarked;
 
     //    private String profileImg;  // user table
 //    private int like;  // like table
@@ -31,7 +32,7 @@ public class PostResponseDTO {
     public PostResponseDTO() {}
 
 
-    public PostResponseDTO(Long postId, Long categoryId, String categoryName, String title, String recommendMenu, int price, String post, Long placeId, String placeName, String roadAddressName, String xCoordinate, String yCoordinate, LocalDateTime createdAt, LocalDateTime updatedAt, List<String> imageUrls, String userName, Long userId) {
+    public PostResponseDTO(Long postId, Long categoryId, String categoryName, String title, String recommendMenu, int price, String post, Long placeId, String placeName, String roadAddressName, String xCoordinate, String yCoordinate, LocalDateTime createdAt, LocalDateTime updatedAt, List<String> imageUrls, String userName, Long userId, boolean bookmarked) {
         this.postId = postId;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
@@ -49,6 +50,7 @@ public class PostResponseDTO {
         this.imageUrls = imageUrls;
         this.userName = userName;
         this.userId = userId;
+        this.bookmarked = bookmarked;
     }
 
     public Long getPostId() {
@@ -187,6 +189,14 @@ public class PostResponseDTO {
         this.userId = userId;
     }
 
+    public boolean isBookmarked() {
+        return bookmarked;
+    }
+
+    public void setBookmarked(boolean bookmarked) {
+        this.bookmarked = bookmarked;
+    }
+
     @Override
     public String toString() {
         return "PostResponseDTO{" +
@@ -207,6 +217,7 @@ public class PostResponseDTO {
                 ", imageUrls=" + imageUrls +
                 ", userName='" + userName + '\'' +
                 ", userId=" + userId +
+                ", bookmarked=" + bookmarked +
                 '}';
     }
 }

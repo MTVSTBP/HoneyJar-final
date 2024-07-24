@@ -74,9 +74,12 @@
         </div>
 
         <div class="bookmark">
-            <button id="bookmarkButton">
-                <img src="/assets/svg/bookmark_border.svg" alt="북마크" id="bookmarkImage">
-            </button>
+            <form id="bookmarkForm" th:action="@{/bookmarks/toggle}" method="post">
+                <input type="hidden" name="postId" th:value="${post.postId}">
+                <button id="bookmarkButton" th:data-bookmarked="${post.bookmarked}">
+                    <img th:src="${post.bookmarked} ? @{/assets/svg/bookmark.svg} : @{/assets/svg/bookmark_border.svg}" alt="북마크" id="bookmarkImage">
+                </button>
+            </form>
         </div>
     </div>
     <!-- //information -->

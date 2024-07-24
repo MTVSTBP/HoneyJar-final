@@ -152,23 +152,33 @@ document.addEventListener("DOMContentLoaded", function () {
     const bookmarkImage = document.getElementById("bookmarkImage");
 
     if (bookmarkButton && bookmarkImage) {
-        bookmarkButton.addEventListener("click", function () {
-            const isBookmarked = bookmarkImage.src.includes("bookmark_border.svg");
+        bookmarkButton.addEventListener("click", function (event) {
+            event.preventDefault();
+            const form = document.getElementById("bookmarkForm");
+            const formData = new FormData(form);
+            const isBookmarked = bookmarkButton.getAttribute("data-bookmarked") === "true";
 
-            // AJAX 요청 보내기 (북마크 상태 변경)
-            /*
-            sendBookmarkData(isBookmarked).then(response => {
-                if (response.success) {
-                    // 이미지 업데이트
-                    bookmarkImage.src = isBookmarked ? "/assets/svg/bookmark.svg" : "/assets/svg/bookmark_border.svg";
-                } else {
-                    console.error('Bookmark update failed');
-                }
-            });
-            */
-
-            // 임시로 이미지 업데이트
-            bookmarkImage.src = isBookmarked ? "/assets/svg/bookmark.svg" : "/assets/svg/bookmark_border.svg";
+            fetch(form.action, {
+                method: "POST",
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        if (data.bookmarked) {
+                            bookmarkImage.src = "/assets/svg/bookmark.svg";
+                            bookmarkButton.setAttribute("data-bookmarked", "true");
+                        } else {
+                            bookmarkImage.src = "/assets/svg/bookmark_border.svg";
+                            bookmarkButton.setAttribute("data-bookmarked", "false");
+                        }
+                    } else {
+                        console.error('Bookmark update failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         });
     }
 
