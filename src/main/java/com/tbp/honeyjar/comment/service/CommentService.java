@@ -26,7 +26,6 @@ public class CommentService {
     @Transactional
     public void registComment(CommentRegistDTO newComment) {
         commentMapper.registComment(newComment);
-//        commentMapper.findAllComment();
     }
 
     @Transactional
@@ -34,16 +33,14 @@ public class CommentService {
         commentMapper.modifyComment(modifyComment);
     }
 
+    @Transactional
     public CommentRequestDTO findCommentById(Long commentId) {
         return commentMapper.findById(commentId);
     }
 
+    @Transactional
     public void deleteComment(Long commentId) {
          commentMapper.deleteCommentById(commentId);
     }
 
-    // js에서 내 userId 서로 일치하는지 확인
-//    public int registComment(CommentListDTO newComment) {
-//        return commentMapper.registComment(newComment);
-//    }
 }

@@ -46,16 +46,18 @@
 <!--        ORDER BY C.updated_at;-->
     </select>
 
-    <insert id="registComment" parameterType="com.tbp.honeyjar.comment.dto.CommentRegistDTO">
+    <insert id="registComment" parameterType="com.tbp.honeyjar.comment.dto.CommentRegistDTO" keyProperty="postId">
         INSERT INTO COMMENT
         (
                 COMMENT
               , USER_ID
+              , POST_ID
         )
         VALUES
         (
                 #{ comment }
-              , 3
+              , #{ userId }
+              , #{ postId }
         )
     </insert>
 
@@ -73,8 +75,8 @@
         UPDATE COMMENT
         SET
                 COMMENT = #{ comment }
-              , POST_ID = 1
-              , USER_ID = 1
+              , POST_ID = #{ postId }
+              , USER_ID = #{ userId }
         WHERE
                 COMMENT_ID = #{ commentId }
     </update>
@@ -84,4 +86,6 @@
         WHERE
                 COMMENT_ID = #{ commentId }
     </delete>
+
+
 </mapper>

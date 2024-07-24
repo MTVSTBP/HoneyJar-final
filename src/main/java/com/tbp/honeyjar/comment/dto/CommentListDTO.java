@@ -4,9 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
-@Getter
-@NoArgsConstructor
+
 public class CommentListDTO {
     private long userId;
     private long postId;
@@ -16,6 +14,9 @@ public class CommentListDTO {
     private String userName;
     private String url;
 
+    public CommentListDTO() {
+    }
+
     public CommentListDTO(long userId, long postId, long commentId, String comment, String updatedAt, String userName, String url) {
         this.userId = userId;
         this.postId = postId;
@@ -23,6 +24,62 @@ public class CommentListDTO {
         this.comment = comment;
         this.updatedAt = updatedAt;
         this.userName = userName;
+        this.url = url;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
+    public long getPostId() {
+        return postId;
+    }
+
+    public void setPostId(long postId) {
+        this.postId = postId;
+    }
+
+    public long getCommentId() {
+        return commentId;
+    }
+
+    public void setCommentId(long commentId) {
+        this.commentId = commentId;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(String updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
         this.url = url;
     }
 
