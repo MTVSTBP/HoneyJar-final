@@ -76,6 +76,7 @@ public class PostController {
         int commentCnt = postService.commentCount(postId);
         model.addAttribute("post", post);
         model.addAttribute("commentCnt", commentCnt);
+//        System.out.println("commentCnt= " + commentCnt);
 
         return "pages/post/postDetail";
     }

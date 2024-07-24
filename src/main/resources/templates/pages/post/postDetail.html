@@ -98,9 +98,9 @@
             </button>
         </div>
         <div class="comment">
-            <button id="commentButton">
+            <button id="commentButton" th:data-count="${commentCnt}">
                 <img src="/assets/svg/mode_comment.svg" alt="댓글">
-                <span id="commentCount">0</span>
+                <span id="commentCount" th:text="${commentCnt}">0</span>
             </button>
         </div>
         <div class="scope" id="rating">
