@@ -12,6 +12,7 @@
         <result property="mainImageUrl" column="main_image_url"/>
         <result property="bookmarked" column="bookmarked"/>
         <result property="categoryId" column="category_id"/>
+        <result property="userName" column="user_name"/>
         <!-- <result property="profileImg" column="profile_img"/> -->
     </resultMap>
 
@@ -31,6 +32,7 @@
         <result property="yCoordinate" column="y_coordinate"/>
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
+        <result property="userName" column="user_name"/>
         <collection property="imageUrls" ofType="java.lang.String">
             <result column="url"/>
         </collection>
@@ -53,7 +55,8 @@
                 WHEN b.post_id IS NOT NULL THEN true
                 ELSE false
             END AS bookmarked,
-            p.category_id
+            p.category_id,
+            u.name AS user_name
         FROM post p
         LEFT JOIN (
             SELECT post_id, url
@@ -61,6 +64,7 @@
             WHERE is_main = 1
         ) i ON p.post_id = i.post_id
         LEFT JOIN bookmark b ON p.post_id = b.post_id
+        LEFT JOIN user u ON p.user_id = u.user_id
         WHERE p.deleted = FALSE
         <if test="category != null">
             AND p.category_id = #{category}
@@ -84,10 +88,12 @@
             pl.road_address_name,
             pl.x_coordinate,
             pl.y_coordinate,
-            i.url
+            i.url,
+            u.name AS user_name
         FROM post p
         LEFT JOIN place pl ON p.place_id = pl.place_id
         LEFT JOIN image i ON p.post_id = i.post_id
+        LEFT JOIN user u ON p.user_id = u.user_id
         WHERE p.post_id = #{postId} AND p.deleted = FALSE
         ORDER BY i.is_main DESC, i.image_id ASC
     </select>

@@ -93,9 +93,6 @@ public class PostService {
         return UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
     }
 
-    public List<PostListDTO> findAllPost() {
-        return postMapper.findAllPost();
-    }
 
     public PostResponseDTO findPostById(Long postId) {
         PostResponseDTO postResponseDTO = postMapper.findPostById(postId);

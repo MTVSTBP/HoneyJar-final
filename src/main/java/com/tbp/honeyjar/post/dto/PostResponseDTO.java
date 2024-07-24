@@ -20,6 +20,7 @@ public class PostResponseDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<String> imageUrls;  // 이미지 URL 리스트
+    private String userName;
 
     //    private String profileImg;  // user table
 //    private int like;  // like table
@@ -29,7 +30,7 @@ public class PostResponseDTO {
     public PostResponseDTO() {}
 
 
-    public PostResponseDTO(Long postId, Long categoryId, String categoryName, String title, String recommendMenu, int price, String post, Long placeId, String placeName, String xCoordinate, String yCoordinate, String roadAddressName, LocalDateTime createdAt, LocalDateTime updatedAt, List<String> imageUrls) {
+    public PostResponseDTO(Long postId, Long categoryId, String categoryName, String title, String recommendMenu, int price, String post, Long placeId, String placeName, String roadAddressName, String xCoordinate, String yCoordinate, LocalDateTime createdAt, LocalDateTime updatedAt, List<String> imageUrls, String userName) {
         this.postId = postId;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
@@ -39,13 +40,13 @@ public class PostResponseDTO {
         this.post = post;
         this.placeId = placeId;
         this.placeName = placeName;
+        this.roadAddressName = roadAddressName;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
-        this.roadAddressName = roadAddressName;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.imageUrls = imageUrls;
-
+        this.userName = userName;
     }
 
     public Long getPostId() {
@@ -119,6 +120,15 @@ public class PostResponseDTO {
     public void setPlaceName(String placeName) {
         this.placeName = placeName;
     }
+
+    public String getRoadAddressName() {
+        return roadAddressName;
+    }
+
+    public void setRoadAddressName(String roadAddressName) {
+        this.roadAddressName = roadAddressName;
+    }
+
     public String getxCoordinate() {
         return xCoordinate;
     }
@@ -133,14 +143,6 @@ public class PostResponseDTO {
 
     public void setyCoordinate(String yCoordinate) {
         this.yCoordinate = yCoordinate;
-    }
-
-    public String getRoadAddressName() {
-        return roadAddressName;
-    }
-
-    public void setRoadAddressName(String roadAddressName) {
-        this.roadAddressName = roadAddressName;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -167,6 +169,13 @@ public class PostResponseDTO {
         this.imageUrls = imageUrls;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     @Override
     public String toString() {
@@ -186,6 +195,7 @@ public class PostResponseDTO {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", imageUrls=" + imageUrls +
+                ", userName='" + userName + '\'' +
                 '}';
     }
 }
