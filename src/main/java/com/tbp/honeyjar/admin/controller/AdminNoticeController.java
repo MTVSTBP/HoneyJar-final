@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.time.LocalDateTime;
 import java.util.List;
-
-import static java.time.LocalDateTime.*;
 
 @RequiredArgsConstructor
 @Controller
@@ -57,9 +54,6 @@ public class AdminNoticeController {
     @PostMapping("/write")
     public String writeNotice(NoticeSaveRequestDto requestDto) {
 
-        requestDto.setCreatedAt(now());
-        requestDto.setUpdatedAt(now());
-
         noticeService.save(requestDto);
 
         return "redirect:/admin/notice";
@@ -83,7 +77,6 @@ public class AdminNoticeController {
         NoticeResponseDto notice = noticeService.findById(notice_id);
 
         if (notice != null) {
-            requestDto.setUpdatedAt(now());
             requestDto.setNoticeId(notice.getNoticeId());
             noticeService.correction(requestDto);
         }
