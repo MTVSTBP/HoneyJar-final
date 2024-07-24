@@ -1,9 +1,6 @@
 package com.tbp.honeyjar.admin.dto.notice;
 
-import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
