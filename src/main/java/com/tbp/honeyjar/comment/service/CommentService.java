@@ -23,24 +23,23 @@ public class CommentService {
         return commentMapper.findAllComment();
     }
 
-    @Transactional
     public void registComment(CommentRegistDTO newComment) {
         commentMapper.registComment(newComment);
     }
 
-    @Transactional
     public void modifyComment(CommentModifyDTO modifyComment) {
         commentMapper.modifyComment(modifyComment);
     }
 
-    @Transactional
     public CommentRequestDTO findCommentById(Long commentId) {
         return commentMapper.findById(commentId);
     }
 
-    @Transactional
     public void deleteComment(Long commentId) {
          commentMapper.deleteCommentById(commentId);
     }
 
+    public void softDeleteComment(Long postId) {
+        commentMapper.softDeleteComment(postId);
+    }
 }

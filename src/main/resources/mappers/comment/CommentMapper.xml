@@ -87,5 +87,14 @@
                 COMMENT_ID = #{ commentId }
     </delete>
 
+    <!-- 코멘트 소프트 삭제 쿼리-->
+    <update id="softDeleteComment">
+        UPDATE
+                COMMENT
+        SET
+                DELETED = TRUE
+        WHERE
+                POST_ID = #{ post_id }
+    </update>
 
 </mapper>

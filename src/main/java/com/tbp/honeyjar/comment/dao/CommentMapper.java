@@ -20,4 +20,6 @@ public interface CommentMapper {
     CommentRequestDTO findById(Long commentId);
 
     void deleteCommentById(Long commentId);
+
+    void softDeleteComment(Long postId);
 }

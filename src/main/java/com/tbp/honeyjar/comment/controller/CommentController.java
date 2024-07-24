@@ -23,7 +23,6 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-
     // 댓글 조회
     @GetMapping
     public String commentList(Model model) {
@@ -35,16 +34,17 @@ public class CommentController {
     }
 
     // 댓글 등록
-    @PostMapping("regist") // long id?????
+    @PostMapping("regist") //
     public String registComment(@ModelAttribute CommentRegistDTO newComment) {
 //        System.out.println(newComment);
 
         commentService.registComment(newComment);
-//        commentService.findAllComment();
+
 
         return "redirect:/comment";
     }
 
+    // 댓글 수정
     @PostMapping("modify/{comment_id}")
     public String modifyComment(@PathVariable Long comment_id, CommentModifyDTO modifyComment) {
 //        System.out.println(modifyComment);
@@ -58,12 +58,20 @@ public class CommentController {
         return "redirect:/comment";
     }
 
+    // 댓글 삭제
     @GetMapping("{comment_id}")
     public String deleteComment(@PathVariable Long comment_id) {
 
-        System.out.println("comment_id = " + comment_id);
+//        System.out.println("comment_id = " + comment_id);
         commentService.deleteComment(comment_id);
 
         return "redirect:/comment";
+    }
+
+    // comment softDelete
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<?> softDeletePost(@PathVariable Long postId) {
+        commentService.softDeleteComment(postId);
+        return ResponseEntity.ok("Comment deleted successfully");
     }
 }
