@@ -22,7 +22,7 @@ public class RatingController {
                 .build();
 
         model.addAttribute("ratingDetail", ratingDTO);
-        return "pages/post/postDetail";  // 실제 상세 페이지 경로로 변경해야 합니다.
+        return "pages/post/postDetail";
     }
 
 }

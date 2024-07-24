@@ -65,7 +65,7 @@
 
             <div class="address info">
                 <h5>주소</h5>
-                <p th:text="*{placeName}">주소</p>
+                <p th:text="*{roadAddressName}">주소</p>
             </div>
         </div>
 
@@ -150,6 +150,37 @@
     // 마커가 지도 위에 표시되도록 설정합니다
     marker.setMap(map);
     /*]]>*/
+</script>
+
+
+<!-- 삭제 확인 모달 -->
+<div id="deleteConfirmModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-text">
+            <p>정말 삭제하시겠습니까?</p>
+        </div>
+        <div class="button-box">
+            <button id="confirmClose" class="confirm close2">취소</button>
+            <button id="confirmDelete" class="confirm">확인</button>
+        </div>
+    </div>
+</div>
+
+<!-- 삭제 완료 모달 -->
+<div id="deleteSuccessModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-text">
+            <p>삭제가 완료되었습니다!</p>
+        </div>
+        <button id="completeDelete" class="complete">확인</button>
+    </div>
+</div>
+
+
+<script th:inline="javascript">
+    var postId = /*[[${post.postId}]]*/ 'defaultPostId';
 </script>
 
 <script th:inline="javascript" type="text/javascript" th:src="@{/js/pages/post/postDetail.js}"></script>

@@ -4,7 +4,6 @@ import com.tbp.honeyjar.inquiry.dto.InquiryDto;
 import com.tbp.honeyjar.inquiry.dto.InquiryWriteDto;
 import com.tbp.honeyjar.inquiry.dto.InquiryUpdateDto;
 import com.tbp.honeyjar.inquiry.mapper.InquiryMapper;
-import com.tbp.honeyjar.login.mapper.user.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +13,9 @@ import java.util.List;
 @Service
 public class InquiryService {
     InquiryMapper inquiryMapper;
-    UserMapper userMapper;
 
-    public InquiryService(UserMapper userMapper, InquiryMapper inquiryMapper) {
-        this.userMapper = userMapper;
+    @Autowired(required = true)
+    public InquiryService(InquiryMapper inquiryMapper) {
         this.inquiryMapper = inquiryMapper;
     }
 
@@ -25,8 +23,7 @@ public class InquiryService {
         return inquiryMapper.getInquiryList();
     }
 
-    public List<InquiryDto> getInquiryListByUserId(String kakaoId) {
-        Long userId = userMapper.findByKakaoId(kakaoId).getUserId();
+    public List<InquiryDto> getInquiryListByUserId(Long userId) {
         return inquiryMapper.getInquiryListByUserId(userId);
     }
 

@@ -21,7 +21,6 @@ import java.util.Map;
 @Builder
 public class UserPrincipal implements OAuth2User, UserDetails, OidcUser {
     private Long userId;
-    private String kakaoId;
     private String name;
     private String pr;
     private Collection<GrantedAuthority> authorities;
