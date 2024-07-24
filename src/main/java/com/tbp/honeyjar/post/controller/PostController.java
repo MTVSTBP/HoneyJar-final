@@ -86,6 +86,7 @@ public class PostController {
     }
 
     @PostMapping("/like/{postId}")
+    @ResponseBody
     public void postLike(@PathVariable Long postId, Principal principal, PostLikeRequestDto requestDto) {
 
         PostResponseDTO post = postService.findPostById(postId);
@@ -98,6 +99,7 @@ public class PostController {
     }
 
     @DeleteMapping("/like/{postId}")
+    @ResponseBody
     public void postUnlike(@PathVariable Long postId, Principal principal, PostLikeRequestDto requestDto) {
 
         PostResponseDTO post = postService.findPostById(postId);
