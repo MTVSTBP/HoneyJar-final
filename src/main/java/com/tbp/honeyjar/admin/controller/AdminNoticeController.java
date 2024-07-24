@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.time.LocalDateTime;
 import java.util.List;
+
+import static java.time.LocalDateTime.*;
 
 @RequiredArgsConstructor
 @Controller
@@ -36,7 +39,6 @@ public class AdminNoticeController {
 
     @GetMapping("/{notice_id}")
     public String noticeDetail(@PathVariable Long notice_id, Model model) {
-
         NoticeResponseDto notice = noticeService.findById(notice_id);
 
         if (notice != null) {
@@ -53,6 +55,8 @@ public class AdminNoticeController {
 
     @PostMapping("/write")
     public String writeNotice(NoticeSaveRequestDto requestDto) {
+        requestDto.setCreatedAt(now());
+        requestDto.setUpdatedAt(now());
 
         noticeService.save(requestDto);
 
@@ -61,7 +65,6 @@ public class AdminNoticeController {
 
     @GetMapping("/correction/{notice_id}")
     public String correction(@PathVariable Long notice_id, Model model) {
-
         NoticeResponseDto notice = noticeService.findById(notice_id);
 
         if (notice != null) {
@@ -73,10 +76,10 @@ public class AdminNoticeController {
 
     @PostMapping("/correction/{notice_id}")
     public String correctionNotice(@PathVariable Long notice_id, NoticeCorrectionRequestDto requestDto) {
-
         NoticeResponseDto notice = noticeService.findById(notice_id);
 
-        if (notice != null) {
+        if (notice != null){
+            requestDto.setUpdatedAt(now());
             requestDto.setNoticeId(notice.getNoticeId());
             noticeService.correction(requestDto);
         }
@@ -86,10 +89,9 @@ public class AdminNoticeController {
 
     @GetMapping("/delete/{notice_id}")
     public String delete(@PathVariable Long notice_id) {
-
         NoticeResponseDto notice = noticeService.findById(notice_id);
 
-        if (notice != null) {
+        if (notice != null){
             noticeService.delete(notice.getNoticeId());
         }
 

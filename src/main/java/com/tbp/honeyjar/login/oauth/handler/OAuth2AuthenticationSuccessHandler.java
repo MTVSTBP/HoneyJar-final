@@ -2,10 +2,8 @@ package com.tbp.honeyjar.login.oauth.handler;
 
 import com.tbp.honeyjar.login.common.CookieUtil;
 import com.tbp.honeyjar.login.config.properties.AppProperties;
-import com.tbp.honeyjar.login.oauth.entity.ProviderType;
 import com.tbp.honeyjar.login.oauth.entity.RoleType;
-import com.tbp.honeyjar.login.oauth.info.OAuth2UserInfo;
-import com.tbp.honeyjar.login.oauth.info.OAuth2UserInfoFactory;
+import com.tbp.honeyjar.login.oauth.entity.user.UserPrincipal;
 import com.tbp.honeyjar.login.oauth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.tbp.honeyjar.login.oauth.token.AuthToken;
 import com.tbp.honeyjar.login.oauth.token.AuthTokenProvider;
@@ -16,15 +14,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
 
@@ -54,6 +50,32 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             return;
         }
 
+        // 토큰 생성 로직
+        String userId = getUserIdFromAuthentication(authentication);
+        Date now = new Date();
+        AuthToken accessToken = tokenProvider.createAuthToken(
+                userId,
+                RoleType.USER.getCode(),
+                new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
+        );
+
+        // 리프레시 토큰 생성
+        long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
+        AuthToken refreshToken = tokenProvider.createAuthToken(
+                appProperties.getAuth().getTokenSecret(),
+                new Date(now.getTime() + refreshTokenExpiry)
+        );
+
+        // 쿠키에 토큰 저장
+        int accessTokenMaxAge = (int) appProperties.getAuth().getTokenExpiry() / 1000;
+        CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), accessTokenMaxAge);
+
+        int refreshTokenMaxAge = (int) refreshTokenExpiry / 1000;
+        CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), refreshTokenMaxAge);
+
+        // SecurityContext 설정
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         clearAuthenticationAttributes(request, response);
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
@@ -71,42 +93,19 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
         String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
+//        String targetUrl = redirectUri.orElse("/home");
+        log.info("Before Redirecting to: {}", targetUrl);
 
-        OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
-        ProviderType providerType = ProviderType.valueOf(authToken.getAuthorizedClientRegistrationId().toUpperCase());
+        // 사용자 역할에 따라 targetUrl 결정
+        if (hasAdminRole(authentication)) {
+            targetUrl = "/admin";
+        } else {
+            targetUrl = "/home";
+        }
+        log.info("After Redirecting to: {}", targetUrl);
 
-        OidcUser oidcUser = ((OidcUser) authentication.getPrincipal());
-        OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerType, oidcUser.getAttributes());
-
-        Date now = new Date();
-        AuthToken accessToken = tokenProvider.createAuthToken(
-                userInfo.getId(),
-                RoleType.USER.getCode(),
-                new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
-        );
-        log.debug("AuthToken accessToken: {}", accessToken);
-
-        // 리프레시 토큰 설정
-        long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
-        log.debug("refreshTokenExpiry: {}", refreshTokenExpiry);
-
-        AuthToken refreshToken = tokenProvider.createAuthToken(
-                appProperties.getAuth().getTokenSecret(),
-                new Date(now.getTime() + refreshTokenExpiry)
-        );
-        log.debug("AuthToken refreshToken: {}", refreshToken);
-
-        // 액세스 토큰 쿠키 설정
-        int accessTokenCookieMaxAge = (int) appProperties.getAuth().getTokenExpiry() / 1000;
-        CookieUtil.deleteCookie(request, response, ACCESS_TOKEN);
-        CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), accessTokenCookieMaxAge);
-
-        // 리프레시 토큰 쿠키 설정
-        int refreshTokenCookieMaxAge  = (int) refreshTokenExpiry / 1000;
-        CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
-        CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), refreshTokenCookieMaxAge);
-
-        return targetUrl;
+        return UriComponentsBuilder.fromUriString(targetUrl)
+                .build().toUriString();
     }
 
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
@@ -114,17 +113,16 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         authorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
     }
 
-    private boolean hasAuthority(Collection<? extends GrantedAuthority> authorities, String authority) {
-        if (authorities == null) {
-            return false;
+    private String getUserIdFromAuthentication(Authentication authentication) {
+        if (authentication.getPrincipal() instanceof UserPrincipal userPrincipal) {
+            return userPrincipal.getUserId().toString();
         }
+        throw new IllegalArgumentException("Unexpected authentication principal");
+    }
 
-        for (GrantedAuthority grantedAuthority : authorities) {
-            if (authority.equals(grantedAuthority.getAuthority())) {
-                return true;
-            }
-        }
-        return false;
+    private boolean hasAdminRole(Authentication authentication) {
+        return authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(RoleType.ADMIN.getCode()));
     }
 
     private boolean isAuthorizedRedirectUri(String uri) {
