@@ -156,21 +156,25 @@ document.addEventListener("DOMContentLoaded", function () {
     const likeImage = document.getElementById("likeImage");
     const likeCount = document.getElementById("likeCount");
 
-    const userId = parseInt(likeButton.getAttribute("data-user-id"))
-    const postId = parseInt(likeButton.getAttribute("data-post-id"))
-
     if (likeButton && likeImage && likeCount) {
+        const userId = parseInt(likeButton.getAttribute("data-user-id"))
+        const postId = parseInt(likeButton.getAttribute("data-post-id"))
+        let isLiked = likeButton.getAttribute("data-liked") === "true";
+
+        console.log(isLiked)
+
         likeButton.addEventListener("click", function () {
-            let isLiked = likeImage.src.includes("favorite_color.svg");
             const newCount = isLiked ? parseInt(likeCount.textContent) - 1 : parseInt(likeCount.textContent) + 1;
             likeCount.textContent = newCount;
             likeImage.src = isLiked ? "/assets/svg/favorite.svg" : "/assets/svg/favorite_color.svg";
 
             // AJAX 요청 보내기 (좋아요 상태 변경)
-            if (!isLiked){
+            if (!isLiked) {
                 likePost(userId, postId);
+                isLiked = true;
             } else {
                 unlikePost(userId, postId);
+                isLiked = false;
             }
         });
     }

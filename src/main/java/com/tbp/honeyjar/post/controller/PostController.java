@@ -80,8 +80,18 @@ public class PostController {
         PostResponseDTO post = postService.findPostById(postId);
         Long userId = userService.findByKakaoId(principal.getName()).getUserId();
 
-        model.addAttribute("post", post);
-        model.addAttribute("userId", userId);
+        if (post != null && userId != null) {
+            int likeCount = postService.getLikeCountByPostId(postId);
+            boolean isLiked = postService.getIsLikedByPostIdAndUserId(postId, userId);
+
+            System.out.println("isLiked = " + isLiked);
+
+            model.addAttribute("post", post);
+            model.addAttribute("userId", userId);
+            model.addAttribute("likeCount", likeCount);
+            model.addAttribute("isLiked", isLiked);
+        }
+
         return "pages/post/postDetail";
     }
 

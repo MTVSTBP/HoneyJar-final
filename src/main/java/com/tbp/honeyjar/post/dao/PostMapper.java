@@ -19,4 +19,8 @@ public interface PostMapper {
     void likePost(PostLikeRequestDto requestDto);
 
     void unlikePost(PostLikeRequestDto requestDto);
+
+    int getLikeCountByPostId(Long postId);
+
+    int getIsLikedByPostIdAndUserId(Long postId, Long userId);
 }

@@ -111,4 +111,12 @@ public class PostService {
     public void unlikePost(PostLikeRequestDto requestDto) {
         postMapper.unlikePost(requestDto);
     }
+
+    public int getLikeCountByPostId(Long postId) {
+        return postMapper.getLikeCountByPostId(postId);
+    }
+
+    public boolean getIsLikedByPostIdAndUserId(Long postId, Long userId) {
+        return postMapper.getIsLikedByPostIdAndUserId(postId, userId) == 1;
+    }
 }
