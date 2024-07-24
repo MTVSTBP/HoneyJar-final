@@ -17,7 +17,7 @@
         <div id="detailContainer">
             <div id="userDetail">
                 <div th:text="${myPage.userName}">유저 이름</div>
-                <a th:href="@{/mypage/{userId}/correction(userId=${myPage.userId})}">
+                <a th:href="@{/mypage/correction}">
                     <img id="pencil" src="/assets/svg/pencil.svg" alt="사진이 없습니다."/>
                 </a>
             </div>
@@ -61,13 +61,17 @@
     <div id="bookMark">
         <div id="textLine">
             <div id="bookMarkText">북마크</div>
-            <div id="more">더보기&gt</div>
-        </div>
-            <div class="my_list">
-                <ul>
-                    <th:block th:replace="common/components/postComponent :: postComponent(posts=${posts})"></th:block>
-                </ul>
+            <div>
+                <a id="more" th:href="@{/mypage/bookmark}">
+                    더보기&gt
+                </a>
             </div>
+        </div>
+        <div class="my_list">
+            <ul>
+                <th:block th:replace="common/components/postComponent :: postComponent(posts=${posts}, maxPosts=2)"></th:block>
+            </ul>
+        </div>
     </div>
 <!--    <div th:replace="components/modal :: modal(props=${props})"></div>-->
     <div id="navigate"></div>
