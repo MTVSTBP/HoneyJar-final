@@ -267,18 +267,21 @@ document.addEventListener("DOMContentLoaded", function () {
         formData.append('place.roadAddressName', placeRoadAddressNameField.value);
 
         // Add selected files to formData
+        let filesAdded = false;
         selectedFiles.forEach((fileData, index) => {
-            if (index !== thumbnailIndex) {
-                const blob = dataURLtoBlob(fileData.dataURL);
+            const blob = dataURLtoBlob(fileData.dataURL);
+            if (index === thumbnailIndex) {
+                formData.append('mainImageFile', blob, fileData.name);
+                formData.append('mainImageUrl', fileData.name);
+            } else {
                 formData.append('files', blob, fileData.name);
+                filesAdded = true;
             }
         });
 
-        // Add main image URL and file
-        if (thumbnailIndex !== null) {
-            const mainImageBlob = dataURLtoBlob(selectedFiles[thumbnailIndex].dataURL);
-            formData.append('mainImageUrl', selectedFiles[thumbnailIndex].name);
-            formData.append('mainImageFile', mainImageBlob, selectedFiles[thumbnailIndex].name);
+        // Check if no additional files were added
+        if (!filesAdded) {
+            formData.delete('files');
         }
 
         try {
@@ -310,6 +313,7 @@ document.addEventListener("DOMContentLoaded", function () {
             showErrorMessage(errorMessage, 'An error occurred while submitting the form.');
         }
     });
+
 
 
 

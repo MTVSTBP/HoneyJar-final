@@ -165,13 +165,11 @@ public class PostService {
         }
         placeDTO.setPlaceId(placeId);
 
-
-        // 여기에 중복 제거 코드 추가
+        // 중복 제거 코드
         placeDTO.setName(removeDuplicates(placeDTO.getName()));
         placeDTO.setxCoordinate(removeDuplicates(placeDTO.getxCoordinate()));
         placeDTO.setyCoordinate(removeDuplicates(placeDTO.getyCoordinate()));
         placeDTO.setRoadAddressName(removeDuplicates(placeDTO.getRoadAddressName()));
-
 
         System.out.println("Updated PlaceDTO: " + placeDTO);
 
@@ -224,6 +222,7 @@ public class PostService {
         // 포스트 업데이트
         postMapper.updatePost(postRequestDTO);
     }
+
 
     private String removeDuplicates(String value) {
         if (value == null || value.isEmpty()) {

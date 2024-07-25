@@ -113,14 +113,15 @@ public class PostController {
     public String postCorrectionForm(@RequestParam Long postId, Model model) {
         PostResponseDTO post = postService.findPostById(postId);
         PostRequestDTO postRequestDTO = postService.convertToPostRequestDTO(post);
+        postRequestDTO.setExistingImageUrls(post.getImageUrls()); // 기존 이미지 URL 설정
         model.addAttribute("postRequestDTO", postRequestDTO);
-        model.addAttribute("categories", categoryService.findAllFoodCategory()); // 카테고리 목록 추가
+        model.addAttribute("categories", categoryService.findAllFoodCategory());
         return "pages/post/postCorrection";
     }
 
     @PostMapping("/correction")
     public ResponseEntity<?> postCorrection(@ModelAttribute PostRequestDTO postRequestDTO,
-                                            @RequestParam("files") List<MultipartFile> files,
+                                            @RequestParam(value = "files", required = false) List<MultipartFile> files,
                                             @RequestParam("mainImageFile") MultipartFile mainImageFile,
                                             @RequestParam("mainImageUrl") String mainImageUrl,
                                             Principal principal) throws IOException, FirebaseAuthException {
@@ -131,6 +132,11 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("수정 권한이 없습니다.");
         }
 
+        // 빈 파일 리스트 처리
+        if (files == null) {
+            files = new ArrayList<>();
+        }
+
         postService.updatePost(postRequestDTO, files, mainImageFile, mainImageUrl);
         Map<String, Object> response = new HashMap<>();
         response.put("postId", postRequestDTO.getPostId());
@@ -138,6 +144,7 @@ public class PostController {
 
         return ResponseEntity.ok(response);
     }
+
 
     @GetMapping("/map")
     public String findAddress(@RequestParam(required = false) String redirectTo, Model model) {
