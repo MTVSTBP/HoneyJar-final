@@ -40,10 +40,10 @@ public class PostController {
     public String postList(Model model,
                            @RequestParam(required = false) Long category,
                            @RequestParam(defaultValue = "0") int page,
-                           @RequestParam(defaultValue = "4") int size) {
+                           @RequestParam(defaultValue = "6") int size) {
         // 최초 요청 시 4개의 포스트만 반환
         if (page == 0) {
-            List<PostListDTO> posts = postService.findPostsByCategory(category, 0, 4); // 4개만 가져오기
+            List<PostListDTO> posts = postService.findPostsByCategory(category, 0, 6); // 4개만 가져오기
             model.addAttribute("posts", posts);
             model.addAttribute("categories", categoryService.findAllFoodCategory());
             model.addAttribute("selectedCategory", category);
