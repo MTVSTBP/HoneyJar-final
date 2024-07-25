@@ -9,7 +9,9 @@ import com.tbp.honeyjar.post.dto.PostListDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -24,4 +26,14 @@ public class MyPageService {
     public List<PostListDTO> getMyPost(Long userId) {return myPageMapper.getMyPost(userId);}
     public MyPageCorrectionDTO getMyProfile(Long userId){return myPageMapper.getMyProfile(userId);}
     public void updateMyProfile(MyPageCorrectionDTO myPageCorrectionDTO) {myPageMapper.updateMyPage(myPageCorrectionDTO);}
+    public List<PostListDTO> getMyBookmark(Long category, Long userId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("category", category);
+        return myPageMapper.getMyBookmark(params, userId);
+    }
+    public List<PostListDTO> getMyPost(Long category, Long userId) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("category", category);
+        return myPageMapper.getMyPost(params, userId);
+    }
 }

@@ -6,7 +6,7 @@
       th:with="pageTitle='Bookmark'"
 >
 <head>
-    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/post/post.css}"/>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/bookmark/bookmark.css}"/>
     <th:block layout:fragment="title">
         <title th:text="${pageTitle}">Bookmark</title>
     </th:block>
@@ -26,13 +26,13 @@
                                 th:selected="${category.id == selectedCategory}"
                                 th:text="${category.name}">카테고리</option>
                     </select>
-                    <select id="category2" name="sortOption" onchange="document.getElementById('filterForm').submit()">
-                        <option value="">정렬</option>
-                        <option th:each="sortOption : ${sortOptions}"
-                                th:value="${sortOption.id}"
-                                th:selected="${sortOption.id == selectedSortOption}"
-                                th:text="${sortOption.name}">정렬</option>
-                    </select>
+<!--                    <select id="category2" name="sortOption" onchange="document.getElementById('filterForm').submit()">-->
+<!--                        <option value="">정렬</option>-->
+<!--                        <option th:each="sortOption : ${sortOptions}"-->
+<!--                                th:value="${sortOption.id}"-->
+<!--                                th:selected="${sortOption.id == selectedSortOption}"-->
+<!--                                th:text="${sortOption.name}">정렬</option>-->
+<!--                    </select>-->
                 </div>
             </div>
             <!-- //category -->
@@ -51,14 +51,14 @@
     <!-- myListbox -->
     <div class="my_list">
         <ul>
-            <li th:each="postWithBookmark : ${postWithBookmarks}" class="item">
-                <a href="javascript:void(0)">
-                    <img th:src="${postWithBookmark.post.img1}" alt="임시이미지">
-                    <div class="bookmark" id="bookmarkButton" th:classappend="${postWithBookmark.bookmark.bookmarked} ? 'bookmarked' : ''">
+            <li th:each="post : ${posts}" class="item">
+                <a th:href="@{'/post/detail?postId=' + ${post.postId}}">
+                    <img th:src="${post.mainImageUrl}" alt="메인이미지">
+                    <div class="bookmark" th:classappend="${post.bookmarked} ? 'bookmarked' : ''">
                         <form th:action="@{/bookmarks/toggle}" method="post">
-                            <input type="hidden" name="postId" th:value="${postWithBookmark.post.id}">
+                            <input type="hidden" name="postId" th:value="${post.postId}">
                             <button type="submit">
-                                <img th:src="${postWithBookmark.bookmark.bookmarked} ? '/assets/svg/bookmark.svg' : '/assets/svg/bookmark_border.svg'" alt="북마크">
+                                <img th:src="${post.bookmarked} ? '/assets/svg/bookmark.svg' : '/assets/svg/bookmark_border.svg'" alt="북마크">
                             </button>
                         </form>
                     </div>
@@ -67,8 +67,8 @@
                             <img src="/assets/svg/base_profile.svg" alt="">
                         </div>
                         <div class="info_context">
-                            <h5 th:text="${postWithBookmark.post.postTitle}">title</h5>
-                            <span th:text="${postWithBookmark.post.nickname}">닉네임</span>
+                            <h5 th:text="${post.postTitle}">title</h5>
+                            <span  th:text="${post.userName}">닉네임</span>
                         </div>
                     </div>
                 </a>
