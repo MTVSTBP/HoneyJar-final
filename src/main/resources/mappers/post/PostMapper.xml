@@ -156,6 +156,7 @@
             post_id = #{postId}
     </select>
 
+    <!-- 포스트 좋아요 유무 체크 쿼리 -->
     <select id="getIsLikedByPostIdAndUserId" parameterType="com.tbp.honeyjar.post.dto.PostLikeRequestDto">
         SELECT
             COUNT(*)
@@ -165,6 +166,7 @@
             post_id = #{postId} AND user_id = #{userId}
     </select>
 
+    <!-- 포스트 평점 카운트 쿼리 -->
     <select id="getRating" parameterType="_long">
         SELECT
             ROUND(AVG(rating), 1)
