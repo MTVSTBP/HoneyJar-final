@@ -39,4 +39,6 @@ public interface PostMapper {
     void rating(PostRatingRequestDto requestDto);
 
     int getIsRatedByPostIdAndUserId(Long postId, Long userId);
+
+    void ratingAgain(PostRatingRequestDto requestDto);
 }

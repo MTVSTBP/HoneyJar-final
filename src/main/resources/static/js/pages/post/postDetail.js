@@ -308,9 +308,12 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
 
+        const modalButton = document.getElementById("openRatingModal");
+
         if (confirmRating) {
             const userId = parseInt(likeButton.getAttribute("data-user-id"))
             const postId = parseInt(likeButton.getAttribute("data-post-id"))
+            let isRated = modalButton.getAttribute("data-rated") === "true";
 
             confirmRating.addEventListener('click', function () {
                 ratingModal.style.display = "none";

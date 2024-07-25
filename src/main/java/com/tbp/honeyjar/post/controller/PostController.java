@@ -167,6 +167,21 @@ public class PostController {
         }
     }
 
+    @PostMapping("/rating-again/{postId}")
+    @ResponseBody
+    public void postRatingAgain(@PathVariable Long postId, Principal principal,@RequestBody PostRatingRequestDto requestDto) {
+
+        PostResponseDTO post = postService.findPostById(postId);
+        Long userId = userService.findUserIdByKakaoId(principal.getName());
+
+        if (post != null && userId != null) {
+            requestDto.setPostId(post.getPostId());
+            requestDto.setUserId(userId);
+
+            postService.ratingAgain(requestDto);
+        }
+    }
+
     @GetMapping("/correction")
     public String postCorrectionForm(@RequestParam Long postId, Model model) {
         PostResponseDTO post = postService.findPostById(postId);
