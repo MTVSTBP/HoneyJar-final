@@ -103,6 +103,7 @@ public class InquiryController {
         model.addAttribute("inquiry", inquiry);
         model.addAttribute("username", userInfo.getName());
         model.addAttribute("page", page);
+        model.addAttribute("categoryName", categoryService.findQnaById(inquiry.getCategoryId()).getName());
         return "pages/inquiry/inquiryDetail";
     }
 
