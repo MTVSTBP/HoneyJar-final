@@ -83,9 +83,7 @@ public class PostController {
         if (post != null && userId != null) {
             int likeCount = postService.getLikeCountByPostId(postId);
             boolean isLiked = postService.getIsLikedByPostIdAndUserId(postId, userId);
-
-            System.out.println("isLiked = " + isLiked);
-
+            
             model.addAttribute("post", post);
             model.addAttribute("userId", userId);
             model.addAttribute("likeCount", likeCount);
