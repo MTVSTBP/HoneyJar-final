@@ -4,6 +4,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const closeBtn = document.querySelector(".close");
     const completeBtn = document.getElementById('complete');
 
+    const postForm = document.getElementById('Form');
+    const inquiryId = window.inquiryId;
+
     function showErrorMessage(element, message) {
         if (element) {
             element.textContent = message;
@@ -67,41 +70,51 @@ document.addEventListener("DOMContentLoaded", function () {
         return isValid;
     }
 
-    const postForm = document.getElementById('Form');
-    postForm.addEventListener('input', (event) => {
-        validateForm(false);
-        hideErrorMessage(document.getElementById(event.target.id + 'Error'));
-    });
-    postForm.addEventListener('change', (event) => {
-        validateForm(false);
-        hideErrorMessage(document.getElementById(event.target.id + 'Error'));
-    });
+    // Add event listeners for real-time validation
+    document.getElementById('inquiry_title').addEventListener('input', () => validateForm(false));
+    document.getElementById('category').addEventListener('change', () => validateForm(false));
+    document.getElementById('content').addEventListener('input', () => validateForm(false));
+
     postForm.addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent default form submission
+
         if (!validateForm(true)) {
+            console.log("Form validation failed");
             return;
         }
 
-        openModal();
+        const formData = new FormData(postForm);
+        console.log("write button click!!");
+
+        fetch(`/settings/inquiry/correction/${inquiryId}`, {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => {
+                if (response.ok) {
+                    openModal();
+                } else {
+                    alert('수정에 실패했습니다. 다시 시도해주세요.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('수정에 실패했습니다. 다시 시도해주세요.');
+            });
     });
 
+    // Modal handling, close button, etc.
     function openModal() {
+        console.log("Opening modal");
         modal.style.display = "block";
     }
 
-    function closeModal() {
+    closeBtn.addEventListener("click", function () {
         modal.style.display = "none";
-    }
-
-    closeBtn.addEventListener("click", closeModal);
-
-    completeBtn.addEventListener("click", function() {
-        closeModal();
-        window.location.href = "/settings/inquiry";
     });
 
-    window.addEventListener("click", function(event) {
-        if (event.target === modal) {
-            closeModal();
-        }
+    completeBtn.addEventListener("click", function () {
+        modal.style.display = "none";
+        window.location.href = '/settings/inquiry'; // 페이지 이동
     });
 });
