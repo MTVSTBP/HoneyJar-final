@@ -50,12 +50,12 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- 댓글 내용 -->
-            <div class="user_comment">
-                <p class="commentText" th:text="${comment.comment}">
-                    댓글 내용이 여기에 출력됩니다.
-                </p>
+                <!-- 댓글 내용 -->
+                <div class="user_comment">
+                    <p class="commentText" th:text="${comment.comment}">
+                        댓글 내용이 여기에 출력됩니다.
+                    </p>
+                </div>
             </div>
             <!-- 댓글 수정 -->
 <!--            <form th:action="@{|/comment/modify/${comment.commentId}|}" method="post" th:object="${comment}">-->
@@ -75,7 +75,7 @@
                     <input type="text" class="edit_text" placeholder="댓글을 입력해주세요" required th:value="*{comment}" name="comment"/>
                 </div>
                 <div class="edit_submit">
-                    <button type="submit" class="edit_button" >수정</button>
+                    <button type="submit" class="edit_button">수정</button>
                 </div>
             </div>
             </form>
