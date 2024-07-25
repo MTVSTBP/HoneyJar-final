@@ -14,67 +14,75 @@ document.addEventListener("DOMContentLoaded", function () {
         const slideLis = slider.querySelectorAll('li');
         const moveButton = kindWrap.querySelectorAll('.arrow a');
 
-        const clone1 = slideLis[0].cloneNode(true);
-        const cloneLast = slideLis[slideLis.length - 1].cloneNode(true);
-        slider.insertBefore(cloneLast, slideLis[0]);
-        slider.appendChild(clone1);
+        if (slideLis.length > 1) {
+            const clone1 = slideLis[0].cloneNode(true);
+            const cloneLast = slideLis[slideLis.length - 1].cloneNode(true);
+            slider.insertBefore(cloneLast, slideLis[0]);
+            slider.appendChild(clone1);
 
-        let currentIdx = 1;
-        let translate = 0;
-        const speedTime = 500;
+            let currentIdx = 1;
+            let translate = 0;
+            const speedTime = 500;
 
-        function setSliderWidth() {
-            const sliderCloneLis = slider.querySelectorAll('li');
-            const liWidth = container.clientWidth;
-            const sliderWidth = liWidth * sliderCloneLis.length;
-            slider.style.width = `${sliderWidth}px`;
-            sliderCloneLis.forEach(li => {
-                li.style.width = `${liWidth}px`;
-            });
-            translate = -liWidth * currentIdx;
-            slider.style.transform = `translateX(${translate}px)`;
-            return liWidth;
-        }
+            function setSliderWidth() {
+                const sliderCloneLis = slider.querySelectorAll('li');
+                const liWidth = container.clientWidth;
+                const sliderWidth = liWidth * sliderCloneLis.length;
+                slider.style.width = `${sliderWidth}px`;
+                sliderCloneLis.forEach(li => {
+                    li.style.width = `${liWidth}px`;
+                });
+                translate = -liWidth * currentIdx;
+                slider.style.transform = `translateX(${translate}px)`;
+                return liWidth;
+            }
 
-        let liWidth = setSliderWidth();
+            let liWidth = setSliderWidth();
 
-        moveButton.forEach(button => button.addEventListener('click', moveSlide));
+            moveButton.forEach(button => button.addEventListener('click', moveSlide));
 
-        function move(D) {
-            currentIdx += (-1 * D);
-            translate += liWidth * D;
-            slider.style.transform = `translateX(${translate}px)`;
-            slider.style.transition = `all ${speedTime}ms ease`;
-        }
+            function move(D) {
+                currentIdx += (-1 * D);
+                translate += liWidth * D;
+                slider.style.transform = `translateX(${translate}px)`;
+                slider.style.transition = `all ${speedTime}ms ease`;
+            }
 
-        function moveSlide(event) {
-            event.preventDefault();
-            if (event.currentTarget.classList.contains('next')) {
-                move(-1);
-                if (currentIdx === slider.querySelectorAll('li').length - 1) {
-                    setTimeout(() => {
-                        slider.style.transition = 'none';
-                        currentIdx = 1;
-                        translate = -liWidth;
-                        slider.style.transform = `translateX(${translate}px)`;
-                    }, speedTime);
-                }
-            } else {
-                move(1);
-                if (currentIdx === 0) {
-                    setTimeout(() => {
-                        slider.style.transition = 'none';
-                        currentIdx = slider.querySelectorAll('li').length - 2;
-                        translate = -(liWidth * currentIdx);
-                        slider.style.transform = `translateX(${translate}px)`;
-                    }, speedTime);
+            function moveSlide(event) {
+                event.preventDefault();
+                if (event.currentTarget.classList.contains('next')) {
+                    move(-1);
+                    if (currentIdx === slider.querySelectorAll('li').length - 1) {
+                        setTimeout(() => {
+                            slider.style.transition = 'none';
+                            currentIdx = 1;
+                            translate = -liWidth;
+                            slider.style.transform = `translateX(${translate}px)`;
+                        }, speedTime);
+                    }
+                } else {
+                    move(1);
+                    if (currentIdx === 0) {
+                        setTimeout(() => {
+                            slider.style.transition = 'none';
+                            currentIdx = slider.querySelectorAll('li').length - 2;
+                            translate = -(liWidth * currentIdx);
+                            slider.style.transform = `translateX(${translate}px)`;
+                        }, speedTime);
+                    }
                 }
             }
-        }
 
-        window.addEventListener('resize', () => {
-            liWidth = setSliderWidth();
-        });
+            window.addEventListener('resize', () => {
+                liWidth = setSliderWidth();
+            });
+        } else {
+            const singleSlideWidth = container.clientWidth;
+            slideLis.forEach(li => {
+                li.style.width = `${singleSlideWidth}px`;
+            });
+            slider.style.width = `${singleSlideWidth}px`;
+        }
     }
 
     // 공용 모달 설정
@@ -136,7 +144,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
-
 
     // 삭제 완료 모달의 확인 버튼 클릭 시
     if (completeDeleteButton) {

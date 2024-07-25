@@ -24,15 +24,30 @@
 
     <!-- 북마크 조회 -->
     <select id="findBookmarkByPostIdAndUserId" resultType="com.tbp.honeyjar.bookmark.dto.BookmarkDTO">
-        SELECT post_id, user_id, created_at, updated_at
+        SELECT
+            post_id,
+            user_id,
+            created_at,
+            updated_at
         FROM bookmark
         WHERE post_id = #{postId} AND user_id = #{userId}
     </select>
 
     <!-- 북마크 추가 -->
     <insert id="insertBookmark">
-        INSERT INTO bookmark (post_id, user_id, created_at, updated_at)
-        VALUES (#{postId}, #{userId}, NOW(), NOW())
+        INSERT INTO bookmark (
+            post_id,
+            user_id,
+            created_at,
+            updated_at
+        )
+        VALUES
+        (
+            #{postId},
+            #{userId},
+            NOW(),
+            NOW()
+        )
     </insert>
 
     <!-- 북마크 삭제 -->
@@ -43,13 +58,13 @@
 
     <select id="findBookmarkedPostsByUserId" resultMap="postListResultMap">
         SELECT
-        p.post_id,
-        p.title,
-        p.post,
-        i.url AS main_image_url,
-        u.name AS user_name,
-        true AS bookmarked,
-        p.category_id
+            p.post_id,
+            p.title,
+            p.post,
+            i.url AS main_image_url,
+            u.name AS user_name,
+            true AS bookmarked,
+            p.category_id
         FROM post p
         LEFT JOIN bookmark b ON p.post_id = b.post_id
         LEFT JOIN image i ON p.post_id = i.post_id AND i.is_main = 1
