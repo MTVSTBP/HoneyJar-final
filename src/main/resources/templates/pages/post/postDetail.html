@@ -152,6 +152,53 @@
     /*]]>*/
 </script>
 
+
+<!-- 삭제 확인 모달 -->
+<div id="deleteConfirmModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-text">
+            <p>정말 삭제하시겠습니까?</p>
+        </div>
+        <div class="button-box">
+            <button id="confirmClose" class="confirm close2">취소</button>
+            <button id="confirmDelete" class="confirm">확인</button>
+        </div>
+    </div>
+</div>
+
+<!-- 삭제 완료 모달 -->
+<div id="deleteSuccessModal" class="modal" style="display:none;">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-text">
+            <p>삭제가 완료되었습니다!</p>
+        </div>
+        <button id="completeDelete" class="complete">확인</button>
+    </div>
+</div>
+
+<!-- Modal -->
+<!-- 모달에 확인 버튼 추가 -->
+<div id="ratingModal" class="modal">
+    <div class="modal-content">
+                        <span class="close">
+                            <img src="/assets/svg/close.svg" alt="">
+                        </span>
+        <div class="rating">
+            <p>평점을 남겨주세요!</p>
+        </div>
+        <div class="modal-rating">
+            <span class="star" data-value="1">&#9733;</span>
+            <span class="star" data-value="2">&#9733;</span>
+            <span class="star" data-value="3">&#9733;</span>
+            <span class="star" data-value="4">&#9733;</span>
+            <span class="star" data-value="5">&#9733;</span>
+        </div>
+        <button id="confirmRating" class="confirmRating">확인</button>
+    </div>
+</div>
+
 <script th:inline="javascript" type="text/javascript" th:src="@{/js/pages/post/postDetail.js}"></script>
 
 </body>
