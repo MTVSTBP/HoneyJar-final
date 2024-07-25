@@ -63,27 +63,6 @@ public class PostController {
         return "pages/post/postWrite";
     }
 
-//    @PostMapping("/write")
-//    public ResponseEntity<Map<String, Object>> postCreate(
-//            @ModelAttribute PostRequestDTO postRequestDTO,
-//            @RequestParam("files") List<MultipartFile> files,
-//            @RequestParam("mainImageFile") MultipartFile mainImageFile,
-//            @RequestParam("mainImageUrl") String mainImageUrl,
-//            Principal principal) throws IOException {
-//
-//        Map<String, Object> response = new HashMap<>();
-//        try {
-//            Long userId = userService.findUserIdByKakaoId(principal.getName());
-//            postRequestDTO.setUserId(userId); // userId 설정
-//
-//            Long postId = postService.createPost(postRequestDTO, files, mainImageFile, mainImageUrl);
-//            response.put("postId", postId);
-//            return ResponseEntity.ok(response);
-//        } catch (FirebaseAuthException e) {
-//            response.put("error", "Failed to upload file to Firebase: " + e.getMessage());
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
-//        }
-//    }
 
     @PostMapping("/write")
     public ResponseEntity<Map<String, Object>> postCreate(
