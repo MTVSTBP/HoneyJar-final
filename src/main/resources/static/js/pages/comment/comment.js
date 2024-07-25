@@ -78,28 +78,48 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
-    // const deleteButtons = document.querySelectorAll('.deleteButton');
-    // deleteButtons.forEach(function(deleteButton) {
-    //     deleteButton.addEventListener('click', async function(event) {
-    //         event.stopPropagation(); // 클릭 이벤트 전파 방지
-    //
-    //         const commentId = this.getAttribute('th:action');
-    //         try {
-    //             const response = await fetch(commentId, {
-    //                 method: 'POST'
-    //             });
-    //
-    //             if (!response.ok) {
-    //                 throw new Error('Network response was not ok');
-    //             }
-    //
-    //             // 삭제 성공 후 처리 로직 추가
-    //             console.log('Comment deleted successfully');
-    //             // 예를 들어, 삭제된 댓글을 DOM에서 제거하는 등의 추가 작업 수행
-    //         } catch (error) {
-    //             console.error('There was a problem with the fetch operation:', error);
-    //         }
-    //     });
-    // });
+
+    // 삭제 버튼
+    const deleteButtons = document.querySelectorAll('.deleteButton');
+    deleteButtons.forEach(function(deleteButton) {
+        deleteButton.addEventListener('click', async function(event) {
+            event.preventDefault(); // 기본 링크 행동 방지
+            event.stopPropagation(); // 클릭 이벤트 전파 방지
+
+            console.log(this.getAttribute('data-post-id'));
+
+            const postId = this.getAttribute('data-post-id'); // postId 가져오기
+            const commentId = this.getAttribute('data-comment-id'); // commentId 가져오기
+            // console.log(commentId);
+
+            // 삭제 확인 메시지
+            if (!confirm('댓글을 삭제하시겠습니까?')) {
+                return; // 사용자가 취소하면 함수 종료
+            }
+
+            const url = `/comment/delete/${postId}/${commentId}`; // 요청할 URL 구성
+
+            try {
+                const response = await fetch(url, {
+                    method: 'GET', // GET 메소드 사용
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                // 삭제 성공 후 처리 로직 추가
+                console.log('Comment deleted successfully');
+                // 예를 들어, 삭제된 댓글을 DOM에서 제거하는 등의 추가 작업 수행
+                this.closest('.user_record').remove(); // 댓글 요소 삭제
+
+            } catch (error) {
+                console.error('There was a problem with the fetch operation:', error);
+            }
+        });
+    });
 
 });

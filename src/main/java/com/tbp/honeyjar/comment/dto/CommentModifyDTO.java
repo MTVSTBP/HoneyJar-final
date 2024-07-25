@@ -1,5 +1,6 @@
 package com.tbp.honeyjar.comment.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,12 +8,12 @@ import lombok.Setter;
 
 
 public class CommentModifyDTO {
+    @NotNull(message = "Comment cannot be null")
     private Long commentId;
     private String comment;
     private Long postId;
 
-    public CommentModifyDTO() {
-    }
+    public CommentModifyDTO() {}
 
     public CommentModifyDTO(Long commentId, String comment, Long postId) {
         this.commentId = commentId;
@@ -39,7 +40,6 @@ public class CommentModifyDTO {
     public Long getPostId() { return postId;}
 
     public void setPostId(Long postId) { this.postId = postId;}
-
 
     @Override
     public String toString() {

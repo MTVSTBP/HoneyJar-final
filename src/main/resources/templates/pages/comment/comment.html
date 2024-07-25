@@ -43,7 +43,8 @@
                         <div class="click_box">
                             <div class="d_flex">
                                 <a class="edit_p editButton">수정</a>
-                                <a id="deletePost" class="delete_p deleteButton" th:href="@{|/comment/${comment.getPostId()}|}">삭제</a>
+                                <a id="deletePost" class="delete_p deleteButton" th:href="@{|/comment/delete/${comment.getPostId()}/${comment.getCommentId()}|}"  data-post-id="${comment.getPostId()}"
+                                   data-comment-id="${comment.getCommentId()}">삭제</a>
                             </div>
                         </div>
                     </div>
@@ -56,10 +57,21 @@
                 </p>
             </div>
             <!-- 댓글 수정 -->
-            <form th:action="@{|/comment/modify/${comment.getCommentId()}|}" method="post">
+<!--            <form th:action="@{|/comment/modify/${comment.commentId}|}" method="post" th:object="${comment}">-->
+<!--                <div class="edit_comment" style="display: none;">-->
+<!--                    <div class="user_edit">-->
+<!--                        <input class="edit_text" placeholder="댓글을 입력해주세요" th:field="*{comment}" />-->
+<!--                    </div>-->
+<!--                    <div class="edit_submit">-->
+<!--                        <button type="submit" class="edit_button">수정</button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </form>-->
+<!--             댓글 수정-->
+            <form th:action="@{|/comment/modify/${postId}/${comment.getCommentId()}|}" method="post" th:object="${comment}">
             <div class="edit_comment">
                 <div class="user_edit">
-                    <input class="edit_text" placeholder="댓글을 입력해주세요" name="comment"/>
+                    <input type="text" class="edit_text" placeholder="댓글을 입력해주세요" required th:value="*{comment}" name="comment"/>
                 </div>
                 <div class="edit_submit">
                     <button type="submit" class="edit_button" >수정</button>
