@@ -15,4 +15,6 @@ public interface PlaceMapper {
     void updatePlace(PlaceDTO placeDTO);
 
     void deletePlaceById(Long placeId);
+
+    float getRatingById(Long placeId);
 }
