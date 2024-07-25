@@ -186,6 +186,28 @@
 </div>
 
 
+<!-- Modal -->
+<!-- 모달에 확인 버튼 추가 -->
+<div id="ratingModal" class="modal">
+    <div class="modal-content">
+                        <span class="close">
+                            <img src="/assets/svg/close.svg" alt="">
+                        </span>
+        <div class="rating">
+            <p>평점을 남겨주세요!</p>
+        </div>
+        <div class="modal-rating">
+            <span class="star" data-value="1">&#9733;</span>
+            <span class="star" data-value="2">&#9733;</span>
+            <span class="star" data-value="3">&#9733;</span>
+            <span class="star" data-value="4">&#9733;</span>
+            <span class="star" data-value="5">&#9733;</span>
+        </div>
+        <button id="confirmRating" class="confirmRating">확인</button>
+    </div>
+</div>
+
+
 <script th:inline="javascript">
     var postId = /*[[${post.postId}]]*/ 'defaultPostId';
 </script>
