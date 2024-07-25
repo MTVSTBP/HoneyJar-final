@@ -47,23 +47,23 @@
     </resultMap>
 
     <!-- 포스트 리스트 조회 쿼리 -->
-    <select id="findAllPost" resultMap="postListResultMap">
+    <select id="findPostsByCategory" resultMap="postListResultMap">
         SELECT
-            p.post_id,
-            p.title,
-            p.post,
-            i.url AS main_image_url,
-            CASE
-                WHEN b.post_id IS NOT NULL THEN true
-                ELSE false
-            END AS bookmarked,
-            p.category_id,
-            u.name AS user_name
+        p.post_id,
+        p.title,
+        p.post,
+        i.url AS main_image_url,
+        CASE
+        WHEN b.post_id IS NOT NULL THEN true
+        ELSE false
+        END AS bookmarked,
+        p.category_id,
+        u.name AS user_name
         FROM post p
         LEFT JOIN (
-            SELECT post_id, url
-            FROM image
-            WHERE is_main = 1
+        SELECT post_id, url
+        FROM image
+        WHERE is_main = 1
         ) i ON p.post_id = i.post_id
         LEFT JOIN bookmark b ON p.post_id = b.post_id
         LEFT JOIN user u ON p.user_id = u.user_id
@@ -72,6 +72,7 @@
             AND p.category_id = #{category}
         </if>
         ORDER BY p.created_at DESC
+        LIMIT #{size} OFFSET #{offset} <!-- 페이징을 위한 LIMIT과 OFFSET 추가 -->
     </select>
 
     <!-- 포스트 상세 조회 쿼리 -->

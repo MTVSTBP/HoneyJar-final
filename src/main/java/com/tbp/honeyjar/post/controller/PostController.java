@@ -37,12 +37,23 @@ public class PostController {
     }
 
     @GetMapping
-    public String postList(Model model, @RequestParam(required = false) Long category) {
-        List<PostListDTO> posts = postService.findAllPost(category);
+    public String postList(Model model,
+                           @RequestParam(required = false) Long category,
+                           @RequestParam(defaultValue = "0") int page,
+                           @RequestParam(defaultValue = "4") int size) {
+        // 최초 요청 시 4개의 포스트만 반환
+        if (page == 0) {
+            List<PostListDTO> posts = postService.findPostsByCategory(category, 0, 4); // 4개만 가져오기
+            model.addAttribute("posts", posts);
+            model.addAttribute("categories", categoryService.findAllFoodCategory());
+            model.addAttribute("selectedCategory", category);
+            return "pages/post/post"; // 전체 포스트 페이지
+        }
+
+        // AJAX 요청일 경우 특정 페이지의 포스트만 반환
+        List<PostListDTO> posts = postService.findPostsByCategory(category, page, size);
         model.addAttribute("posts", posts);
-        model.addAttribute("categories", categoryService.findAllFoodCategory());
-        model.addAttribute("selectedCategory", category);
-        return "pages/post/post";
+        return "common/components/postComponent"; // 포스트 컴포넌트를 반환
     }
 
     @GetMapping("/write")

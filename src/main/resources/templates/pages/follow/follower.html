@@ -5,12 +5,20 @@
       layout:fragment="content"
       th:with="pageTitle='Followers'">
 <head>
-    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/mypage/myPage.css}"/>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/mypage/follower.css}"/>
     <th:block layout:fragment="title">
         <title th:text="${pageTitle}">Followers</title>
     </th:block>
 </head>
 <body>
-
+    <div id="request">
+        <div>요청</div>
+        <th:block th:replace="common/components/followerComponent :: followerComponent(follows=${follows})"></th:block>
+        <div><br/></div>
+    </div>
+    <div id="followers">
+        <div>친구</div>
+        <th:block th:replace="common/components/followerRequestComponent :: followerRequestComponent(follows=${follows})"></th:block>
+    </div>
 </body>
 </html>
