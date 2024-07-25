@@ -105,9 +105,33 @@ public class PostController {
 
         model.addAttribute("post", post);
         model.addAttribute("isAuthor", isAuthor); // 작성자인지 여부를 모델에 추가
+        model.addAttribute("userId", loggedInUserId);
         return "pages/post/postDetail";
     }
 
+    @PostMapping("/like/{postId}")
+    public void postLike(@PathVariable Long postId, Principal principal, PostLikeRequestDto requestDto) {
+
+        PostResponseDTO post = postService.findPostById(postId);
+        Long userId = userService.findUserIdByKakaoId(principal.getName());
+
+        requestDto.setPostId(post.getPostId());
+        requestDto.setUserId(userId);
+
+        postService.likePost(requestDto);
+    }
+
+    @DeleteMapping("/like/{postId}")
+    public void postUnlike(@PathVariable Long postId, Principal principal, PostLikeRequestDto requestDto) {
+
+        PostResponseDTO post = postService.findPostById(postId);
+        Long userId = userService.findUserIdByKakaoId(principal.getName());
+
+        requestDto.setPostId(post.getPostId());
+        requestDto.setUserId(userId);
+
+        postService.unlikePost(requestDto);
+    }
 
     @GetMapping("/correction")
     public String postCorrectionForm(@RequestParam Long postId, Model model) {

@@ -1,5 +1,6 @@
 package com.tbp.honeyjar.post.dao;
 
+import com.tbp.honeyjar.post.dto.PostLikeRequestDto;
 import com.tbp.honeyjar.post.dto.PostListDTO;
 import com.tbp.honeyjar.post.dto.PostRequestDTO;
 import com.tbp.honeyjar.post.dto.PostResponseDTO;
@@ -28,4 +29,7 @@ public interface PostMapper {
 
     void softDeletePost(Long postId);
 
+    void likePost(PostLikeRequestDto requestDto);
+
+    void unlikePost(PostLikeRequestDto requestDto);
 }
