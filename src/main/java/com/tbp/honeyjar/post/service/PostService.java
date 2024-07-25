@@ -48,6 +48,7 @@ public class PostService {
         return postMapper.findAllPost(params);
     }
 
+
     @Transactional
     public Long createPost(PostRequestDTO postRequestDTO, List<MultipartFile> files, MultipartFile mainImageFile, String mainImageUrl) throws IOException, FirebaseAuthException {
         // 새로운 장소 등록
@@ -89,13 +90,11 @@ public class PostService {
 
 
 
+
     private String generateFileName(MultipartFile file) {
         return UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
     }
 
-    public List<PostListDTO> findAllPost() {
-        return postMapper.findAllPost();
-    }
 
     public PostResponseDTO findPostById(Long postId) {
         PostResponseDTO postResponseDTO = postMapper.findPostById(postId);
