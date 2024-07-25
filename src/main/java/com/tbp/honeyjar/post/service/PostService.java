@@ -254,4 +254,8 @@ public class PostService {
     public boolean getIsLikedByPostIdAndUserId(Long postId, Long userId) {
         return postMapper.getIsLikedByPostIdAndUserId(postId, userId) == 1;
     }
+
+    public float getRating(Long postId) {
+        return postMapper.getRating(postId);
+    }
 }

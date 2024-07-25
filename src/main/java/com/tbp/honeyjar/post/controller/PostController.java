@@ -101,6 +101,7 @@ public class PostController {
         if (loggedInUserId != null) {
             int likeCount = postService.getLikeCountByPostId(postId);
             boolean isLiked = postService.getIsLikedByPostIdAndUserId(postId, loggedInUserId);
+            float rating = postService.getRating(postId);
 
             // 디버깅을 위한 로그 추가
             System.out.println("Post UserId: " + post.getUserId());
@@ -112,6 +113,7 @@ public class PostController {
             model.addAttribute("userId", loggedInUserId);
             model.addAttribute("likeCount", likeCount);
             model.addAttribute("isLiked", isLiked);
+            model.addAttribute("rating", rating);
         }
 
         return "pages/post/postDetail";
