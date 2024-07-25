@@ -11,10 +11,7 @@ import com.tbp.honeyjar.image.service.ImageService;
 import com.tbp.honeyjar.place.dto.PlaceDTO;
 import com.tbp.honeyjar.place.service.PlaceService;
 import com.tbp.honeyjar.post.dao.PostMapper;
-import com.tbp.honeyjar.post.dto.PostLikeRequestDto;
-import com.tbp.honeyjar.post.dto.PostListDTO;
-import com.tbp.honeyjar.post.dto.PostRequestDTO;
-import com.tbp.honeyjar.post.dto.PostResponseDTO;
+import com.tbp.honeyjar.post.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -257,5 +254,13 @@ public class PostService {
 
     public float getRating(Long postId) {
         return postMapper.getRating(postId);
+    }
+
+    public void rating(PostRatingRequestDto requestDto) {
+        postMapper.rating(requestDto);
+    }
+
+    public boolean getIsRatedByPostIdAndUserId(Long postId, Long userId) {
+        return postMapper.getIsRatedByPostIdAndUserId(postId, userId) == 1;
     }
 }

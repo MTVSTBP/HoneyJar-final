@@ -112,7 +112,7 @@
         </div>
         <div class="scope" id="rating">
             <button id="openRatingModal" data-post-id="*{postId}">
-                <img src="/assets/svg/star.svg" alt="별점" id="ratingStar">
+                <img th:src="${isRated} ? '/assets/svg/star_color.svg' : '/assets/svg/star.svg'" alt="별점" id="ratingStar">
                 <span id="averageRating" th:text="${rating}">0</span>
             </button>
         </div>
@@ -203,7 +203,7 @@
             <span class="star" data-value="4">&#9733;</span>
             <span class="star" data-value="5">&#9733;</span>
         </div>
-        <button id="confirmRating" class="confirmRating">확인</button>
+        <button id="confirmRating" class="confirmRating" name="rating">확인</button>
     </div>
 </div>
 

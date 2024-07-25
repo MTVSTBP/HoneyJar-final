@@ -213,4 +213,32 @@
         FROM post
         WHERE post_id = #{postId})
     </select>
+
+    <!-- 포스트 평점 입력 쿼리 -->
+    <insert id="rating" parameterType="com.tbp.honeyjar.post.dto.PostRatingRequestDto">
+        INSERT INTO ratings
+        (
+            user_id,
+            place_id,
+            rating
+        )
+        VALUES
+        (
+            #{userId},
+            (SELECT place_id
+            FROM post
+            WHERE post_id = #{postId}),
+            #{rating}
+        )
+    </insert>
+
+    <!-- 포스트 평점 확인 쿼리 -->
+    <select id="getIsRatedByPostIdAndUserId" parameterType="com.tbp.honeyjar.post.dto.PostLikeRequestDto">
+        SELECT
+            COUNT(*)
+        FROM
+            ratings
+        WHERE
+            place_id = (SELECT place_id FROM post WHERE post_id = #{postId}) AND user_id = #{userId}
+    </select>
 </mapper>

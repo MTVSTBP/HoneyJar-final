@@ -309,29 +309,42 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         if (confirmRating) {
+            const userId = parseInt(likeButton.getAttribute("data-user-id"))
+            const postId = parseInt(likeButton.getAttribute("data-post-id"))
+
             confirmRating.addEventListener('click', function () {
                 ratingModal.style.display = "none";
 
-                // AJAX 요청 보내기 (평점 저장)
-                /*
-                sendRatingData(selectedRating).then(response => {
-                    if (response.success) {
-                        // 백엔드에서 총점을 받아와서 업데이트
-                        averageRating.textContent = response.newAverage;
-                        // 성공적으로 저장되면 별점 이미지를 업데이트
-                        ratingStar.src = "/assets/svg/star_color.svg";
-                    } else {
-                        console.error('Rating update failed');
-                    }
-                });
-                */
+                stars.forEach(star => {
+                    star.addEventListener('click', () => {
+                        selectedRating = star.getAttribute('data-value');
+                    });
 
-                // 임시로 별점 이미지 및 총점 업데이트
-                averageRating.textContent = (parseFloat(averageRating.textContent) + selectedRating) / 2;
-                ratingStar.src = "/assets/svg/star_color.svg";
-            });
-        }
+                    rating(userId, postId, selectedRating);
+                });
+            }
+        )
     }
+
+    function rating(userId, postId, selectedRating) {
+        fetch('/post/rating/' + postId, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'charset': 'UTF-8'
+            },
+            body: JSON.stringify({
+                'user-id': userId,
+                'post-id': postId,
+                'rating': selectedRating
+            })
+        }).then(res => {
+            if (!res.ok) {
+                throw new Error('Network response was not ok');
+            }
+        })
+    }
+
 
     // 더보기 버튼 클릭 이벤트
     const moreHorizImage = document.querySelector('.more_h img');
@@ -349,4 +362,4 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
-});
+}})

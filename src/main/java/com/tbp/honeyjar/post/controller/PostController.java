@@ -102,6 +102,8 @@ public class PostController {
             int likeCount = postService.getLikeCountByPostId(postId);
             boolean isLiked = postService.getIsLikedByPostIdAndUserId(postId, loggedInUserId);
             float rating = postService.getRating(postId);
+            boolean isRated = postService.getIsRatedByPostIdAndUserId(postId,
+                    loggedInUserId);
 
             // 디버깅을 위한 로그 추가
             System.out.println("Post UserId: " + post.getUserId());
@@ -114,6 +116,7 @@ public class PostController {
             model.addAttribute("likeCount", likeCount);
             model.addAttribute("isLiked", isLiked);
             model.addAttribute("rating", rating);
+            model.addAttribute("isRated", isRated);
         }
 
         return "pages/post/postDetail";
@@ -146,6 +149,21 @@ public class PostController {
             requestDto.setUserId(userId);
 
             postService.unlikePost(requestDto);
+        }
+    }
+
+    @PostMapping("/rating/{postId}")
+    @ResponseBody
+    public void postRating(@PathVariable Long postId, Principal principal,@RequestBody PostRatingRequestDto requestDto) {
+
+        PostResponseDTO post = postService.findPostById(postId);
+        Long userId = userService.findUserIdByKakaoId(principal.getName());
+
+        if (post != null && userId != null) {
+            requestDto.setPostId(post.getPostId());
+            requestDto.setUserId(userId);
+
+            postService.rating(requestDto);
         }
     }
 

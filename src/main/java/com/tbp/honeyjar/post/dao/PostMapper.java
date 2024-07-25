@@ -1,9 +1,6 @@
 package com.tbp.honeyjar.post.dao;
 
-import com.tbp.honeyjar.post.dto.PostLikeRequestDto;
-import com.tbp.honeyjar.post.dto.PostListDTO;
-import com.tbp.honeyjar.post.dto.PostRequestDTO;
-import com.tbp.honeyjar.post.dto.PostResponseDTO;
+import com.tbp.honeyjar.post.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -38,4 +35,8 @@ public interface PostMapper {
     int getIsLikedByPostIdAndUserId(Long postId, Long userId);
 
     float getRating(Long postId);
+
+    void rating(PostRatingRequestDto requestDto);
+
+    int getIsRatedByPostIdAndUserId(Long postId, Long userId);
 }
