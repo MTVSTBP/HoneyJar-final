@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     const bookmarkButtons = document.querySelectorAll(".bookmark");
     let currentPage = 1; // 현재 페이지를 1로 시작
-    const postsPerPage = 4; // 한 번에 로드할 포스트 수
+    const postsPerPage = 6; // 한 번에 로드할 포스트 수
     let isLoading = false; // 로딩 상태를 추적
     let timeoutId;
 
