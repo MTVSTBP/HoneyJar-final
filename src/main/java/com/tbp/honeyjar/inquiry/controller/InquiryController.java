@@ -11,6 +11,9 @@ import com.tbp.honeyjar.login.mapper.user.UserMapper;
 import com.tbp.honeyjar.login.service.user.UserService;
 import com.tbp.honeyjar.mypage.DTO.CategoryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,13 +36,31 @@ public class InquiryController {
         this.categoryService = categoryService;
     }
 
+    //    @GetMapping
+//    public String getInquiriesByUserId(Model model, Principal principal) {
+//        String kakaoId = principal.getName();
+//        List<InquiryDto> inquiryList = inquiryService.getInquiryListByUserId(kakaoId);
+//        model.addAttribute("inquiryList", inquiryList);
+//        return "pages/inquiry/inquiry";
+//    }
     @GetMapping
-    public String getInquiriesByUserId(Model model, Principal principal) {
+    public String getInquiriesByUserId(Model model, Principal principal, @RequestParam(defaultValue = "1") int page) {
         String kakaoId = principal.getName();
-        List<InquiryDto> inquiryList = inquiryService.getInquiryListByUserId(kakaoId);
-        model.addAttribute("inquiryList", inquiryList);
-        return "pages/inquiry/inquiry";
+        page = page < 1 ? 1 : page;
+        Pageable pageable = PageRequest.of(page - 1, 5);  // 페이지 번호는 0부터 시작하므로 -1
+        Page<InquiryDto> inquiryPage = inquiryService.getInquiryListByUserId(kakaoId, pageable);
+        model.addAttribute("inquiryList", inquiryPage.getContent());
+        page = page > inquiryPage.getTotalPages() ? inquiryPage.getTotalPages() : page;
+
+        model.addAttribute("page", page);
+        model.addAttribute("totalPages", inquiryPage.getTotalPages());
+
+        return (page > inquiryPage.getTotalPages()) ?
+                "redirect:settings/inquiry?page=" + page :
+                "pages/inquiry/inquiry";
+
     }
+
 
     @GetMapping("/write")
     public String inquiryWrite(Model model, Principal principal) {
@@ -69,7 +90,9 @@ public class InquiryController {
     //principl 을 사용하여 id찾기
     //
     @GetMapping("/detail/{inquiryId}")
-    public String getInquiryDetail(@PathVariable Long inquiryId, Model model, Principal principal) {
+    public String getInquiryDetail(@PathVariable Long inquiryId,
+                                   @RequestParam(value = "page", defaultValue = "1") int page,
+                                   Model model, Principal principal) {
         String kakaoId = principal.getName();
         User userInfo = userMapper.findByKakaoId(kakaoId);
         InquiryDto inquiry = inquiryService.getInquiryById(inquiryId);
@@ -79,11 +102,12 @@ public class InquiryController {
         }
         model.addAttribute("inquiry", inquiry);
         model.addAttribute("username", userInfo.getName());
+        model.addAttribute("page", page);
         return "pages/inquiry/inquiryDetail";
     }
 
     @GetMapping("/correction/{inquiryId}")
-    public String inquiryCorrection(@PathVariable Long inquiryId,Model model, Principal principal) {
+    public String inquiryCorrection(@PathVariable Long inquiryId, Model model, Principal principal) {
         String kakaoId = principal.getName();
         User userInfo = userMapper.findByKakaoId(kakaoId);
         InquiryDto inquiry = inquiryService.getInquiryById(inquiryId);
