@@ -4,7 +4,6 @@ package com.tbp.honeyjar.post.controller;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.tbp.honeyjar.admin.service.CategoryService;
 import com.tbp.honeyjar.image.service.ImageService;
-import com.tbp.honeyjar.login.entity.user.User;
 import com.tbp.honeyjar.login.service.user.UserService;
 import com.tbp.honeyjar.post.dto.*;
 import com.tbp.honeyjar.post.service.PostService;
@@ -84,12 +83,16 @@ public class PostController {
             int likeCount = postService.getLikeCountByPostId(postId);
             boolean isLiked = postService.getIsLikedByPostIdAndUserId(postId, userId);
             float rating = postService.getRating(postId);
+            boolean isRated = postService.getIsRatedByPostIdAndUserId(postId, userId);
+
+            System.out.println("isRated = " + isRated);
             
             model.addAttribute("post", post);
             model.addAttribute("userId", userId);
             model.addAttribute("likeCount", likeCount);
             model.addAttribute("isLiked", isLiked);
             model.addAttribute("rating", rating);
+            model.addAttribute("isRated", isRated);
         }
 
         return "pages/post/postDetail";
@@ -122,6 +125,21 @@ public class PostController {
             requestDto.setUserId(userId);
 
             postService.unlikePost(requestDto);
+        }
+    }
+
+    @PostMapping("/rating/{postId}")
+    @ResponseBody
+    public void postRating(@PathVariable Long postId, Principal principal,@RequestBody PostRatingRequestDto requestDto) {
+
+        PostResponseDTO post = postService.findPostById(postId);
+        Long userId = userService.findByKakaoId(principal.getName()).getUserId();
+
+        if (post != null && userId != null) {
+            requestDto.setPostId(post.getPostId());
+            requestDto.setUserId(userId);
+
+            postService.rating(requestDto);
         }
     }
 

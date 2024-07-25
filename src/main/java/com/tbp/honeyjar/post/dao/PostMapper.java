@@ -25,4 +25,8 @@ public interface PostMapper {
     int getIsLikedByPostIdAndUserId(Long postId, Long userId);
 
     float getRating(Long postId);
+
+    void rating(PostRatingRequestDto requestDto);
+
+    int getIsRatedByPostIdAndUserId(Long postId, Long userId);
 }
