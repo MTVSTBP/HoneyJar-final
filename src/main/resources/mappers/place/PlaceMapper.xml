@@ -37,4 +37,13 @@
         WHERE
             place_id = #{placeId}
     </select>
+
+    <select id="getRatingById" parameterType="_long">
+        SELECT
+            AVG(rating)
+        FROM
+            ratings
+        WHERE
+            place_id = #{placeId}
+    </select>
 </mapper>

@@ -23,4 +23,8 @@ public class PlaceService {
     public PlaceDTO getPlaceById(Long placeId) {
         return placeMapper.findPlaceById(placeId);
     }
+
+    public float getRatingById(Long placeId) {
+        return placeMapper.getRatingById(placeId);
+    }
 }

@@ -11,4 +11,6 @@ public interface PlaceMapper {
 
     // Place 조회
     PlaceDTO findPlaceById(Long placeId);
+
+    float getRatingById(Long placeId);
 }
