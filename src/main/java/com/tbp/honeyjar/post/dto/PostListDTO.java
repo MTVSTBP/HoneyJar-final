@@ -8,17 +8,19 @@ public class PostListDTO {
     private String mainImageUrl;
     private Boolean bookmarked;
     private Long categoryId;
+    private String userName;
 //    private String profileImg;
 
     public PostListDTO() {}
 
-    public PostListDTO(Long postId, String postTitle, String post, String mainImageUrl, Boolean bookmarked, Long categoryId) {
+    public PostListDTO(Long postId, String postTitle, String post, String mainImageUrl, Boolean bookmarked, Long categoryId, String userName) {
         this.postId = postId;
         this.postTitle = postTitle;
         this.post = post;
         this.mainImageUrl = mainImageUrl;
         this.bookmarked = bookmarked;
         this.categoryId = categoryId;
+        this.userName = userName;
     }
 
     public Long getPostId() {
@@ -69,6 +71,14 @@ public class PostListDTO {
         this.categoryId = categoryId;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     @Override
     public String toString() {
         return "PostListDTO{" +
@@ -78,6 +88,7 @@ public class PostListDTO {
                 ", mainImageUrl='" + mainImageUrl + '\'' +
                 ", bookmarked=" + bookmarked +
                 ", categoryId=" + categoryId +
+                ", userName='" + userName + '\'' +
                 '}';
     }
 }
