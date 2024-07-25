@@ -106,7 +106,7 @@
         <div class="scope" id="rating">
             <button id="openRatingModal" data-post-id="*{postId}">
                 <img src="/assets/svg/star.svg" alt="별점" id="ratingStar">
-                <span id="averageRating">0</span>
+                <span id="averageRating" th:text="${rating}">0</span>
             </button>
         </div>
     </div>

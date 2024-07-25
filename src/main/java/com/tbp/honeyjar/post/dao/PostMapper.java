@@ -23,4 +23,6 @@ public interface PostMapper {
     int getLikeCountByPostId(Long postId);
 
     int getIsLikedByPostIdAndUserId(Long postId, Long userId);
+
+    float getRating(Long postId);
 }

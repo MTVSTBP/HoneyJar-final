@@ -165,4 +165,15 @@
             post_id = #{postId} AND user_id = #{userId}
     </select>
 
+    <select id="getRating" parameterType="_long">
+        SELECT
+            ROUND(AVG(rating), 1)
+        FROM
+            ratings
+        WHERE
+            place_id = (SELECT place_id
+                        FROM post
+                        WHERE post_id = #{postId})
+    </select>
+
 </mapper>
