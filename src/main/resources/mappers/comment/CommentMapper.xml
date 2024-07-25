@@ -14,7 +14,6 @@
         <result property="comment" column="comment"/>
         <result property="updatedAt" column="updated_at"/>
         <result property="userName" column="name"/>
-        <result property="url" column="url"/>
     </resultMap>
 
     <resultMap id="commentResultMap" type="com.tbp.honeyjar.comment.dto.CommentRequestDTO">
@@ -29,7 +28,6 @@
               , C.UPDATED_AT
               , C.CREATED_AT
               , U.NAME
-              , I.URL
         FROM
                 COMMENT AS C
         JOIN
@@ -65,18 +63,31 @@
         SELECT
                 COMMENT_ID
               , COMMENT
+              , USER_ID
         FROM
                 COMMENT
         WHERE
-                COMMENT_ID = #{ commentId };
+                COMMENT_ID = #{ commentId }
+            AND
+                USER_ID = #{ user_id }
+    </select>
+
+    <select id="findAllCommentListById" resultMap="commentListResultMap">
+        SELECT
+                a.comment_id
+              , a.comment
+              , a.created_at
+              , b.name
+        FROM
+                comment as a JOIN user as b on a.user_id = b.user_id
+        where
+                a.post_id = #{ post_id }
     </select>
 
     <update id="modifyComment" parameterType="com.tbp.honeyjar.comment.dto.CommentModifyDTO">
         UPDATE COMMENT
         SET
                 COMMENT = #{ comment }
-              , POST_ID = #{ postId }
-              , USER_ID = #{ userId }
         WHERE
                 COMMENT_ID = #{ commentId }
     </update>

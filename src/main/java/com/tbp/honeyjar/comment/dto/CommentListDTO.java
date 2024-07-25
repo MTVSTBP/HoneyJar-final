@@ -12,19 +12,17 @@ public class CommentListDTO {
     private String comment;
     private String updatedAt;
     private String userName;
-    private String url;
 
     public CommentListDTO() {
     }
 
-    public CommentListDTO(long userId, long postId, long commentId, String comment, String updatedAt, String userName, String url) {
+    public CommentListDTO(long userId, long postId, long commentId, String comment, String updatedAt, String userName) {
         this.userId = userId;
         this.postId = postId;
         this.commentId = commentId;
         this.comment = comment;
         this.updatedAt = updatedAt;
         this.userName = userName;
-        this.url = url;
     }
 
     public long getUserId() {
@@ -75,13 +73,6 @@ public class CommentListDTO {
         this.userName = userName;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
 
     @Override
     public String toString() {
@@ -92,7 +83,6 @@ public class CommentListDTO {
                 ", comment='" + comment + '\'' +
                 ", updatedAt='" + updatedAt + '\'' +
                 ", userName='" + userName + '\'' +
-                ", url='" + url + '\'' +
                 '}';
     }
 }

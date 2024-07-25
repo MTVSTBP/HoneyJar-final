@@ -42,4 +42,8 @@ public class CommentService {
     public void softDeleteComment(Long postId) {
         commentMapper.softDeleteComment(postId);
     }
+
+    public List<CommentListDTO> findAllCommentListById(Long postId) {
+        return commentMapper.findAllCommentListById(postId);
+    }
 }

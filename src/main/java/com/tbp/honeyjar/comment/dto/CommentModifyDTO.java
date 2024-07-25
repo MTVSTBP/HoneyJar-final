@@ -9,13 +9,15 @@ import lombok.Setter;
 public class CommentModifyDTO {
     private Long commentId;
     private String comment;
+    private Long postId;
 
     public CommentModifyDTO() {
     }
 
-    public CommentModifyDTO(Long commentId, String comment) {
+    public CommentModifyDTO(Long commentId, String comment, Long postId) {
         this.commentId = commentId;
         this.comment = comment;
+        this.postId = postId;
     }
 
     public Long getCommentId() {
@@ -34,11 +36,17 @@ public class CommentModifyDTO {
         this.comment = comment;
     }
 
+    public Long getPostId() { return postId;}
+
+    public void setPostId(Long postId) { this.postId = postId;}
+
+
     @Override
     public String toString() {
         return "CommentModifyDTO{" +
                 "commentId=" + commentId +
                 ", comment='" + comment + '\'' +
+                ", postId=" + postId +
                 '}';
     }
 }

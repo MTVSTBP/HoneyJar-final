@@ -11,7 +11,7 @@
 </head>
 <body>
 <div id="container">
-    <form action="/comment/regist" id="comment" class="comment_create" method="post">
+    <form th:action="@{/comment/regist}" id="comment" class="comment_create" method="post" th:object="${newComment}">
         <div class="comment_input">
             <div class="edit_icon">
                 <img src="/assets/svg/mode.svg" alt="edit">
@@ -20,7 +20,7 @@
                 댓글
             </div>
             <div class="input_area">
-                <input class="text" placeholder="댓글을 입력해주세요" name="comment"/>
+                <input class="text" placeholder="댓글을 입력해주세요" th:field="*{newComment.comment}"/> <!-- name="comment" -->
             </div>
             <div class="input_submit">
                 <button type="submit" id="registSubmit" class="submit_button">등록</button>
@@ -32,7 +32,7 @@
     <div class="comment_list">
         <div class="user_details" th:each="comment, commentIndex : ${commentList}">
             <div class="user_record">
-                <img th:src="@{${comment.url}}" onerror="this.src='assets/svg/base_profile.svg'" alt="" class="user_profile">
+                <img src='/assets/svg/base_profile.svg' alt="" class="user_profile">
                 <div class="user">
                     <div class="user_info">
                         <span class="user_name" th:text="${comment.userName}">사용자</span>

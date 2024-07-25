@@ -1,18 +1,18 @@
 package com.tbp.honeyjar.comment.dto;
 
-import lombok.Data;
-
 
 public class CommentRequestDTO {
     private Long commentId;
     private String content;
+    private Long userId;
 
     public CommentRequestDTO() {
     }
 
-    public CommentRequestDTO(Long commentId, String content) {
+    public CommentRequestDTO(Long commentId, String content, Long userId) {
         this.commentId = commentId;
         this.content = content;
+        this.userId = userId;
     }
 
     public Long getCommentId() {
@@ -31,11 +31,16 @@ public class CommentRequestDTO {
         this.content = content;
     }
 
+    public Long getUserId() { return userId; }
+
+    public void setUserId(Long userId) { this.userId = userId; }
+
     @Override
     public String toString() {
         return "CommentRequestDTO{" +
                 "commentId=" + commentId +
                 ", content='" + content + '\'' +
+                ", userId=" + userId +
                 '}';
     }
 }

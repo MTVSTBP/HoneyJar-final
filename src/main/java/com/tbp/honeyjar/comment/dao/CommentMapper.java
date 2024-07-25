@@ -22,4 +22,6 @@ public interface CommentMapper {
     void deleteCommentById(Long commentId);
 
     void softDeleteComment(Long postId);
+
+    List<CommentListDTO> findAllCommentListById(Long postId);
 }
