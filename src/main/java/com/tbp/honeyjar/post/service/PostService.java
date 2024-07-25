@@ -128,4 +128,8 @@ public class PostService {
     public boolean getIsRatedByPostIdAndUserId(Long postId, Long userId) {
         return postMapper.getIsRatedByPostIdAndUserId(postId, userId) == 1;
     }
+
+    public void ratingAgain(PostRatingRequestDto requestDto) {
+        postMapper.ratingAgain(requestDto);
+    }
 }

@@ -85,8 +85,6 @@ public class PostController {
             float rating = postService.getRating(postId);
             boolean isRated = postService.getIsRatedByPostIdAndUserId(postId, userId);
 
-            System.out.println("isRated = " + isRated);
-            
             model.addAttribute("post", post);
             model.addAttribute("userId", userId);
             model.addAttribute("likeCount", likeCount);
@@ -140,6 +138,21 @@ public class PostController {
             requestDto.setUserId(userId);
 
             postService.rating(requestDto);
+        }
+    }
+
+    @PostMapping("/rating-again/{postId}")
+    @ResponseBody
+    public void postRatingAgain(@PathVariable Long postId, Principal principal,@RequestBody PostRatingRequestDto requestDto) {
+
+        PostResponseDTO post = postService.findPostById(postId);
+        Long userId = userService.findByKakaoId(principal.getName()).getUserId();
+
+        if (post != null && userId != null) {
+            requestDto.setPostId(post.getPostId());
+            requestDto.setUserId(userId);
+
+            postService.ratingAgain(requestDto);
         }
     }
 

@@ -196,6 +196,7 @@
         )
     </insert>
 
+    <!-- 포스트 평점 유무 확인 쿼리 -->
     <select id="getIsRatedByPostIdAndUserId" parameterType="com.tbp.honeyjar.post.dto.PostLikeRequestDto">
         SELECT
             COUNT(*)
@@ -204,5 +205,13 @@
         WHERE
             place_id = (SELECT place_id FROM post WHERE post_id = #{postId}) AND user_id = #{userId}
     </select>
+
+    <update id="ratingAgain" parameterType="com.tbp.honeyjar.post.dto.PostRatingRequestDto">
+        UPDATE ratings
+        SET
+            rating = #{rating}
+        WHERE
+            place_id = (SELECT place_id FROM post WHERE post_id = #{postId}) AND user_id = #{userId}
+    </update>
 
 </mapper>

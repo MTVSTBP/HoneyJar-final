@@ -266,10 +266,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
             });
         })
+        const modalButton = document.getElementById("openRatingModal");
 
         if (confirmRating) {
             const userId = parseInt(likeButton.getAttribute("data-user-id"))
             const postId = parseInt(likeButton.getAttribute("data-post-id"))
+            let isRated = modalButton.getAttribute("data-rated") === "true";
+
+
 
             confirmRating.addEventListener('click', function () {
                 ratingModal.style.display = "none";
@@ -280,9 +284,13 @@ document.addEventListener("DOMContentLoaded", function () {
                     });
                 });
 
-                console.log(selectedRating)
-
-                rating(userId, postId, selectedRating);
+                if (!isRated) {
+                    rating(userId, postId, selectedRating);
+                    isRated = true;
+                } else {
+                    ratingAgain(userId, postId, selectedRating);
+                    isRated = false;
+                }
             });
         }
 
@@ -304,6 +312,25 @@ document.addEventListener("DOMContentLoaded", function () {
                     }
                 })
             }
+
+        function ratingAgain(userId, postId, selectedRating) {
+            fetch('/post/rating-again/' + postId, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'charset': 'UTF-8'
+                },
+                body: JSON.stringify({
+                    'user-id': userId,
+                    'post-id': postId,
+                    'rating': selectedRating
+                })
+            }).then(res => {
+                if (!res.ok) {
+                    throw new Error('Network response was not ok');
+                }
+            })
+        }
         }
     })
 
