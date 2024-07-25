@@ -49,6 +49,44 @@ public class PostService {
     }
 
 
+//    @Transactional
+//    public Long createPost(PostRequestDTO postRequestDTO, List<MultipartFile> files, MultipartFile mainImageFile, String mainImageUrl) throws IOException, FirebaseAuthException {
+//        // 새로운 장소 등록
+//        PlaceDTO placeDTO = postRequestDTO.getPlace();
+//        placeService.createPlace(placeDTO);
+//        Long placeId = placeDTO.getPlaceId();
+//
+//        // 포스트 등록 시 placeId를 설정
+//        postRequestDTO.setPlaceId(placeId);
+//        postMapper.createPost(postRequestDTO);
+//        Long postId = postRequestDTO.getPostId();
+//
+//        // 메인 이미지 업로드
+//        String mainImageUploadUrl = fireBaseService.uploadFile(mainImageFile, UUID.randomUUID().toString());
+//
+//        // 파일 업로드 및 이미지 URL 리스트 생성
+//        List<String> imageUrls = new ArrayList<>();
+//        for (MultipartFile file : files) {
+//            String fileName = UUID.randomUUID().toString();
+//            String imageUrl = fireBaseService.uploadFile(file, fileName);
+//            imageUrls.add(imageUrl);
+//        }
+//
+//        // 메인 이미지 URL을 리스트에서 제외
+//        imageUrls = imageUrls.stream()
+//                .filter(imageUrl -> !imageUrl.equals(mainImageUploadUrl))
+//                .collect(Collectors.toList());
+//
+//        postRequestDTO.setImageUrls(imageUrls);
+//        postRequestDTO.setMainImageUrl(mainImageUploadUrl);
+//
+//        // 썸네일 이미지를 포함한 모든 이미지를 삽입
+//        imageService.saveMainImage(mainImageUploadUrl, postRequestDTO.getUserId(), postId);
+//        imageService.saveImages(imageUrls, postRequestDTO.getUserId(), postId);
+//
+//        return postId;
+//    }
+
     @Transactional
     public Long createPost(PostRequestDTO postRequestDTO, List<MultipartFile> files, MultipartFile mainImageFile, String mainImageUrl) throws IOException, FirebaseAuthException {
         // 새로운 장소 등록
@@ -66,16 +104,20 @@ public class PostService {
 
         // 파일 업로드 및 이미지 URL 리스트 생성
         List<String> imageUrls = new ArrayList<>();
-        for (MultipartFile file : files) {
-            String fileName = UUID.randomUUID().toString();
-            String imageUrl = fireBaseService.uploadFile(file, fileName);
-            imageUrls.add(imageUrl);
-        }
+        if (files != null) {
+            for (MultipartFile file : files) {
+                if (!file.isEmpty()) { // 빈 파일인지 확인
+                    String fileName = UUID.randomUUID().toString();
+                    String imageUrl = fireBaseService.uploadFile(file, fileName);
+                    imageUrls.add(imageUrl);
+                }
+            }
 
-        // 메인 이미지 URL을 리스트에서 제외
-        imageUrls = imageUrls.stream()
-                .filter(imageUrl -> !imageUrl.equals(mainImageUploadUrl))
-                .collect(Collectors.toList());
+            // 메인 이미지 URL을 리스트에서 제외
+            imageUrls = imageUrls.stream()
+                    .filter(imageUrl -> !imageUrl.equals(mainImageUploadUrl))
+                    .collect(Collectors.toList());
+        }
 
         postRequestDTO.setImageUrls(imageUrls);
         postRequestDTO.setMainImageUrl(mainImageUploadUrl);
@@ -86,6 +128,7 @@ public class PostService {
 
         return postId;
     }
+
 
 
 
