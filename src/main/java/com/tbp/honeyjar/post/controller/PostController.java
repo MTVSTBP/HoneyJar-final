@@ -2,6 +2,7 @@ package com.tbp.honeyjar.post.controller;
 
 
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.gson.Gson;
 import com.tbp.honeyjar.admin.service.CategoryService;
 import com.tbp.honeyjar.image.service.ImageService;
 import com.tbp.honeyjar.login.service.user.UserService;
@@ -123,8 +124,10 @@ public class PostController {
         PostResponseDTO post = postService.findPostById(postId);
         PostRequestDTO postRequestDTO = postService.convertToPostRequestDTO(post);
         postRequestDTO.setExistingImageUrls(post.getImageUrls()); // 기존 이미지 URL 설정
+
         model.addAttribute("postRequestDTO", postRequestDTO);
         model.addAttribute("categories", categoryService.findAllFoodCategory());
+
         return "pages/post/postCorrection";
     }
 
