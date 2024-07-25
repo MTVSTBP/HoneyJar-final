@@ -30,26 +30,27 @@ public class CommentController {
     //                  {postId}/comment
 
     // 댓글 조회
-    @GetMapping("/{postId}")
+    @GetMapping("{postId}")
     public String commentList(@PathVariable Long postId, Model model) {
         // postId를 받아주고 에러처리
         List<CommentListDTO> commentList = commentService.findAllCommentListById(postId);
 //        List<CommentListDTO> commentList = commentService.findAllComment();
         model.addAttribute("commentList", commentList);
-
+        model.addAttribute("postId", postId);
+        model.addAttribute("newComment", new CommentRegistDTO());
         return "pages/comment/comment";
     }
 
     // 댓글 등록
-    @PostMapping("regist") //
-    public String registComment(@ModelAttribute CommentRegistDTO newComment, Principal principal) {
+    @PostMapping("{postId}/regist") ///
+    public String registComment(@ModelAttribute CommentRegistDTO newComment, Principal principal, @PathVariable Long postId) {
         // userId 기반으로 등록을 하기때문에 코드 추가 해야함
         Long userId = userService.findUserIdByKakaoId(principal.getName());
         newComment.setUserId(userId);
-
+        newComment.setPostId(postId);
         commentService.registComment(newComment);
 
-        return "redirect:/comment/{newComment.getPostId()}";
+        return "redirect:/comment/{postId}";
     }
 
     // 댓글 수정

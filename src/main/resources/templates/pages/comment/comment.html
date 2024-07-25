@@ -11,7 +11,7 @@
 </head>
 <body>
 <div id="container">
-    <form th:action="@{/comment/regist}" id="comment" class="comment_create" method="post" th:object="${newComment}">
+    <form th:action="@{/comment/{postId}/regist(postId=${postId})}" id="comment" class="comment_create" method="post" th:object="${newComment}">
         <div class="comment_input">
             <div class="edit_icon">
                 <img src="/assets/svg/mode.svg" alt="edit">
@@ -20,7 +20,7 @@
                 댓글
             </div>
             <div class="input_area">
-                <input class="text" placeholder="댓글을 입력해주세요" th:field="*{newComment.comment}"/> <!-- name="comment" -->
+                <input class="text" placeholder="댓글을 입력해주세요" th:field="*{comment}"/> <!-- name="comment" -->
             </div>
             <div class="input_submit">
                 <button type="submit" id="registSubmit" class="submit_button">등록</button>
@@ -43,7 +43,7 @@
                         <div class="click_box">
                             <div class="d_flex">
                                 <a class="edit_p editButton">수정</a>
-                                <a id="deletePost" class="delete_p deleteButton" th:href="@{|/comment/${comment.getCommentId()}|}">삭제</a>
+                                <a id="deletePost" class="delete_p deleteButton" th:href="@{|/comment/${comment.getPostId()}|}">삭제</a>
                             </div>
                         </div>
                     </div>

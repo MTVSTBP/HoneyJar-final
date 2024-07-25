@@ -1,43 +1,23 @@
 package com.tbp.honeyjar.comment.dto;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-
+@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public class CommentRegistDTO {
     private String comment;
-    private long userId;
-    private long postId;
+    private Long userId;
+    private Long postId;
 
-    public CommentRegistDTO() {
-    }
 
     public CommentRegistDTO(String comment, long userId, long postId) {
         this.comment = comment;
         this.userId = userId;
-        this.postId = postId;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
-    public long getPostId() {
-        return postId;
-    }
-
-    public void setPostId(long postId) {
         this.postId = postId;
     }
 
