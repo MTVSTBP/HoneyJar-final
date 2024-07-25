@@ -61,10 +61,11 @@ public class PostController {
         return "pages/post/postWrite";
     }
 
+
     @PostMapping("/write")
     public ResponseEntity<Map<String, Object>> postCreate(
             @ModelAttribute PostRequestDTO postRequestDTO,
-            @RequestParam("files") List<MultipartFile> files,
+            @RequestParam(value = "files", required = false) List<MultipartFile> files,
             @RequestParam("mainImageFile") MultipartFile mainImageFile,
             @RequestParam("mainImageUrl") String mainImageUrl,
             Principal principal) throws IOException {

@@ -49,6 +49,7 @@ public class PostService {
     }
 
 
+
     @Transactional
     public Long createPost(PostRequestDTO postRequestDTO, List<MultipartFile> files, MultipartFile mainImageFile, String mainImageUrl) throws IOException, FirebaseAuthException {
         // 새로운 장소 등록
@@ -66,16 +67,20 @@ public class PostService {
 
         // 파일 업로드 및 이미지 URL 리스트 생성
         List<String> imageUrls = new ArrayList<>();
-        for (MultipartFile file : files) {
-            String fileName = UUID.randomUUID().toString();
-            String imageUrl = fireBaseService.uploadFile(file, fileName);
-            imageUrls.add(imageUrl);
-        }
+        if (files != null) {
+            for (MultipartFile file : files) {
+                if (!file.isEmpty()) { // 빈 파일인지 확인
+                    String fileName = UUID.randomUUID().toString();
+                    String imageUrl = fireBaseService.uploadFile(file, fileName);
+                    imageUrls.add(imageUrl);
+                }
+            }
 
-        // 메인 이미지 URL을 리스트에서 제외
-        imageUrls = imageUrls.stream()
-                .filter(imageUrl -> !imageUrl.equals(mainImageUploadUrl))
-                .collect(Collectors.toList());
+            // 메인 이미지 URL을 리스트에서 제외
+            imageUrls = imageUrls.stream()
+                    .filter(imageUrl -> !imageUrl.equals(mainImageUploadUrl))
+                    .collect(Collectors.toList());
+        }
 
         postRequestDTO.setImageUrls(imageUrls);
         postRequestDTO.setMainImageUrl(mainImageUploadUrl);
@@ -86,6 +91,7 @@ public class PostService {
 
         return postId;
     }
+
 
 
 
