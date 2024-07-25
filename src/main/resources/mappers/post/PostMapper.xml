@@ -241,4 +241,13 @@
         WHERE
             place_id = (SELECT place_id FROM post WHERE post_id = #{postId}) AND user_id = #{userId}
     </select>
+
+    <!-- 포스트 평점 업데이트 쿼리 -->
+    <update id="ratingAgain" parameterType="com.tbp.honeyjar.post.dto.PostRatingRequestDto">
+        UPDATE ratings
+        SET
+            rating = #{rating}
+        WHERE
+            place_id = (SELECT place_id FROM post WHERE post_id = #{postId}) AND user_id = #{userId}
+    </update>
 </mapper>

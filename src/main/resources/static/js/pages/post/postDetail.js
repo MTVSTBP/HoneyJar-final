@@ -322,9 +322,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     star.addEventListener('click', () => {
                         selectedRating = star.getAttribute('data-value');
                     });
-
-                    rating(userId, postId, selectedRating);
                 });
+                if (!isRated) {
+                    rating(userId, postId, selectedRating);
+                    isRated = true;
+                } else {
+                    ratingAgain(userId, postId, selectedRating);
+                    isRated = false;
+                }
             }
         )
     }
@@ -347,6 +352,25 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         })
     }
+
+        function ratingAgain(userId, postId, selectedRating) {
+            fetch('/post/rating-again/' + postId, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'charset': 'UTF-8'
+                },
+                body: JSON.stringify({
+                    'user-id': userId,
+                    'post-id': postId,
+                    'rating': selectedRating
+                })
+            }).then(res => {
+                if (!res.ok) {
+                    throw new Error('Network response was not ok');
+                }
+            })
+        }
 
 
     // 더보기 버튼 클릭 이벤트
