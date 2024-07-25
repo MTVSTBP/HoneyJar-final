@@ -104,6 +104,7 @@ public class PostService {
 
     public PostResponseDTO findPostById(Long postId) {
         PostResponseDTO postResponseDTO = postMapper.findPostById(postId);
+        // 카테고리 이름 설정
         Long categoryId = postResponseDTO.getCategoryId();
         if (categoryId != null) {
             FoodResponseDto category = categoryMapper.findFoodById(categoryId);
@@ -111,6 +112,17 @@ public class PostService {
                 postResponseDTO.setCategoryName(category.getName());
             }
         }
+
+        // 메인 이미지 URL 가져오기 (예시: mainImageUrl 필드를 데이터베이스에서 가져옴)
+        String mainImageUrl = postResponseDTO.getMainImageUrl();
+        postResponseDTO.setMainImageUrl(mainImageUrl);
+
+        // 썸네일 인덱스 계산
+        if (postResponseDTO.getImageUrls() != null) {
+            int thumbnailIndex = postResponseDTO.getImageUrls().indexOf(mainImageUrl);
+            postResponseDTO.setThumbnailIndex(thumbnailIndex);
+        }
+
         return postResponseDTO;
     }
 
@@ -127,6 +139,7 @@ public class PostService {
         postRequestDTO.setCategoryId(post.getCategoryId());
         postRequestDTO.setCreatedAt(post.getCreatedAt());
         postRequestDTO.setUpdatedAt(post.getUpdatedAt());
+        postRequestDTO.setMainImageUrl(post.getMainImageUrl());
 
         // Main image URL 설정
         if (post.getImageUrls() != null && !post.getImageUrls().isEmpty()) {

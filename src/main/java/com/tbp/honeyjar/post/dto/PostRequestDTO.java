@@ -21,11 +21,12 @@ public class PostRequestDTO {
     private LocalDateTime updatedAt;
     private Long categoryId;
     private List<String> existingImageUrls; // 추가된 필드
+    private int thumbnailIndex;
 
 
     public PostRequestDTO() {}
 
-    public PostRequestDTO(Long postId, String title, String recommendMenu, int price, String post, Long userId, List<String> imageUrls, String mainImageUrl, PlaceDTO place, Long placeId, LocalDateTime createdAt, LocalDateTime updatedAt, Long categoryId, List<String> existingImageUrls) {
+    public PostRequestDTO(Long postId, String title, String recommendMenu, int price, String post, Long userId, List<String> imageUrls, String mainImageUrl, PlaceDTO place, Long placeId, LocalDateTime createdAt, LocalDateTime updatedAt, Long categoryId, List<String> existingImageUrls, int thumbnailIndex) {
         this.postId = postId;
         this.title = title;
         this.recommendMenu = recommendMenu;
@@ -40,6 +41,7 @@ public class PostRequestDTO {
         this.updatedAt = updatedAt;
         this.categoryId = categoryId;
         this.existingImageUrls = existingImageUrls;
+        this.thumbnailIndex = thumbnailIndex;
     }
 
     public Long getPostId() {
@@ -154,6 +156,14 @@ public class PostRequestDTO {
         this.existingImageUrls = existingImageUrls;
     }
 
+    public int getThumbnailIndex() {
+        return thumbnailIndex;
+    }
+
+    public void setThumbnailIndex(int thumbnailIndex) {
+        this.thumbnailIndex = thumbnailIndex;
+    }
+
     @Override
     public String toString() {
         return "PostRequestDTO{" +
@@ -171,6 +181,7 @@ public class PostRequestDTO {
                 ", updatedAt=" + updatedAt +
                 ", categoryId=" + categoryId +
                 ", existingImageUrls=" + existingImageUrls +
+                ", thumbnailIndex=" + thumbnailIndex +
                 '}';
     }
 }

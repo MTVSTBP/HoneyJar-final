@@ -87,6 +87,15 @@ public class PostController {
     }
 
 
+    @GetMapping("/{postId}")
+    public ResponseEntity<PostRequestDTO> getPost(@PathVariable Long postId) {
+        PostResponseDTO postResponseDTO = postService.findPostById(postId);
+        PostRequestDTO postRequestDTO = postService.convertToPostRequestDTO(postResponseDTO);
+        postRequestDTO.setExistingImageUrls(postResponseDTO.getImageUrls()); // 기존 이미지 URL 설정
+        postRequestDTO.setThumbnailIndex(postResponseDTO.getThumbnailIndex()); // 썸네일 인덱스 설정
+        return ResponseEntity.ok(postRequestDTO);
+    }
+
 
     @GetMapping("/detail")
     public String getPostDetail(@RequestParam Long postId, Model model, Principal principal) {
