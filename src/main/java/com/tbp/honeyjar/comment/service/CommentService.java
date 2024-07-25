@@ -6,6 +6,7 @@ import com.tbp.honeyjar.comment.dto.CommentModifyDTO;
 import com.tbp.honeyjar.comment.dto.CommentRegistDTO;
 import com.tbp.honeyjar.comment.dto.CommentRequestDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +18,7 @@ import java.util.List;
 public class CommentService {
 
     private final CommentMapper commentMapper;
+    private final SecurityAutoConfiguration securityAutoConfiguration;
 
     @Transactional(readOnly = true)
     public List<CommentListDTO> findAllComment() {
@@ -36,6 +38,7 @@ public class CommentService {
     }
 
     public void deleteComment(Long commentId) {
+        System.out.println("코멘트 아이디: " + commentId);
          commentMapper.deleteCommentById(commentId);
     }
 

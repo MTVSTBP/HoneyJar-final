@@ -39,6 +39,10 @@ public class CommentController {
         model.addAttribute("commentList", commentList);
         model.addAttribute("postId", postId);
         model.addAttribute("newComment", new CommentRegistDTO());
+        System.out.println("================commentList===============");
+        commentList.forEach(System.out::println);
+        System.out.println("================postId===============");
+        System.out.println("댓글 postId = " + postId);
         return "pages/comment/comment";
     }
 

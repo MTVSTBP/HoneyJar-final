@@ -85,12 +85,14 @@ document.addEventListener("DOMContentLoaded", function() {
         deleteButton.addEventListener('click', async function(event) {
             event.preventDefault(); // 기본 링크 행동 방지
             event.stopPropagation(); // 클릭 이벤트 전파 방지
-
-            console.log(this.getAttribute('data-post-id'));
-
-            const postId = this.getAttribute('data-post-id'); // postId 가져오기
-            const commentId = this.getAttribute('data-comment-id'); // commentId 가져오기
-            // console.log(commentId);
+            //document.querySelector(".comment_postId")
+            //document.querySelector(".user_date")
+            // const postId = this.getAttribute('data-post-id'); // postId 가져오기
+            const postId = this.getAttribute('data-post-id');
+            const commentId = this.getAttribute('data-post-id'); // commentId 가져오기
+            console.log("최형석 바보ㅋ")
+            console.log("commentId: ", commentId);
+            console.log("postId: ", postId);
 
             // 삭제 확인 메시지
             if (!confirm('댓글을 삭제하시겠습니까?')) {

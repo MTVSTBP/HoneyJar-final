@@ -36,7 +36,8 @@
                 <div class="user">
                     <div class="user_info">
                         <span class="user_name" th:text="${comment.userName}">사용자</span>
-                        <span class="user_date" th:text="${comment.updatedAt}">date</span>
+                        <span class="user_date" th:text="${comment.updatedAt}" th:data-post-id="${comment.commentId}">date</span>
+                        <input class="comment_postId" type="hidden" th:data-post-id="${postId}"/>
                     </div>
                     <div class="more_h">
                         <img src="/assets/svg/more_horiz.svg" alt="more_horiz">
