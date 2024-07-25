@@ -87,6 +87,8 @@ public class InquiryController {
         String kakaoId = principal.getName();
         User userInfo = userMapper.findByKakaoId(kakaoId);
         InquiryDto inquiry = inquiryService.getInquiryById(inquiryId);
+        List<QnaCategoryListResponseDto> categories = categoryService.findAllQnaCategory();
+        model.addAttribute("categories", categories);
         model.addAttribute("inquiry", inquiry);
         model.addAttribute("username", userInfo.getName());
         return "pages/inquiry/inquiryCorrection";
