@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.print.Pageable;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -42,10 +43,9 @@ public class PostService {
         this.categoryMapper = categoryMapper;
     }
 
-    public List<PostListDTO> findAllPost(Long category) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("category", category);
-        return postMapper.findAllPost(params);
+    public List<PostListDTO> findPostsByCategory(Long category, int page, int size) {
+        int offset = page * size; // offset 계산
+        return postMapper.findPostsByCategory(category, size, offset);
     }
 
 

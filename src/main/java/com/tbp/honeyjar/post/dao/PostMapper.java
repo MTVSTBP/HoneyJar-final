@@ -4,6 +4,7 @@ import com.tbp.honeyjar.post.dto.PostListDTO;
 import com.tbp.honeyjar.post.dto.PostRequestDTO;
 import com.tbp.honeyjar.post.dto.PostResponseDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -11,7 +12,9 @@ import java.util.Map;
 @Mapper
 public interface PostMapper {
 
-    List<PostListDTO> findAllPost(Map<String, Object> params);
+    List<PostListDTO> findPostsByCategory(@Param("category") Long category,
+                                          @Param("size") int size,
+                                          @Param("offset") int offset);
 
     void createPost(PostRequestDTO postRequestDTO);
 
