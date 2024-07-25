@@ -181,4 +181,24 @@
         WHERE
         post_id = #{postId} and user_id = #{userId}
     </delete>
+
+    <!-- 포스트 좋아요 카운트 쿼리 -->
+    <select id="getLikeCountByPostId" parameterType="_long">
+        SELECT
+            COUNT(*)
+        FROM
+            LIKED
+        WHERE
+            post_id = #{postId}
+    </select>
+
+    <!-- 포스트 좋아요 확인 쿼리 -->
+    <select id="getIsLikedByPostIdAndUserId" parameterType="com.tbp.honeyjar.post.dto.PostLikeRequestDto">
+        SELECT
+            COUNT(*)
+        FROM
+            LIKED
+        WHERE
+            post_id = #{postId} AND user_id = #{userId}
+    </select>
 </mapper>

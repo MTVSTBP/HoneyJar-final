@@ -98,14 +98,22 @@ public class PostController {
             isAuthor = post.getUserId().equals(loggedInUserId);
         }
 
-        // 디버깅을 위한 로그 추가
-        System.out.println("Post UserId: " + post.getUserId());
-        System.out.println("Logged in UserId: " + loggedInUserId);
-        System.out.println("Is Author: " + isAuthor);
+        if (loggedInUserId != null) {
+            int likeCount = postService.getLikeCountByPostId(postId);
+            boolean isLiked = postService.getIsLikedByPostIdAndUserId(postId, loggedInUserId);
 
-        model.addAttribute("post", post);
-        model.addAttribute("isAuthor", isAuthor); // 작성자인지 여부를 모델에 추가
-        model.addAttribute("userId", loggedInUserId);
+            // 디버깅을 위한 로그 추가
+            System.out.println("Post UserId: " + post.getUserId());
+            System.out.println("Logged in UserId: " + loggedInUserId);
+            System.out.println("Is Author: " + isAuthor);
+
+            model.addAttribute("post", post);
+            model.addAttribute("isAuthor", isAuthor); // 작성자인지 여부를 모델에 추가
+            model.addAttribute("userId", loggedInUserId);
+            model.addAttribute("likeCount", likeCount);
+            model.addAttribute("isLiked", isLiked);
+        }
+
         return "pages/post/postDetail";
     }
 
