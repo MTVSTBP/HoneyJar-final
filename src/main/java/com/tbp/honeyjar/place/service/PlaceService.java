@@ -37,4 +37,9 @@ public class PlaceService {
     public void deletePlace(Long placeId) {
         placeMapper.deletePlaceById(placeId);
     }
+
+    @Transactional(readOnly = true)
+    public float getRatingById(Long placeId) {
+        return placeMapper.getRatingById(placeId);
+    }
 }
