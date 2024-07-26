@@ -98,9 +98,11 @@ public class PostController {
     }
 
 
+
     @GetMapping("/detail")
     public String getPostDetail(@RequestParam Long postId, Model model, Principal principal) {
         PostResponseDTO post = postService.findPostById(postId);
+        int commentCnt = postService.commentCount(postId);
         Long loggedInUserId = userService.findUserIdByKakaoId(principal.getName()); // 로그인된 사용자의 userId를 가져옴
 
         boolean isAuthor = false;
@@ -114,6 +116,9 @@ public class PostController {
         System.out.println("Is Author: " + isAuthor);
 
         model.addAttribute("post", post);
+        model.addAttribute("commentCnt", commentCnt);
+//        System.out.println("commentCnt= " + commentCnt);
+
         model.addAttribute("isAuthor", isAuthor); // 작성자인지 여부를 모델에 추가
         return "pages/post/postDetail";
     }
@@ -159,6 +164,7 @@ public class PostController {
         postRequestDTO.setExistingImageUrls(existingImageUrls);
 
         postService.updatePost(postRequestDTO, files, mainImageFile, mainImageUrl);
+
         Map<String, Object> response = new HashMap<>();
         response.put("postId", postRequestDTO.getPostId());
         response.put("message", "Post updated successfully");

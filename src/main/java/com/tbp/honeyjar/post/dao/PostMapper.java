@@ -28,4 +28,5 @@ public interface PostMapper {
 
     void softDeletePost(Long postId);
 
+    int commentCount(Long postId);
 }
