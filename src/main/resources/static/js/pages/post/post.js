@@ -24,9 +24,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // 새로 고침 시 기본 값으로 설정
-    sessionStorage.removeItem('sortOption');
-    sessionStorage.removeItem('selectedCategory');
-    sessionStorage.removeItem('goodRestaurant');
+    // sessionStorage.removeItem('sortOption');
+    // sessionStorage.removeItem('selectedCategory');
+    // sessionStorage.removeItem('goodRestaurant');
 
     // 세션 스토리지에서 이전 상태 불러오기
     const savedSortOption = sessionStorage.getItem('sortOption');
