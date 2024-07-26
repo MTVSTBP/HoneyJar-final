@@ -11,6 +11,7 @@
 </head>
 <body>
 <div id="container">
+    <!-- 댓글 등록 -->
     <form th:action="@{/comment/{postId}/regist(postId=${postId})}" id="comment" class="comment_create" method="post" >
         <div class="comment_input">
             <div class="edit_icon">
@@ -41,6 +42,7 @@
 
                         <input class="comment_postId" type="hidden" th:data-post-id="${postId}"/>
                     </div>
+                    <!-- 수정, 삭제 버튼 -->
                     <div class="more_h">
                         <img src="/assets/svg/more_horiz.svg" alt="more_horiz">
                         <div class="click_box">
@@ -52,25 +54,15 @@
                         </div>
                     </div>
                 </div>
-                <!-- 댓글 내용 -->
+                <!-- 사용자가 작성한 댓글 내용 -->
                 <div class="user_comment">
                     <p class="commentText" th:text="${comment.comment}">
                         댓글 내용이 여기에 출력됩니다.
                     </p>
                 </div>
             </div>
-            <!-- 댓글 수정 -->
-<!--            <form th:action="@{|/comment/modify/${comment.commentId}|}" method="post" th:object="${comment}">-->
-<!--                <div class="edit_comment" style="display: none;">-->
-<!--                    <div class="user_edit">-->
-<!--                        <input class="edit_text" placeholder="댓글을 입력해주세요" th:field="*{comment}" />-->
-<!--                    </div>-->
-<!--                    <div class="edit_submit">-->
-<!--                        <button type="submit" class="edit_button">수정</button>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </form>-->
-<!--             댓글 수정-->
+
+            <!-- 수정할 댓글 내용 -->
             <form th:action="@{|/comment/modify/${postId}/${comment.getCommentId()}|}" method="post" th:object="${comment}">
             <div class="edit_comment">
                 <div class="user_edit">
