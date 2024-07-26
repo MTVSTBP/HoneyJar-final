@@ -45,3 +45,30 @@
     width: 30px;
     margin-left: 10px;
 }
+
+.search-result {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 0 0 4px 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.search-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.search-item:hover {
+    background-color: #f0f0f0;
+}
+
+.search input:focus + .search-results {
+    display: block;
+}

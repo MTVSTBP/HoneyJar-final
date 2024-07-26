@@ -9,8 +9,13 @@
             <div class="search">
                 <input placeholder="가고 싶은 장소를 검색해보세요!">
                 <img src="/assets/svg/search.svg" alt="검색">
+                <div id="searchResults" class="search-result"></div>
             </div>
         </div>
     </div>
 </header>
+<script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=801fe93e4b5c07756a1d7821185a0a72&libraries=services"></script>
+<!--        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fa5ef4c8b53367d10238f7d505c2a083&libraries=services"></script>-->
+<script th:inline="javascript" th:src="@{/js/layout/homeHeader.js}"></script>
 </html>
