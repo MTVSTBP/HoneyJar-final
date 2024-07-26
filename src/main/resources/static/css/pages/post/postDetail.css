@@ -190,6 +190,7 @@ button {
 .kind_wrap .arrow>a.next {
     width: 10%;
     height: 100%;
+    right: 0;
 }
 
 /* 음식점 정보 */

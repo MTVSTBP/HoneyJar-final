@@ -77,6 +77,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 liWidth = setSliderWidth();
             });
         } else {
+            // 이미지가 하나밖에 없는 경우 화살표 숨기기
+            const arrowContainer = container.querySelector('.arrow');
+            if (arrowContainer) {
+                arrowContainer.style.display = 'none';
+            }
+
             const singleSlideWidth = container.clientWidth;
             slideLis.forEach(li => {
                 li.style.width = `${singleSlideWidth}px`;
