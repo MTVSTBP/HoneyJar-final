@@ -105,14 +105,14 @@
     cursor: pointer;
 }
 
-#delete-button {
+#edit-button {
     margin-left: 0.5rem;
     background-color: #fff;
     color: #FF8243;
     border: 1px solid #FF8243;
 }
 
-#edit-button {
+#delete-button {
     margin-left: 0.5rem;
     background-color: #fff;
     color: #FF8243;
@@ -130,21 +130,18 @@
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.7);
+
+    justify-content: center;
+    align-items: center;
 }
 
 .modal-content {
     background-color: #fff;
-    margin: auto;
-    padding: 3rem 0 1rem;
+    padding: 3rem 1rem;
     width: 80%;
     max-width: 480px;
     min-width: 320px;
     border-radius: 10px;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    margin-bottom: 2rem;
-    bottom: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -158,18 +155,19 @@
 
 .close {
     position: absolute;
-    right: 3%;
-    top: 5%;
+    right: 1rem;
+    top: 1rem;
+    font-size: 1.5rem;
+    cursor: pointer;
 }
 
 .close:hover,
 .close:focus {
     color: black;
     text-decoration: none;
-    cursor: pointer;
 }
 
-.complete{
+.complete {
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -181,7 +179,7 @@
     color: #fff;
     justify-content: center;
     margin-top: 2rem;
-    border:none;
+    border: none;
 }
 
 .comment_input {
