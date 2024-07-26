@@ -160,4 +160,14 @@
         SET deleted = TRUE
         WHERE post_id = #{postId}
     </update>
+
+    <!-- 코멘트 count -->
+    <select id="commentCount" resultType="int">
+        SELECT
+        COUNT(*)
+        FROM
+        COMMENT
+        WHERE
+        POST_ID = #{ post_id }
+    </select>
 </mapper>

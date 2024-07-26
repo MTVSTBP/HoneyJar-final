@@ -105,9 +105,10 @@
             </button>
         </div>
         <div class="comment">
-            <button id="commentButton">
+            <button id="commentButton"
+                    data-post-id="${post.postId}">
                 <img src="/assets/svg/mode_comment.svg" alt="댓글">
-                <span id="commentCount">0</span>
+                <span id="commentCount" th:text="${commentCnt}">0</span>
             </button>
         </div>
         <div class="scope" id="rating">

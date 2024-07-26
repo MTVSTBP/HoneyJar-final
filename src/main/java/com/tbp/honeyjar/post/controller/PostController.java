@@ -102,6 +102,7 @@ public class PostController {
     public String getPostDetail(@RequestParam Long postId, Model model, Principal principal) {
         PostResponseDTO post = postService.findPostById(postId);
         Long loggedInUserId = userService.findUserIdByKakaoId(principal.getName()); // 로그인된 사용자의 userId를 가져옴
+        int commentCnt = postService.commentCount(postId); // 댓글카운트
 
         boolean isAuthor = false;
         if (post.getUserId() != null) {
@@ -114,6 +115,7 @@ public class PostController {
         System.out.println("Is Author: " + isAuthor);
 
         model.addAttribute("post", post);
+        model.addAttribute("commentCnt", commentCnt);
         model.addAttribute("isAuthor", isAuthor); // 작성자인지 여부를 모델에 추가
         return "pages/post/postDetail";
     }
