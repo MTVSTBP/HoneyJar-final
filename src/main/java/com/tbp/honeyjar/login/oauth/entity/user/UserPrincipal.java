@@ -42,19 +42,14 @@ public class UserPrincipal implements OAuth2User, UserDetails, OidcUser {
         return authorities;
     }
 
-//    @Override
-//    public String getName() {
-//        return kakaoId;
-//    }
-
     @Override
     public String getName() {
-        return String.valueOf(userId);
+        return kakaoId;
     }
 
     @Override
     public String getUsername() {
-        return String.valueOf(userId);
+        return kakaoId;
     }
 
     @Override

@@ -41,18 +41,17 @@ public class SettingsController {
         log.debug("authentication = {}", authentication);
 
         if (authentication != null && authentication.isAuthenticated()) {
-            String userId = authentication.getName(); // 이 부분이 중요합니다.
-            log.info("Settings page accessed - User ID: {}", userId);
+            String kakaoId = authentication.getName();
+            log.info("Settings page accessed - Kakao ID: {}", kakaoId);
 
-            User user = userMapper.findByUserId(Long.parseLong(userId));
+            User user = userMapper.findByKakaoId(kakaoId);
 
             if (user != null) {
                 model.addAttribute("user", user);
                 model.addAttribute("name", user.getName());
-                model.addAttribute("profileImage", user.getProfileImage());
                 return "pages/settings/settings";
             } else {
-                log.warn("User not found for ID: {}", userId);
+                log.warn("User not found for Kakao ID: {}", kakaoId);
             }
         }
 
@@ -65,16 +64,16 @@ public class SettingsController {
         log.debug("authentication = {}", authentication);
 
         if (authentication != null && authentication.isAuthenticated()) {
-            String userId = authentication.getName();
+            String kakaoId = authentication.getName();
 
-            User user = userMapper.findByUserId(Long.parseLong(userId));
+            User user = userMapper.findByKakaoId(kakaoId);
 
             if (user != null) {
                 model.addAttribute("user", user);
                 model.addAttribute("name", user.getName());
                 return "pages/settings/leave";
             } else {
-                log.warn("User not found for ID: {}", userId);
+                log.warn("User not found for Kakao ID: {}", kakaoId);
             }
         }
 
@@ -86,8 +85,10 @@ public class SettingsController {
     public ResponseEntity<?> leaveUser(HttpServletRequest request, HttpServletResponse response) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
-            String userId = authentication.getName();
-            User user = userMapper.findByUserId(Long.parseLong(userId));
+            String kakaoId = authentication.getName();
+
+            User user = userMapper.findByKakaoId(kakaoId);
+
             if (user != null) {
                 userService.deleteUser(user.getKakaoId());
 

@@ -46,10 +46,9 @@ if (navigator.geolocation) {
         marker.setMap(map);
 
         // 커스텀 오버레이에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
-        var content = '<div class="customoverlay">' +
-            '  <a href="https://map.kakao.com/link/map/현재위치,' + lat + ',' + lon + '" target="_blank">' +
-            '    <span class="title">현재 위치</span>' +
-            '  </a>' +
+        var content =
+            '<div class="customoverlay">' +
+            '  <a href="https://map.kakao.com/link/map/현재위치,' + lat + ',' + lon + '" target="_blank"></a>' +
             '</div>';
 
         // 커스텀 오버레이를 생성합니다
@@ -76,10 +75,9 @@ if (navigator.geolocation) {
         image: markerImage // 마커이미지 설정
     });
 
-    var content = '<div class="customoverlay">' +
-        '  <a href="https://map.kakao.com/link/map/기본위치,33.450701,126.570667" target="_blank">' +
-        '    <span class="title">기본 위치</span>' +
-        '  </a>' +
+    var content =
+        '<div class="customoverlay">' +
+        '  <a href="https://map.kakao.com/link/map/기본위치,33.450701,126.570667" target="_blank"></a>' +
         '</div>';
 
     // 커스텀 오버레이를 생성합니다

@@ -6,8 +6,8 @@
     <select id="findByUserId" resultType="com.tbp.honeyjar.login.entity.user.User">
         SELECT user_id       as userId,
                kakao_id      as kakaoId,
-               pr,
-               name,
+               pr            as pr,
+               name          as name,
                profile_image as profileImage,
                created_at    as createdAt,
                updated_at    as updatedAt,
@@ -18,15 +18,15 @@
     </select>
 
     <select id="findByUserName" resultType="com.tbp.honeyjar.login.entity.user.User">
-        SELECT user_id     as userId,
-               kakao_id    as kakaoId,
-               pr,
-               name,
+        SELECT user_id       as userId,
+               kakao_id      as kakaoId,
+               pr            as pr,
+               name          as name,
                profile_image as profileImage,
-               created_at  as createdAt,
-               updated_at  as updatedAt,
-               fired_at    as firedAt,
-               user_status as userStatus
+               created_at    as createdAt,
+               updated_at    as updatedAt,
+               fired_at      as firedAt,
+               user_status   as userStatus
         FROM user
         WHERE name = #{name}
     </select>
@@ -34,8 +34,8 @@
     <select id="findByKakaoId" resultType="com.tbp.honeyjar.login.entity.user.User">
         SELECT user_id     as userId,
                kakao_id    as kakaoId,
-               pr,
-               name,
+               pr          as pr,
+               name        as name,
                profile_image as profileImage,
                created_at  as createdAt,
                updated_at  as updatedAt,
@@ -59,9 +59,10 @@
 
     <update id="updateUser" parameterType="com.tbp.honeyjar.login.entity.user.User">
         UPDATE user
-        SET name       = #{name},
-            pr         = #{pr},
-            updated_at = NOW()
+        SET name          = #{name},
+            pr            = #{pr},
+            profile_image = #{profileImage},
+            updated_at    = NOW()
         WHERE user_id = #{userId}
     </update>
 
