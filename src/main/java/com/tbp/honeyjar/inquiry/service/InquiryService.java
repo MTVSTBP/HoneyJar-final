@@ -6,11 +6,16 @@ import com.tbp.honeyjar.inquiry.dto.InquiryUpdateDto;
 import com.tbp.honeyjar.inquiry.mapper.InquiryMapper;
 import com.tbp.honeyjar.login.mapper.user.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -21,6 +26,21 @@ public class InquiryService {
     public InquiryService(UserMapper userMapper, InquiryMapper inquiryMapper) {
         this.userMapper = userMapper;
         this.inquiryMapper = inquiryMapper;
+    }
+
+    @Transactional(readOnly = true)
+    public Page<InquiryDto> getInquiryListByUserId(String kakaoId, Pageable pageable) {
+        Long userId = userMapper.findByKakaoId(kakaoId).getUserId();
+        int total = inquiryMapper.getInquiryCountByUserId(userId);
+
+        Map<String, Object> params = new HashMap<>();
+
+        params.put("userId", userId);
+        params.put("pageSize", pageable.getPageSize());
+        params.put("offset", pageable.getOffset());
+
+        List<InquiryDto> inquiries = inquiryMapper.getInquiryListByUserId(params);
+        return new PageImpl<>(inquiries, pageable, total);
     }
 
     @Transactional(readOnly = true)

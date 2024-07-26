@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tbp.honeyjar.follow.dao.FollowMapper">
+    <resultMap id="FollowDTOMap" type="com.tbp.honeyjar.follow.DTO.FollowDTO">
+        <id property="userId" column="follow_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="profileImage" column="profile_image"/>
+    </resultMap>
+    <select id="getFollower" resultMap="FollowDTOMap">
+        SELECT
+        u.user_id AS follow_Id,
+        u.name AS user_name,
+        i.url AS profile_image
+        FROM
+        follow f
+        JOIN
+        user u ON f.follower_id = u.user_id
+        LEFT JOIN
+        image i ON i.user_id = f.follower_id AND i.post_id IS NULL
+        WHERE
+        f.followee_id = #{userId};
+    </select>
+</mapper>
