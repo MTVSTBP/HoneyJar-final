@@ -11,25 +11,30 @@
         <result property="post" column="post"/>
         <result property="mainImageUrl" column="main_image_url"/>
         <result property="bookmarked" column="bookmarked"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="userName" column="user_name"/>
         <!-- <result property="profileImg" column="profile_img"/> -->
     </resultMap>
 
     <!-- 포스트 상세 조회 -->
     <resultMap id="postResponseResultMap" type="com.tbp.honeyjar.post.dto.PostResponseDTO">
         <id property="postId" column="post_id"/>
+        <id property="placeId" column="place_id"/>
+        <id property="userId" column="user_id"/>
         <result property="categoryId" column="category_id"/>
         <result property="categoryName" column="name"/>
         <result property="title" column="title"/>
         <result property="recommendMenu" column="recommend_menu"/>
         <result property="price" column="price"/>
         <result property="post" column="post"/>
-        <result property="placeId" column="place_id"/>
         <result property="placeName" column="place_name"/>
-        <result property="roadAddressName" column="road_address_name"/> <!-- 도로명 주소 추가 -->
+        <result property="roadAddressName" column="road_address_name"/>
         <result property="xCoordinate" column="x_coordinate"/>
         <result property="yCoordinate" column="y_coordinate"/>
         <result property="createdAt" column="created_at"/>
         <result property="updatedAt" column="updated_at"/>
+        <result property="userName" column="user_name"/>
+        <result property="bookmarked" column="bookmarked"/>
         <collection property="imageUrls" ofType="java.lang.String">
             <result column="url"/>
         </collection>
@@ -42,25 +47,32 @@
     </resultMap>
 
     <!-- 포스트 리스트 조회 쿼리 -->
-    <select id="findAllPost" resultMap="postListResultMap">
+    <select id="findPostsByCategory" resultMap="postListResultMap">
         SELECT
-            p.post_id,
-            p.title,
-            p.post,
-            i.url AS main_image_url,
+        p.post_id,
+        p.title,
+        p.post,
+        i.url AS main_image_url,
         CASE
-            WHEN b.post_id IS NOT NULL THEN true
-            ELSE false
-        END AS bookmarked
+        WHEN b.post_id IS NOT NULL THEN true
+        ELSE false
+        END AS bookmarked,
+        p.category_id,
+        u.name AS user_name
         FROM post p
         LEFT JOIN (
-            SELECT post_id, url
-            FROM image
-            WHERE is_main = 1
+        SELECT post_id, url
+        FROM image
+        WHERE is_main = 1
         ) i ON p.post_id = i.post_id
         LEFT JOIN bookmark b ON p.post_id = b.post_id
+        LEFT JOIN user u ON p.user_id = u.user_id
         WHERE p.deleted = FALSE
-        <!-- LEFT JOIN user u ON p.user_id = u.user_id -->
+        <if test="category != null">
+            AND p.category_id = #{category}
+        </if>
+        ORDER BY p.created_at DESC
+        LIMIT #{size} OFFSET #{offset} <!-- 페이징을 위한 LIMIT과 OFFSET 추가 -->
     </select>
 
     <!-- 포스트 상세 조회 쿼리 -->
@@ -79,10 +91,18 @@
             pl.road_address_name,
             pl.x_coordinate,
             pl.y_coordinate,
-            i.url
+            i.url,
+            u.name AS user_name,
+            p.user_id,
+            CASE
+                WHEN b.post_id IS NOT NULL THEN true
+                ELSE false
+            END AS bookmarked
         FROM post p
         LEFT JOIN place pl ON p.place_id = pl.place_id
         LEFT JOIN image i ON p.post_id = i.post_id
+        LEFT JOIN user u ON p.user_id = u.user_id
+        LEFT JOIN bookmark b ON p.post_id = b.post_id AND b.user_id = #{userId}
         WHERE p.post_id = #{postId} AND p.deleted = FALSE
         ORDER BY i.is_main DESC, i.image_id ASC
     </select>

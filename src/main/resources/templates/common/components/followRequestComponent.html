@@ -1,10 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+<div id="backGround" th:fragment="followRequestComponent(follows)">
+    <div id="container" th:each="follow : ${follows}">
+        <div id="leftContainer">
+            <div>
+                <img th:src="${follow.profileImage != null ? follow.profileImage : '/assets/svg/base_profile.svg'}"/>
+            </div>
+            <div id="text" th:text="${follow.userName}"></div>
+        </div>
+        <div id="rightContainer">
+            <div>
+                <button id="accept">수락</button>
+            </div>
+            <div>
+                <button id="decline">거절</button>
+            </div>
+        </div>
+    </div>
+    <div id="border">
+        <hr />
+    </div>
+</div>

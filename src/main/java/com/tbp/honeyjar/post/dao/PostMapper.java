@@ -4,24 +4,17 @@ import com.tbp.honeyjar.post.dto.PostListDTO;
 import com.tbp.honeyjar.post.dto.PostRequestDTO;
 import com.tbp.honeyjar.post.dto.PostResponseDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-
-//@Mapper
-//public interface PostMapper {
-//
-//    void createPost(PostRequestDTO postRequestDTO);
-//
-//    List<PostListDTO> findAllPost();
-//
-//    PostResponseDTO findPostById(Long postId);
-//
-//    void updatePost(PostRequestDTO addPostRequestDTO);
-//
-//}
+import java.util.Map;
 
 @Mapper
 public interface PostMapper {
+
+    List<PostListDTO> findPostsByCategory(@Param("category") Long category,
+                                          @Param("size") int size,
+                                          @Param("offset") int offset);
 
     void createPost(PostRequestDTO postRequestDTO);
 
@@ -34,4 +27,5 @@ public interface PostMapper {
     Long findPlaceIdByPostId(Long postId);
 
     void softDeletePost(Long postId);
+
 }

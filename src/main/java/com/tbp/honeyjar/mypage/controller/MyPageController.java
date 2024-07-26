@@ -1,45 +1,86 @@
 package com.tbp.honeyjar.mypage.controller;
+import com.tbp.honeyjar.admin.service.CategoryService;
+import com.tbp.honeyjar.login.service.user.UserService;
+import com.tbp.honeyjar.mypage.DTO.CategoryDTO;
 import com.tbp.honeyjar.mypage.DTO.MyPageCorrectionDTO;
 import com.tbp.honeyjar.mypage.DTO.MyPageDTO;
+import com.tbp.honeyjar.mypage.DTO.PostDTO;
 import com.tbp.honeyjar.mypage.service.MyPageService;
+import com.tbp.honeyjar.post.dao.PostMapper;
+import com.tbp.honeyjar.post.dto.PostListDTO;
+import com.tbp.honeyjar.post.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
 @RequestMapping("/mypage")
 public class MyPageController {
     private final MyPageService myPageService;
+    private final UserService userService;
+    private final PostService postService;
+    private final CategoryService categoryService;
+
     @Autowired
-    public MyPageController(MyPageService myPageService) {
+    public MyPageController(MyPageService myPageService, UserService userService, PostService postService, CategoryService categoryService) {
         this.myPageService = myPageService;
+        this.userService = userService;
+        this.postService = postService;
+        this.categoryService = categoryService;
     }
-    @GetMapping("/{userId}")
-    public String getMyPage(@PathVariable Long userId, Model model) {
-        // MyPageDTO myPage = myPageService.getMyPage(userId);
-        MyPageDTO myPage = new MyPageDTO();
-        myPage.setNumberOfPosts(6);
+    @GetMapping
+    public String getMyPage(Model model, Principal principal) {
+        Long userId = userService.findUserIdByKakaoId(principal.getName());
+        System.out.println(userId);
+        MyPageDTO myPage = myPageService.getMyPage(userId);
+        List<PostListDTO> postList =myPageService.getMyPost(userId);
         model.addAttribute("myPage", myPage);
-        Map<String, Object> props = new HashMap<>();
-        props.put("detail", "모달 내용 넣을 것");
-        props.put("url", "확인버튼 눌렀을 때 이동할 페이지 주소 넣을 것 이동 없어도 입력해야 함");
-        model.addAttribute("props", props);
+        model.addAttribute("posts", postList);
         return "pages/mypage/myPage";
     }
-    @PostMapping("/{userId}/correction")
-    public String updateMyPageCorrection(@PathVariable Long userId, Model model) {
-        MyPageCorrectionDTO myPage = new MyPageCorrectionDTO();
+    @PostMapping("/correction")
+    @ResponseBody
+    public ResponseEntity<MyPageCorrectionDTO> updateMyPageCorrection(@RequestBody MyPageCorrectionDTO myPageCorrectionDTO, Principal principal) {
+        Long userId = userService.findUserIdByKakaoId(principal.getName());
+        myPageCorrectionDTO.setUserId(userId);
+        myPageService.updateMyProfile(myPageCorrectionDTO);
+
+        return new ResponseEntity<>(myPageCorrectionDTO, HttpStatus.OK);
+    }
+    @GetMapping("/correction")
+    public String getMyPageCorrection(Model model, Principal principal) {
+        Long userId = userService.findUserIdByKakaoId(principal.getName());
+        MyPageCorrectionDTO myPage = myPageService.getMyProfile(userId);
         model.addAttribute("myPage", myPage);
         return "pages/mypage/myPageCorrection";
     }
-    @GetMapping("/{userId}/correction")
-    public String getMyPageCorrection(@PathVariable Long userId, Model model) {
-        MyPageCorrectionDTO myPage = new MyPageCorrectionDTO();
-        model.addAttribute("myPage", myPage);
-        return "pages/mypage/myPageCorrection";
+    @GetMapping(value="category", produces = "application/json; charset=UTF-8")
+    @ResponseBody
+    public List<CategoryDTO> getMyPageCategory() {return myPageService.getCategoryList();}
+    @GetMapping("/bookmark")
+    public String getMyPageBookmark(Model model, Principal principal, @RequestParam(required = false) Long category) {
+        Long userId = userService.findUserIdByKakaoId(principal.getName());
+        List<PostListDTO> posts = myPageService.getMyBookmark(category, userId);
+        model.addAttribute("posts", posts);
+        model.addAttribute("categories", categoryService.findAllFoodCategory());
+        model.addAttribute("selectedCategory", category);
+        return "pages/mypage/bookmark";
+    }
+    @GetMapping("/mypost")
+    public String getMyPost(Model model, Principal principal, @RequestParam(required = false) Long category) {
+        Long userId = userService.findUserIdByKakaoId(principal.getName());
+        List<PostListDTO> posts = myPageService.getMyPost(category, userId);
+        model.addAttribute("posts", posts);
+        model.addAttribute("categories", categoryService.findAllFoodCategory());
+        model.addAttribute("selectedCategory", category);
+        return "pages/mypage/myPost";
     }
 }

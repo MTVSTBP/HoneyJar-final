@@ -1,72 +1,89 @@
 document.addEventListener("DOMContentLoaded", function () {
+    const categoryElement = document.getElementById('category');
+    if (categoryElement) {
+        categoryElement.addEventListener('change', function() {
+            document.getElementById('filterForm').submit();
+        });
+    }
+
     // 슬라이더 이미지 설정
     const container = document.getElementById('container');
-    const kindWrap = container.querySelector('.kind_wrap');
-    const slider = kindWrap.querySelector('.slider');
-    const slideLis = slider.querySelectorAll('li');
-    const moveButton = kindWrap.querySelectorAll('.arrow a');
+    if (container) {
+        const kindWrap = container.querySelector('.kind_wrap');
+        const slider = kindWrap.querySelector('.slider');
+        const slideLis = slider.querySelectorAll('li');
+        const moveButton = kindWrap.querySelectorAll('.arrow a');
 
-    const clone1 = slideLis[0].cloneNode(true);
-    const cloneLast = slideLis[slideLis.length - 1].cloneNode(true);
-    slider.insertBefore(cloneLast, slideLis[0]);
-    slider.appendChild(clone1);
+        if (slideLis.length > 1) {
+            const clone1 = slideLis[0].cloneNode(true);
+            const cloneLast = slideLis[slideLis.length - 1].cloneNode(true);
+            slider.insertBefore(cloneLast, slideLis[0]);
+            slider.appendChild(clone1);
 
-    let currentIdx = 1;
-    let translate = 0;
-    const speedTime = 500;
+            let currentIdx = 1;
+            let translate = 0;
+            const speedTime = 500;
 
-    function setSliderWidth() {
-        const sliderCloneLis = slider.querySelectorAll('li');
-        const liWidth = container.clientWidth;
-        const sliderWidth = liWidth * sliderCloneLis.length;
-        slider.style.width = `${sliderWidth}px`;
-        sliderCloneLis.forEach(li => {
-            li.style.width = `${liWidth}px`;
-        });
-        translate = -liWidth * currentIdx;
-        slider.style.transform = `translateX(${translate}px)`;
-        return liWidth;
-    }
-
-    let liWidth = setSliderWidth();
-
-    moveButton.forEach(button => button.addEventListener('click', moveSlide));
-
-    function move(D) {
-        currentIdx += (-1 * D);
-        translate += liWidth * D;
-        slider.style.transform = `translateX(${translate}px)`;
-        slider.style.transition = `all ${speedTime}ms ease`;
-    }
-
-    function moveSlide(event) {
-        event.preventDefault();
-        if (event.currentTarget.classList.contains('next')) {
-            move(-1);
-            if (currentIdx === slider.querySelectorAll('li').length - 1) {
-                setTimeout(() => {
-                    slider.style.transition = 'none';
-                    currentIdx = 1;
-                    translate = -liWidth;
-                    slider.style.transform = `translateX(${translate}px)`;
-                }, speedTime);
+            function setSliderWidth() {
+                const sliderCloneLis = slider.querySelectorAll('li');
+                const liWidth = container.clientWidth;
+                const sliderWidth = liWidth * sliderCloneLis.length;
+                slider.style.width = `${sliderWidth}px`;
+                sliderCloneLis.forEach(li => {
+                    li.style.width = `${liWidth}px`;
+                });
+                translate = -liWidth * currentIdx;
+                slider.style.transform = `translateX(${translate}px)`;
+                return liWidth;
             }
+
+            let liWidth = setSliderWidth();
+
+            moveButton.forEach(button => button.addEventListener('click', moveSlide));
+
+            function move(D) {
+                currentIdx += (-1 * D);
+                translate += liWidth * D;
+                slider.style.transform = `translateX(${translate}px)`;
+                slider.style.transition = `all ${speedTime}ms ease`;
+            }
+
+            function moveSlide(event) {
+                event.preventDefault();
+                if (event.currentTarget.classList.contains('next')) {
+                    move(-1);
+                    if (currentIdx === slider.querySelectorAll('li').length - 1) {
+                        setTimeout(() => {
+                            slider.style.transition = 'none';
+                            currentIdx = 1;
+                            translate = -liWidth;
+                            slider.style.transform = `translateX(${translate}px)`;
+                        }, speedTime);
+                    }
+                } else {
+                    move(1);
+                    if (currentIdx === 0) {
+                        setTimeout(() => {
+                            slider.style.transition = 'none';
+                            currentIdx = slider.querySelectorAll('li').length - 2;
+                            translate = -(liWidth * currentIdx);
+                            slider.style.transform = `translateX(${translate}px)`;
+                        }, speedTime);
+                    }
+                }
+            }
+
+            window.addEventListener('resize', () => {
+                liWidth = setSliderWidth();
+            });
         } else {
-            move(1);
-            if (currentIdx === 0) {
-                setTimeout(() => {
-                    slider.style.transition = 'none';
-                    currentIdx = slider.querySelectorAll('li').length - 2;
-                    translate = -(liWidth * currentIdx);
-                    slider.style.transform = `translateX(${translate}px)`;
-                }, speedTime);
-            }
+            const singleSlideWidth = container.clientWidth;
+            slideLis.forEach(li => {
+                li.style.width = `${singleSlideWidth}px`;
+            });
+            slider.style.width = `${singleSlideWidth}px`;
         }
     }
-
-    window.addEventListener('resize', () => {
-        liWidth = setSliderWidth();
-    });
 
     // 공용 모달 설정
     const deleteConfirmModal = document.getElementById('deleteConfirmModal');
@@ -128,7 +145,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-
     // 삭제 완료 모달의 확인 버튼 클릭 시
     if (completeDeleteButton) {
         completeDeleteButton.addEventListener('click', function () {
@@ -143,23 +159,33 @@ document.addEventListener("DOMContentLoaded", function () {
     const bookmarkImage = document.getElementById("bookmarkImage");
 
     if (bookmarkButton && bookmarkImage) {
-        bookmarkButton.addEventListener("click", function () {
-            const isBookmarked = bookmarkImage.src.includes("bookmark_border.svg");
+        bookmarkButton.addEventListener("click", function (event) {
+            event.preventDefault();
+            const form = document.getElementById("bookmarkForm");
+            const formData = new FormData(form);
+            const isBookmarked = bookmarkButton.getAttribute("data-bookmarked") === "true";
 
-            // AJAX 요청 보내기 (북마크 상태 변경)
-            /*
-            sendBookmarkData(isBookmarked).then(response => {
-                if (response.success) {
-                    // 이미지 업데이트
-                    bookmarkImage.src = isBookmarked ? "/assets/svg/bookmark.svg" : "/assets/svg/bookmark_border.svg";
-                } else {
-                    console.error('Bookmark update failed');
-                }
-            });
-            */
-
-            // 임시로 이미지 업데이트
-            bookmarkImage.src = isBookmarked ? "/assets/svg/bookmark.svg" : "/assets/svg/bookmark_border.svg";
+            fetch(form.action, {
+                method: "POST",
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        if (data.bookmarked) {
+                            bookmarkImage.src = "/assets/svg/bookmark.svg";
+                            bookmarkButton.setAttribute("data-bookmarked", "true");
+                        } else {
+                            bookmarkImage.src = "/assets/svg/bookmark_border.svg";
+                            bookmarkButton.setAttribute("data-bookmarked", "false");
+                        }
+                    } else {
+                        console.error('Bookmark update failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         });
     }
 
@@ -263,14 +289,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const moreHorizImage = document.querySelector('.more_h img');
     const clickBox = document.querySelector('.click_box');
 
-    moreHorizImage.addEventListener('click', function (event) {
-        event.stopPropagation();
-        clickBox.style.display = (clickBox.style.display === 'block') ? 'none' : 'block';
-    });
+    if (moreHorizImage && clickBox) {
+        moreHorizImage.addEventListener('click', function (event) {
+            event.stopPropagation();
+            clickBox.style.display = (clickBox.style.display === 'block') ? 'none' : 'block';
+        });
 
-    document.addEventListener('click', function (event) {
-        if (!clickBox.contains(event.target)) {
-            clickBox.style.display = 'none';
-        }
-    });
+        document.addEventListener('click', function (event) {
+            if (!clickBox.contains(event.target)) {
+                clickBox.style.display = 'none';
+            }
+        });
+    }
 });
