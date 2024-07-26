@@ -229,7 +229,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!res.ok) {
             throw new Error('Network response was not ok');
         }
-        return res.json();
     }
 
     async function unlikePost(userId, postId) {
@@ -247,7 +246,6 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!res.ok) {
             throw new Error('Network response was not ok');
         }
-        return res.json();
     }
 
     const commentButton = document.getElementById("commentButton");
