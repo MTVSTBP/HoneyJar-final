@@ -83,9 +83,9 @@ public class SecurityConfig {
                                 .requestMatchers("/home", "/post/**", "/mypage/**", "/follow/**", "/settings/**").authenticated()
 
                                 // 그 외 모든 요청은 인증 필요
-                                .anyRequest().authenticated()
+//                                .anyRequest().authenticated()
 //                        // 개발 중에 임시로 모든 엔드포인트를 허용
-//                                .anyRequest().permitAll()
+                                .anyRequest().permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(authorization -> authorization
