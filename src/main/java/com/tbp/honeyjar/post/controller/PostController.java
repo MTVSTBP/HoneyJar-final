@@ -83,10 +83,6 @@ public class PostController {
             userId = userService.findUserIdByKakaoId(principal.getName());
         }
 
-        // 기본 값을 설정합니다.
-        latitude = (latitude != null) ? latitude : 0.0;
-        longitude = (longitude != null) ? longitude : 0.0;
-
         Integer maxPrice = goodRestaurant ? 10000 : null;
         List<PostListDTO> posts = postService.findPostsByCategory(category, page, size, userId, maxPrice, sortOption, latitude, longitude);
 
@@ -103,6 +99,7 @@ public class PostController {
         model.addAttribute("posts", posts);
         return "common/components/postComponent"; // 포스트 컴포넌트를 반환
     }
+
 
 
 
