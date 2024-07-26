@@ -161,6 +161,96 @@
         WHERE post_id = #{postId}
     </update>
 
+    <!-- 포스트 좋아요 쿼리 -->
+    <insert id="likePost" parameterType="com.tbp.honeyjar.post.dto.PostLikeRequestDto">
+        INSERT INTO LIKED
+        (
+            post_id,
+            user_id
+        )
+        VALUES
+        (
+            #{postId},
+            #{userId}
+        )
+    </insert>
+
+    <!-- 포스트 좋아요 취소 쿼리 -->
+    <delete id="unlikePost" parameterType="com.tbp.honeyjar.post.dto.PostLikeRequestDto">
+        DELETE FROM LIKED
+        WHERE
+        post_id = #{postId} and user_id = #{userId}
+    </delete>
+
+    <!-- 포스트 좋아요 카운트 쿼리 -->
+    <select id="getLikeCountByPostId" parameterType="_long">
+        SELECT
+            COUNT(*)
+        FROM
+            LIKED
+        WHERE
+            post_id = #{postId}
+    </select>
+
+    <!-- 포스트 좋아요 확인 쿼리 -->
+    <select id="getIsLikedByPostIdAndUserId" parameterType="com.tbp.honeyjar.post.dto.PostLikeRequestDto">
+        SELECT
+            COUNT(*)
+        FROM
+            LIKED
+        WHERE
+            post_id = #{postId} AND user_id = #{userId}
+    </select>
+
+    <!-- 포스트 평점 조회 쿼리 -->
+    <select id="getRating" parameterType="_long">
+        SELECT
+            COALESCE(ROUND(AVG(rating), 1), 0.0)
+        FROM
+            ratings
+        WHERE
+            place_id = (SELECT place_id
+        FROM post
+        WHERE post_id = #{postId})
+    </select>
+
+    <!-- 포스트 평점 입력 쿼리 -->
+    <insert id="rating" parameterType="com.tbp.honeyjar.post.dto.PostRatingRequestDto">
+        INSERT INTO ratings
+        (
+            user_id,
+            place_id,
+            rating
+        )
+        VALUES
+        (
+            #{userId},
+            (SELECT place_id
+            FROM post
+            WHERE post_id = #{postId}),
+            #{rating}
+        )
+    </insert>
+
+    <!-- 포스트 평점 확인 쿼리 -->
+    <select id="getIsRatedByPostIdAndUserId" parameterType="com.tbp.honeyjar.post.dto.PostLikeRequestDto">
+        SELECT
+            COUNT(*)
+        FROM
+            ratings
+        WHERE
+            place_id = (SELECT place_id FROM post WHERE post_id = #{postId}) AND user_id = #{userId}
+    </select>
+
+    <!-- 포스트 평점 업데이트 쿼리 -->
+    <update id="ratingAgain" parameterType="com.tbp.honeyjar.post.dto.PostRatingRequestDto">
+        UPDATE ratings
+        SET
+            rating = #{rating}
+        WHERE
+            place_id = (SELECT place_id FROM post WHERE post_id = #{postId}) AND user_id = #{userId}
+    </update>
+
     <!-- 코멘트 count -->
     <select id="commentCount" resultType="int">
         SELECT

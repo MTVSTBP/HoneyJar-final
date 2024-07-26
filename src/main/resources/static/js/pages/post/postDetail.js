@@ -194,17 +194,58 @@ document.addEventListener("DOMContentLoaded", function () {
     const likeCount = document.getElementById("likeCount");
 
     if (likeButton && likeImage && likeCount) {
+        const userId = parseInt(likeButton.getAttribute("data-user-id"))
+        const postId = parseInt(likeButton.getAttribute("data-post-id"))
+        let isLiked = likeButton.getAttribute("data-liked") === "true";
+
         likeButton.addEventListener("click", function () {
-            let isLiked = likeImage.src.includes("favorite_color.svg");
             const newCount = isLiked ? parseInt(likeCount.textContent) - 1 : parseInt(likeCount.textContent) + 1;
             likeCount.textContent = newCount;
             likeImage.src = isLiked ? "/assets/svg/favorite.svg" : "/assets/svg/favorite_color.svg";
 
             // AJAX 요청 보내기 (좋아요 상태 변경)
-            /*
-            sendLikeData(!isLiked, newCount);
-            */
+            if (!isLiked) {
+                likePost(userId, postId);
+                isLiked = true;
+            } else {
+                unlikePost(userId, postId);
+                isLiked = false;
+            }
         });
+    }
+
+    async function likePost(userId, postId) {
+        const res = await fetch('/post/like/' + postId, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'charset': 'UTF-8'
+            },
+            body: JSON.stringify({
+                'user-id': userId,
+                'post-id': postId
+            })
+        });
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
+        }
+    }
+
+    async function unlikePost(userId, postId) {
+        const res = await fetch('/post/like/' + postId, {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json',
+                'charset': 'UTF-8'
+            },
+            body: JSON.stringify({
+                'user-id': userId,
+                'post-id': postId
+            })
+        });
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
+        }
     }
 
     const commentButton = document.getElementById("commentButton");
@@ -260,28 +301,68 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
 
+        const modalButton = document.getElementById("openRatingModal");
+
         if (confirmRating) {
-            confirmRating.addEventListener('click', function () {
+            const userId = parseInt(likeButton.getAttribute("data-user-id"))
+            const postId = parseInt(likeButton.getAttribute("data-post-id"))
+            let isRated = modalButton.getAttribute("data-rated") === "true";
+
+            confirmRating.addEventListener('click', async function () {
                 ratingModal.style.display = "none";
 
-                // AJAX 요청 보내기 (평점 저장)
-                /*
-                sendRatingData(selectedRating).then(response => {
-                    if (response.success) {
-                        // 백엔드에서 총점을 받아와서 업데이트
-                        averageRating.textContent = response.newAverage;
-                        // 성공적으로 저장되면 별점 이미지를 업데이트
-                        ratingStar.src = "/assets/svg/star_color.svg";
-                    } else {
-                        console.error('Rating update failed');
-                    }
+                stars.forEach(star => {
+                    star.addEventListener('click', () => {
+                        selectedRating = star.getAttribute('data-value');
+                    });
                 });
-                */
 
-                // 임시로 별점 이미지 및 총점 업데이트
-                averageRating.textContent = (parseFloat(averageRating.textContent) + selectedRating) / 2;
-                ratingStar.src = "/assets/svg/star_color.svg";
+                if (!isRated) {
+                    await rating(userId, postId, selectedRating);
+                    isRated = true;
+                } else {
+                    await ratingAgain(userId, postId, selectedRating);
+                    isRated = false;
+                }
+
+                window.location.reload();
             });
+        }
+    }
+
+    async function rating(userId, postId, selectedRating) {
+        const res = await fetch('/post/rating/' + postId, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'charset': 'UTF-8'
+            },
+            body: JSON.stringify({
+                'user-id': userId,
+                'post-id': postId,
+                'rating': selectedRating
+            })
+        });
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
+        }
+    }
+
+    async function ratingAgain(userId, postId, selectedRating) {
+        const res = await fetch('/post/rating-again/' + postId, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'charset': 'UTF-8'
+            },
+            body: JSON.stringify({
+                'user-id': userId,
+                'post-id': postId,
+                'rating': selectedRating
+            })
+        });
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
         }
     }
 
