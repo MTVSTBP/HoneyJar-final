@@ -27,22 +27,14 @@ public class CommentController {
         this.commentService = commentService;
         this.userService = userService;
     }
-    // 컨트롤러 손보고 그거에 맞게 쿼리도 다시 손보고 그다음에 예준님 소환 => 해당 포스트 id에 맞는 comment로 이동
-    //                  {postId}/comment
 
     // 댓글 조회
     @GetMapping("{postId}")
     public String commentList(@PathVariable Long postId, Model model) {
-        // postId를 받아주고 에러처리
+
         List<CommentListDTO> commentList = commentService.findAllCommentListById(postId);
-//        List<CommentListDTO> commentList = commentService.findAllComment();
         model.addAttribute("commentList", commentList);
-        model.addAttribute("postId", postId);
-        model.addAttribute("newComment", new CommentRegistDTO());
-        System.out.println("================commentList===============");
-        commentList.forEach(System.out::println);
-        System.out.println("================postId===============");
-        System.out.println("댓글 postId = " + postId);
+
         return "pages/comment/comment";
     }
 
@@ -66,8 +58,6 @@ public class CommentController {
         modifyComment.setCommentId(comment_id);
         modifyComment.setComment(comment);
 
-//        System.out.println("코멘트 ㅇㅇㅇㅇㅇㅇ " + modifyComment.getComment());
-//        System.out.println("코멘트 아이디 ㅇㅇㅇㅇㅇㅇㅇ " + modifyComment.getCommentId());
         commentService.modifyComment(modifyComment);
 
         logger.info("Modifying comment: " + modifyComment);
@@ -87,8 +77,6 @@ public class CommentController {
         System.out.println("1212314234 comment_id = " + comment_id);
 
         System.out.println(deleteComment.getPostId());
-//        System.out.println("comment_id = " + comment_id);
-//        System.out.println(postId);
 
         commentService.deleteComment(comment_id);
 

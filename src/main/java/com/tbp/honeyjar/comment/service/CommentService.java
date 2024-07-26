@@ -33,12 +33,7 @@ public class CommentService {
         commentMapper.modifyComment(modifyComment);
     }
 
-    public CommentRequestDTO findCommentById(Long commentId) {
-        return commentMapper.findById(commentId);
-    }
-
     public void deleteComment(Long commentId) {
-        System.out.println("코멘트 아이디: " + commentId);
          commentMapper.deleteCommentById(commentId);
     }
 

@@ -17,7 +17,7 @@ public interface CommentMapper {
 
     void modifyComment(CommentModifyDTO modifyComment);
 
-    CommentRequestDTO findById(Long commentId);
+//    CommentRequestDTO findById(Long commentId);
 
     void deleteCommentById(Long commentId);
 
