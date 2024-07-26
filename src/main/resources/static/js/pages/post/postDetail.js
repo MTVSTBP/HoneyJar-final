@@ -211,7 +211,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 unlikePost(userId, postId);
                 isLiked = false;
             }
-
         });
     }
 
@@ -351,24 +350,24 @@ document.addEventListener("DOMContentLoaded", function () {
         })
     }
 
-        function ratingAgain(userId, postId, selectedRating) {
-            fetch('/post/rating-again/' + postId, {
-                method: "POST",
-                headers: {
-                    'Content-Type': 'application/json',
-                    'charset': 'UTF-8'
-                },
-                body: JSON.stringify({
-                    'user-id': userId,
-                    'post-id': postId,
-                    'rating': selectedRating
-                })
-            }).then(res => {
-                if (!res.ok) {
-                    throw new Error('Network response was not ok');
-                }
+    function ratingAgain(userId, postId, selectedRating) {
+        fetch('/post/rating-again/' + postId, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'charset': 'UTF-8'
+            },
+            body: JSON.stringify({
+                'user-id': userId,
+                'post-id': postId,
+                'rating': selectedRating
             })
-        }
+        }).then(res => {
+            if (!res.ok) {
+                throw new Error('Network response was not ok');
+            }
+        })
+    }
 
 
     // 더보기 버튼 클릭 이벤트
