@@ -164,10 +164,10 @@
     <!-- 코멘트 count -->
     <select id="commentCount" resultType="int">
         SELECT
-        COUNT(*)
+                COUNT(*)
         FROM
-        COMMENT
+                COMMENT
         WHERE
-        POST_ID = #{ post_id }
+                POST_ID = #{ post_id }
     </select>
 </mapper>

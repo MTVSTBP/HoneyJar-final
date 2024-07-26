@@ -263,9 +263,7 @@ public class PostService {
         postMapper.softDeletePost(postId);
     }
 
-
     public int commentCount(Long postId) {
         return postMapper.commentCount(postId);
     }
-
 }
