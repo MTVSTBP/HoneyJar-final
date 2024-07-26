@@ -13,6 +13,9 @@
         <result property="bookmarked" column="bookmarked"/>
         <result property="categoryId" column="category_id"/>
         <result property="userName" column="user_name"/>
+        <result property="xCoordinate" column="x_coordinate"/>
+        <result property="yCoordinate" column="y_coordinate"/>
+        <result property="distance" column="distance"/>
         <!-- <result property="profileImg" column="profile_img"/> -->
     </resultMap>
 
@@ -47,7 +50,38 @@
     </resultMap>
 
     <!-- 포스트 리스트 조회 쿼리 -->
-    <select id="findPostsByCategory" resultMap="postListResultMap">
+<!--    <select id="findPostsByCategory" resultMap="postListResultMap">-->
+<!--        SELECT-->
+<!--        p.post_id,-->
+<!--        p.title,-->
+<!--        p.post,-->
+<!--        i.url AS main_image_url,-->
+<!--        CASE-->
+<!--        WHEN b.post_id IS NOT NULL THEN true-->
+<!--        ELSE false-->
+<!--        END AS bookmarked,-->
+<!--        p.category_id,-->
+<!--        u.name AS user_name-->
+<!--        FROM post p-->
+<!--        LEFT JOIN (-->
+<!--        SELECT post_id, url-->
+<!--        FROM image-->
+<!--        WHERE is_main = 1-->
+<!--        ) i ON p.post_id = i.post_id-->
+<!--        LEFT JOIN bookmark b ON p.post_id = b.post_id AND b.user_id = #{userId}-->
+<!--        LEFT JOIN user u ON p.user_id = u.user_id-->
+<!--        WHERE p.deleted = FALSE-->
+<!--        <if test="category != null">-->
+<!--            AND p.category_id = #{category}-->
+<!--        </if>-->
+<!--        <if test="maxPrice != null">-->
+<!--            AND p.price &lt;= #{maxPrice}-->
+<!--        </if>-->
+<!--        ORDER BY p.created_at DESC-->
+<!--        LIMIT #{size} OFFSET #{offset}-->
+<!--    </select>-->
+
+    <select id="findPostsByCategory" resultMap="postListResultMap" parameterType="map">
         SELECT
         p.post_id,
         p.title,
@@ -58,8 +92,18 @@
         ELSE false
         END AS bookmarked,
         p.category_id,
-        u.name AS user_name
+        u.name AS user_name,
+        pl.x_coordinate,
+        pl.y_coordinate,
+        <if test="latitude != null and longitude != null">
+            (6371 * acos(
+            cos(radians(#{latitude})) * cos(radians(pl.x_coordinate))
+            * cos(radians(pl.y_coordinate) - radians(#{longitude}))
+            + sin(radians(#{latitude})) * sin(radians(pl.x_coordinate))
+            )) AS distance
+        </if>
         FROM post p
+        LEFT JOIN place pl ON p.place_id = pl.place_id
         LEFT JOIN (
         SELECT post_id, url
         FROM image
@@ -74,9 +118,18 @@
         <if test="maxPrice != null">
             AND p.price &lt;= #{maxPrice}
         </if>
-        ORDER BY p.created_at DESC
+        <choose>
+            <when test="sortOption == 'distance' and latitude != null and longitude != null">
+                ORDER BY distance DESC
+            </when>
+            <otherwise>
+                ORDER BY p.created_at DESC
+            </otherwise>
+        </choose>
         LIMIT #{size} OFFSET #{offset}
     </select>
+
+
 
     <!-- 변경된 포스트 상세 조회 쿼리 -->
     <select id="findPostById" resultMap="postResponseResultMap">
