@@ -1,5 +1,6 @@
 package com.tbp.honeyjar.inquiry.controller;
 
+import com.google.firebase.auth.UserInfo;
 import com.tbp.honeyjar.admin.dto.category.QnaCategoryListResponseDto;
 import com.tbp.honeyjar.admin.service.CategoryService;
 import com.tbp.honeyjar.inquiry.dto.InquiryDto;
@@ -7,7 +8,6 @@ import com.tbp.honeyjar.inquiry.dto.InquiryWriteDto;
 import com.tbp.honeyjar.inquiry.dto.InquiryUpdateDto;
 import com.tbp.honeyjar.inquiry.service.InquiryService;
 import com.tbp.honeyjar.login.entity.user.User;
-import com.tbp.honeyjar.login.mapper.user.UserMapper;
 import com.tbp.honeyjar.login.service.user.UserService;
 import com.tbp.honeyjar.mypage.DTO.CategoryDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,32 +26,29 @@ import java.util.List;
 public class InquiryController {
     private InquiryService inquiryService;
     private UserService userService;
-    private UserMapper userMapper;
     private CategoryService categoryService;
 
-    public InquiryController(InquiryService inquiryService, UserService userService, UserMapper userMapper, CategoryService categoryService) {
+    public InquiryController(InquiryService inquiryService, UserService userService, CategoryService categoryService) {
         this.inquiryService = inquiryService;
         this.userService = userService;
-        this.userMapper = userMapper;
         this.categoryService = categoryService;
     }
 
-    //    @GetMapping
-//    public String getInquiriesByUserId(Model model, Principal principal) {
-//        String kakaoId = principal.getName();
-//        List<InquiryDto> inquiryList = inquiryService.getInquiryListByUserId(kakaoId);
-//        model.addAttribute("inquiryList", inquiryList);
-//        return "pages/inquiry/inquiry";
-//    }
     @GetMapping
     public String getInquiriesByUserId(Model model, Principal principal, @RequestParam(defaultValue = "1") int page) {
         String kakaoId = principal.getName();
+        /* Handling Exception minumem page value  */
         page = page < 1 ? 1 : page;
+
+        /* Setting Pageable & Call Service   */
         Pageable pageable = PageRequest.of(page - 1, 5);  // 페이지 번호는 0부터 시작하므로 -1
         Page<InquiryDto> inquiryPage = inquiryService.getInquiryListByUserId(kakaoId, pageable);
-        model.addAttribute("inquiryList", inquiryPage.getContent());
+
+        /* Handling Exception maxmum page value  */
         page = page > inquiryPage.getTotalPages() ? inquiryPage.getTotalPages() : page;
 
+        /* Setting Model*/
+        model.addAttribute("inquiryList", inquiryPage.getContent());
         model.addAttribute("page", page);
         model.addAttribute("totalPages", inquiryPage.getTotalPages());
 
@@ -60,7 +57,6 @@ public class InquiryController {
                 "pages/inquiry/inquiry";
 
     }
-
 
     @GetMapping("/write")
     public String inquiryWrite(Model model, Principal principal) {
@@ -76,7 +72,7 @@ public class InquiryController {
                                 @RequestParam("post") String post,
                                 Principal principal) {
         String kakaoId = principal.getName();
-        Long userId = userMapper.findByKakaoId(kakaoId).getUserId();
+        Long userId = inquiryService.findByKakaoId(kakaoId).getUserId();
         InquiryWriteDto inquiryWriteDto = InquiryWriteDto.builder()
                 .userId(userId)
                 .title(title)
@@ -94,7 +90,7 @@ public class InquiryController {
                                    @RequestParam(value = "page", defaultValue = "1") int page,
                                    Model model, Principal principal) {
         String kakaoId = principal.getName();
-        User userInfo = userMapper.findByKakaoId(kakaoId);
+        User userInfo = inquiryService.findByKakaoId(kakaoId);
         InquiryDto inquiry = inquiryService.getInquiryById(inquiryId);
 
         if (!inquiry.getUserId().equals(userInfo.getUserId())) {
@@ -110,7 +106,7 @@ public class InquiryController {
     @GetMapping("/correction/{inquiryId}")
     public String inquiryCorrection(@PathVariable Long inquiryId, Model model, Principal principal) {
         String kakaoId = principal.getName();
-        User userInfo = userMapper.findByKakaoId(kakaoId);
+        User userInfo = inquiryService.findByKakaoId(kakaoId);
         InquiryDto inquiry = inquiryService.getInquiryById(inquiryId);
         List<QnaCategoryListResponseDto> categories = categoryService.findAllQnaCategory();
         model.addAttribute("categories", categories);
@@ -127,7 +123,7 @@ public class InquiryController {
                                 Principal principal) {
         String kakaoId = principal.getName();
         InquiryDto inquiry = inquiryService.getInquiryById(inquiryId);
-        User userInfo = userMapper.findByKakaoId(kakaoId);
+        User userInfo = inquiryService.findByKakaoId(kakaoId);
         if (!inquiry.getUserId().equals(userInfo.getUserId())) {
             return "redirect:/settings/inquiry";
         }
@@ -141,13 +137,13 @@ public class InquiryController {
         return "redirect:/settings/inquiry/detail/" + inquiryId;
     }
 
-    @PostMapping("/delete")
-    public String deleteInquiry(Principal principal) {
-        String kakaoId = principal.getName();
-        Long userId = userMapper.findByKakaoId(kakaoId).getUserId();
-        InquiryDto inquiry = inquiryService.getInquiryById(userId);
+    public User IsVaildUserId(String kakaoId, Long userId) {
+        User userInfo = inquiryService.findByKakaoId(kakaoId);
 
-        inquiryService.deleteInquiry(userId);
-        return "redirect:/settings/inquiry";
+        //Validate userInfo with kakaoId
+        if (!userInfo.getUserId().equals(userId)) {
+            return null;
+        }
+        return userInfo;
     }
 }

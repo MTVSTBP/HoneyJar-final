@@ -46,7 +46,7 @@
             <button th:disabled="${page == totalPages}" th:onclick="|changePage(${totalPages})|">마지막</button>
         </div>
     </div>
-    <script th:inline="javascript" type="text/javascript" th:src="@{/js/pages/inquiry/inquiry.js}"></script>
+    <script th:inline="javascript" type="text/javascript" th:src="@{/js/pages/inquiry/adminInquiry.js}"></script>
     <script th:inline="javascript">
         page = page < 1 ? 1 : page;
         page = [[${page}]] > totalPages ? totalPages : [[${page}]];
