@@ -21,11 +21,11 @@ public class FollowController {
         this.followService = followService;
         this.userService = userService;
     }
-    @GetMapping
+    @GetMapping("/follower")
     public String follower(Model model, Principal principal) {
         Long userId = userService.findUserIdByKakaoId(principal.getName());
-        FollowerDTO followerDTO = followService.getFollowers(userId);
+        FollowerDTO followerDTO = followService.getFollower(userId);
         model.addAttribute("follows", followerDTO);
-        return "/pages/follow/follower";
+        return "pages/follow/follower";
     }
 }

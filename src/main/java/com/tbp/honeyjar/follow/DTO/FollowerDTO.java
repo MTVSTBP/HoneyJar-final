@@ -1,14 +1,17 @@
 package com.tbp.honeyjar.follow.DTO;
 
-import lombok.Builder;
+import lombok.*;
 
 import java.util.List;
 
+@Data
+@NoArgsConstructor
+@Getter
+@Setter
 public class FollowerDTO{
     private Long userId;
     private List<FollowDTO> followers;
 
-    @Builder
     public FollowerDTO(Long userId, List<FollowDTO> followers) {
         this.userId = userId;
         this.followers = followers;

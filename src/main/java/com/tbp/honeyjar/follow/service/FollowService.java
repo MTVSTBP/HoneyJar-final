@@ -10,8 +10,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class FollowService {
     private final FollowMapper followMapper;
-    public FollowerDTO getFollowers(Long userId) {
-        return followMapper.getFollowers(userId);
+    public FollowerDTO getFollower(Long userId) {
+        FollowerDTO followerDTO = new FollowerDTO();
+        followerDTO.setUserId(userId);
+        followerDTO.setFollowers(followMapper.getFollower(userId));
+        return followerDTO;
     }
     public FollowingDTO getFollowing(Long userId) {
         return followMapper.getFollowings(userId);
