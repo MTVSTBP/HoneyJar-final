@@ -9,7 +9,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -54,6 +56,19 @@ public class ImageService {
     @Transactional
     public void deleteImagesByPostId(Long postId) {
         imageMapper.deleteImagesByPostId(postId);
+    }
+
+    @Transactional
+    public void deleteImageById(Long imageId) {
+        imageMapper.deleteImageById(imageId);
+    }
+
+    @Transactional
+    public void updateMainImageStatus(Long imageId, boolean isMain) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("imageId", imageId);
+        params.put("isMain", isMain);
+        imageMapper.updateMainImageStatus(params);
     }
 
     public List<ImageDTO> getImagesByPostId(Long postId) {

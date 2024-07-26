@@ -44,8 +44,7 @@
         <!-- //image upload -->
 
         <!-- JSON 데이터 포함 -->
-        <script id="initial-data" type="application/json" th:utext="${postRequestDTO.existingImageUrls != null ? postRequestDTO.existingImageUrls : '[]'}"></script>
-
+        <script id="initial-data" type="application/json" th:text="${existingImageUrlsJson}"></script>
 
         <!-- titles -->
         <div class="form-group">

@@ -34,7 +34,7 @@ public class PostResponseDTO {
     public PostResponseDTO() {}
 
 
-    public PostResponseDTO(Long postId, Long categoryId, String categoryName, String title, String recommendMenu, int price, String post, Long placeId, String placeName, String roadAddressName, String xCoordinate, String yCoordinate, LocalDateTime createdAt, LocalDateTime updatedAt, List<String> imageUrls, String userName, Long userId, boolean bookmarked, String mainImageUr, int thumbnailIndex) {
+    public PostResponseDTO(Long postId, Long categoryId, String categoryName, String title, String recommendMenu, int price, String post, Long placeId, String placeName, String roadAddressName, String xCoordinate, String yCoordinate, LocalDateTime createdAt, LocalDateTime updatedAt, List<String> imageUrls, String userName, Long userId, boolean bookmarked, String mainImageUrl, int thumbnailIndex) {
         this.postId = postId;
         this.categoryId = categoryId;
         this.categoryName = categoryName;

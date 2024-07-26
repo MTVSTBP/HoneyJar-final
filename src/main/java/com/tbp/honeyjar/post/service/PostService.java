@@ -18,12 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.print.Pageable;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
-
-
 
 
 @Service
@@ -95,8 +92,6 @@ public class PostService {
 
 
 
-
-
     private String generateFileName(MultipartFile file) {
         return UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
     }
@@ -161,6 +156,7 @@ public class PostService {
     }
 
 
+
     @Transactional
     public void updatePost(PostRequestDTO postRequestDTO, List<MultipartFile> files, MultipartFile mainImageFile, String mainImageUrl) throws IOException, FirebaseAuthException {
         Long placeId = postRequestDTO.getPlaceId();
@@ -184,31 +180,37 @@ public class PostService {
         placeDTO.setyCoordinate(removeDuplicates(placeDTO.getyCoordinate()));
         placeDTO.setRoadAddressName(removeDuplicates(placeDTO.getRoadAddressName()));
 
-        System.out.println("Updated PlaceDTO: " + placeDTO);
-
-        // 장소 정보 업데이트
-        System.out.println("PlaceDTO name before update: " + placeDTO.getName());
         placeService.updatePlace(placeDTO);
-        System.out.println("PlaceDTO name after update: " + placeDTO.getName());
 
         // 기존 이미지 정보 가져오기
         List<ImageDTO> existingImages = imageService.getImagesByPostId(postRequestDTO.getPostId());
 
         // 기존 이미지 삭제
         for (ImageDTO image : existingImages) {
-            try {
-                fireBaseService.deleteFile(image.getUrl());
-            } catch (IOException e) {
-                System.out.println("File not found in the bucket: " + image.getUrl());
+            if (!postRequestDTO.getExistingImageUrls().contains(image.getUrl())) {
+                try {
+                    fireBaseService.deleteFile(image.getUrl());
+                } catch (IOException e) {
+                    System.out.println("File not found in the bucket: " + image.getUrl());
+                }
+                imageService.deleteImageById(image.getImageId());
             }
         }
-        imageService.deleteImagesByPostId(postRequestDTO.getPostId());
+
+        // 기존 메인 이미지 상태 업데이트 (모든 기존 메인 이미지의 is_main 값을 false로 설정)
+        for (ImageDTO image : existingImages) {
+            if (image.isMain()) {
+                imageService.updateMainImageStatus(image.getImageId(), false);
+            }
+        }
 
         // 새로운 메인 이미지 업로드
         final String mainImageUploadUrl;
         if (mainImageFile != null && !mainImageFile.isEmpty()) {
+            // 새로운 썸네일 이미지가 업로드된 경우
             mainImageUploadUrl = fireBaseService.uploadFile(mainImageFile, UUID.randomUUID().toString());
         } else {
+            // 기존 썸네일 이미지를 사용하는 경우
             mainImageUploadUrl = postRequestDTO.getMainImageUrl();
         }
         postRequestDTO.setMainImageUrl(mainImageUploadUrl);
@@ -230,6 +232,17 @@ public class PostService {
 
             postRequestDTO.setImageUrls(imageUrls);
             imageService.saveImages(imageUrls, postRequestDTO.getUserId(), postRequestDTO.getPostId());
+        }
+
+        // 새로운 메인 이미지 상태 업데이트 (새로운 썸네일 이미지의 is_main 값을 true로 설정)
+        ImageDTO newMainImage = imageService.getImagesByPostId(postRequestDTO.getPostId())
+                .stream()
+                .filter(image -> image.getUrl().equals(mainImageUploadUrl))
+                .findFirst()
+                .orElse(null);
+
+        if (newMainImage != null) {
+            imageService.updateMainImageStatus(newMainImage.getImageId(), true);
         }
 
         // 포스트 업데이트

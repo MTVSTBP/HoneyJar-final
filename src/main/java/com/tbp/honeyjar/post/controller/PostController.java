@@ -125,17 +125,23 @@ public class PostController {
         PostRequestDTO postRequestDTO = postService.convertToPostRequestDTO(post);
         postRequestDTO.setExistingImageUrls(post.getImageUrls()); // 기존 이미지 URL 설정
 
+        // 기존 이미지 URL 리스트를 JSON 형식으로 변환하여 모델에 추가
+        String existingImageUrlsJson = new Gson().toJson(postRequestDTO.getExistingImageUrls());
+        model.addAttribute("existingImageUrlsJson", existingImageUrlsJson);
+
         model.addAttribute("postRequestDTO", postRequestDTO);
         model.addAttribute("categories", categoryService.findAllFoodCategory());
 
         return "pages/post/postCorrection";
     }
 
+
     @PostMapping("/correction")
     public ResponseEntity<?> postCorrection(@ModelAttribute PostRequestDTO postRequestDTO,
                                             @RequestParam(value = "files", required = false) List<MultipartFile> files,
                                             @RequestParam("mainImageFile") MultipartFile mainImageFile,
                                             @RequestParam("mainImageUrl") String mainImageUrl,
+                                            @RequestParam(value = "existingImageUrls", required = false) List<String> existingImageUrls,
                                             Principal principal) throws IOException, FirebaseAuthException {
         Long loggedInUserId = userService.findUserIdByKakaoId(principal.getName());
         PostResponseDTO existingPost = postService.findPostById(postRequestDTO.getPostId());
@@ -148,6 +154,9 @@ public class PostController {
         if (files == null) {
             files = new ArrayList<>();
         }
+
+        // existingImageUrls를 DTO에 설정합니다.
+        postRequestDTO.setExistingImageUrls(existingImageUrls);
 
         postService.updatePost(postRequestDTO, files, mainImageFile, mainImageUrl);
         Map<String, Object> response = new HashMap<>();
