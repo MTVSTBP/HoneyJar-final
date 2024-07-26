@@ -1,8 +1,8 @@
-<div id="backGround" th:fragment="followerComponent(follows)">
-    <div id="container" th:each="follow : ${follows.followers}">
+<div id="container" th:fragment="followerComponent(follows)" th:each="follow : ${follows.followers}">
+    <div id="top_container">
         <div id="leftContainer">
             <div>
-                <img th:src="${follow.profileImage != null ? follow.profileImage : '/assets/svg/base_profile.svg'}"/>
+                <img id="profile" th:src="${follow.profileImage != null ? follow.profileImage : '/assets/svg/base_profile.svg'}"/>
             </div>
             <div id="text" th:text="${follow.userName}"></div>
         </div>
@@ -13,7 +13,7 @@
         </div>
     </div>
     <div id="border">
-        <hr />
+            <hr />
     </div>
 </div>
 
