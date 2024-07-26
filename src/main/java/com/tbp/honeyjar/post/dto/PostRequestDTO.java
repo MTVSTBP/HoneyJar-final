@@ -20,10 +20,13 @@ public class PostRequestDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Long categoryId;
+    private List<String> existingImageUrls; // 추가된 필드
+    private int thumbnailIndex;
+
 
     public PostRequestDTO() {}
 
-    public PostRequestDTO(Long postId, String title, String recommendMenu, int price, String post, Long userId, List<String> imageUrls, String mainImageUrl, PlaceDTO place, Long placeId, LocalDateTime createdAt, LocalDateTime updatedAt, Long categoryId) {
+    public PostRequestDTO(Long postId, String title, String recommendMenu, int price, String post, Long userId, List<String> imageUrls, String mainImageUrl, PlaceDTO place, Long placeId, LocalDateTime createdAt, LocalDateTime updatedAt, Long categoryId, List<String> existingImageUrls, int thumbnailIndex) {
         this.postId = postId;
         this.title = title;
         this.recommendMenu = recommendMenu;
@@ -37,6 +40,8 @@ public class PostRequestDTO {
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.categoryId = categoryId;
+        this.existingImageUrls = existingImageUrls;
+        this.thumbnailIndex = thumbnailIndex;
     }
 
     public Long getPostId() {
@@ -143,6 +148,22 @@ public class PostRequestDTO {
         this.categoryId = categoryId;
     }
 
+    public List<String> getExistingImageUrls() {
+        return existingImageUrls;
+    }
+
+    public void setExistingImageUrls(List<String> existingImageUrls) {
+        this.existingImageUrls = existingImageUrls;
+    }
+
+    public int getThumbnailIndex() {
+        return thumbnailIndex;
+    }
+
+    public void setThumbnailIndex(int thumbnailIndex) {
+        this.thumbnailIndex = thumbnailIndex;
+    }
+
     @Override
     public String toString() {
         return "PostRequestDTO{" +
@@ -159,6 +180,8 @@ public class PostRequestDTO {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", categoryId=" + categoryId +
+                ", existingImageUrls=" + existingImageUrls +
+                ", thumbnailIndex=" + thumbnailIndex +
                 '}';
     }
 }

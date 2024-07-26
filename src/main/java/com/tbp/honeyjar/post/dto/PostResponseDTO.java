@@ -23,6 +23,8 @@ public class PostResponseDTO {
     private String userName;
     private Long userId;
     private boolean bookmarked;
+    private String mainImageUrl;
+    private int thumbnailIndex;
 
     //    private String profileImg;  // user table
 //    private int like;  // like table
@@ -32,7 +34,7 @@ public class PostResponseDTO {
     public PostResponseDTO() {}
 
 
-    public PostResponseDTO(Long postId, Long categoryId, String categoryName, String title, String recommendMenu, int price, String post, Long placeId, String placeName, String roadAddressName, String xCoordinate, String yCoordinate, LocalDateTime createdAt, LocalDateTime updatedAt, List<String> imageUrls, String userName, Long userId, boolean bookmarked) {
+    public PostResponseDTO(Long postId, Long categoryId, String categoryName, String title, String recommendMenu, int price, String post, Long placeId, String placeName, String roadAddressName, String xCoordinate, String yCoordinate, LocalDateTime createdAt, LocalDateTime updatedAt, List<String> imageUrls, String userName, Long userId, boolean bookmarked, String mainImageUrl, int thumbnailIndex) {
         this.postId = postId;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
@@ -51,6 +53,8 @@ public class PostResponseDTO {
         this.userName = userName;
         this.userId = userId;
         this.bookmarked = bookmarked;
+        this.mainImageUrl = mainImageUrl;
+        this.thumbnailIndex = thumbnailIndex;
     }
 
     public Long getPostId() {
@@ -197,6 +201,22 @@ public class PostResponseDTO {
         this.bookmarked = bookmarked;
     }
 
+    public String getMainImageUrl() {
+        return mainImageUrl;
+    }
+
+    public void setMainImageUrl(String mainImageUrl) {
+        this.mainImageUrl = mainImageUrl;
+    }
+
+    public int getThumbnailIndex() {
+        return thumbnailIndex;
+    }
+
+    public void setThumbnailIndex(int thumbnailIndex) {
+        this.thumbnailIndex = thumbnailIndex;
+    }
+
     @Override
     public String toString() {
         return "PostResponseDTO{" +
@@ -218,6 +238,8 @@ public class PostResponseDTO {
                 ", userName='" + userName + '\'' +
                 ", userId=" + userId +
                 ", bookmarked=" + bookmarked +
+                ", mainImageUrl='" + mainImageUrl + '\'' +
+                ", thumbnailIndex=" + thumbnailIndex +
                 '}';
     }
 }

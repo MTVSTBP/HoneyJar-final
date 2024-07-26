@@ -34,12 +34,17 @@
                 <img src="/assets/svg/camera_enhance.svg" alt="Upload Icon">
             </label>
             <input type="file" id="imageUpload" accept="image/jpeg, image/png, image/gif" multiple>
-            <div id="imagePreview"></div>
+            <div id="imagePreview">
+                <img src="https://storage.googleapis.com/download/storage/v1/b/honey-jar-e8380.appspot.com/o/1542a9fd-e461-4cd8-a94a-80cc1bde63e1?generation=1721914749070469&alt=media">
+            </div>
             <p id="fileCountMessage">최대 5개까지 업로드할 수 있습니다.</p>
             <p id="fileTypeMessage">jpg, png, gif 파일만 업로드할 수 있습니다.</p>
             <p class="error-message" id="imageError"></p>
         </div>
         <!-- //image upload -->
+
+        <!-- JSON 데이터 포함 -->
+        <script id="initial-data" type="application/json" th:text="${existingImageUrlsJson}"></script>
 
         <!-- titles -->
         <div class="form-group">
@@ -117,6 +122,7 @@
         </div>
     </div>
 </div>
+
 
 <script th:inline="javascript" type="text/javascript" th:src="@{/js/pages/post/postCorrection.js}"></script>
 

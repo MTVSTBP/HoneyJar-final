@@ -2,40 +2,11 @@ package com.tbp.honeyjar.image.dao;
 
 import com.tbp.honeyjar.image.dto.ImageDTO;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+
 
 import java.util.List;
+import java.util.Map;
 
-
-//@Mapper
-//public interface ImageMapper {
-//    void insertImage(ImageDTO image);
-//
-//    void insertImages(@Param("images") List<ImageDTO> images);
-//
-//    List<ImageDTO> findImagesByPostId(Long postId);
-//
-//    ImageDTO findMainImageByPostId(Long postId);
-//
-//    void deleteImagesByPostId(Long postId);
-//
-//}
-
-//@Mapper
-//public interface ImageMapper {
-//
-//    void insertImage(ImageDTO image);
-//
-//    void insertImages(List<ImageDTO> images);
-//
-//    List<ImageDTO> findImagesByPostId(Long postId);
-//
-//    ImageDTO findMainImageByPostId(Long postId);
-//
-//    void deleteImagesByPostId(Long postId);
-//
-//    void deleteImageById(Long imageId);
-//}
 
 @Mapper
 public interface ImageMapper {
@@ -46,9 +17,12 @@ public interface ImageMapper {
 
     void deleteImagesByPostId(Long postId);
 
-    void deleteImage(Long imageId);
+    void deleteImageById(Long imageId);
+
+    void updateMainImageStatus(Map<String, Object> params);
 
     List<ImageDTO> findImagesByPostId(Long postId);
 
     ImageDTO findMainImageByPostId(Long postId);
+
 }
