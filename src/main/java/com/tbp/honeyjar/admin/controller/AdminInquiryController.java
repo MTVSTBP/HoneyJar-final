@@ -13,6 +13,8 @@ import com.tbp.honeyjar.login.service.user.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +42,6 @@ public class AdminInquiryController {
     @GetMapping
     public String getAdminInquiries(Model model, Principal principal, @RequestParam(defaultValue = "1") int page) {
         String kakaoId = principal.getName();
-        System.out.println("principal.tosring : " + principal.toString());
         page = page < 1 ? 1 : page;
         Pageable pageable = PageRequest.of(page - 1, 5);  // 페이지 번호는 0부터 시작하므로 -1
         Page<InquiryDto> inquiryPage = adminInquiryService.getInquiryList(pageable);
@@ -60,27 +61,33 @@ public class AdminInquiryController {
     public String getInquiryDetail(@PathVariable Long inquiryId,
                                    @RequestParam(value = "page", defaultValue = "1") int page,
                                    Model model) {
-//        User userInfo = inquiryService.findByKakaoId(principal.getName());
         InquiryDto inquiry = adminInquiryService.getInquiryById(inquiryId);
-//        User userInfo = userService.findByKakaoId(inquiry.getKakaoId());
-        System.out.println("inquiry : " + inquiry.toString());
         model.addAttribute("inquiry", inquiry);
         model.addAttribute("username", "yunjunsu");
         model.addAttribute("page", page);
         model.addAttribute("categoryName", categoryService.findQnaById(inquiry.getCategoryId()).getName());
         return "pages/admin/inquiry/adminInquiryDetail";
     }
+//
+//    @PostMapping("/delete/{inquiryId}")
+//    public String deleteInquiry(@PathVariable Long inquiryId) {
+////        InquiryDto inquiry = AdminInquiryService.getInquiryById(inquiryId);
+//        boolean result = adminInquiryService.deleteInquiry(inquiryId);
+//        if (result) {
+//            return "redirect:/admin/inquiry";
+//        } else {
+//            return "redirect:/admin/inquiry/detail/" + inquiryId;
+//        }
+//
+//    }
 
-    @PostMapping("/delete/{inquiryId}")
-    public String deleteInquiry(@PathVariable Long inquiryId) {
-//        InquiryDto inquiry = AdminInquiryService.getInquiryById(inquiryId);
+    @DeleteMapping("/delete/{inquiryId}")
+    public ResponseEntity<String> deleteInquiry(@PathVariable Long inquiryId, @RequestParam("page") int page) {
         boolean result = adminInquiryService.deleteInquiry(inquiryId);
         if (result) {
-            return "redirect:/admin/inquiry";
+            return ResponseEntity.ok("삭제 완료");
         } else {
-            return "redirect:/admin/inquiry/detail/" + inquiryId;
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("삭제 실패");
         }
-
     }
-
 }

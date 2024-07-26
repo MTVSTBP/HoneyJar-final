@@ -1,6 +1,5 @@
 package com.tbp.honeyjar.inquiry.controller;
 
-import com.google.firebase.auth.UserInfo;
 import com.tbp.honeyjar.admin.dto.category.QnaCategoryListResponseDto;
 import com.tbp.honeyjar.admin.service.CategoryService;
 import com.tbp.honeyjar.inquiry.dto.InquiryDto;
@@ -9,8 +8,6 @@ import com.tbp.honeyjar.inquiry.dto.InquiryUpdateDto;
 import com.tbp.honeyjar.inquiry.service.InquiryService;
 import com.tbp.honeyjar.login.entity.user.User;
 import com.tbp.honeyjar.login.service.user.UserService;
-import com.tbp.honeyjar.mypage.DTO.CategoryDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

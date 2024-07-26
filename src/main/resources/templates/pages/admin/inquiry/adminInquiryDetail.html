@@ -8,7 +8,7 @@
     <th:block layout:fragment="title">
         <title>1:1 문의 상세</title>
     </th:block>
-    <script defer="defer" th:src="@{/js/pages/inquiry/adminInquiryDetail.js}"></script>
+    <script defer="defer" th:src="@{/js/pages/admin/inquiry/adminInquiryDetail.js}"></script>
 </head>
 <body>
 <!-- 헤더영역 -->
@@ -41,8 +41,9 @@
         </div>
     </div>
     <div class="button_list">
-        <a th:href="@{'/admin/inquiry/delete/' + ${inquiry.id}}" type="submit" class="btn">삭제</a>
+        <button type="button" class="btn delete-button" th:data-inquiry-id="${inquiry.id}">삭제</button>
     </div>
+
 </div>
 
 <!-- 삭제 확인 모달 -->

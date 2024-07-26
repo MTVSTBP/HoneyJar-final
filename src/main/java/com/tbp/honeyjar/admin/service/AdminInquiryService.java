@@ -54,7 +54,14 @@ public class AdminInquiryService {
         return adminInquiryMapper.getInquiryById(inquiryId);
     }
     /* Admin can delete Inquiry */
+
+    @Transactional
     public boolean deleteInquiry(Long inquiryId) {
-        return adminInquiryMapper.delete(inquiryId);
+        try {
+            adminInquiryMapper.delete(inquiryId);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }
