@@ -39,6 +39,9 @@ a {
 
 .qna_category {
     margin-top: 3rem;
+    display: flex;
+    overflow: auto;
+    scrollbar-width: none;
 }
 
 .qna_category ul {

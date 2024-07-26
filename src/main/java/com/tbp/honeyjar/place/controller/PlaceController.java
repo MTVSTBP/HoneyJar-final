@@ -25,6 +25,8 @@ public class PlaceController {
     @GetMapping("/{placeId}")
     public ResponseEntity<PlaceDTO> getPlaceById(@PathVariable Long placeId) {
         PlaceDTO place = placeService.getPlaceById(placeId);
+        float rating = placeService.getRatingById(placeId);
+        place.setRatingAvg(rating);
         return ResponseEntity.ok(place);
     }
 

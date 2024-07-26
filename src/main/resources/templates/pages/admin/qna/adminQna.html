@@ -30,12 +30,9 @@
         </div>
     </div>
     <div class="qna_category">
-        <ul>
+        <ul th:each="category, categoryStat : ${qnaCategory}">
             <li>
-                <p data-category="1" class="tab tab_active">카테고리1</p>
-            </li>
-            <li>
-                <p data-category="2" class="tab">카테고리2</p>
+                <p th:data-category="${categoryStat.count}" th:text="${category.name}" th:class="${categoryStat.count} == 1 ? 'tab tab_active' : 'tab'">카테고리</p>
             </li>
         </ul>
     </div>
