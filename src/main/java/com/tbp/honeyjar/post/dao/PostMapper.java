@@ -13,7 +13,8 @@ public interface PostMapper {
     List<PostListDTO> findPostsByCategory(@Param("category") Long category,
                                           @Param("size") int size,
                                           @Param("offset") int offset,
-                                          @Param("userId") Long userId);
+                                          @Param("userId") Long userId,
+                                          @Param("maxPrice") Integer maxPrice);
 
     void createPost(PostRequestDTO postRequestDTO);
 

@@ -38,9 +38,9 @@ public class PostService {
         this.categoryMapper = categoryMapper;
     }
 
-    public List<PostListDTO> findPostsByCategory(Long category, int page, int size, Long userId) {
+    public List<PostListDTO> findPostsByCategory(Long category, int page, int size, Long userId, Integer maxPrice) {
         int offset = page * size; // offset 계산
-        return postMapper.findPostsByCategory(category, size, offset, userId);
+        return postMapper.findPostsByCategory(category, size, offset, userId, maxPrice);
     }
 
 
