@@ -99,9 +99,9 @@
         pl.y_coordinate
         <if test="latitude != null and longitude != null">
             , (6371 * acos(
-            cos(radians(#{latitude})) * cos(radians(pl.x_coordinate))
-            * cos(radians(pl.y_coordinate) - radians(#{longitude}))
-            + sin(radians(#{latitude})) * sin(radians(pl.x_coordinate))
+            cos(radians(#{latitude})) * cos(radians(pl.y_coordinate))
+            * cos(radians(pl.x_coordinate) - radians(#{longitude}))
+            + sin(radians(#{latitude})) * sin(radians(pl.y_coordinate))
             )) AS distance
         </if>
         FROM post p
@@ -122,7 +122,7 @@
         </if>
         <choose>
             <when test="sortOption == 'distance' and latitude != null and longitude != null">
-                ORDER BY distance DESC
+                ORDER BY distance ASC
             </when>
             <otherwise>
                 ORDER BY p.created_at DESC
@@ -130,6 +130,9 @@
         </choose>
         LIMIT #{size} OFFSET #{offset}
     </select>
+
+
+
 
 
 
