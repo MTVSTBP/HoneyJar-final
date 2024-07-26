@@ -19,7 +19,6 @@ function dataURLtoBlob(dataurl) {
     return new Blob([u8arr], { type: mime });
 }
 
-
 document.addEventListener("DOMContentLoaded", function () {
     function htmlDecode(input) {
         const doc = new DOMParser().parseFromString(input, "text/html");
@@ -64,11 +63,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // 기존 이미지 URL을 selectedFiles 배열에 추가
-    existingImageUrls.forEach(url => {
-        const fileData = { name: url.split('/').pop(), dataURL: url };
-        selectedFiles.push(fileData);
-    });
-    localStorage.setItem('selectedFiles', JSON.stringify(selectedFiles));
+    if (selectedFiles.length === 0) {  // 로컬 스토리지에 기존 파일이 없는 경우에만 추가
+        existingImageUrls.forEach(url => {
+            const fileData = { name: url.split('/').pop(), dataURL: url };
+            selectedFiles.push(fileData);
+        });
+        localStorage.setItem('selectedFiles', JSON.stringify(selectedFiles));
+    }
     updateImagePreview();
 
     function updateImagePreview() {
@@ -211,7 +212,10 @@ document.addEventListener("DOMContentLoaded", function () {
         for (const file of files) {
             if (selectedFiles.length < maxFiles) {
                 const compressedDataURL = await compressImage(file);
-                selectedFiles.push({ name: file.name, dataURL: compressedDataURL });
+                // 중복 확인 로직 추가
+                if (!selectedFiles.some(fileData => fileData.dataURL === compressedDataURL)) {
+                    selectedFiles.push({ name: file.name, dataURL: compressedDataURL });
+                }
                 localStorage.setItem('selectedFiles', JSON.stringify(selectedFiles));
                 updateImagePreview();
                 validateForm();
@@ -396,14 +400,15 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-
     completeBtn.addEventListener('click', function () {
         window.location.href = `/post`;
     });
 
     function openMapPage() {
+        // 장소 관련 정보를 초기화
         localStorage.removeItem('selectedPlace');
 
+        // 게시물 관련 정보 저장
         localStorage.setItem('postFormState', JSON.stringify({
             postTitle: document.getElementById('postTitle').value.trim(),
             content: document.getElementById('content').value.trim(),
@@ -412,8 +417,7 @@ document.addEventListener("DOMContentLoaded", function () {
             placeName: document.getElementById('placeNameInput').value.trim().replace(/^,/, ''),
             category: categoryField.value.trim(),
             placeId: placeIdField.value.trim(),
-            postId: postIdField.value.trim(),
-            placeRoadAddressName : document.getElementById("placeRoadAddressName").value.trim().replace(/^,/, '')
+            postId: postIdField.value.trim()
         }));
         const currentUrl = window.location.href;
         window.location.href = '/post/map?redirectTo=' + encodeURIComponent(currentUrl);
@@ -429,8 +433,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById('content').value = postFormState.content;
             document.getElementById('bestMenu').value = postFormState.bestMenu;
             document.getElementById('price').value = postFormState.price;
-            document.getElementById('placeNameInput').value = postFormState.placeRoadAddressName.replace(/^,/, '');
-            document.getElementById('placeName').value = postFormState.placeName.replace(/^,/, '');
+            document.getElementById('placeNameInput').value.trim().replace(/^,/, '');
             categoryField.value = postFormState.category;
             placeIdField.value = postFormState.placeId;
             localStorage.removeItem('postFormState');
@@ -439,12 +442,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const selectedPlace = JSON.parse(localStorage.getItem('selectedPlace'));
         if (selectedPlace) {
-            document.getElementById('placeNameInput').value = selectedPlace.road_address_name.replace(/^,/, '');
+            document.getElementById('placeNameInput').value = selectedPlace.road_address_name.replace(/^,/, '') || selectedPlace.address_name.replace(/^,/, '');
             placeIdField.value = selectedPlace.placeId || placeIdField.value;
             placeXField.value = selectedPlace.x;
             placeYField.value = selectedPlace.y;
-            placeName.value = selectedPlace.place_name.replace(/^,/, '');
-            localStorage.removeItem('selectedPlace');
+            placeNameField.value = selectedPlace.place_name;
         }
 
         updateImagePreview();
@@ -452,3 +454,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     restoreFormState();
 });
+
+
+
+

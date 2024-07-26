@@ -10,11 +10,19 @@ import java.util.Map;
 @Mapper
 public interface PostMapper {
 
+//    List<PostListDTO> findPostsByCategory(@Param("category") Long category,
+//                                          @Param("size") int size,
+//                                          @Param("offset") int offset,
+//                                          @Param("userId") Long userId,
+//                                          @Param("maxPrice") Integer maxPrice);
     List<PostListDTO> findPostsByCategory(@Param("category") Long category,
                                           @Param("size") int size,
                                           @Param("offset") int offset,
                                           @Param("userId") Long userId,
-                                          @Param("maxPrice") Integer maxPrice);
+                                          @Param("maxPrice") Integer maxPrice,
+                                          @Param("sortOption") String sortOption,
+                                          @Param("latitude") Double latitude,
+                                          @Param("longitude") Double longitude);
 
     void createPost(PostRequestDTO postRequestDTO);
 

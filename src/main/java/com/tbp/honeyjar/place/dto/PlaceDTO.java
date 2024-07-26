@@ -4,15 +4,15 @@ public class PlaceDTO {
     private Long placeId;
     private String name;
     private float ratingAvg;
-    private String xCoordinate;
-    private String yCoordinate;
+    private Double xCoordinate;
+    private Double yCoordinate;
     private String roadAddressName;
     private String createdAt;
     private String updatedAt;
 
     public PlaceDTO() {}
 
-    public PlaceDTO(Long placeId, String name, float ratingAvg, String xCoordinate, String yCoordinate, String roadAddressName, String createdAt, String updatedAt) {
+    public PlaceDTO(Long placeId, String name, float ratingAvg, Double xCoordinate, Double yCoordinate, String roadAddressName, String createdAt, String updatedAt) {
         this.placeId = placeId;
         this.name = name;
         this.ratingAvg = ratingAvg;
@@ -47,19 +47,19 @@ public class PlaceDTO {
         this.ratingAvg = ratingAvg;
     }
 
-    public String getxCoordinate() {
+    public Double getxCoordinate() {
         return xCoordinate;
     }
 
-    public void setxCoordinate(String xCoordinate) {
+    public void setxCoordinate(Double xCoordinate) {
         this.xCoordinate = xCoordinate;
     }
 
-    public String getyCoordinate() {
+    public Double getyCoordinate() {
         return yCoordinate;
     }
 
-    public void setyCoordinate(String yCoordinate) {
+    public void setyCoordinate(Double yCoordinate) {
         this.yCoordinate = yCoordinate;
     }
 
@@ -93,8 +93,8 @@ public class PlaceDTO {
                 "placeId=" + placeId +
                 ", name='" + name + '\'' +
                 ", ratingAvg=" + ratingAvg +
-                ", xCoordinate='" + xCoordinate + '\'' +
-                ", yCoordinate='" + yCoordinate + '\'' +
+                ", xCoordinate=" + xCoordinate +
+                ", yCoordinate=" + yCoordinate +
                 ", roadAddressName='" + roadAddressName + '\'' +
                 ", createdAt='" + createdAt + '\'' +
                 ", updatedAt='" + updatedAt + '\'' +

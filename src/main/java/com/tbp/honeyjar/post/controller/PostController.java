@@ -37,12 +37,45 @@ public class PostController {
         this.userService = userService;
     }
 
+//    @GetMapping
+//    public String postList(Model model,
+//                           @RequestParam(required = false) Long category,
+//                           @RequestParam(defaultValue = "0") int page,
+//                           @RequestParam(defaultValue = "6") int size,
+//                           @RequestParam(required = false) boolean goodRestaurant,
+//                           Principal principal) {
+//
+//        Long userId = null;
+//        if (principal != null) {
+//            userId = userService.findUserIdByKakaoId(principal.getName());
+//        }
+//
+//        // 최초 요청 시 4개의 포스트만 반환
+//        if (page == 0) {
+//            List<PostListDTO> posts = postService.findPostsByCategory(category, page, size, userId, goodRestaurant ? 10000 : null); // 4개만 가져오기
+//            model.addAttribute("posts", posts);
+//            model.addAttribute("categories", categoryService.findAllFoodCategory());
+//            model.addAttribute("selectedCategory", category);
+//            model.addAttribute("goodRestaurant", goodRestaurant);
+//            return "pages/post/post"; // 전체 포스트 페이지
+//        }
+//
+//        // AJAX 요청일 경우 특정 페이지의 포스트만 반환
+//        Integer maxPrice = goodRestaurant ? 10000 : null;
+//        List<PostListDTO> posts = postService.findPostsByCategory(category, page, size, userId, maxPrice);
+//        model.addAttribute("posts", posts);
+//        return "common/components/postComponent"; // 포스트 컴포넌트를 반환
+//    }
+
     @GetMapping
     public String postList(Model model,
                            @RequestParam(required = false) Long category,
                            @RequestParam(defaultValue = "0") int page,
                            @RequestParam(defaultValue = "6") int size,
                            @RequestParam(required = false) boolean goodRestaurant,
+                           @RequestParam(required = false) String sortOption,
+                           @RequestParam(required = false) Double latitude,
+                           @RequestParam(required = false) Double longitude,
                            Principal principal) {
 
         Long userId = null;
@@ -50,9 +83,11 @@ public class PostController {
             userId = userService.findUserIdByKakaoId(principal.getName());
         }
 
+        Integer maxPrice = goodRestaurant ? 10000 : null;
+        List<PostListDTO> posts = postService.findPostsByCategory(category, page, size, userId, maxPrice, sortOption, latitude, longitude);
+
         // 최초 요청 시 4개의 포스트만 반환
         if (page == 0) {
-            List<PostListDTO> posts = postService.findPostsByCategory(category, page, size, userId, goodRestaurant ? 10000 : null); // 4개만 가져오기
             model.addAttribute("posts", posts);
             model.addAttribute("categories", categoryService.findAllFoodCategory());
             model.addAttribute("selectedCategory", category);
@@ -61,11 +96,16 @@ public class PostController {
         }
 
         // AJAX 요청일 경우 특정 페이지의 포스트만 반환
-        Integer maxPrice = goodRestaurant ? 10000 : null;
-        List<PostListDTO> posts = postService.findPostsByCategory(category, page, size, userId, maxPrice);
         model.addAttribute("posts", posts);
         return "common/components/postComponent"; // 포스트 컴포넌트를 반환
     }
+
+
+
+
+
+
+
 
     @GetMapping("/write")
     public String postCreateForm(Model model) {
