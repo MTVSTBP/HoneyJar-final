@@ -1,7 +1,6 @@
 package com.tbp.honeyjar.login.config.security;
 
 import com.tbp.honeyjar.login.common.CookieUtil;
-import com.tbp.honeyjar.login.config.properties.AppProperties;
 import com.tbp.honeyjar.login.config.properties.CorsProperties;
 import com.tbp.honeyjar.login.oauth.entity.RoleType;
 import com.tbp.honeyjar.login.oauth.filter.TokenAuthenticationFilter;

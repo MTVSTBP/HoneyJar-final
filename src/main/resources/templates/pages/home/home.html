@@ -1,21 +1,16 @@
-<!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{common/layout/homeLayout}">
+      layout:decorate="~{common/layout/homeLayout}"
+      layout:fragment="content">
 
 <head>
-    <!-- TODO: 도저히 home.css 를 불러올 수 없었던 관계로, 스크립트 내에 스타일을 적용 -->
-    <title>홈페이지</title>
-    <th:block layout:fragment="css">
-        <link rel="stylesheet" th:href="@{/css/pages/home/home.css}" href="/css/pages/home/home.css"/>
-    </th:block>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/home/home.css}" href="/css/pages/home/home.css"/>
+    <title>홈</title>
 </head>
 
 <body>
-<th:block layout:fragment="content">
-    <div id="map"></div>
-</th:block>
+
+<div id="map"></div>
 
 <th:block layout:fragment="script">
     <script type="text/javascript"

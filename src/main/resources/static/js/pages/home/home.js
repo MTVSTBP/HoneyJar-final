@@ -7,16 +7,16 @@ var mapContainer = document.getElementById('map'), // 지도를 표시할 div
 var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
 // 맵 크기 재설정
-function resizeMap() {
-    var mapContainer = document.getElementById('map');
-    mapContainer.style.width = '100%';
-    mapContainer.style.height = window.innerHeight - 60 + 'px'; // footer 높이 고려
-    map.relayout();
-}
+// function resizeMap() {
+//     var mapContainer = document.getElementById('map');
+//     mapContainer.style.width = '100%';
+//     mapContainer.style.height = window.innerHeight - 60 + 'px'; // footer 높이 고려
+//     map.relayout();
+// }
 
 // 초기 로딩 및 윈도우 크기 변경 시 맵 크기 조정
-resizeMap();
-window.addEventListener('resize', resizeMap);
+// resizeMap();
+// window.addEventListener('resize', resizeMap);
 
 var imageSrc = '/assets/img/marker.png', // 마커이미지의 주소입니다
     imageSize = new kakao.maps.Size(52, 64), // 마커이미지의 크기입니다
