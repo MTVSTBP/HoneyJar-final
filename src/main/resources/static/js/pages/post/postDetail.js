@@ -214,8 +214,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    function likePost(userId, postId) {
-        fetch('/post/like/' + postId, {
+    async function likePost(userId, postId) {
+        const res = await fetch('/post/like/' + postId, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -225,16 +225,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 'user-id': userId,
                 'post-id': postId
             })
-        }).then(res => {
-            if (!res.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return res.json();
-        })
+        });
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return res.json();
     }
 
-    function unlikePost(userId, postId) {
-        fetch('/post/like/' + postId, {
+    async function unlikePost(userId, postId) {
+        const res = await fetch('/post/like/' + postId, {
             method: "DELETE",
             headers: {
                 'Content-Type': 'application/json',
@@ -244,12 +243,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 'user-id': userId,
                 'post-id': postId
             })
-        }).then(res => {
-            if (!res.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return res.json();
-        })
+        });
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return res.json();
     }
 
     const commentButton = document.getElementById("commentButton");
@@ -312,7 +310,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const postId = parseInt(likeButton.getAttribute("data-post-id"))
             let isRated = modalButton.getAttribute("data-rated") === "true";
 
-            confirmRating.addEventListener('click', function () {
+            confirmRating.addEventListener('click', async function () {
                 ratingModal.style.display = "none";
 
                 stars.forEach(star => {
@@ -320,19 +318,22 @@ document.addEventListener("DOMContentLoaded", function () {
                         selectedRating = star.getAttribute('data-value');
                     });
                 });
+
                 if (!isRated) {
-                    rating(userId, postId, selectedRating);
+                    await rating(userId, postId, selectedRating);
                     isRated = true;
                 } else {
-                    ratingAgain(userId, postId, selectedRating);
+                    await ratingAgain(userId, postId, selectedRating);
                     isRated = false;
                 }
-            }
-        )
+
+                window.location.reload();
+            });
+        }
     }
 
-    function rating(userId, postId, selectedRating) {
-        fetch('/post/rating/' + postId, {
+    async function rating(userId, postId, selectedRating) {
+        const res = await fetch('/post/rating/' + postId, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -343,15 +344,14 @@ document.addEventListener("DOMContentLoaded", function () {
                 'post-id': postId,
                 'rating': selectedRating
             })
-        }).then(res => {
-            if (!res.ok) {
-                throw new Error('Network response was not ok');
-            }
-        })
+        });
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
+        }
     }
 
-    function ratingAgain(userId, postId, selectedRating) {
-        fetch('/post/rating-again/' + postId, {
+    async function ratingAgain(userId, postId, selectedRating) {
+        const res = await fetch('/post/rating-again/' + postId, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -362,13 +362,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 'post-id': postId,
                 'rating': selectedRating
             })
-        }).then(res => {
-            if (!res.ok) {
-                throw new Error('Network response was not ok');
-            }
-        })
+        });
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
+        }
     }
-
 
     // 더보기 버튼 클릭 이벤트
     const moreHorizImage = document.querySelector('.more_h img');
@@ -386,4 +384,4 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
-}})
+});
