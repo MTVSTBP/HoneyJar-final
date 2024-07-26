@@ -38,11 +38,10 @@ public class PostService {
         this.categoryMapper = categoryMapper;
     }
 
-    public List<PostListDTO> findPostsByCategory(Long category, int page, int size) {
+    public List<PostListDTO> findPostsByCategory(Long category, int page, int size, Long userId) {
         int offset = page * size; // offset 계산
-        return postMapper.findPostsByCategory(category, size, offset);
+        return postMapper.findPostsByCategory(category, size, offset, userId);
     }
-
 
 
     @Transactional
@@ -95,8 +94,8 @@ public class PostService {
     }
 
 
-    public PostResponseDTO findPostById(Long postId) {
-        PostResponseDTO postResponseDTO = postMapper.findPostById(postId);
+    public PostResponseDTO findPostById(Long postId, Long userId) {
+        PostResponseDTO postResponseDTO = postMapper.findPostById(postId, userId);
         // 카테고리 이름 설정
         Long categoryId = postResponseDTO.getCategoryId();
         if (categoryId != null) {
