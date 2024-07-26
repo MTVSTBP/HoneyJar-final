@@ -15,8 +15,8 @@ public class PostResponseDTO {
     private Long placeId;
     private String placeName; // place 이름
     private String roadAddressName;
-    private String xCoordinate; // x좌표
-    private String yCoordinate; // y좌표
+    private Double xCoordinate; // x좌표
+    private Double yCoordinate; // y좌표
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private List<String> imageUrls;  // 이미지 URL 리스트
@@ -34,7 +34,7 @@ public class PostResponseDTO {
     public PostResponseDTO() {}
 
 
-    public PostResponseDTO(Long postId, Long categoryId, String categoryName, String title, String recommendMenu, int price, String post, Long placeId, String placeName, String roadAddressName, String xCoordinate, String yCoordinate, LocalDateTime createdAt, LocalDateTime updatedAt, List<String> imageUrls, String userName, Long userId, boolean bookmarked, String mainImageUrl, int thumbnailIndex) {
+    public PostResponseDTO(Long postId, Long categoryId, String categoryName, String title, String recommendMenu, int price, String post, Long placeId, String placeName, String roadAddressName, Double xCoordinate, Double yCoordinate, LocalDateTime createdAt, LocalDateTime updatedAt, List<String> imageUrls, String userName, Long userId, boolean bookmarked, String mainImageUrl, int thumbnailIndex) {
         this.postId = postId;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
@@ -137,19 +137,19 @@ public class PostResponseDTO {
         this.roadAddressName = roadAddressName;
     }
 
-    public String getxCoordinate() {
+    public Double getxCoordinate() {
         return xCoordinate;
     }
 
-    public void setxCoordinate(String xCoordinate) {
+    public void setxCoordinate(Double xCoordinate) {
         this.xCoordinate = xCoordinate;
     }
 
-    public String getyCoordinate() {
+    public Double getyCoordinate() {
         return yCoordinate;
     }
 
-    public void setyCoordinate(String yCoordinate) {
+    public void setyCoordinate(Double yCoordinate) {
         this.yCoordinate = yCoordinate;
     }
 

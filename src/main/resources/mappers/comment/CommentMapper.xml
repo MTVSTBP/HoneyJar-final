@@ -40,7 +40,7 @@
         WHERE
                 C.POST_ID = #{ postId }
         ORDER BY
-                C.CREATED_AT;
+                C.CREATED_AT desc;
     </select>
 
     <!-- 댓글 등록 -->

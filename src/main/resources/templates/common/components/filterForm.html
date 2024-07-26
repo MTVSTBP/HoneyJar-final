@@ -1,32 +1,32 @@
-<form id="filterForm" th:action="${actionUrl}" method="get" th:fragment="filterForm(categories, selectedCategory, goodRestaurant, actionUrl)">
-  <div class="mylist_select">
-    <!-- category -->
-    <div class="category_wrap">
-      <div class="custom-select-wrapper">
-        <select id="category" name="category" onchange="document.getElementById('filterForm').submit()">
-          <option value="">선택</option>
-          <option th:each="category : ${categories}"
-                  th:value="${category.id}"
-                  th:selected="${category.id == selectedCategory}"
-                  th:text="${category.name}">카테고리</option>
-        </select>
-        <!--                    <select id="category2" name="sortOption" onchange="document.getElementById('filterForm').submit()">-->
-        <!--                        <option value="">정렬</option>-->
-        <!--                        <option th:each="sortOption : ${sortOptions}"-->
-        <!--                                th:value="${sortOption.id}"-->
-        <!--                                th:selected="${sortOption.id == selectedSortOption}"-->
-        <!--                                th:text="${sortOption.name}">정렬</option>-->
-        <!--                    </select>-->
-      </div>
-    </div>
-    <!-- //category -->
+<form id="filterForm" th:action="${actionUrl}" method="get"
+      th:fragment="filterForm(categories, selectedCategory, goodRestaurant, actionUrl)">
+    <div class="mylist_select">
+        <!-- category -->
+        <div class="category_wrap">
+            <div class="custom-select-wrapper">
+                <select id="category" name="category" onchange="document.getElementById('filterForm').submit()">
+                    <option value="">선택</option>
+                    <option th:each="category : ${categories}"
+                            th:value="${category.id}"
+                            th:selected="${category.id == selectedCategory}"
+                            th:text="${category.name}">카테고리
+                    </option>
+                </select>
+                <select id="sortOption" name="sortOption">
+                    <option value="date" selected="selected">최신순</option>
+                    <option value="distance">거리순</option>
+                </select>
+            </div>
+        </div>
+        <!-- //category -->
 
-    <!-- checkbox  -->
-    <div class="checkbox">
-      <span>착한맛집</span>
-      <input type="checkbox" id="goodRestaurant" name="goodRestaurant" th:checked="${goodRestaurant}" onclick="document.getElementById('filterForm').submit()">
-      <label class="board_check_box" for="goodRestaurant"></label>
+        <!-- checkbox  -->
+        <div class="checkbox">
+            <span>착한맛집</span>
+            <input type="checkbox" id="goodRestaurant" name="goodRestaurant" th:checked="${goodRestaurant}"
+                   onclick="document.getElementById('filterForm').submit()">
+            <label class="board_check_box" for="goodRestaurant"></label>
+        </div>
+        <!-- //checkbox -->
     </div>
-    <!-- //checkbox -->
-  </div>
 </form>

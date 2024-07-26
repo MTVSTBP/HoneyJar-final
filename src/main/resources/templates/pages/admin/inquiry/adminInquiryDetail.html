@@ -8,7 +8,7 @@
     <th:block layout:fragment="title">
         <title>1:1 문의 상세</title>
     </th:block>
-    <script defer="defer" th:src="@{/js/pages/inquiry/adminInquiryDetail.js}"></script>
+    <script defer="defer" th:src="@{/js/pages/admin/inquiry/adminInquiryDetail.js}"></script>
 </head>
 <body>
 <!-- 헤더영역 -->
@@ -16,7 +16,7 @@
 <!-- //헤더영역 -->
 <div id="container">
     <div class="sub_title">
-        <a th:href="@{'/settings/inquiry?page=' + ${page}}" id="back-button">
+        <a th:href="@{'/admin/inquiry?page=' + ${page}}" id="back-button">
             <img src="/assets/svg/arrow_back.svg" alt="뒤로가기">
             <h4>1:1 문의</h4>
         </a>
@@ -30,7 +30,6 @@
                 <h2 th:text="${inquiry.title}">문의 드립니다.</h2>
                 <div class="user_info">
                     <img src="/assets/svg/base_profile.svg" alt="관리자프로필">
-                    <!--                    user.name 출력-->
                     <p th:text="${username}">사용자</p>
                 </div>
                 <span class="date" th:text="${#temporals.format(inquiry.createdAt, 'yyyy-MM-dd')}">2024.07.01</span>
@@ -41,8 +40,9 @@
         </div>
     </div>
     <div class="button_list">
-        <a th:href="@{'/settings/inquiry/correction/' + ${inquiry.id}}" type="submit" class="btn">수정</a>
+        <button type="button" class="btn delete-button" th:data-inquiry-id="${inquiry.id}">삭제</button>
     </div>
+
 </div>
 
 <!-- 삭제 확인 모달 -->

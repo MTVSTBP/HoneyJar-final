@@ -1,9 +1,11 @@
 package com.tbp.honeyjar.inquiry.service;
 
+import com.tbp.honeyjar.admin.dao.AdminInquiryMapper;
 import com.tbp.honeyjar.inquiry.dto.InquiryDto;
 import com.tbp.honeyjar.inquiry.dto.InquiryWriteDto;
 import com.tbp.honeyjar.inquiry.dto.InquiryUpdateDto;
 import com.tbp.honeyjar.inquiry.mapper.InquiryMapper;
+import com.tbp.honeyjar.login.entity.user.User;
 import com.tbp.honeyjar.login.mapper.user.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,15 +25,24 @@ public class InquiryService {
     InquiryMapper inquiryMapper;
     UserMapper userMapper;
 
-    public InquiryService(UserMapper userMapper, InquiryMapper inquiryMapper) {
-        this.userMapper = userMapper;
+    public InquiryService(InquiryMapper inquiryMapper, UserMapper userMapper) {
         this.inquiryMapper = inquiryMapper;
+        this.userMapper = userMapper;
     }
 
+    /*  */
+
+    @Transactional(readOnly = true)
+    public User findByKakaoId(String kakaoId) {
+        return userMapper.findByKakaoId(kakaoId);
+    }
+
+    /* User find inquiry in page-unit */
     @Transactional(readOnly = true)
     public Page<InquiryDto> getInquiryListByUserId(String kakaoId, Pageable pageable) {
+        System.out.println("kakaoId : " + kakaoId);
         Long userId = userMapper.findByKakaoId(kakaoId).getUserId();
-        int total = inquiryMapper.getInquiryCountByUserId(userId);
+        int totalPageCount = inquiryMapper.getInquiryCountByUserId(userId);
 
         Map<String, Object> params = new HashMap<>();
 
@@ -40,12 +51,7 @@ public class InquiryService {
         params.put("offset", pageable.getOffset());
 
         List<InquiryDto> inquiries = inquiryMapper.getInquiryListByUserId(params);
-        return new PageImpl<>(inquiries, pageable, total);
-    }
-
-    @Transactional(readOnly = true)
-    public List<InquiryDto> getInquiryList() {
-        return inquiryMapper.getInquiryList();
+        return new PageImpl<>(inquiries, pageable, totalPageCount);
     }
 
     @Transactional(readOnly = true)
@@ -54,9 +60,10 @@ public class InquiryService {
         return inquiryMapper.getInquiryListByUserId(userId);
     }
 
+    /* get inquiryDetail by inquiryId */
     @Transactional(readOnly = true)
-    public InquiryDto getInquiryById(Long id) {
-        return inquiryMapper.getInquiryById(id);
+    public InquiryDto getInquiryById(Long inquiryId) {
+        return inquiryMapper.getInquiryById(inquiryId);
     }
 
     public int createInquiry(InquiryWriteDto inquiryWriteDto) {
@@ -73,9 +80,5 @@ public class InquiryService {
 
     public void updateInquiry(InquiryUpdateDto inquiryUpdateDto) {
         inquiryMapper.update(inquiryUpdateDto);
-    }
-
-    public void deleteInquiry(Long id) {
-        inquiryMapper.delete(id);
     }
 }
