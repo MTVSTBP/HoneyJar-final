@@ -398,7 +398,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     completeBtn.addEventListener('click', function () {
-        window.location.href = `/post/detail?postId=${postId}`;
+        window.location.href = `/post`;
     });
 
     function openMapPage() {
