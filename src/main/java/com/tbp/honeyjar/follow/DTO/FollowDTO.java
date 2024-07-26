@@ -1,19 +1,21 @@
 package com.tbp.honeyjar.follow.DTO;
 
-import lombok.Builder;
+import lombok.*;
 
+@Data
+@NoArgsConstructor
+@Getter
+@Setter
 public class FollowDTO {
     private Long userId;
     private String userName;
     private String profileImage;
-    private boolean requestStatus;
 
     @Builder
     public FollowDTO(Long userId, String userName, String profileImage, boolean requestStatus) {
         this.userId = userId;
         this.userName = userName;
         this.profileImage = profileImage;
-        this.requestStatus = requestStatus;
     }
 
     public Long getUserId() {
@@ -28,9 +30,6 @@ public class FollowDTO {
         return profileImage;
     }
 
-    public boolean isRequestStatus() {
-        return requestStatus;
-    }
 
     @Override
     public String toString() {
@@ -38,7 +37,6 @@ public class FollowDTO {
                 "userId=" + userId +
                 ", userName='" + userName + '\'' +
                 ", profileImage='" + profileImage + '\'' +
-                ", requestStatus=" + requestStatus +
                 '}';
     }
 }

@@ -1,17 +1,8 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link th:inline="css" rel="stylesheet" th:href="@{/css/components/followerComponent.css}"/>
-</head>
-<body>
-<div id="backGround">
-    <div id="container">
+<div id="container" th:fragment="followerComponent(follows)" th:each="follow : ${follows.followers}">
+    <div id="top_container">
         <div id="leftContainer">
             <div>
-                <img th:src="${follow.profileImage != null ? follow.profileImage : '/assets/svg/base_profile.svg'}" />
+                <img id="profile" th:src="${follow.profileImage != null ? follow.profileImage : '/assets/svg/base_profile.svg'}"/>
             </div>
             <div id="text" th:text="${follow.userName}"></div>
         </div>
@@ -22,8 +13,7 @@
         </div>
     </div>
     <div id="border">
-        <hr />
+            <hr />
     </div>
 </div>
-</body>
-</html>
+

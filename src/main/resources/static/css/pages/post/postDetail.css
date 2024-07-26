@@ -175,11 +175,22 @@ button {
 
 
 .kind_wrap .arrow>a.prev {
-    left: 10px;
+    width: 10%;
+    height: 100%;
+}
+
+.kind_wrap .arrow>a.prev img,
+.kind_wrap .arrow>a.next img {
+    width: 100%;
+    position: relative;
+    top: 45%;
+    display: flex;
 }
 
 .kind_wrap .arrow>a.next {
-    right: 10px;
+    width: 10%;
+    height: 100%;
+    right: 0;
 }
 
 /* 음식점 정보 */

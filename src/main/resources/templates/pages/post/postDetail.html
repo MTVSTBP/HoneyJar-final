@@ -20,7 +20,7 @@
                 <img src="/assets/svg/base_profile.svg" alt="">
                 <span th:text="${post.userName}">닉네임</span>
             </div>
-            <p id="date" th:text="*{createdAt}">2024.06.24</p>
+            <p id="date" th:text="${#temporals.format(post.createdAt, 'yyyy년 M월 d일 HH시 mm분')}">2024.06.24</p>
         </div>
         <div class="more_h" th:if="${isAuthor}">
             <img src="/assets/svg/more_horiz.svg" alt="more_horiz">
@@ -99,21 +99,22 @@
     <!-- comment -->
     <div class="comment_box">
         <div class="like">
-            <button id="likeButton" data-post-id="*{postId}">
-                <img src="/assets/svg/favorite.svg" alt="좋아요" id="likeImage">
-                <span id="likeCount">0</span>
+            <button id="likeButton" th:data-post-id="${post.postId}" th:data-user-id="${userId}" th:data-liked="${isLiked}">
+                <img th:src="${isLiked} ? '/assets/svg/favorite_color.svg' : '/assets/svg/favorite.svg'" alt="좋아요" id="likeImage">
+                <span id="likeCount" th:text="${likeCount}">0</span>
             </button>
         </div>
         <div class="comment">
-            <button id="commentButton">
+            <button id="commentButton"
+                    data-post-id="${post.postId}">
                 <img src="/assets/svg/mode_comment.svg" alt="댓글">
-                <span id="commentCount">0</span>
+                <span id="commentCount" th:text="${commentCnt}">0</span>
             </button>
         </div>
         <div class="scope" id="rating">
-            <button id="openRatingModal" data-post-id="*{postId}">
-                <img src="/assets/svg/star.svg" alt="별점" id="ratingStar">
-                <span id="averageRating">0</span>
+            <button id="openRatingModal" th:data-rated="${isRated}">
+                <img th:src="${isRated} ? '/assets/svg/star_color.svg' : '/assets/svg/star.svg'" alt="별점" id="ratingStar">
+                <span id="averageRating" th:text="${rating}">0</span>
             </button>
         </div>
     </div>
@@ -203,7 +204,7 @@
             <span class="star" data-value="4">&#9733;</span>
             <span class="star" data-value="5">&#9733;</span>
         </div>
-        <button id="confirmRating" class="confirmRating">확인</button>
+        <button id="confirmRating" class="confirmRating" name="rating">확인</button>
     </div>
 </div>
 

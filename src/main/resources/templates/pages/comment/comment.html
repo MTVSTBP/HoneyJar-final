@@ -11,7 +11,8 @@
 </head>
 <body>
 <div id="container">
-    <form id="comment" th:object="${comDTO}" class="comment_create">
+    <!-- 댓글 등록 -->
+    <form th:action="@{/comment/{postId}/regist(postId=${postId})}" id="comment" class="comment_create" method="post" >
         <div class="comment_input">
             <div class="edit_icon">
                 <img src="/assets/svg/mode.svg" alt="edit">
@@ -20,48 +21,58 @@
                 댓글
             </div>
             <div class="input_area">
-                <textarea class="text" placeholder="댓글을 입력해주세요" th:field="*{content}"></textarea>
+                <input class="text" placeholder="댓글을 입력해주세요" name="comment"/>
             </div>
             <div class="input_submit">
-                <button type="submit" class="submit_button">등록</button>
+                <button type="submit" id="registSubmit" class="submit_button">등록</button>
             </div>
         </div>
     </form>
+
+    <!-- 사용자 info -->
     <div class="comment_list">
-        <div class="user_details" th:each="comment, commentIndex : ${comments}">
+        <div class="user_details" th:each="comment, commentIndex : ${commentList}">
             <div class="user_record">
-                <img th:src="@{${comment.profileImg}}" alt="사용자프로필" class="user_profile">
+                <img src='/assets/svg/base_profile.svg' alt="" class="user_profile">
                 <div class="user">
                     <div class="user_info">
-                        <span class="user_name" th:text="${comment.nickName}">사용자</span>
-                        <span class="user_date" th:text="${comment.date}">date</span>
+                        <span class="user_name" th:text="${comment.userName}">사용자</span>
+                        <span class="user_date" th:text="${comment.formattedCreatedAt}" th:data-post-id="${comment.commentId}">date</span>
+<!--                        <span class="user_date" th:text="${#dates.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">date</span>-->
+
+                        <input class="comment_postId" type="hidden"/>
                     </div>
-                    <div class="more_h">
+                    <!-- 수정, 삭제 버튼 -->
+                    <div class="more_h"  th:data-user-id="${userId}" th:data-other-id="${comment.userId}">
                         <img src="/assets/svg/more_horiz.svg" alt="more_horiz">
                         <div class="click_box">
                             <div class="d_flex">
-                                <a class="edit_p editButton" >수정</a>
-                                <a id="deletePost" class="delete_p deleteButton" href="javascript:void(0)">삭제</a>
+                                <a class="edit_p editButton">수정</a>
+                                <a id="deletePost" class="delete_p deleteButton" th:href="@{|/comment/delete/${comment.getPostId()}/${comment.commentId}|}"  data-post-id="${comment.getPostId()}"
+                                   data-comment-id="${comment.getCommentId()}">삭제</a>
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- 사용자가 작성한 댓글 내용 -->
+                <div class="user_comment">
+                    <p class="commentText" th:text="${comment.comment}">
+                        댓글 내용이 여기에 출력됩니다.
+                    </p>
+                </div>
             </div>
 
-            <div class="user_comment">
-                <p class="commentText" th:text="${comment.content}">
-                    댓글 내용이 여기에 출력됩니다.
-                </p>
-            </div>
-
-            <div th:id="'edit_comment_' + ${commentIndex.index}" class="edit_comment">
+            <!-- 수정할 댓글 내용 -->
+            <form th:action="@{|/comment/modify/${postId}/${comment.getCommentId()}|}" method="post" th:object="${comment}">
+            <div class="edit_comment">
                 <div class="user_edit">
-                    <textarea class="edit_text" placeholder="댓글을 입력해주세요"></textarea>
+                    <input type="text" class="edit_text" placeholder="댓글을 입력해주세요" required th:value="*{comment}" name="comment"/>
                 </div>
                 <div class="edit_submit">
                     <button type="submit" class="edit_button">수정</button>
                 </div>
             </div>
+            </form>
         </div>
     </div>
 </div>

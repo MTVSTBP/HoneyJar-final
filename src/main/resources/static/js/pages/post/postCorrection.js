@@ -1,4 +1,31 @@
+function dataURLtoBlob(dataurl) {
+    const arr = dataurl.split(',');
+    if (arr.length !== 2) {
+        throw new Error("Invalid dataURL format");
+    }
+
+    const mimeMatch = arr[0].match(/:(.*?);/);
+    if (!mimeMatch) {
+        throw new Error("Invalid MIME type in dataURL");
+    }
+
+    const mime = mimeMatch[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], { type: mime });
+}
+
+
 document.addEventListener("DOMContentLoaded", function () {
+    function htmlDecode(input) {
+        const doc = new DOMParser().parseFromString(input, "text/html");
+        return doc.documentElement.textContent;
+    }
+
     const imageUpload = document.getElementById('imageUpload');
     const imagePreview = document.getElementById('imagePreview');
     const fileCountMessage = document.getElementById('fileCountMessage');
@@ -22,6 +49,27 @@ document.addEventListener("DOMContentLoaded", function () {
     let selectedFiles = JSON.parse(localStorage.getItem('selectedFiles')) || [];
     let thumbnailIndex = localStorage.getItem('thumbnailIndex') !== null ? parseInt(localStorage.getItem('thumbnailIndex')) : null;
     let postId;
+
+    // 서버에서 전달받은 기존 이미지 URL 배열을 JavaScript 배열로 변환
+    let existingImageUrls = [];
+    try {
+        const initialDataElement = document.getElementById('initial-data');
+        if (initialDataElement) {
+            const rawJsonData = initialDataElement.textContent.trim();
+            const decodedJsonData = htmlDecode(rawJsonData); // HTML 디코딩
+            existingImageUrls = JSON.parse(decodedJsonData);
+        }
+    } catch (e) {
+        console.error('Failed to parse JSON data:', e);
+    }
+
+    // 기존 이미지 URL을 selectedFiles 배열에 추가
+    existingImageUrls.forEach(url => {
+        const fileData = { name: url.split('/').pop(), dataURL: url };
+        selectedFiles.push(fileData);
+    });
+    localStorage.setItem('selectedFiles', JSON.stringify(selectedFiles));
+    updateImagePreview();
 
     function updateImagePreview() {
         imagePreview.innerHTML = '';
@@ -83,7 +131,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function dataURLtoBlob(dataurl) {
         const arr = dataurl.split(',');
-        const mime = arr[0].match(/:(.*?);/)[1];
+        if (arr.length !== 2) {
+            console.error("Invalid dataURL format:", dataurl);
+            throw new Error("Invalid dataURL format");
+        }
+
+        const mimeMatch = arr[0].match(/:(.*?);/);
+        if (!mimeMatch) {
+            console.error("Invalid MIME type in dataURL:", dataurl);
+            throw new Error("Invalid MIME type in dataURL");
+        }
+
+        const mime = mimeMatch[1];
         const bstr = atob(arr[1]);
         let n = bstr.length;
         const u8arr = new Uint8Array(n);
@@ -266,20 +325,44 @@ document.addEventListener("DOMContentLoaded", function () {
         formData.append('place.yCoordinate', placeYField.value);
         formData.append('place.roadAddressName', placeRoadAddressNameField.value);
 
+        // 기존 이미지 URL을 formData에 추가
+        existingImageUrls.forEach((url) => {
+            formData.append('existingImageUrls', url);
+        });
+
         // Add selected files to formData
         selectedFiles.forEach((fileData, index) => {
-            if (index !== thumbnailIndex) {
-                const blob = dataURLtoBlob(fileData.dataURL);
-                formData.append('files', blob, fileData.name);
+            if (index === thumbnailIndex) {
+                // 썸네일 이미지는 mainImageFile로 추가
+                if (!fileData.dataURL.startsWith('data:')) {
+                    // 기존 썸네일 이미지는 그대로 추가
+                    formData.append('mainImageUrl', fileData.dataURL);
+                    // mainImageFile 필드를 위해 빈 파일을 추가
+                    formData.append('mainImageFile', new Blob(), fileData.name);
+                } else {
+                    // 새로운 썸네일 이미지는 Blob으로 변환하여 추가
+                    const mainImageBlob = dataURLtoBlob(fileData.dataURL);
+                    formData.append('mainImageUrl', fileData.name);
+                    formData.append('mainImageFile', mainImageBlob, fileData.name);
+                }
+            } else {
+                // 나머지 이미지는 files로 추가
+                if (!fileData.dataURL.startsWith('data:')) {
+                    // 기존 이미지 URL은 Blob으로 변환하지 않고 그대로 추가
+                    formData.append('existingImageUrls', fileData.dataURL);
+                } else {
+                    // 새로 추가된 이미지만 Blob으로 변환하여 추가
+                    const blob = dataURLtoBlob(fileData.dataURL);
+                    formData.append('files', blob, fileData.name);
+                }
             }
         });
 
-        // Add main image URL and file
-        if (thumbnailIndex !== null) {
-            const mainImageBlob = dataURLtoBlob(selectedFiles[thumbnailIndex].dataURL);
-            formData.append('mainImageUrl', selectedFiles[thumbnailIndex].name);
-            formData.append('mainImageFile', mainImageBlob, selectedFiles[thumbnailIndex].name);
-        }
+        // 삭제된 이미지를 formData에 추가
+        const deletedImages = existingImageUrls.filter(url => !selectedFiles.some(fileData => fileData.dataURL === url));
+        deletedImages.forEach((url) => {
+            formData.append('deletedImages', url);
+        });
 
         try {
             const response = await fetch(postForm.action, {
@@ -303,6 +386,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 showErrorMessage(errorMessage, result.error);
             } else {
                 postId = result.postId;
+                localStorage.removeItem('selectedFiles'); // 로컬스토리지에서 selectedFiles 삭제
+                localStorage.removeItem('thumbnailIndex'); // 로컬스토리지에서 thumbnailIndex 삭제
                 modal.style.display = 'block';
             }
         } catch (error) {
@@ -312,9 +397,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 
-
     completeBtn.addEventListener('click', function () {
-        window.location.href = `/post/detail?postId=${postId}`;
+        window.location.href = `/post`;
     });
 
     function openMapPage() {
@@ -350,7 +434,7 @@ document.addEventListener("DOMContentLoaded", function () {
             categoryField.value = postFormState.category;
             placeIdField.value = postFormState.placeId;
             localStorage.removeItem('postFormState');
-            postId: postIdField.value.trim();
+            postId = postFormState.postId;
         }
 
         const selectedPlace = JSON.parse(localStorage.getItem('selectedPlace'));

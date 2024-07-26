@@ -19,10 +19,11 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
     }
 
     @Override
+    @SuppressWarnings(value = "unchecked")
     public String getName() {
-        Map<String, Object> kakaoAccount = objectMapper.convertValue(attributes.get("kakao_account"), Map.class);
+        Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
         if (kakaoAccount != null) {
-            Map<String, Object> profile = objectMapper.convertValue(kakaoAccount.get("profile"), Map.class);
+            Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
             if (profile != null) {
                 return (String) profile.get("nickname");
             }
@@ -31,10 +32,11 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
     }
 
     @Override
+    @SuppressWarnings(value = "unchecked")
     public String getEmail() {
-        Map<String, Object> kakaoAccount = objectMapper.convertValue(attributes.get("kakao_account"), Map.class);
+        Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
         if (kakaoAccount != null) {
-            Boolean emailNeedsAgreement = objectMapper.convertValue(kakaoAccount.get("email_needs_agreement"), Boolean.class);
+            Boolean emailNeedsAgreement = (Boolean) kakaoAccount.get("email_needs_agreement");
             // email_needs_agreement 확인
             if (emailNeedsAgreement == null || !emailNeedsAgreement) {
                 return (String) kakaoAccount.get("email");
@@ -47,13 +49,14 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
     }
 
     @Override
+    @SuppressWarnings(value = "unchecked")
     public String getImageUrl() {
-        Map<String, Object> kakaoAccount = objectMapper.convertValue(attributes.get("kakao_account"), Map.class);
+        Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
         if (kakaoAccount != null) {
-            Map<String, Object> profile = objectMapper.convertValue(kakaoAccount.get("profile"), Map.class);
+            Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
             // profile_image_needs_agreement 확인
             if (profile != null) {
-                Boolean profileImageNeedsAgreement = objectMapper.convertValue(kakaoAccount.get("profile_image_needs_agreement"), Boolean.class);
+                Boolean profileImageNeedsAgreement = (Boolean) kakaoAccount.get("profile_image_needs_agreement");
                 if (profileImageNeedsAgreement == null || !profileImageNeedsAgreement) {
                     return (String) profile.get("profile_image_url");
                 }

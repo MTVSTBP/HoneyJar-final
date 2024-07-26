@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     bookmarkButtons.forEach(button => {
         button.addEventListener("click", function(event) {
-            event.preventDefault();
+            event.preventDefault();  // 기본 폼 제출을 막음
             const form = this.closest("form");
             const formData = new FormData(form);
 
