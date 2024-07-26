@@ -211,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (commentButton) {
         commentButton.addEventListener("click", function () {
-            window.location.href = "/src/pages/html/comment.html";
+            window.location.href = "/comment/" + postId ;
         });
     }
 

@@ -1,17 +1,17 @@
 div#backGround {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    padding-top: 10px;
     justify-content: center;
     align-items: center;
+    padding: 180px;
 }
 div#container {
     display: flex;
     height: 70px;
     width: 320px;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
+    align-items: center;
 }
 div#leftContainer {
     display: flex;
@@ -41,10 +41,19 @@ button#decline {
     font-weight: 500;
 }
 div#border {
+    diplay:flex;
     width: 80%;
 }
 div#text {
     font-family: Inter, sans-serif;
     font-weight: bold;
     font-size: 16px;
+}
+img#profile {
+    width: 47px;
+    height: 47px;
+}
+div#top_container {
+    display:flex;
+    flex-direction: row;
 }

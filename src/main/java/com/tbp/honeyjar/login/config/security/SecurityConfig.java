@@ -65,8 +65,6 @@ public class SecurityConfig {
         http
                 .cors(Customizer.withDefaults())  // CORS 설정 적용
                 .csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화 (RestAPI 이므로)
-//                .csrf(csrf -> csrf
-//                        .ignoringRequestMatchers("/login/oauth2/**", "/oauth2/**")) // TODO: 활성 유무 확인하기
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // 세션 사용 안 함
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
