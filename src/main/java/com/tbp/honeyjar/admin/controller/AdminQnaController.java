@@ -38,7 +38,12 @@ public class AdminQnaController {
     }
 
     @GetMapping("/write")
-    public String write() {
+    public String write(Model model) {
+
+        List<QnaCategoryListResponseDto> qnaCategory = categoryService.findAllQnaCategory();
+
+        model.addAttribute("qnaCategory", qnaCategory);
+
         return "pages/admin/qna/adminQnaWrite";
     }
 
@@ -56,9 +61,11 @@ public class AdminQnaController {
     public String qnaCorrection(@PathVariable Long qna_id, Model model) {
 
         QnaResponseDto dto = qnaService.findById(qna_id);
+        List<QnaCategoryListResponseDto> qnaCategory = categoryService.findAllQnaCategory();
 
         if (dto != null) {
             model.addAttribute("dto", dto);
+            model.addAttribute("qnaCategory", qnaCategory);
         }
 
         return "pages/admin/qna/adminQnaCorrection";

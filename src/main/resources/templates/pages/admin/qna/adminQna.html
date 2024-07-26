@@ -30,15 +30,15 @@
         </div>
     </div>
     <div class="qna_category">
-        <ul th:each="category, categoryStat : ${qnaCategory}">
+        <ul th:each="category : ${qnaCategory}">
             <li>
-                <p th:data-category="${categoryStat.count}" th:text="${category.name}" th:class="${categoryStat.count} == 1 ? 'tab tab_active' : 'tab'">카테고리</p>
+                <p th:data-category="${category.id}" th:text="${category.name}" th:class="${category.id} == 1 ? 'tab tab_active' : 'tab'">카테고리</p>
             </li>
         </ul>
     </div>
 
     <div id="qna-container">
-        <div th:each="qna : ${qnaList}" class="qna active" id="category1">
+        <div th:each="qna : ${qnaList}" th:class="${qna.getCategoryId()} == 1 ? 'qna active' : 'qna'" th:id="category + ${qna.getCategoryId()}">
             <div class="qna_item">
                 <div class="question">
                     <div th:text="${qna.title}" class="title">
@@ -56,52 +56,7 @@
                 </div>
                 <div class="answer">
                             <span th:text="${qna.post}">
-                                Senectus et netus et malesuada. Nunc pulvinar sapien et ligula ullamcorper malesuada proin. Neque convallis a cras semper auctor. Libero id faucibus nisl tincidunt eget. Leo a diam sollicitudin tempor id. A lacus vestibulum sed arcu non odio euismod lacinia. In tellus integer feugiat scelerisque. Feugiat in fermentum posuere urna nec tincidunt praesent. Porttitor rhoncus dolor purus non enim praesent elementum facilisis. Nisi scelerisque eu ultrices vitae auctor eu augue ut lectus. Ipsum faucibus vitae aliquet nec ullamcorper sit amet risus. Et malesuada fames ac turpis egestas sed. Sit amet nisl suscipit adipiscing bibendum est ultricies. Arcu ac tortor dignissim convallis aenean et tortor at. Pretium viverra suspendisse potenti nullam ac tortor vitae purus. Eros donec ac odio tempor orci dapibus ultrices. Elementum nibh tellus molestie nunc. Et magnis dis parturient montes nascetur. Est placerat in egestas erat imperdiet. Consequat interdum varius sit amet mattis vulputate enim.
-                            </span>
-                </div>
-            </div>
-        </div>
-
-        <div class="qna" id="category2">
-            <div class="qna_item">
-                <div class="question">
-                    <div class="title">
-                        <h5>카테고리 2 질문 1</h5>
-                    </div>
-                    <div class="more_h">
-                        <img src="/assets/svg/more_horiz.svg" alt="more_horiz">
-                        <div class="click_box">
-                            <div class="d_flex">
-                                <a class="edit_p" href="/src/pages/html/adminQnaCorrection.html">수정</a>
-                                <a id="deletePost" class="delete_p" href="javascript:void(0)">삭제</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="answer">
-                            <span>
-                                카테고리 2 답변 1
-                            </span>
-                </div>
-            </div>
-            <div class="qna_item">
-                <div class="question">
-                    <div class="title">
-                        <h5>카테고리 2 질문 2</h5>
-                    </div>
-                    <div class="more_h">
-                        <img src="/assets/svg/more_horiz.svg" alt="more_horiz">
-                        <div class="click_box">
-                            <div class="d_flex">
-                                <a class="edit_p" href="/src/pages/html/adminQnaCorrection.html">수정</a>
-                                <a id="deletePost" class="delete_p" href="javascript:void(0)">삭제</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="answer">
-                            <span>
-                                카테고리 2 답변 1
+                                text
                             </span>
                 </div>
             </div>
