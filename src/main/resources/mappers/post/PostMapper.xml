@@ -46,7 +46,7 @@
         <result property="isMain" column="is_main"/>
     </resultMap>
 
-    <!-- 변경된 포스트 리스트 조회 쿼리 -->
+    <!-- 포스트 리스트 조회 쿼리 -->
     <select id="findPostsByCategory" resultMap="postListResultMap">
         SELECT
         p.post_id,
@@ -70,6 +70,9 @@
         WHERE p.deleted = FALSE
         <if test="category != null">
             AND p.category_id = #{category}
+        </if>
+        <if test="maxPrice != null">
+            AND p.price &lt;= #{maxPrice}
         </if>
         ORDER BY p.created_at DESC
         LIMIT #{size} OFFSET #{offset}

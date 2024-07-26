@@ -5,6 +5,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let isLoading = false; // 로딩 상태를 추적
     let timeoutId;
 
+    const goodRestaurantCheckbox = document.getElementById('goodRestaurant');
+    const filterForm = document.getElementById('filterForm');
+
     // 북마크 버튼 클릭 이벤트 처리
     bookmarkButtons.forEach(button => {
         button.addEventListener("click", function (event) {
@@ -37,7 +40,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (isLoading) return; // 이미 로딩 중이면 무시
 
         isLoading = true; // 로딩 시작
-        fetch(`/post?page=${currentPage}&size=${postsPerPage}`)
+        const goodRestaurant = goodRestaurantCheckbox.checked; // 체크박스 상태 가져오기
+        fetch(`/post?page=${currentPage}&size=${postsPerPage}&goodRestaurant=${goodRestaurant}`)
             .then(response => response.text())
             .then(html => {
                 const postList = document.querySelector("#postList ul");
@@ -67,4 +71,24 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         }, 100); // 100ms 후에 실행
     });
+
+    // 체크박스 상태 변경 시 필터링된 결과를 가져옴
+    goodRestaurantCheckbox.addEventListener('change', function () {
+        currentPage = 1; // 페이지를 초기화
+        const goodRestaurant = goodRestaurantCheckbox.checked; // 체크박스 상태 가져오기
+        fetch(`/post?page=0&size=${postsPerPage}&goodRestaurant=${goodRestaurant}`)
+            .then(response => response.text())
+            .then(html => {
+                const postList = document.querySelector("#postList ul");
+                if (postList) {
+                    postList.innerHTML = html; // 기존 포스트를 새로운 포스트로 교체
+                } else {
+                    console.error('Post list element not found.');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching posts:', error);
+            });
+    });
+
 });
