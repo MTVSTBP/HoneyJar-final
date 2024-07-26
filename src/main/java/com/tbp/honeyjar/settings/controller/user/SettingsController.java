@@ -37,77 +37,73 @@ public class SettingsController {
     }
 
     @GetMapping
-    public String settingsView(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public String settingsView(Model model, Authentication authentication) {
+        log.debug("authentication = {}", authentication);
 
         if (authentication != null && authentication.isAuthenticated()) {
-            String kakaoId = authentication.getName();
-            log.debug("# String kakaoId: {}", kakaoId);
+            String userId = authentication.getName(); // 이 부분이 중요합니다.
+            log.info("Settings page accessed - User ID: {}", userId);
 
-            User user = userMapper.findByKakaoId(kakaoId);
-            log.debug("# User user: {}", user);
+            User user = userMapper.findByUserId(Long.parseLong(userId));
 
             if (user != null) {
                 model.addAttribute("user", user);
                 model.addAttribute("name", user.getName());
-
+                model.addAttribute("profileImage", user.getProfileImage());
                 return "pages/settings/settings";
             } else {
-                log.warn("Kakao ID not found: {}", kakaoId);
-                return "redirect:/login";
+                log.warn("User not found for ID: {}", userId);
             }
-        } else {
-            log.warn("# No Authentication #");
-            return null;
         }
+
+        log.warn("# No Authentication #");
+        return "redirect:/login";
     }
 
     @GetMapping(value = "/leave")
-    public String leaveView(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public String leaveView(Model model, Authentication authentication) {
+        log.debug("authentication = {}", authentication);
 
         if (authentication != null && authentication.isAuthenticated()) {
-            String kakaoId = authentication.getName();
-            log.debug("# String kakaoId: {}", kakaoId);
+            String userId = authentication.getName();
 
-            User user = userMapper.findByKakaoId(kakaoId);
-            log.debug("# User user: {}", user);
+            User user = userMapper.findByUserId(Long.parseLong(userId));
 
             if (user != null) {
                 model.addAttribute("user", user);
                 model.addAttribute("name", user.getName());
-
                 return "pages/settings/leave";
             } else {
-                log.warn("Kakao ID not found: {}", kakaoId);
-                return "redirect:/login";
+                log.warn("User not found for ID: {}", userId);
             }
-        } else {
-            log.warn("# No Authentication #");
-            return null;
         }
+
+        log.warn("# No Authentication #");
+        return "redirect:/login";
     }
 
     @PostMapping("/leave")
-    public ResponseEntity<?> leaveUser(
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) {
+    public ResponseEntity<?> leaveUser(HttpServletRequest request, HttpServletResponse response) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()) {
-            String kakaoId = authentication.getName();
-            userService.deleteUser(kakaoId);
+            String userId = authentication.getName();
+            User user = userMapper.findByUserId(Long.parseLong(userId));
+            if (user != null) {
+                userService.deleteUser(user.getKakaoId());
 
-            // 로그아웃 처리
-            new SecurityContextLogoutHandler().logout(request, response, authentication);
+                // 로그아웃 처리
+                new SecurityContextLogoutHandler().logout(request, response, authentication);
 
-            // 토큰 삭제
-            CookieUtil.deleteCookie(request, response, ACCESS_TOKEN);
-            CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
+                // 토큰 삭제
+                CookieUtil.deleteCookie(request, response, ACCESS_TOKEN);
+                CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
 
-            return ResponseEntity.ok().body(new ApiResponse<>(SUCCESS_CODE, "User leave successfully", null));
+                return ResponseEntity.ok().body(new ApiResponse<>(SUCCESS_CODE, "User leave successfully", null));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(ApiResponse.NOT_FOUND_CODE, "User not found", null));
+            }
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>(SUCCESS_CODE, "User not authenticated", null));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>(ApiResponse.UNAUTHORIZED_CODE, "User not authenticated", null));
         }
     }
 }

@@ -20,7 +20,10 @@
             <!-- 사용자 정보 시작 -->
             <section class="user-info">
                 <div class="user-info__profile">
-                    <img class="user-info__image" th:src="@{/assets/svg/base_profile.svg}" alt="프로필 사진"/>
+                    <img class="user-info__image"
+                         th:src="${user.profileImage != null ? user.profileImage : '/assets/svg/base_profile.svg'}"
+                         alt="프로필 사진"
+                         onerror="this.src='/assets/svg/base_profile.svg'"/>
                     <div class="user-info__container">
                         <div class="user-info__row">
                             <div class="user-info__column">

@@ -34,6 +34,7 @@ public abstract class AbstractAuthController {
 
     @PostMapping("/logout")
     public void logout(HttpServletRequest request) throws ServletException {
+        request.getSession().removeAttribute("isAdmin");
         // Spring Security의 로그아웃 처리 위임
         request.logout();
     }

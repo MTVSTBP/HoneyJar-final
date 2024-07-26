@@ -22,11 +22,14 @@ import java.io.IOException;
 import static com.tbp.honeyjar.login.oauth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository.REDIRECT_URI_PARAM_COOKIE_NAME;
 
 @Component
-@RequiredArgsConstructor
 public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
     private final OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestRepository;
     private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    public OAuth2AuthenticationFailureHandler(OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestRepository) {
+        this.authorizationRequestRepository = authorizationRequestRepository;
+    }
 
     @Override
     public void onAuthenticationFailure(

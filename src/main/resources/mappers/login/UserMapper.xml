@@ -3,11 +3,26 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.tbp.honeyjar.login.mapper.user.UserMapper">
+    <select id="findByUserId" resultType="com.tbp.honeyjar.login.entity.user.User">
+        SELECT user_id       as userId,
+               kakao_id      as kakaoId,
+               pr,
+               name,
+               profile_image as profileImage,
+               created_at    as createdAt,
+               updated_at    as updatedAt,
+               fired_at      as firedAt,
+               user_status   as userStatus
+        FROM user
+        WHERE user_id = #{userId}
+    </select>
+
     <select id="findByUserName" resultType="com.tbp.honeyjar.login.entity.user.User">
         SELECT user_id     as userId,
                kakao_id    as kakaoId,
                pr,
                name,
+               profile_image as profileImage,
                created_at  as createdAt,
                updated_at  as updatedAt,
                fired_at    as firedAt,
@@ -21,6 +36,7 @@
                kakao_id    as kakaoId,
                pr,
                name,
+               profile_image as profileImage,
                created_at  as createdAt,
                updated_at  as updatedAt,
                fired_at    as firedAt,
@@ -37,8 +53,8 @@
 
     <insert id="insertUser" parameterType="com.tbp.honeyjar.login.entity.user.User" useGeneratedKeys="true"
             keyProperty="userId">
-        INSERT INTO user (kakao_id, pr, name, created_at, updated_at, user_status)
-        VALUES (#{kakaoId}, #{pr}, #{name}, NOW(), NOW(), true)
+        INSERT INTO user (kakao_id, pr, name, profile_image, created_at, updated_at, user_status)
+        VALUES (#{kakaoId}, #{pr}, #{name}, #{profileImage}, NOW(), NOW(), true)
     </insert>
 
     <update id="updateUser" parameterType="com.tbp.honeyjar.login.entity.user.User">
@@ -52,7 +68,7 @@
     <update id="deleteUser">
         UPDATE user
         SET user_status = false,
-            fired_at = #{firedAt}
+            fired_at    = #{firedAt}
         WHERE kakao_id = #{kakaoId}
     </update>
 

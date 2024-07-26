@@ -1,0 +1,22 @@
+/* Footer를 위한 공간 확보 */
+#footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+/* 지도 크기 조정 */
+.map-container {
+    width: 100%;
+    height: calc(100vh - 60px); /* 뷰포트 높이에서 footer 높이를 뺀 값 */
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}

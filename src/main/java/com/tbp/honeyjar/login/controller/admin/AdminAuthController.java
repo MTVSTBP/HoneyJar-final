@@ -10,6 +10,7 @@ import com.tbp.honeyjar.login.mapper.admin.AdminMapper;
 import com.tbp.honeyjar.login.oauth.entity.RoleType;
 import com.tbp.honeyjar.login.oauth.token.AuthToken;
 import com.tbp.honeyjar.login.oauth.token.AuthTokenProvider;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -37,9 +38,10 @@ public class AdminAuthController extends AbstractAuthController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login")
     public ResponseEntity<ApiResponse<String>> adminLogin(
             @RequestBody AdminAuthenticationDTO adminAuthenticationDTO,
+            HttpServletRequest request,
             HttpServletResponse response
     ) {
         log.debug("Attempting admin login for email: {}", adminAuthenticationDTO.getEmail());
@@ -55,27 +57,30 @@ public class AdminAuthController extends AbstractAuthController {
                     new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
             );
 
-                log.info("Created access token for admin: {}", accessToken.getToken());
+            log.info("Created access token for admin: {}", accessToken.getToken());
 
-                long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
-                AuthToken refreshToken = tokenProvider.createAuthToken(
-                        appProperties.getAuth().getTokenSecret(),
-                        new Date(now.getTime() + refreshTokenExpiry)
-                );
+            long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
+            AuthToken refreshToken = tokenProvider.createAuthToken(
+                    appProperties.getAuth().getTokenSecret(),
+                    new Date(now.getTime() + refreshTokenExpiry)
+            );
 
-                log.debug("Created refresh token for admin");
+            log.debug("Created refresh token for admin");
 
-                int accessTokenMaxAge = (int) appProperties.getAuth().getTokenExpiry() / 1000;
-                CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), accessTokenMaxAge);
+            int accessTokenMaxAge = (int) appProperties.getAuth().getTokenExpiry() / 1000;
+            CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), accessTokenMaxAge);
 
-                int refreshTokenMaxAge = (int) refreshTokenExpiry / 1000;
-                CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), refreshTokenMaxAge);
+            int refreshTokenMaxAge = (int) refreshTokenExpiry / 1000;
+            CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), refreshTokenMaxAge);
 
-                log.debug("Added access and refresh tokens to cookies");
+            log.debug("Added access and refresh tokens to cookies");
 
-                Map<String, String> resultMap = new HashMap<>();
-                resultMap.put(TOKEN_NAME, accessToken.getToken());
-                resultMap.put("redirectUrl", "/admin");
+            // 세션에 관리자 상태 저장
+            request.getSession().setAttribute("isAdmin", true);
+
+            Map<String, String> resultMap = new HashMap<>();
+            resultMap.put(TOKEN_NAME, accessToken.getToken());
+            resultMap.put("redirectUrl", "/admin");
 
             return ResponseEntity.ok(new ApiResponse<>(ApiResponse.SUCCESS_CODE, "Login Successful", resultMap));
         } else {

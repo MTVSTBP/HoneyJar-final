@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/homeLayout}">
+
+<head>
+    <!-- TODO: 도저히 home.css 를 불러올 수 없었던 관계로, 스크립트 내에 스타일을 적용 -->
+    <title>홈페이지</title>
+    <th:block layout:fragment="css">
+        <link rel="stylesheet" th:href="@{/css/pages/home/home.css}" href="/css/pages/home/home.css"/>
+    </th:block>
+</head>
+
+<body>
+<th:block layout:fragment="content">
+    <div id="map"></div>
+</th:block>
+
+<th:block layout:fragment="script">
+    <script type="text/javascript"
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=801fe93e4b5c07756a1d7821185a0a72"></script>
+    <script th:src="@{/js/pages/home/home.js}"></script>
+</th:block>
+</body>
+</html>

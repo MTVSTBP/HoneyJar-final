@@ -37,7 +37,10 @@
 .user-info__image {
     width: 74px;
     height: 74px;
-    margin: 0 15px 0 0;
+    border-radius: 50%;  /* 이미지를 원형으로 만듭니다 */
+    object-fit: cover;  /* 이미지 비율을 유지하면서 컨테이너에 맞춥니다 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  /* 약간의 그림자 효과를 추가합니다 */
+    margin-right: 15px;
 }
 
 .user-info__container {
