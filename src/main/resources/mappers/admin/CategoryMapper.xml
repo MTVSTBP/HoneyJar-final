@@ -54,11 +54,11 @@
     <insert id="saveQnaCategory" parameterType="com.tbp.honeyjar.admin.dto.category.QnaCategorySaveRequestDto">
         insert into other_category
         (
-            category_name,
+            category_name
         )
         values
         (
-            #{name},
+            #{name}
         )
     </insert>
 
