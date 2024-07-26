@@ -291,7 +291,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 모달 확인 버튼 클릭 시 상세 페이지로 이동
     completeBtn.addEventListener('click', function () {
-        window.location.href = `/post/detail?postId=${postId}`;
+        window.location.href = `/post`;
     });
 
     function openMapPage() {

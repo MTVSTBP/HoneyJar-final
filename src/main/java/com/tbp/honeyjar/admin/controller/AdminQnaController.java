@@ -1,9 +1,11 @@
 package com.tbp.honeyjar.admin.controller;
 
+import com.tbp.honeyjar.admin.dto.category.QnaCategoryListResponseDto;
 import com.tbp.honeyjar.admin.dto.qna.QnaCorrectionRequestDto;
 import com.tbp.honeyjar.admin.dto.qna.QnaListResponseDto;
 import com.tbp.honeyjar.admin.dto.qna.QnaResponseDto;
 import com.tbp.honeyjar.admin.dto.qna.QnaSaveRequestDto;
+import com.tbp.honeyjar.admin.service.CategoryService;
 import com.tbp.honeyjar.admin.service.QnaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -21,19 +23,27 @@ import java.util.List;
 public class AdminQnaController {
 
     private final QnaService qnaService;
+    private final CategoryService categoryService;
 
     @GetMapping
     public String qna(Model model) {
 
         List<QnaListResponseDto> qnaList = qnaService.findAllQna();
+        List<QnaCategoryListResponseDto> qnaCategory = categoryService.findAllQnaCategory();
 
         model.addAttribute("qnaList", qnaList);
+        model.addAttribute("qnaCategory", qnaCategory);
 
         return "pages/admin/qna/adminQna";
     }
 
     @GetMapping("/write")
-    public String write() {
+    public String write(Model model) {
+
+        List<QnaCategoryListResponseDto> qnaCategory = categoryService.findAllQnaCategory();
+
+        model.addAttribute("qnaCategory", qnaCategory);
+
         return "pages/admin/qna/adminQnaWrite";
     }
 
@@ -51,9 +61,11 @@ public class AdminQnaController {
     public String qnaCorrection(@PathVariable Long qna_id, Model model) {
 
         QnaResponseDto dto = qnaService.findById(qna_id);
+        List<QnaCategoryListResponseDto> qnaCategory = categoryService.findAllQnaCategory();
 
         if (dto != null) {
             model.addAttribute("dto", dto);
+            model.addAttribute("qnaCategory", qnaCategory);
         }
 
         return "pages/admin/qna/adminQnaCorrection";

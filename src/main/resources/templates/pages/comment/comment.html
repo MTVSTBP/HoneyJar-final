@@ -40,15 +40,15 @@
                         <span class="user_date" th:text="${comment.formattedCreatedAt}" th:data-post-id="${comment.commentId}">date</span>
 <!--                        <span class="user_date" th:text="${#dates.format(comment.createdAt, 'yyyy-MM-dd HH:mm')}">date</span>-->
 
-                        <input class="comment_postId" type="hidden" th:data-post-id="${postId}"/>
+                        <input class="comment_postId" type="hidden"/>
                     </div>
                     <!-- 수정, 삭제 버튼 -->
-                    <div class="more_h">
+                    <div class="more_h"  th:data-user-id="${userId}" th:data-other-id="${comment.userId}">
                         <img src="/assets/svg/more_horiz.svg" alt="more_horiz">
                         <div class="click_box">
                             <div class="d_flex">
                                 <a class="edit_p editButton">수정</a>
-                                <a id="deletePost" class="delete_p deleteButton" th:href="@{|/comment/delete/${comment.getPostId()}/${comment.getCommentId()}|}"  data-post-id="${comment.getPostId()}"
+                                <a id="deletePost" class="delete_p deleteButton" th:href="@{|/comment/delete/${comment.getPostId()}/${comment.commentId}|}"  data-post-id="${comment.getPostId()}"
                                    data-comment-id="${comment.getCommentId()}">삭제</a>
                             </div>
                         </div>

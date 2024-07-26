@@ -110,19 +110,90 @@ public class PostController {
             isAuthor = post.getUserId().equals(loggedInUserId);
         }
 
-        // 디버깅을 위한 로그 추가
-        System.out.println("Post UserId: " + post.getUserId());
-        System.out.println("Logged in UserId: " + loggedInUserId);
-        System.out.println("Is Author: " + isAuthor);
+        if (loggedInUserId != null) {
+            int likeCount = postService.getLikeCountByPostId(postId);
+            boolean isLiked = postService.getIsLikedByPostIdAndUserId(postId, loggedInUserId);
+            float rating = postService.getRating(postId);
+            boolean isRated = postService.getIsRatedByPostIdAndUserId(postId,
+                    loggedInUserId);
 
-        model.addAttribute("post", post);
-        model.addAttribute("commentCnt", commentCnt);
-//        System.out.println("commentCnt= " + commentCnt);
+            // 디버깅을 위한 로그 추가
+            System.out.println("Post UserId: " + post.getUserId());
+            System.out.println("Logged in UserId: " + loggedInUserId);
+            System.out.println("Is Author: " + isAuthor);
 
-        model.addAttribute("isAuthor", isAuthor); // 작성자인지 여부를 모델에 추가
+            model.addAttribute("post", post);
+            model.addAttribute("isAuthor", isAuthor); // 작성자인지 여부를 모델에 추가
+            model.addAttribute("userId", loggedInUserId);
+            model.addAttribute("likeCount", likeCount);
+            model.addAttribute("isLiked", isLiked);
+            model.addAttribute("rating", rating);
+            model.addAttribute("isRated", isRated);
+            model.addAttribute("commentCnt", commentCnt);
+        }
+
         return "pages/post/postDetail";
     }
 
+    @PostMapping("/like/{postId}")
+    @ResponseBody
+    public void postLike(@PathVariable Long postId, Principal principal, PostLikeRequestDto requestDto) {
+
+        PostResponseDTO post = postService.findPostById(postId);
+        Long userId = userService.findUserIdByKakaoId(principal.getName());
+
+        if (post != null && userId != null) {
+            requestDto.setPostId(post.getPostId());
+            requestDto.setUserId(userId);
+
+            postService.likePost(requestDto);
+        }
+    }
+
+    @DeleteMapping("/like/{postId}")
+    @ResponseBody
+    public void postUnlike(@PathVariable Long postId, Principal principal, PostLikeRequestDto requestDto) {
+
+        PostResponseDTO post = postService.findPostById(postId);
+        Long userId = userService.findUserIdByKakaoId(principal.getName());
+
+        if (post != null && userId != null) {
+            requestDto.setPostId(post.getPostId());
+            requestDto.setUserId(userId);
+
+            postService.unlikePost(requestDto);
+        }
+    }
+
+    @PostMapping("/rating/{postId}")
+    @ResponseBody
+    public void postRating(@PathVariable Long postId, Principal principal,@RequestBody PostRatingRequestDto requestDto) {
+
+        PostResponseDTO post = postService.findPostById(postId);
+        Long userId = userService.findUserIdByKakaoId(principal.getName());
+
+        if (post != null && userId != null) {
+            requestDto.setPostId(post.getPostId());
+            requestDto.setUserId(userId);
+
+            postService.rating(requestDto);
+        }
+    }
+
+    @PostMapping("/rating-again/{postId}")
+    @ResponseBody
+    public void postRatingAgain(@PathVariable Long postId, Principal principal,@RequestBody PostRatingRequestDto requestDto) {
+
+        PostResponseDTO post = postService.findPostById(postId);
+        Long userId = userService.findUserIdByKakaoId(principal.getName());
+
+        if (post != null && userId != null) {
+            requestDto.setPostId(post.getPostId());
+            requestDto.setUserId(userId);
+
+            postService.ratingAgain(requestDto);
+        }
+    }
 
     @GetMapping("/correction")
     public String postCorrectionForm(@RequestParam Long postId, Model model) {
@@ -135,11 +206,9 @@ public class PostController {
         model.addAttribute("existingImageUrlsJson", existingImageUrlsJson);
 
         model.addAttribute("postRequestDTO", postRequestDTO);
-        model.addAttribute("categories", categoryService.findAllFoodCategory());
-
+        model.addAttribute("categories", categoryService.findAllFoodCategory()); // 카테고리 목록 추가
         return "pages/post/postCorrection";
     }
-
 
     @PostMapping("/correction")
     public ResponseEntity<?> postCorrection(@ModelAttribute PostRequestDTO postRequestDTO,
@@ -171,7 +240,6 @@ public class PostController {
 
         return ResponseEntity.ok(response);
     }
-
 
     @GetMapping("/map")
     public String findAddress(@RequestParam(required = false) String redirectTo, Model model) {

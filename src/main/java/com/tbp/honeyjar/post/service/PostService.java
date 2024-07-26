@@ -11,9 +11,7 @@ import com.tbp.honeyjar.image.service.ImageService;
 import com.tbp.honeyjar.place.dto.PlaceDTO;
 import com.tbp.honeyjar.place.service.PlaceService;
 import com.tbp.honeyjar.post.dao.PostMapper;
-import com.tbp.honeyjar.post.dto.PostListDTO;
-import com.tbp.honeyjar.post.dto.PostRequestDTO;
-import com.tbp.honeyjar.post.dto.PostResponseDTO;
+import com.tbp.honeyjar.post.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -156,7 +154,6 @@ public class PostService {
     }
 
 
-
     @Transactional
     public void updatePost(PostRequestDTO postRequestDTO, List<MultipartFile> files, MultipartFile mainImageFile, String mainImageUrl) throws IOException, FirebaseAuthException {
         Long placeId = postRequestDTO.getPlaceId();
@@ -249,7 +246,6 @@ public class PostService {
         postMapper.updatePost(postRequestDTO);
     }
 
-
     private String removeDuplicates(String value) {
         if (value == null || value.isEmpty()) {
             return value;
@@ -265,5 +261,36 @@ public class PostService {
 
     public int commentCount(Long postId) {
         return postMapper.commentCount(postId);
+    }
+    public void likePost(PostLikeRequestDto requestDto) {
+        postMapper.likePost(requestDto);
+    }
+
+    public void unlikePost(PostLikeRequestDto requestDto) {
+        postMapper.unlikePost(requestDto);
+    }
+
+    public int getLikeCountByPostId(Long postId) {
+        return postMapper.getLikeCountByPostId(postId);
+    }
+
+    public boolean getIsLikedByPostIdAndUserId(Long postId, Long userId) {
+        return postMapper.getIsLikedByPostIdAndUserId(postId, userId) == 1;
+    }
+
+    public float getRating(Long postId) {
+        return postMapper.getRating(postId);
+    }
+
+    public void rating(PostRatingRequestDto requestDto) {
+        postMapper.rating(requestDto);
+    }
+
+    public boolean getIsRatedByPostIdAndUserId(Long postId, Long userId) {
+        return postMapper.getIsRatedByPostIdAndUserId(postId, userId) == 1;
+    }
+
+    public void ratingAgain(PostRatingRequestDto requestDto) {
+        postMapper.ratingAgain(requestDto);
     }
 }

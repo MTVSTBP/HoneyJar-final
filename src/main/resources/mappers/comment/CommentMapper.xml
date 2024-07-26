@@ -30,6 +30,7 @@
               , C.COMMENT
               , C.CREATED_AT
               , U.NAME
+              , U.user_id
         FROM
                 COMMENT AS C
         JOIN
