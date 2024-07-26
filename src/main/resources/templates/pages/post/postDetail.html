@@ -20,7 +20,7 @@
                 <img src="/assets/svg/base_profile.svg" alt="">
                 <span th:text="${post.userName}">닉네임</span>
             </div>
-            <p id="date" th:text="*{createdAt}">2024.06.24</p>
+            <p id="date" th:text="${#temporals.format(post.createdAt, 'yyyy년 M월 d일 HH시 mm분')}">2024.06.24</p>
         </div>
         <div class="more_h" th:if="${isAuthor}">
             <img src="/assets/svg/more_horiz.svg" alt="more_horiz">
