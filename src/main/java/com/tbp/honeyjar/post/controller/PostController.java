@@ -2,6 +2,7 @@ package com.tbp.honeyjar.post.controller;
 
 
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.gson.Gson;
 import com.tbp.honeyjar.admin.service.CategoryService;
 import com.tbp.honeyjar.image.service.ImageService;
 import com.tbp.honeyjar.login.service.user.UserService;
@@ -87,6 +88,15 @@ public class PostController {
     }
 
 
+    @GetMapping("/{postId}")
+    public ResponseEntity<PostRequestDTO> getPost(@PathVariable Long postId) {
+        PostResponseDTO postResponseDTO = postService.findPostById(postId);
+        PostRequestDTO postRequestDTO = postService.convertToPostRequestDTO(postResponseDTO);
+        postRequestDTO.setExistingImageUrls(postResponseDTO.getImageUrls()); // 기존 이미지 URL 설정
+        postRequestDTO.setThumbnailIndex(postResponseDTO.getThumbnailIndex()); // 썸네일 인덱스 설정
+        return ResponseEntity.ok(postRequestDTO);
+    }
+
 
     @GetMapping("/detail")
     public String getPostDetail(@RequestParam Long postId, Model model, Principal principal) {
@@ -113,16 +123,25 @@ public class PostController {
     public String postCorrectionForm(@RequestParam Long postId, Model model) {
         PostResponseDTO post = postService.findPostById(postId);
         PostRequestDTO postRequestDTO = postService.convertToPostRequestDTO(post);
+        postRequestDTO.setExistingImageUrls(post.getImageUrls()); // 기존 이미지 URL 설정
+
+        // 기존 이미지 URL 리스트를 JSON 형식으로 변환하여 모델에 추가
+        String existingImageUrlsJson = new Gson().toJson(postRequestDTO.getExistingImageUrls());
+        model.addAttribute("existingImageUrlsJson", existingImageUrlsJson);
+
         model.addAttribute("postRequestDTO", postRequestDTO);
-        model.addAttribute("categories", categoryService.findAllFoodCategory()); // 카테고리 목록 추가
+        model.addAttribute("categories", categoryService.findAllFoodCategory());
+
         return "pages/post/postCorrection";
     }
 
+
     @PostMapping("/correction")
     public ResponseEntity<?> postCorrection(@ModelAttribute PostRequestDTO postRequestDTO,
-                                            @RequestParam("files") List<MultipartFile> files,
+                                            @RequestParam(value = "files", required = false) List<MultipartFile> files,
                                             @RequestParam("mainImageFile") MultipartFile mainImageFile,
                                             @RequestParam("mainImageUrl") String mainImageUrl,
+                                            @RequestParam(value = "existingImageUrls", required = false) List<String> existingImageUrls,
                                             Principal principal) throws IOException, FirebaseAuthException {
         Long loggedInUserId = userService.findUserIdByKakaoId(principal.getName());
         PostResponseDTO existingPost = postService.findPostById(postRequestDTO.getPostId());
@@ -131,6 +150,14 @@ public class PostController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("수정 권한이 없습니다.");
         }
 
+        // 빈 파일 리스트 처리
+        if (files == null) {
+            files = new ArrayList<>();
+        }
+
+        // existingImageUrls를 DTO에 설정합니다.
+        postRequestDTO.setExistingImageUrls(existingImageUrls);
+
         postService.updatePost(postRequestDTO, files, mainImageFile, mainImageUrl);
         Map<String, Object> response = new HashMap<>();
         response.put("postId", postRequestDTO.getPostId());
@@ -138,6 +165,7 @@ public class PostController {
 
         return ResponseEntity.ok(response);
     }
+
 
     @GetMapping("/map")
     public String findAddress(@RequestParam(required = false) String redirectTo, Model model) {
