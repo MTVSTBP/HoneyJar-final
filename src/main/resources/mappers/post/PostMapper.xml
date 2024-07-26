@@ -250,4 +250,14 @@
         WHERE
             place_id = (SELECT place_id FROM post WHERE post_id = #{postId}) AND user_id = #{userId}
     </update>
+
+    <!-- 코멘트 count -->
+    <select id="commentCount" resultType="int">
+        SELECT
+                COUNT(*)
+        FROM
+                COMMENT
+        WHERE
+                POST_ID = #{ post_id }
+    </select>
 </mapper>

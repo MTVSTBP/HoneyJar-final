@@ -14,7 +14,13 @@
         <result property="categoryId" column="category_id"/>
     </resultMap>
 
-    <select id="getInquiryList" resultMap="inquiryResultMap">
+    <select id="getInquiryCountByUserId" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM inquiry
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="getInquiryListByUserId" parameterType="map" resultMap="inquiryResultMap">
         SELECT
             inquiry_id,
             title,
@@ -23,11 +29,13 @@
             updated_at,
             user_id,
             category_id
-         FROM inquiry
-         ORDER BY created_at DESC
+        FROM inquiry
+        WHERE user_id = #{params.userId}
+        ORDER BY created_at DESC
+        LIMIT #{params.pageSize} OFFSET #{params.offset}
     </select>
 
-    <select id="getInquiryListByUserId" parameterType="java.lang.Long" resultMap="inquiryResultMap">
+    <select id="getInquiryList" resultMap="inquiryResultMap">
         SELECT
             inquiry_id,
             title,

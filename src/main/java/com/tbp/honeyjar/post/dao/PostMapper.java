@@ -41,4 +41,5 @@ public interface PostMapper {
     int getIsRatedByPostIdAndUserId(Long postId, Long userId);
 
     void ratingAgain(PostRatingRequestDto requestDto);
+    int commentCount(Long postId);
 }
