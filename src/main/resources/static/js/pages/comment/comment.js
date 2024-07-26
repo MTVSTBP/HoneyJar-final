@@ -7,6 +7,21 @@ document.addEventListener("DOMContentLoaded", function() {
     editComment.style.display = "none";
     registSubmit.style.display = "none";
 
+
+    // 모든 more_h div를 가져오기
+    const commentDivs = document.querySelectorAll('.more_h');
+
+    commentDivs.forEach(div => {
+        // 각 div의 data-post-id 속성 값 가져오기
+        const parentUserId = div.getAttribute('data-user-id');
+        const commentPostId = div.getAttribute('data-other-id');
+
+        // postId와 comment.postId가 다르면 해당 div 숨기기
+        if (parentUserId !== commentPostId) {
+            div.style.display = 'none';
+        }
+    });
+
     // editIcon 클릭 시 댓글 수정 영역 토글
     editIcon.addEventListener('click', function() {
         const isHidden = editComment.style.display === "none";

@@ -30,11 +30,11 @@ public class CommentController {
 
     // 댓글 조회
     @GetMapping("{postId}")
-    public String commentList(@PathVariable Long postId, Model model) {
+    public String commentList(@PathVariable Long postId, Model model, Principal principal) {
 
         List<CommentListDTO> commentList = commentService.findAllCommentListById(postId);
         model.addAttribute("commentList", commentList);
-
+        model.addAttribute("userId", userService.findUserIdByKakaoId(principal.getName()));
         return "pages/comment/comment";
     }
 
@@ -72,11 +72,6 @@ public class CommentController {
 
         deleteComment.setCommentId(comment_id);
         deleteComment.setPostId(post_id); // postId를 설정하는 부분 추가
-
-        System.out.println("12121212 postId = " + deleteComment.getPostId());
-        System.out.println("1212314234 comment_id = " + comment_id);
-
-        System.out.println(deleteComment.getPostId());
 
         commentService.deleteComment(comment_id);
 
