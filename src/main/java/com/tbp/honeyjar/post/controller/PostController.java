@@ -41,10 +41,16 @@ public class PostController {
     public String postList(Model model,
                            @RequestParam(required = false) Long category,
                            @RequestParam(defaultValue = "0") int page,
-                           @RequestParam(defaultValue = "6") int size) {
+                           @RequestParam(defaultValue = "6") int size,
+                           Principal principal) {
+        Long userId = null;
+        if (principal != null) {
+            userId = userService.findUserIdByKakaoId(principal.getName());
+        }
+
         // 최초 요청 시 4개의 포스트만 반환
         if (page == 0) {
-            List<PostListDTO> posts = postService.findPostsByCategory(category, 0, 6); // 4개만 가져오기
+            List<PostListDTO> posts = postService.findPostsByCategory(category, 0, 6, userId); // 4개만 가져오기
             model.addAttribute("posts", posts);
             model.addAttribute("categories", categoryService.findAllFoodCategory());
             model.addAttribute("selectedCategory", category);
@@ -52,7 +58,7 @@ public class PostController {
         }
 
         // AJAX 요청일 경우 특정 페이지의 포스트만 반환
-        List<PostListDTO> posts = postService.findPostsByCategory(category, page, size);
+        List<PostListDTO> posts = postService.findPostsByCategory(category, page, size, userId);
         model.addAttribute("posts", posts);
         return "common/components/postComponent"; // 포스트 컴포넌트를 반환
     }
@@ -89,21 +95,61 @@ public class PostController {
 
 
     @GetMapping("/{postId}")
-    public ResponseEntity<PostRequestDTO> getPost(@PathVariable Long postId) {
-        PostResponseDTO postResponseDTO = postService.findPostById(postId);
+    public ResponseEntity<PostRequestDTO> getPost(@PathVariable Long postId, Principal principal) {
+        Long userId = null;
+        if (principal != null) {
+            userId = userService.findUserIdByKakaoId(principal.getName());
+        }
+        PostResponseDTO postResponseDTO = postService.findPostById(postId, userId);
         PostRequestDTO postRequestDTO = postService.convertToPostRequestDTO(postResponseDTO);
-        postRequestDTO.setExistingImageUrls(postResponseDTO.getImageUrls()); // 기존 이미지 URL 설정
-        postRequestDTO.setThumbnailIndex(postResponseDTO.getThumbnailIndex()); // 썸네일 인덱스 설정
+        postRequestDTO.setExistingImageUrls(postResponseDTO.getImageUrls());
+        postRequestDTO.setThumbnailIndex(postResponseDTO.getThumbnailIndex());
         return ResponseEntity.ok(postRequestDTO);
     }
 
 
+//
+//    @GetMapping("/detail")
+//    public String getPostDetail(@RequestParam Long postId, Model model, Principal principal) {
+//        PostResponseDTO post = postService.findPostById(postId);
+//        int commentCnt = postService.commentCount(postId);
+//        Long loggedInUserId = userService.findUserIdByKakaoId(principal.getName()); // 로그인된 사용자의 userId를 가져옴
+//
+//        boolean isAuthor = false;
+//        if (post.getUserId() != null) {
+//            isAuthor = post.getUserId().equals(loggedInUserId);
+//        }
+//
+//        if (loggedInUserId != null) {
+//            int likeCount = postService.getLikeCountByPostId(postId);
+//            boolean isLiked = postService.getIsLikedByPostIdAndUserId(postId, loggedInUserId);
+//            float rating = postService.getRating(postId);
+//            boolean isRated = postService.getIsRatedByPostIdAndUserId(postId,
+//                    loggedInUserId);
+//
+//            // 디버깅을 위한 로그 추가
+//            System.out.println("Post UserId: " + post.getUserId());
+//            System.out.println("Logged in UserId: " + loggedInUserId);
+//            System.out.println("Is Author: " + isAuthor);
+//
+//            model.addAttribute("post", post);
+//            model.addAttribute("isAuthor", isAuthor); // 작성자인지 여부를 모델에 추가
+//            model.addAttribute("userId", loggedInUserId);
+//            model.addAttribute("likeCount", likeCount);
+//            model.addAttribute("isLiked", isLiked);
+//            model.addAttribute("rating", rating);
+//            model.addAttribute("isRated", isRated);
+//            model.addAttribute("commentCnt", commentCnt);
+//        }
+//
+//        return "pages/post/postDetail";
+//    }
 
     @GetMapping("/detail")
     public String getPostDetail(@RequestParam Long postId, Model model, Principal principal) {
-        PostResponseDTO post = postService.findPostById(postId);
-        int commentCnt = postService.commentCount(postId);
         Long loggedInUserId = userService.findUserIdByKakaoId(principal.getName()); // 로그인된 사용자의 userId를 가져옴
+        PostResponseDTO post = postService.findPostById(postId, loggedInUserId); // userId를 추가로 전달
+        int commentCnt = postService.commentCount(postId);
 
         boolean isAuthor = false;
         if (post.getUserId() != null) {
@@ -114,8 +160,7 @@ public class PostController {
             int likeCount = postService.getLikeCountByPostId(postId);
             boolean isLiked = postService.getIsLikedByPostIdAndUserId(postId, loggedInUserId);
             float rating = postService.getRating(postId);
-            boolean isRated = postService.getIsRatedByPostIdAndUserId(postId,
-                    loggedInUserId);
+            boolean isRated = postService.getIsRatedByPostIdAndUserId(postId, loggedInUserId);
 
             // 디버깅을 위한 로그 추가
             System.out.println("Post UserId: " + post.getUserId());
@@ -138,9 +183,9 @@ public class PostController {
     @PostMapping("/like/{postId}")
     @ResponseBody
     public void postLike(@PathVariable Long postId, Principal principal, PostLikeRequestDto requestDto) {
-
-        PostResponseDTO post = postService.findPostById(postId);
         Long userId = userService.findUserIdByKakaoId(principal.getName());
+        PostResponseDTO post = postService.findPostById(postId, userId);
+
 
         if (post != null && userId != null) {
             requestDto.setPostId(post.getPostId());
@@ -153,9 +198,9 @@ public class PostController {
     @DeleteMapping("/like/{postId}")
     @ResponseBody
     public void postUnlike(@PathVariable Long postId, Principal principal, PostLikeRequestDto requestDto) {
-
-        PostResponseDTO post = postService.findPostById(postId);
         Long userId = userService.findUserIdByKakaoId(principal.getName());
+        PostResponseDTO post = postService.findPostById(postId, userId);
+
 
         if (post != null && userId != null) {
             requestDto.setPostId(post.getPostId());
@@ -168,9 +213,9 @@ public class PostController {
     @PostMapping("/rating/{postId}")
     @ResponseBody
     public void postRating(@PathVariable Long postId, Principal principal,@RequestBody PostRatingRequestDto requestDto) {
-
-        PostResponseDTO post = postService.findPostById(postId);
         Long userId = userService.findUserIdByKakaoId(principal.getName());
+        PostResponseDTO post = postService.findPostById(postId, userId);
+
 
         if (post != null && userId != null) {
             requestDto.setPostId(post.getPostId());
@@ -183,9 +228,9 @@ public class PostController {
     @PostMapping("/rating-again/{postId}")
     @ResponseBody
     public void postRatingAgain(@PathVariable Long postId, Principal principal,@RequestBody PostRatingRequestDto requestDto) {
-
-        PostResponseDTO post = postService.findPostById(postId);
         Long userId = userService.findUserIdByKakaoId(principal.getName());
+        PostResponseDTO post = postService.findPostById(postId, userId);
+
 
         if (post != null && userId != null) {
             requestDto.setPostId(post.getPostId());
@@ -196,8 +241,9 @@ public class PostController {
     }
 
     @GetMapping("/correction")
-    public String postCorrectionForm(@RequestParam Long postId, Model model) {
-        PostResponseDTO post = postService.findPostById(postId);
+    public String postCorrectionForm(@RequestParam Long postId, Model model, Principal principal) {
+        Long userId = userService.findUserIdByKakaoId(principal.getName());
+        PostResponseDTO post = postService.findPostById(postId, userId);
         PostRequestDTO postRequestDTO = postService.convertToPostRequestDTO(post);
         postRequestDTO.setExistingImageUrls(post.getImageUrls()); // 기존 이미지 URL 설정
 
@@ -210,6 +256,37 @@ public class PostController {
         return "pages/post/postCorrection";
     }
 
+//    @PostMapping("/correction")
+//    public ResponseEntity<?> postCorrection(@ModelAttribute PostRequestDTO postRequestDTO,
+//                                            @RequestParam(value = "files", required = false) List<MultipartFile> files,
+//                                            @RequestParam("mainImageFile") MultipartFile mainImageFile,
+//                                            @RequestParam("mainImageUrl") String mainImageUrl,
+//                                            @RequestParam(value = "existingImageUrls", required = false) List<String> existingImageUrls,
+//                                            Principal principal) throws IOException, FirebaseAuthException {
+//        Long loggedInUserId = userService.findUserIdByKakaoId(principal.getName());
+//        PostResponseDTO existingPost = postService.findPostById(postRequestDTO.getPostId());
+//
+//        if (existingPost.getUserId() == null || !existingPost.getUserId().equals(loggedInUserId)) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("수정 권한이 없습니다.");
+//        }
+//
+//        // 빈 파일 리스트 처리
+//        if (files == null) {
+//            files = new ArrayList<>();
+//        }
+//
+//        // existingImageUrls를 DTO에 설정합니다.
+//        postRequestDTO.setExistingImageUrls(existingImageUrls);
+//
+//        postService.updatePost(postRequestDTO, files, mainImageFile, mainImageUrl);
+//
+//        Map<String, Object> response = new HashMap<>();
+//        response.put("postId", postRequestDTO.getPostId());
+//        response.put("message", "Post updated successfully");
+//
+//        return ResponseEntity.ok(response);
+//    }
+
     @PostMapping("/correction")
     public ResponseEntity<?> postCorrection(@ModelAttribute PostRequestDTO postRequestDTO,
                                             @RequestParam(value = "files", required = false) List<MultipartFile> files,
@@ -218,7 +295,7 @@ public class PostController {
                                             @RequestParam(value = "existingImageUrls", required = false) List<String> existingImageUrls,
                                             Principal principal) throws IOException, FirebaseAuthException {
         Long loggedInUserId = userService.findUserIdByKakaoId(principal.getName());
-        PostResponseDTO existingPost = postService.findPostById(postRequestDTO.getPostId());
+        PostResponseDTO existingPost = postService.findPostById(postRequestDTO.getPostId(), loggedInUserId);
 
         if (existingPost.getUserId() == null || !existingPost.getUserId().equals(loggedInUserId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("수정 권한이 없습니다.");
@@ -252,7 +329,7 @@ public class PostController {
     @DeleteMapping("/{postId}")
     public ResponseEntity<?> softDeletePost(@PathVariable Long postId, Principal principal) {
         Long loggedInUserId = userService.findUserIdByKakaoId(principal.getName());
-        PostResponseDTO existingPost = postService.findPostById(postId);
+        PostResponseDTO existingPost = postService.findPostById(postId, loggedInUserId);
 
         if (existingPost.getUserId() == null || !existingPost.getUserId().equals(loggedInUserId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("삭제 권한이 없습니다.");

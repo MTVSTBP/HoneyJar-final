@@ -12,13 +12,14 @@ public interface PostMapper {
 
     List<PostListDTO> findPostsByCategory(@Param("category") Long category,
                                           @Param("size") int size,
-                                          @Param("offset") int offset);
+                                          @Param("offset") int offset,
+                                          @Param("userId") Long userId);
 
     void createPost(PostRequestDTO postRequestDTO);
 
     List<PostListDTO> findAllPost();
 
-    PostResponseDTO findPostById(Long postId);
+    PostResponseDTO findPostById(@Param("postId") Long postId, @Param("userId") Long userId);
 
     void updatePost(PostRequestDTO addPostRequestDTO);
 
