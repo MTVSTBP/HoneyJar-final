@@ -38,11 +38,6 @@ public class PostService {
         this.categoryMapper = categoryMapper;
     }
 
-//    public List<PostListDTO> findPostsByCategory(Long category, int page, int size, Long userId, Integer maxPrice) {
-//        int offset = page * size; // offset 계산
-//        return postMapper.findPostsByCategory(category, size, offset, userId, maxPrice);
-//    }
-
     public List<PostListDTO> findPostsByCategory(Long category, int page, int size, Long userId, Integer maxPrice, String sortOption, Double latitude, Double longitude) {
         int offset = page * size;
         return postMapper.findPostsByCategory(category, size, offset, userId, maxPrice, sortOption, latitude, longitude);
@@ -99,8 +94,6 @@ public class PostService {
 
         return postId;
     }
-
-
 
 
     private String generateFileName(MultipartFile file) {
@@ -165,90 +158,6 @@ public class PostService {
 
         return postRequestDTO;
     }
-
-    // 기존 이미지를 모두 삭제할 경우 처리해야됨. 다른 수정은 잘됨.
-//    @Transactional
-//    public void updatePost(PostRequestDTO postRequestDTO, List<MultipartFile> files, MultipartFile mainImageFile, String mainImageUrl, List<String> deletedImages) throws IOException, FirebaseAuthException {
-//        Long placeId = postRequestDTO.getPlaceId();
-//        if (placeId == null) {
-//            placeId = postMapper.findPlaceIdByPostId(postRequestDTO.getPostId());
-//            if (placeId == null) {
-//                throw new IllegalArgumentException("Post ID에 해당하는 placeId가 없습니다.");
-//            }
-//            postRequestDTO.setPlaceId(placeId);
-//        }
-//
-//        PlaceDTO placeDTO = postRequestDTO.getPlace();
-//        if (placeDTO == null) {
-//            throw new IllegalArgumentException("PlaceDTO가 null입니다.");
-//        }
-//        placeDTO.setPlaceId(placeId);
-//
-//        placeDTO.setRoadAddressName(removeLeadingComma(placeDTO.getRoadAddressName()));
-//        placeDTO.setName(removeDuplicates(placeDTO.getName()));
-//        placeDTO.setxCoordinate(removeDuplicateCoordinates(placeDTO.getxCoordinate()));
-//        placeDTO.setyCoordinate(removeDuplicateCoordinates(placeDTO.getyCoordinate()));
-//        placeDTO.setRoadAddressName(removeDuplicates(placeDTO.getRoadAddressName()));
-//
-//        placeService.updatePlace(placeDTO);
-//
-//        List<ImageDTO> existingImages = imageService.getImagesByPostId(postRequestDTO.getPostId());
-//
-//        // 삭제된 이미지 처리
-//        for (ImageDTO image : existingImages) {
-//            if (!postRequestDTO.getExistingImageUrls().contains(image.getUrl()) || deletedImages.contains(image.getUrl())) {
-//                try {
-//                    fireBaseService.deleteFile(image.getUrl());
-//                } catch (IOException e) {
-//                    System.out.println("File not found in the bucket: " + image.getUrl());
-//                }
-//                imageService.deleteImageById(image.getImageId());
-//            }
-//        }
-//
-//        for (ImageDTO image : existingImages) {
-//            if (image.isMain()) {
-//                imageService.updateMainImageStatus(image.getImageId(), false);
-//            }
-//        }
-//
-//        final String mainImageUploadUrl;
-//        if (mainImageFile != null && !mainImageFile.isEmpty()) {
-//            mainImageUploadUrl = fireBaseService.uploadFile(mainImageFile, UUID.randomUUID().toString());
-//        } else {
-//            mainImageUploadUrl = postRequestDTO.getMainImageUrl();
-//        }
-//        postRequestDTO.setMainImageUrl(mainImageUploadUrl);
-//        imageService.saveMainImage(mainImageUploadUrl, postRequestDTO.getUserId(), postRequestDTO.getPostId());
-//
-//        List<String> imageUrls = new ArrayList<>();
-//        if (files != null && !files.isEmpty()) {
-//            for (MultipartFile file : files) {
-//                String fileName = UUID.randomUUID().toString();
-//                String imageUrl = fireBaseService.uploadFile(file, fileName);
-//                imageUrls.add(imageUrl);
-//            }
-//            imageUrls = imageUrls.stream()
-//                    .filter(imageUrl -> !imageUrl.equals(mainImageUploadUrl))
-//                    .collect(Collectors.toList());
-//
-//            postRequestDTO.setImageUrls(imageUrls);
-//            imageService.saveImages(imageUrls, postRequestDTO.getUserId(), postRequestDTO.getPostId());
-//        }
-//
-//        ImageDTO newMainImage = imageService.getImagesByPostId(postRequestDTO.getPostId())
-//                .stream()
-//                .filter(image -> image.getUrl().equals(mainImageUploadUrl))
-//                .findFirst()
-//                .orElse(null);
-//
-//        if (newMainImage != null) {
-//            imageService.updateMainImageStatus(newMainImage.getImageId(), true);
-//        }
-//
-//        postMapper.updatePost(postRequestDTO);
-//    }
-
 
     @Transactional
     public void updatePost(PostRequestDTO postRequestDTO, List<MultipartFile> files, MultipartFile mainImageFile, String mainImageUrl, List<String> deletedImages) throws IOException, FirebaseAuthException {
@@ -336,12 +245,6 @@ public class PostService {
 
         postMapper.updatePost(postRequestDTO);
     }
-
-
-
-
-
-
 
 
     // 좌표 값을 소수점 이하 7자리로 반올림하는 메서드
