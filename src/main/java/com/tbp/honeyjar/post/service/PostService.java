@@ -101,8 +101,6 @@ public class PostService {
     }
 
 
-
-
     private String generateFileName(MultipartFile file) {
         return UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
     }
@@ -264,8 +262,6 @@ public class PostService {
     }
 
 
-
-
     // 좌표 값을 소수점 이하 7자리로 반올림하는 메서드
     private Double roundCoordinate(Double coordinate) {
         return Math.round(coordinate * 1e7) / 1e7;
@@ -295,7 +291,6 @@ public class PostService {
     }
 
 
-
     @Transactional
     public void softDeletePost(Long postId) {
         postMapper.softDeletePost(postId);
@@ -304,6 +299,7 @@ public class PostService {
     public int commentCount(Long postId) {
         return postMapper.commentCount(postId);
     }
+
     public void likePost(PostLikeRequestDto requestDto) {
         postMapper.likePost(requestDto);
     }
@@ -334,5 +330,9 @@ public class PostService {
 
     public void ratingAgain(PostRatingRequestDto requestDto) {
         postMapper.ratingAgain(requestDto);
+    }
+
+    public List<PostListDTO> findPostsByPlaceName(String keyword) {
+        return postMapper.findPostsByPlaceName(keyword);
     }
 }

@@ -53,4 +53,6 @@ public interface PostMapper {
     void ratingAgain(PostRatingRequestDto requestDto);
 
     int commentCount(Long postId);
+
+    List<PostListDTO> findPostsByPlaceName(String keyword);
 }

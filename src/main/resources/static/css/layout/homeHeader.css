@@ -19,6 +19,12 @@
     padding: 0 20px;
 }
 
+.mini-logo {
+    width: 35px;
+    height: auto;
+    margin-right: 10px;
+}
+
 .search {
     flex-grow: 1;
     display: flex;
@@ -28,12 +34,12 @@
 
 .search input {
     flex-grow: 1;
-    height: 35px;
+    height: 32px;
     border: none;
     border-radius: 20px;
     padding: 0 20px;
-    font-family: "Pretendard-Bold";
-    font-size: 11pt;
+    font-family: "Pretendard-Bold", sans-serif;
+    font-size: 10.5pt;
 }
 
 .search input:focus {
@@ -42,8 +48,15 @@
 }
 
 .search img {
-    width: 30px;
+    width: 28px;
+    height: 28px;
     margin-left: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.search img:hover {
+    transform: scale(1.1);
 }
 
 .search-result {

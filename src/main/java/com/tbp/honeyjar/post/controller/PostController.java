@@ -315,5 +315,11 @@ public class PostController {
         postService.softDeletePost(postId);
         return ResponseEntity.ok("Post deleted successfully");
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<PostListDTO>> searchPostsByPlaceName(@RequestParam String keyword) {
+        List<PostListDTO> posts = postService.findPostsByPlaceName(keyword);
+        return ResponseEntity.ok(posts);
+    }
 }
 
