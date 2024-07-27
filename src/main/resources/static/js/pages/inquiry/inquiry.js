@@ -1,6 +1,6 @@
-page = page < 1 ? 1 : page;
 page = [[${page}]] > totalPages ? totalPages : [[${page}]];
 totalPages = [[${totalPages}]];
+page = page < 1 ? 1 : page;
 
 function changePage(page) {
     const params = new URLSearchParams(window.location.search);

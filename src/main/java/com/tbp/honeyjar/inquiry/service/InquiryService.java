@@ -40,17 +40,21 @@ public class InquiryService {
     /* User find inquiry in page-unit */
     @Transactional(readOnly = true)
     public Page<InquiryDto> getInquiryListByUserId(String kakaoId, Pageable pageable) {
-        System.out.println("kakaoId : " + kakaoId);
-        Long userId = userMapper.findByKakaoId(kakaoId).getUserId();
-        int totalPageCount = inquiryMapper.getInquiryCountByUserId(userId);
-
+        Long    userId = 0L;
+        int     totalPageCount = 0;
+        List<InquiryDto> inquiries = null;
         Map<String, Object> params = new HashMap<>();
+        try {
+            userId         = userMapper.findByKakaoId(kakaoId).getUserId();
+            totalPageCount = inquiryMapper.getInquiryCountByUserId(userId);
 
-        params.put("userId", userId);
-        params.put("pageSize", pageable.getPageSize());
-        params.put("offset", pageable.getOffset());
-
-        List<InquiryDto> inquiries = inquiryMapper.getInquiryListByUserId(params);
+            params.put("pageSize",  pageable.getPageSize());
+            params.put("offset",    pageable.getOffset());
+            params.put("userId",    userId);
+            inquiries = inquiryMapper.getInquiryListByUserId(params);
+        } catch (NullPointerException e) {
+            System.out.println("User not found. You might be loggined in admin account!\n");
+        }
         return new PageImpl<>(inquiries, pageable, totalPageCount);
     }
 

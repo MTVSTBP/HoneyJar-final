@@ -11,7 +11,7 @@ public class NoticeListResponseDto {
     private Long noticeId;
     private String title;
     private String post;
-    private LocalDateTime createdAt;
+private LocalDateTime createdAt;
     private String formattedCreatedAt;
 
     public void setCreatedAt(LocalDateTime createdAt) {

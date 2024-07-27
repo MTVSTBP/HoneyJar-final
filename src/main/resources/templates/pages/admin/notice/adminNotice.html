@@ -50,6 +50,13 @@
                     </div>
                 </a>
             </li>
+            <div class="pagination">
+                <button th:disabled="${page == 1}" th:onclick="|changePage(1)|">처음</button>
+                <button th:disabled="${page == 1}" th:onclick="|changePage(${page - 1})|">이전</button>
+                <span th:text="'Page ' + ${page} + ' of ' + ${totalPages}">Page 1 of 1</span>
+                <button th:disabled="${page == totalPages}" th:onclick="|changePage(${page + 1})|">다음</button>
+                <button th:disabled="${page == totalPages}" th:onclick="|changePage(${totalPages})|">마지막</button>
+            </div>
         </ul>
     </div>
 
@@ -80,9 +87,15 @@
     </div>
 
 </div>
-
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var page = /*[[${page}]]*/ 1;
+    var totalPages = 1 /*[[${totalPages}]]*/ ;
+    /*]]>*/
+    console.log(totlaPages);
+</script>
 <script th:inline="javascript" th:src="@{/js/pages/admin/notice/adminNotice.js}"></script>
-
+<script th:inline="javascript" th:src="@{/js/pages/pagenation/pagenation.js/}"></script>
 </body>
 
 </html>
