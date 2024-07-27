@@ -101,6 +101,8 @@ public class PostService {
     }
 
 
+
+
     private String generateFileName(MultipartFile file) {
         return UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
     }
@@ -164,6 +166,89 @@ public class PostService {
         return postRequestDTO;
     }
 
+    // 기존 이미지를 모두 삭제할 경우 처리해야됨. 다른 수정은 잘됨.
+//    @Transactional
+//    public void updatePost(PostRequestDTO postRequestDTO, List<MultipartFile> files, MultipartFile mainImageFile, String mainImageUrl, List<String> deletedImages) throws IOException, FirebaseAuthException {
+//        Long placeId = postRequestDTO.getPlaceId();
+//        if (placeId == null) {
+//            placeId = postMapper.findPlaceIdByPostId(postRequestDTO.getPostId());
+//            if (placeId == null) {
+//                throw new IllegalArgumentException("Post ID에 해당하는 placeId가 없습니다.");
+//            }
+//            postRequestDTO.setPlaceId(placeId);
+//        }
+//
+//        PlaceDTO placeDTO = postRequestDTO.getPlace();
+//        if (placeDTO == null) {
+//            throw new IllegalArgumentException("PlaceDTO가 null입니다.");
+//        }
+//        placeDTO.setPlaceId(placeId);
+//
+//        placeDTO.setRoadAddressName(removeLeadingComma(placeDTO.getRoadAddressName()));
+//        placeDTO.setName(removeDuplicates(placeDTO.getName()));
+//        placeDTO.setxCoordinate(removeDuplicateCoordinates(placeDTO.getxCoordinate()));
+//        placeDTO.setyCoordinate(removeDuplicateCoordinates(placeDTO.getyCoordinate()));
+//        placeDTO.setRoadAddressName(removeDuplicates(placeDTO.getRoadAddressName()));
+//
+//        placeService.updatePlace(placeDTO);
+//
+//        List<ImageDTO> existingImages = imageService.getImagesByPostId(postRequestDTO.getPostId());
+//
+//        // 삭제된 이미지 처리
+//        for (ImageDTO image : existingImages) {
+//            if (!postRequestDTO.getExistingImageUrls().contains(image.getUrl()) || deletedImages.contains(image.getUrl())) {
+//                try {
+//                    fireBaseService.deleteFile(image.getUrl());
+//                } catch (IOException e) {
+//                    System.out.println("File not found in the bucket: " + image.getUrl());
+//                }
+//                imageService.deleteImageById(image.getImageId());
+//            }
+//        }
+//
+//        for (ImageDTO image : existingImages) {
+//            if (image.isMain()) {
+//                imageService.updateMainImageStatus(image.getImageId(), false);
+//            }
+//        }
+//
+//        final String mainImageUploadUrl;
+//        if (mainImageFile != null && !mainImageFile.isEmpty()) {
+//            mainImageUploadUrl = fireBaseService.uploadFile(mainImageFile, UUID.randomUUID().toString());
+//        } else {
+//            mainImageUploadUrl = postRequestDTO.getMainImageUrl();
+//        }
+//        postRequestDTO.setMainImageUrl(mainImageUploadUrl);
+//        imageService.saveMainImage(mainImageUploadUrl, postRequestDTO.getUserId(), postRequestDTO.getPostId());
+//
+//        List<String> imageUrls = new ArrayList<>();
+//        if (files != null && !files.isEmpty()) {
+//            for (MultipartFile file : files) {
+//                String fileName = UUID.randomUUID().toString();
+//                String imageUrl = fireBaseService.uploadFile(file, fileName);
+//                imageUrls.add(imageUrl);
+//            }
+//            imageUrls = imageUrls.stream()
+//                    .filter(imageUrl -> !imageUrl.equals(mainImageUploadUrl))
+//                    .collect(Collectors.toList());
+//
+//            postRequestDTO.setImageUrls(imageUrls);
+//            imageService.saveImages(imageUrls, postRequestDTO.getUserId(), postRequestDTO.getPostId());
+//        }
+//
+//        ImageDTO newMainImage = imageService.getImagesByPostId(postRequestDTO.getPostId())
+//                .stream()
+//                .filter(image -> image.getUrl().equals(mainImageUploadUrl))
+//                .findFirst()
+//                .orElse(null);
+//
+//        if (newMainImage != null) {
+//            imageService.updateMainImageStatus(newMainImage.getImageId(), true);
+//        }
+//
+//        postMapper.updatePost(postRequestDTO);
+//    }
+
 
     @Transactional
     public void updatePost(PostRequestDTO postRequestDTO, List<MultipartFile> files, MultipartFile mainImageFile, String mainImageUrl) throws IOException, FirebaseAuthException {
@@ -191,15 +276,19 @@ public class PostService {
         placeDTO.setyCoordinate(removeDuplicateCoordinates(placeDTO.getyCoordinate()));
         placeDTO.setRoadAddressName(removeDuplicates(placeDTO.getRoadAddressName()));
 
-
         placeService.updatePlace(placeDTO);
 
         // 기존 이미지 정보 가져오기
         List<ImageDTO> existingImages = imageService.getImagesByPostId(postRequestDTO.getPostId());
 
-        // 기존 이미지 삭제
+        // Initialize existingImageUrls to an empty list if null
+        if (postRequestDTO.getExistingImageUrls() == null) {
+            postRequestDTO.setExistingImageUrls(new ArrayList<>());
+        }
+
+        // 삭제된 이미지 처리
         for (ImageDTO image : existingImages) {
-            if (!postRequestDTO.getExistingImageUrls().contains(image.getUrl())) {
+            if (!postRequestDTO.getExistingImageUrls().contains(image.getUrl()) || deletedImages.contains(image.getUrl())) {
                 try {
                     fireBaseService.deleteFile(image.getUrl());
                 } catch (IOException e) {
