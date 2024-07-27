@@ -38,7 +38,6 @@ public class PostController {
     }
 
 
-
     @GetMapping
     public String postList(Model model,
                            @RequestParam(required = false) Long category,
@@ -275,10 +274,6 @@ public class PostController {
 
         return ResponseEntity.ok(response);
     }
-
-
-
-
 
     @GetMapping("/map")
     public String findAddress(@RequestParam(required = false) String redirectTo, Model model) {

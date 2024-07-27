@@ -38,11 +38,6 @@ public class PostService {
         this.categoryMapper = categoryMapper;
     }
 
-//    public List<PostListDTO> findPostsByCategory(Long category, int page, int size, Long userId, Integer maxPrice) {
-//        int offset = page * size; // offset 계산
-//        return postMapper.findPostsByCategory(category, size, offset, userId, maxPrice);
-//    }
-
     public List<PostListDTO> findPostsByCategory(Long category, int page, int size, Long userId, Integer maxPrice, String sortOption, Double latitude, Double longitude) {
         int offset = page * size;
         return postMapper.findPostsByCategory(category, size, offset, userId, maxPrice, sortOption, latitude, longitude);
@@ -99,8 +94,6 @@ public class PostService {
 
         return postId;
     }
-
-
 
 
     private String generateFileName(MultipartFile file) {

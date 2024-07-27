@@ -13,7 +13,6 @@ public class PostListDTO {
     private Double xCoordinate;
     private Double yCoordinate;
     private Double distance;
-//    private String profileImg;
 
     public PostListDTO() {}
 
