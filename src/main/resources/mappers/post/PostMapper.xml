@@ -51,6 +51,54 @@
     </resultMap>
 
     <!-- 포스트 리스트 조회 쿼리 -->
+<!--    <select id="findPostsByCategory" resultMap="postListResultMap" parameterType="map">-->
+<!--        SELECT-->
+<!--        p.post_id,-->
+<!--        p.title,-->
+<!--        p.post,-->
+<!--        i.url AS main_image_url,-->
+<!--        CASE-->
+<!--        WHEN b.post_id IS NOT NULL THEN true-->
+<!--        ELSE false-->
+<!--        END AS bookmarked,-->
+<!--        p.category_id,-->
+<!--        u.name AS user_name,-->
+<!--        pl.place_id,-->
+<!--        pl.x_coordinate,-->
+<!--        pl.y_coordinate-->
+<!--        <if test="latitude != null and longitude != null">-->
+<!--            , (6371 * acos(-->
+<!--            cos(radians(#{latitude})) * cos(radians(pl.y_coordinate))-->
+<!--            * cos(radians(pl.x_coordinate) - radians(#{longitude}))-->
+<!--            + sin(radians(#{latitude})) * sin(radians(pl.y_coordinate))-->
+<!--            )) AS distance-->
+<!--        </if>-->
+<!--        FROM post p-->
+<!--        LEFT JOIN place pl ON p.place_id = pl.place_id-->
+<!--        LEFT JOIN (-->
+<!--        SELECT post_id, url-->
+<!--        FROM image-->
+<!--        WHERE is_main = 1-->
+<!--        ) i ON p.post_id = i.post_id-->
+<!--        LEFT JOIN bookmark b ON p.post_id = b.post_id AND b.user_id = #{userId}-->
+<!--        LEFT JOIN user u ON p.user_id = u.user_id-->
+<!--        WHERE p.deleted = FALSE-->
+<!--        <if test="category != null">-->
+<!--            AND p.category_id = #{category}-->
+<!--        </if>-->
+<!--        <if test="maxPrice != null">-->
+<!--            AND p.price &lt;= #{maxPrice}-->
+<!--        </if>-->
+<!--        <choose>-->
+<!--            <when test="sortOption == 'distance' and latitude != null and longitude != null">-->
+<!--                ORDER BY distance ASC-->
+<!--            </when>-->
+<!--            <otherwise>-->
+<!--                ORDER BY p.created_at DESC-->
+<!--            </otherwise>-->
+<!--        </choose>-->
+<!--        LIMIT #{size} OFFSET #{offset}-->
+<!--    </select>-->
     <select id="findPostsByCategory" resultMap="postListResultMap" parameterType="map">
         SELECT
         p.post_id,
@@ -65,7 +113,8 @@
         u.name AS user_name,
         pl.place_id,
         pl.x_coordinate,
-        pl.y_coordinate
+        pl.y_coordinate,
+        (SELECT COUNT(*) FROM liked l WHERE l.post_id = p.post_id) AS like_count
         <if test="latitude != null and longitude != null">
             , (6371 * acos(
             cos(radians(#{latitude})) * cos(radians(pl.y_coordinate))
@@ -92,6 +141,9 @@
         <choose>
             <when test="sortOption == 'distance' and latitude != null and longitude != null">
                 ORDER BY distance ASC
+            </when>
+            <when test="sortOption == 'likes'">
+                ORDER BY like_count DESC
             </when>
             <otherwise>
                 ORDER BY p.created_at DESC
