@@ -51,37 +51,6 @@
     </resultMap>
 
     <!-- 포스트 리스트 조회 쿼리 -->
-<!--    <select id="findPostsByCategory" resultMap="postListResultMap">-->
-<!--        SELECT-->
-<!--        p.post_id,-->
-<!--        p.title,-->
-<!--        p.post,-->
-<!--        i.url AS main_image_url,-->
-<!--        CASE-->
-<!--        WHEN b.post_id IS NOT NULL THEN true-->
-<!--        ELSE false-->
-<!--        END AS bookmarked,-->
-<!--        p.category_id,-->
-<!--        u.name AS user_name-->
-<!--        FROM post p-->
-<!--        LEFT JOIN (-->
-<!--        SELECT post_id, url-->
-<!--        FROM image-->
-<!--        WHERE is_main = 1-->
-<!--        ) i ON p.post_id = i.post_id-->
-<!--        LEFT JOIN bookmark b ON p.post_id = b.post_id AND b.user_id = #{userId}-->
-<!--        LEFT JOIN user u ON p.user_id = u.user_id-->
-<!--        WHERE p.deleted = FALSE-->
-<!--        <if test="category != null">-->
-<!--            AND p.category_id = #{category}-->
-<!--        </if>-->
-<!--        <if test="maxPrice != null">-->
-<!--            AND p.price &lt;= #{maxPrice}-->
-<!--        </if>-->
-<!--        ORDER BY p.created_at DESC-->
-<!--        LIMIT #{size} OFFSET #{offset}-->
-<!--    </select>-->
-
     <select id="findPostsByCategory" resultMap="postListResultMap" parameterType="map">
         SELECT
         p.post_id,
