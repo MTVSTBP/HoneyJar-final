@@ -37,35 +37,7 @@ public class PostController {
         this.userService = userService;
     }
 
-//    @GetMapping
-//    public String postList(Model model,
-//                           @RequestParam(required = false) Long category,
-//                           @RequestParam(defaultValue = "0") int page,
-//                           @RequestParam(defaultValue = "6") int size,
-//                           @RequestParam(required = false) boolean goodRestaurant,
-//                           Principal principal) {
-//
-//        Long userId = null;
-//        if (principal != null) {
-//            userId = userService.findUserIdByKakaoId(principal.getName());
-//        }
-//
-//        // 최초 요청 시 4개의 포스트만 반환
-//        if (page == 0) {
-//            List<PostListDTO> posts = postService.findPostsByCategory(category, page, size, userId, goodRestaurant ? 10000 : null); // 4개만 가져오기
-//            model.addAttribute("posts", posts);
-//            model.addAttribute("categories", categoryService.findAllFoodCategory());
-//            model.addAttribute("selectedCategory", category);
-//            model.addAttribute("goodRestaurant", goodRestaurant);
-//            return "pages/post/post"; // 전체 포스트 페이지
-//        }
-//
-//        // AJAX 요청일 경우 특정 페이지의 포스트만 반환
-//        Integer maxPrice = goodRestaurant ? 10000 : null;
-//        List<PostListDTO> posts = postService.findPostsByCategory(category, page, size, userId, maxPrice);
-//        model.addAttribute("posts", posts);
-//        return "common/components/postComponent"; // 포스트 컴포넌트를 반환
-//    }
+
 
     @GetMapping
     public String postList(Model model,
@@ -99,10 +71,6 @@ public class PostController {
         model.addAttribute("posts", posts);
         return "common/components/postComponent"; // 포스트 컴포넌트를 반환
     }
-
-
-
-
 
 
 
@@ -260,8 +228,52 @@ public class PostController {
 
         model.addAttribute("postRequestDTO", postRequestDTO);
         model.addAttribute("categories", categoryService.findAllFoodCategory()); // 카테고리 목록 추가
+        model.addAttribute("userId", userId); // userId를 모델에 추가
+
         return "pages/post/postCorrection";
     }
+
+
+    // 삭제처리 되나,기존 이미지 모두 삭제할경우에는 오류남.
+//    @PostMapping("/correction")
+//    public ResponseEntity<?> postCorrection(@ModelAttribute PostRequestDTO postRequestDTO,
+//                                            @RequestParam(value = "files", required = false) List<MultipartFile> files,
+//                                            @RequestParam("mainImageFile") MultipartFile mainImageFile,
+//                                            @RequestParam("mainImageUrl") String mainImageUrl,
+//                                            @RequestParam(value = "existingImageUrls", required = false) List<String> existingImageUrls,
+//                                            @RequestParam(value = "deletedImages", required = false) List<String> deletedImages,
+//                                            Principal principal) throws IOException, FirebaseAuthException {
+//        Long loggedInUserId = userService.findUserIdByKakaoId(principal.getName());
+//        PostResponseDTO existingPost = postService.findPostById(postRequestDTO.getPostId(), loggedInUserId);
+//
+//        if (existingPost.getUserId() == null || !existingPost.getUserId().equals(loggedInUserId)) {
+//            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("수정 권한이 없습니다.");
+//        }
+//
+//        // 빈 파일 리스트 처리
+//        if (files == null) {
+//            files = new ArrayList<>();
+//        }
+//
+//        // existingImageUrls를 DTO에 설정합니다.
+//        postRequestDTO.setExistingImageUrls(existingImageUrls);
+//
+//        // deletedImages가 null인 경우 빈 리스트로 초기화합니다.
+//        if (deletedImages == null) {
+//            deletedImages = new ArrayList<>();
+//        }
+//
+//        // userId를 DTO에 설정합니다.
+//        postRequestDTO.setUserId(loggedInUserId);
+//
+//        postService.updatePost(postRequestDTO, files, mainImageFile, mainImageUrl, deletedImages);
+//
+//        Map<String, Object> response = new HashMap<>();
+//        response.put("postId", postRequestDTO.getPostId());
+//        response.put("message", "Post updated successfully");
+//
+//        return ResponseEntity.ok(response);
+//    }
 
 
     @PostMapping("/correction")
@@ -270,6 +282,7 @@ public class PostController {
                                             @RequestParam("mainImageFile") MultipartFile mainImageFile,
                                             @RequestParam("mainImageUrl") String mainImageUrl,
                                             @RequestParam(value = "existingImageUrls", required = false) List<String> existingImageUrls,
+                                            @RequestParam(value = "deletedImages", required = false) List<String> deletedImages,
                                             Principal principal) throws IOException, FirebaseAuthException {
         Long loggedInUserId = userService.findUserIdByKakaoId(principal.getName());
         PostResponseDTO existingPost = postService.findPostById(postRequestDTO.getPostId(), loggedInUserId);
@@ -283,10 +296,21 @@ public class PostController {
             files = new ArrayList<>();
         }
 
-        // existingImageUrls를 DTO에 설정합니다.
+        // existingImageUrls가 null인 경우 빈 리스트로 초기화합니다.
+        if (existingImageUrls == null) {
+            existingImageUrls = new ArrayList<>();
+        }
         postRequestDTO.setExistingImageUrls(existingImageUrls);
 
-        postService.updatePost(postRequestDTO, files, mainImageFile, mainImageUrl);
+        // deletedImages가 null인 경우 빈 리스트로 초기화합니다.
+        if (deletedImages == null) {
+            deletedImages = new ArrayList<>();
+        }
+
+        // userId를 DTO에 설정합니다.
+        postRequestDTO.setUserId(loggedInUserId);
+
+        postService.updatePost(postRequestDTO, files, mainImageFile, mainImageUrl, deletedImages);
 
         Map<String, Object> response = new HashMap<>();
         response.put("postId", postRequestDTO.getPostId());
@@ -294,6 +318,10 @@ public class PostController {
 
         return ResponseEntity.ok(response);
     }
+
+
+
+
 
     @GetMapping("/map")
     public String findAddress(@RequestParam(required = false) String redirectTo, Model model) {
