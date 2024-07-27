@@ -7,6 +7,21 @@ document.addEventListener("DOMContentLoaded", function() {
     editComment.style.display = "none";
     registSubmit.style.display = "none";
 
+
+    // 모든 more_h div를 가져오기
+    const commentDivs = document.querySelectorAll('.more_h');
+
+    commentDivs.forEach(div => {
+        // 각 div의 data-post-id 속성 값 가져오기
+        const parentUserId = div.getAttribute('data-user-id');
+        const commentPostId = div.getAttribute('data-other-id');
+
+        // postId와 comment.postId가 다르면 해당 div 숨기기
+        if (parentUserId !== commentPostId) {
+            div.style.display = 'none';
+        }
+    });
+
     // editIcon 클릭 시 댓글 수정 영역 토글
     editIcon.addEventListener('click', function() {
         const isHidden = editComment.style.display === "none";
@@ -78,4 +93,48 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
+
+    // 삭제 버튼
+    const deleteButtons = document.querySelectorAll('.deleteButton');
+    deleteButtons.forEach(function(deleteButton) {
+        deleteButton.addEventListener('click', async function(event) {
+            event.preventDefault(); // 기본 링크 행동 방지
+            event.stopPropagation(); // 클릭 이벤트 전파 방지
+
+            const postId = document.querySelector(".comment_postId").getAttribute('data-post-id');
+            const commentId =document.querySelector(".user_date").getAttribute('data-post-id'); // commentId 가져오기
+            console.log("최형석 바보ㅋ")
+            console.log("commentId: ", commentId);
+            console.log("postId: ", postId);
+
+            // 삭제 확인 메시지
+            if (!confirm('댓글을 삭제하시겠습니까?')) {
+                return; // 사용자가 취소하면 함수 종료
+            }
+
+            const url = `/comment/delete/${postId}/${commentId}`; // 요청할 URL 구성
+
+            try {
+                const response = await fetch(url, {
+                    method: 'GET', // GET 메소드 사용
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                // 삭제 성공 후 처리 로직 추가
+                console.log('Comment deleted successfully');
+                // 예를 들어, 삭제된 댓글을 DOM에서 제거하는 등의 추가 작업 수행
+                this.closest('.user_record').remove(); // 댓글 요소 삭제
+
+            } catch (error) {
+                console.error('There was a problem with the fetch operation:', error);
+            }
+        });
+    });
+
 });

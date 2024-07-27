@@ -21,8 +21,8 @@ import static com.tbp.honeyjar.login.common.HeaderUtil.ACCESS_TOKEN;
 @RequestMapping(value = "/admin")
 public class AdminSettingsController {
 
-    private final AuthTokenProvider authTokenProvider;
     private final AdminMapper adminMapper;
+    private final AuthTokenProvider authTokenProvider;
 
     public AdminSettingsController(AuthTokenProvider authTokenProvider, AdminMapper adminMapper) {
         this.authTokenProvider = authTokenProvider;
@@ -31,7 +31,8 @@ public class AdminSettingsController {
 
     @GetMapping(value = "/settings")
     public String adminSettingsView(HttpServletRequest request, Model model) {
-        String token = extractToken(request);  // 토큰 추출 메서드
+        String token = extractToken(request);
+        log.debug("Extracted token: {}", token);
 
         if (token != null && !token.isEmpty()) {
             try {
@@ -39,17 +40,35 @@ public class AdminSettingsController {
                 if (authToken.validate()) {
                     Claims claims = authToken.getTokenClaims();
                     String adminId = claims.getSubject();
-                    Admin admin = adminMapper.findByAdminId(Long.parseLong(adminId));
-                    if (admin != null) {
-                        model.addAttribute("admin", admin);
-                        log.debug("# model: {}", model);
-                        return "pages/settings/adminSettings";
+                    log.debug("Extracted adminId from token: {}", adminId);
+
+                    if (adminId != null && !adminId.equals("null") && !adminId.isEmpty()) {
+                        try {
+                            Long adminIdLong = Long.parseLong(adminId);
+                            Admin admin = adminMapper.findByAdminId(adminIdLong);
+                            if (admin != null) {
+                                model.addAttribute("admin", admin);
+                                log.debug("Admin found: {}", admin);
+                                return "pages/settings/adminSettings";
+                            } else {
+                                log.warn("No admin found for id: {}", adminIdLong);
+                            }
+                        } catch (NumberFormatException e) {
+                            log.error("Error parsing adminId: {}", adminId, e);
+                        }
+                    } else {
+                        log.warn("Invalid adminId in token: {}", adminId);
                     }
+                } else {
+                    log.warn("Invalid token");
                 }
             } catch (Exception e) {
-                log.error("Error validating token", e);
+                log.error("Error processing token", e);
             }
+        } else {
+            log.warn("No token found");
         }
+
         return "redirect:/admin/login";
     }
 

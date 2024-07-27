@@ -8,11 +8,11 @@ import com.tbp.honeyjar.login.oauth.entity.RoleType;
 import com.tbp.honeyjar.login.oauth.entity.user.UserPrincipal;
 import com.tbp.honeyjar.login.oauth.token.AuthToken;
 import com.tbp.honeyjar.login.oauth.token.AuthTokenProvider;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +21,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.tbp.honeyjar.login.common.ApiResponse.SUCCESS_MESSAGE;
+import static com.tbp.honeyjar.login.common.ApiResponse.SUCCESS_CODE;
+import static com.tbp.honeyjar.login.common.ApiResponse.UNAUTHORIZED_CODE;
 import static com.tbp.honeyjar.login.common.HeaderUtil.*;
 
 @Slf4j
@@ -32,28 +33,39 @@ public class UserAuthController extends AbstractAuthController {
             AppProperties appProperties,
             AuthTokenProvider tokenProvider
     ) {
-        super(appProperties, tokenProvider); // 부모 클래스의 생성자 호출
+        super(appProperties, tokenProvider);
     }
 
-    @PostMapping("/login") // 사용자 로그인 엔드포인트
-    public ResponseEntity<ApiResponse<String>> login(
-            HttpServletResponse response
-    ) {
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<String>> login(HttpServletResponse response) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication == null || !authentication.isAuthenticated()) {
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new ApiResponse<>(ApiResponse.UNAUTHORIZED_CODE, "인증에 실패했습니다.", null));
+                    .body(new ApiResponse<>(UNAUTHORIZED_CODE, "인증에 실패했습니다.", null));
         }
 
-        // 로그인 성공 시, 액세스 토큰 및 리프레시 토큰 생성 및 반환
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Long userId = userPrincipal.getUserId();
+        Object principal = authentication.getPrincipal();
+        String userId;
+        String userRole;
+
+        if (principal instanceof UserPrincipal) {
+            UserPrincipal userPrincipal = (UserPrincipal) principal;
+            userId = userPrincipal.getUserId().toString();
+            userRole = RoleType.USER.getCode();
+        } else if (principal instanceof String) {
+            userId = (String) principal;
+            userRole = RoleType.USER.getCode();
+        } else {
+            log.error("Unexpected principal type: {}", principal.getClass().getName());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(ApiResponse.INTERNAL_SERVER_ERROR_CODE, "내부 서버 오류", null));
+        }
 
         Date now = new Date();
         AuthToken accessToken = tokenProvider.createAuthToken(
-                userId.toString(),
-                RoleType.USER.getCode(),
+                userId,
+                userRole,
                 new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
         );
 
@@ -73,12 +85,8 @@ public class UserAuthController extends AbstractAuthController {
 
         Map<String, String> resultMap = new HashMap<>();
         resultMap.put(TOKEN_NAME, accessToken.getToken());
-        // TODO: 지금은 리다이렉트 되는 주소가 "localhost:8080"
-        //  -> 이를 "localhost:8080/home"으로 되게끔 수정
-        //  -> 별도의 home.html 파일을 생성 후 수정하면 될 듯
-        resultMap.put("redirectUrl", "/home");  // 일반 사용자는 홈페이지로 리다이렉트
-//        resultMap.put("redirectUrl", "");  // 일반 사용자는 홈페이지로 리다이렉트
+        resultMap.put("redirectUrl", "/");
 
-        return ResponseEntity.ok(new ApiResponse<>(ApiResponse.SUCCESS_CODE, "Login successful", resultMap));
+        return ResponseEntity.ok(new ApiResponse<>(SUCCESS_CODE, "Login successful", resultMap));
     }
 }

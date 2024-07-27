@@ -1,0 +1,59 @@
+div#backGround {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 180px;
+}
+div#container {
+    display: flex;
+    height: 70px;
+    width: 320px;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+div#leftContainer {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    justify-content: space-evenly;
+    width: 40%;
+    margin-left: 10px;
+}
+div#rightContainer {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    justify-content: space-evenly;
+    width: 40%;
+}
+button#decline {
+    background-color: white;
+    color: #989898;
+    border-color: #989898;
+    border-style: solid;
+    border-radius: 8px;
+    width: 117px;
+    height: 26px;
+    font-size: 13px;
+    font-family: "pretendard";
+    font-weight: 500;
+}
+div#border {
+    diplay:flex;
+    width: 80%;
+}
+div#text {
+    font-family: Inter, sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+}
+img#profile {
+    width: 47px;
+    height: 47px;
+}
+div#top_container {
+    display:flex;
+    flex-direction: row;
+}

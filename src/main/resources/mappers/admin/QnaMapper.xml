@@ -4,11 +4,70 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tbp.honeyjar.admin.dao.QnaMapper">
 
-    <resultMap id="adminQnaResultMap" type="com.tbp.honeyjar.admin.dto.QnADto">
-        <id property="noticeId" column="notice_id"/>
+    <resultMap id="adminQnaListResultMap" type="com.tbp.honeyjar.admin.dto.qna.QnaListResponseDto">
+        <id property="id" column="qna_id"/>
         <result property="title" column="title"/>
         <result property="post" column="post"/>
-        <result property="createdAt" column="created_at"/>
-        <result property="updatedAt" column="updated_at"/>
+        <result property="categoryId" column="category_id"/>
     </resultMap>
+
+    <resultMap id="adminQnaResultMap" type="com.tbp.honeyjar.admin.dto.qna.QnaResponseDto">
+        <id property="id" column="qna_id"/>
+        <result property="title" column="title"/>
+        <result property="post" column="post"/>
+        <result property="categoryId" column="category_id"/>
+    </resultMap>
+
+    <select id="findAllQna" resultMap="adminQnaListResultMap">
+        select
+            qna_id,
+            title,
+            post,
+            category_id
+        from qna
+        order by qna_id
+    </select>
+
+    <select id="findById" resultMap="adminQnaResultMap">
+        select
+            qna_id,
+            title,
+            post,
+            category_id
+        from qna
+        where qna_id = #{id}
+    </select>
+
+    <insert id="save" parameterType="com.tbp.honeyjar.admin.dto.qna.QnaSaveRequestDto">
+        insert into qna
+        (
+            title,
+            post,
+            category_id,
+            user_id
+        )
+        values
+        (
+            #{title},
+            #{post},
+            #{categoryId},
+            #{userId}
+        )
+    </insert>
+
+    <update id="correction" parameterType="com.tbp.honeyjar.admin.dto.qna.QnaCorrectionRequestDto">
+        update qna
+        set
+            title = #{title},
+            post = #{post},
+            category_id = #{categoryId}
+        where
+        qna_id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="_long">
+        delete from qna
+        where
+        qna_id = #{id}
+    </delete>
 </mapper>

@@ -4,12 +4,24 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tbp.honeyjar.place.dao.PlaceMapper">
 
+    <resultMap id="postDTOResultMap" type="com.tbp.honeyjar.place.dto.PlaceDTO">
+        <id property="placeId" column="place_id"/>
+        <result property="name" column="name"/>
+        <result property="ratingAvg" column="rating_avg"/>
+        <result property="xCoordinate" column="x_coordinate"/>
+        <result property="yCoordinate" column="y_coordinate"/>
+        <result property="roadAddressName" column="road_address_name"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+
     <insert id="insertPlace" useGeneratedKeys="true" keyProperty="placeId">
         INSERT INTO place (
             name,
             rating_avg,
             x_coordinate,
             y_coordinate,
+            road_address_name,
             created_at,
             updated_at
         )
@@ -18,22 +30,50 @@
             #{ratingAvg},
             #{xCoordinate},
             #{yCoordinate},
+            #{roadAddressName},
             NOW(),
             NOW()
         )
     </insert>
 
-    <select id="findPlaceById" resultType="com.tbp.honeyjar.place.dto.PlaceDTO">
+    <select id="findPlaceById" resultMap="postDTOResultMap">
         SELECT
             place_id,
             name,
             rating_avg,
             x_coordinate,
             y_coordinate,
+            road_address_name,
             created_at,
             updated_at
         FROM
             place
+        WHERE
+            place_id = #{placeId}
+    </select>
+
+    <update id="updatePlace" parameterType="com.tbp.honeyjar.place.dto.PlaceDTO">
+        UPDATE place
+        SET
+        name = #{name},
+        rating_avg = #{ratingAvg},
+        x_coordinate = #{xCoordinate},
+        y_coordinate = #{yCoordinate},
+        road_address_name = #{roadAddressName},
+        updated_at = NOW()
+        WHERE place_id = #{placeId}
+    </update>
+
+    <delete id="deletePlaceById">
+        DELETE FROM place
+        WHERE place_id = #{placeId}
+    </delete>
+
+    <select id="getRatingById" parameterType="_long">
+        SELECT
+            AVG(rating)
+        FROM
+            ratings
         WHERE
             place_id = #{placeId}
     </select>

@@ -1,24 +1,24 @@
 package com.tbp.honeyjar.admin.dto.notice;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-@Getter
-@NoArgsConstructor
+@Data
 public class NoticeListResponseDto {
 
-    private int noticeId;
+    private Long noticeId;
     private String title;
     private String post;
     private LocalDateTime createdAt;
+    private String formattedCreatedAt;
 
-    @Builder
-    public NoticeListResponseDto(String title, String post, LocalDateTime createdAt) {
-        this.title = title;
-        this.post = post;
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+        if (createdAt != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm");
+            this.formattedCreatedAt = createdAt.format(formatter);
+        }
     }
 }

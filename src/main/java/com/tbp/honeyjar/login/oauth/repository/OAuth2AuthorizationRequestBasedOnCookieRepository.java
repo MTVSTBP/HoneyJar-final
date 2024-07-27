@@ -4,11 +4,11 @@ import com.nimbusds.oauth2.sdk.util.StringUtils;
 import com.tbp.honeyjar.login.common.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 
-import static com.tbp.honeyjar.login.common.HeaderUtil.REFRESH_TOKEN;
-
+@Slf4j
 public class OAuth2AuthorizationRequestBasedOnCookieRepository implements AuthorizationRequestRepository<OAuth2AuthorizationRequest> {
 
     public final static String OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME = "oauth2_auth_request";
@@ -29,15 +29,16 @@ public class OAuth2AuthorizationRequestBasedOnCookieRepository implements Author
             HttpServletResponse response
     ) {
         if (authorizationRequest == null) {
-            CookieUtil.deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
-            CookieUtil.deleteCookie(request, response, REDIRECT_URI_PARAM_COOKIE_NAME);
-            CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
+            log.debug("Authorization request is null, deleting cookies");
+            removeAuthorizationRequestCookies(request, response);
             return;
         }
 
+        log.debug("Saving authorization request to cookie");
         CookieUtil.addCookie(response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME, CookieUtil.serialize(authorizationRequest), COOKIE_EXPIRE_SECONDS);
         String redirectUriAfterLogin = request.getParameter(REDIRECT_URI_PARAM_COOKIE_NAME);
         if (StringUtils.isNotBlank(redirectUriAfterLogin)) {
+            log.debug("Saving redirect URI to cookie: {}", redirectUriAfterLogin);
             CookieUtil.addCookie(response, REDIRECT_URI_PARAM_COOKIE_NAME, redirectUriAfterLogin, COOKIE_EXPIRE_SECONDS);
         }
     }
@@ -50,6 +51,5 @@ public class OAuth2AuthorizationRequestBasedOnCookieRepository implements Author
     public void removeAuthorizationRequestCookies(HttpServletRequest request, HttpServletResponse response) {
         CookieUtil.deleteCookie(request, response, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
         CookieUtil.deleteCookie(request, response, REDIRECT_URI_PARAM_COOKIE_NAME);
-        CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
     }
 }

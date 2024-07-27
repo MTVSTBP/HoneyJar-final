@@ -42,16 +42,12 @@
         insert into notice
         (
             title,
-            post,
-            created_at,
-            updated_at
+            post
         )
         values
         (
             #{title},
-            #{post},
-            #{createdAt},
-            #{updatedAt}
+            #{post}
         )
     </insert>
 
@@ -59,15 +55,14 @@
         update notice
         set
             title = #{title},
-            post = #{post},
-            updated_at = #{updatedAt}
+            post = #{post}
         where
-            notice_id = #{noticeId}
+        notice_id = #{noticeId}
     </update>
 
-    <delete id="delete" parameterType="_int">
+    <delete id="delete" parameterType="_long">
         delete from notice
         where
-            notice_id = #{noticeId}
+        notice_id = #{noticeId}
     </delete>
 </mapper>

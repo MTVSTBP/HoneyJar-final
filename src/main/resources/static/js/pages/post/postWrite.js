@@ -235,13 +235,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     postForm.addEventListener('submit', async function (event) {
         event.preventDefault();
-        hideErrorMessage(errorMessage); // 이전 에러 메시지 숨기기
+        hideErrorMessage(errorMessage);
 
         if (!validateForm()) {
             return;
         }
 
-        // 선택한 장소 정보를 숨겨진 필드에 저장
         const selectedPlace = JSON.parse(localStorage.getItem('selectedPlace'));
         if (selectedPlace) {
             placeNameField.value = selectedPlace.place_name || selectedPlace.road_address_name;
@@ -251,23 +250,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const formData = new FormData(postForm);
 
-        // Add selected files to formData
         selectedFiles.forEach((fileData, index) => {
-            if (index !== thumbnailIndex) {
-                const blob = dataURLtoBlob(fileData.dataURL);
-                formData.append('files', blob, fileData.name);
+            const blob = dataURLtoBlob(fileData.dataURL);
+            if (index === thumbnailIndex) {
+                formData.append('mainImageFile', blob, fileData.name);
+                formData.append('mainImageUrl', fileData.name);
+            } else {
+                if (blob.size > 0) { // 빈 파일이 아닌 경우에만 추가
+                    formData.append('files', blob, fileData.name);
+                }
             }
         });
 
-        // Add main image URL and file
-        if (thumbnailIndex !== null) {
-            const mainImageBlob = dataURLtoBlob(selectedFiles[thumbnailIndex].dataURL);
-            formData.append('mainImageUrl', selectedFiles[thumbnailIndex].name);
-            formData.append('mainImageFile', mainImageBlob, selectedFiles[thumbnailIndex].name);
-        }
-
         try {
-            const response = await fetch('/post/write', {
+            const response = await fetch(postForm.action, {
                 method: 'POST',
                 body: formData
             });
@@ -282,7 +278,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 showErrorMessage(errorMessage, result.error);
             } else {
                 postId = result.postId;
-                modal.style.display = 'block'; // 모달 표시
+                localStorage.removeItem('selectedFiles'); // 로컬스토리지에서 selectedFiles 삭제
+                localStorage.removeItem('thumbnailIndex'); // 로컬스토리지에서 thumbnailIndex 삭제
+                modal.style.display = 'block';
             }
         } catch (error) {
             console.error('Error submitting form:', error);
@@ -290,12 +288,16 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+
     // 모달 확인 버튼 클릭 시 상세 페이지로 이동
     completeBtn.addEventListener('click', function () {
-        window.location.href = `/post/detail?postId=${postId}`;
+        window.location.href = `/post`;
     });
 
     function openMapPage() {
+        // 주소 값을 초기화
+        localStorage.removeItem('selectedPlace');
+
         localStorage.setItem('postFormState', JSON.stringify({
             postTitle: document.getElementById('postTitle').value.trim(),
             content: document.getElementById('content').value.trim(),
@@ -304,9 +306,9 @@ document.addEventListener("DOMContentLoaded", function () {
             placeName: document.getElementById('placeNameInput').value.trim(),
             category: categoryField.value.trim()
         }));
-        window.location.href = '/post/map';
+        const currentUrl = window.location.href;
+        window.location.href = '/post/map?redirectTo=' + encodeURIComponent(currentUrl);
     }
-
     // 주소 입력 필드 클릭 시
     placeNameInput.addEventListener('click', openMapPage);
     placeNameButton.addEventListener('click', openMapPage);
@@ -319,7 +321,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById('content').value = postFormState.content;
             document.getElementById('bestMenu').value = postFormState.bestMenu;
             document.getElementById('price').value = postFormState.price;
-            document.getElementById('placeNameInput').value = postFormState.placeName;
+            document.getElementById('placeNameInput').value = postFormState.placeName.replace(/^,/, '');
             categoryField.value = postFormState.category;
             localStorage.removeItem('postFormState');
         }
@@ -327,7 +329,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // 주소 복원
         const selectedPlace = JSON.parse(localStorage.getItem('selectedPlace'));
         if (selectedPlace) {
-            document.getElementById('placeNameInput').value = selectedPlace.place_name || selectedPlace.road_address_name;
+            document.getElementById('placeNameInput').value = selectedPlace.road_address_name.replace(/^,/, '') || selectedPlace.address_name.replace(/^,/, '');
             placeNameField.value = selectedPlace.place_name || selectedPlace.road_address_name;
             placeXField.value = selectedPlace.x;
             placeYField.value = selectedPlace.y;
@@ -340,3 +342,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // 초기화 시 폼 상태 복원
     restoreFormState();
 });
+
+
+

@@ -1,90 +1,87 @@
 package com.tbp.honeyjar.comment.controller;
 
-import com.tbp.honeyjar.comment.dto.CommentListDTO;
+import com.tbp.honeyjar.comment.dto.*;
 import com.tbp.honeyjar.comment.service.CommentService;
-import lombok.RequiredArgsConstructor;
+import com.tbp.honeyjar.login.service.user.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.util.HashMap;
+import java.security.Principal;
 import java.util.List;
-import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //@RequiredArgsConstructor
 @Controller
 @RequestMapping("/comment")
 public class CommentController {
     private final CommentService commentService;
+    private final UserService userService;
+    private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
 
-    public CommentController(CommentService commentService) {
+    public CommentController(CommentService commentService, UserService userService) {
         this.commentService = commentService;
+        this.userService = userService;
     }
 
-
     // 댓글 조회
-    @GetMapping
-    public String commentList(Model model) {
+    @GetMapping("{postId}")
+    public String commentList(@PathVariable Long postId, Model model, Principal principal) {
 
-        List<CommentListDTO> commentList = commentService.findAllComment();
+        List<CommentListDTO> commentList = commentService.findAllCommentListById(postId);
         model.addAttribute("commentList", commentList);
-
+        model.addAttribute("userId", userService.findUserIdByKakaoId(principal.getName()));
         return "pages/comment/comment";
     }
 
     // 댓글 등록
-    @PostMapping("regist")
-    public String registComment(@ModelAttribute CommentListDTO newComment) {
-        System.out.println(newComment);
+    @PostMapping("{postId}/regist") ///
+    public String registComment(@ModelAttribute CommentRegistDTO newComment, Principal principal, @PathVariable Long postId) {
+        // userId 기반으로 등록을 하기때문에 코드 추가 해야함
+        Long userId = userService.findUserIdByKakaoId(principal.getName());
+        newComment.setUserId(userId);
+        newComment.setPostId(postId);
         commentService.registComment(newComment);
 
-        return "redirect:/comment";
+        return "redirect:/comment/{postId}";
     }
 
-    @PostMapping("modify")
-    public String modifyComment(@ModelAttribute CommentListDTO newComment) {
-        System.out.println(newComment);
-        commentService.modifyComment(newComment);
+    // 댓글 수정
+    @PostMapping("modify/{post_id}/{comment_id}")
+    public String modifyComment(@PathVariable Long post_id, @PathVariable Long comment_id,  @ModelAttribute CommentModifyDTO modifyComment, @RequestParam String comment) {
+        System.out.println("comment controller calll!!!!! ");
+        modifyComment.setPostId(post_id);
+        modifyComment.setCommentId(comment_id);
+        modifyComment.setComment(comment);
 
-        return "redirect:/comment";
+        commentService.modifyComment(modifyComment);
+
+        logger.info("Modifying comment: " + modifyComment);
+        commentService.modifyComment(modifyComment);
+
+        return "redirect:/comment/" + post_id;
     }
 
+    // 댓글 삭제
+    @GetMapping("delete/{post_id}/{comment_id}")
+    public String deleteComment(@PathVariable Long post_id, @PathVariable Long comment_id, @ModelAttribute CommentDeleteDTO deleteComment) {
 
-//    @PostMapping("/regist")
-//    public ResponseEntity<Map<String, String>> registerComment(@RequestBody CommentListDTO comment) {
-//        System.out.println(comment.toString()); // 전달된 데이터 확인을 위해 로그 출력
-//
-//        Map<String, String> response = new HashMap<>();
-//        response.put("postId", String.valueOf(comment.getPostId())); // 실제 저장된 포스트 ID를 반환.
-//        return ResponseEntity.ok(response);
-//    }
+        deleteComment.setCommentId(comment_id);
+        deleteComment.setPostId(post_id); // postId를 설정하는 부분 추가
+
+        commentService.deleteComment(comment_id);
+
+        return "redirect:/comment/" + post_id;
+    }
+
+    // comment soft Delete
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<?> softDeletePost(@PathVariable Long postId) {
+        commentService.softDeleteComment(postId);
+        return ResponseEntity.ok("Comment deleted successfully");
+    }
 }
-
-//    private List<CommentListDTO> getAllComments() {
-//        List<CommentListDTO> comments = new ArrayList<>();
-//        comments.add(CommentListDTO.builder()
-//                .commentId(1L)
-//                .nickName("홍길동")
-//                .profileImg("/assets/svg/base_profile.svg")
-//                .content("Lorem Ipsum is simply dummy text of the printing and typesetting industry.\n" +
-//                        "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,\n" +
-//                        "when an unknown printer took a galley of type and scrambled it to make a type specimen book.\n" +
-//                        "It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.")
-//                .date(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")))
-//                .build());
-//        comments.add(CommentListDTO.builder()
-//                .commentId(2L)
-//                .nickName("Seok")
-//                .profileImg("/assets/svg/base_profile.svg")
-//                .content("Lorem Ipsum is simply dummy text of the printing and typesetting industry.\n" +
-//                        "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,\n" +
-//                        "when an unknown printer took a galley of type and scrambled it to make a type specimen book.\n" +
-//                        "It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.")
-//                .date(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy.MM.dd")))
-//                .build());
-//
-//        return comments;
-//    }
-//}

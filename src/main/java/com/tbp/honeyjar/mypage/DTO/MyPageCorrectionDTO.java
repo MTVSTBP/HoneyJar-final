@@ -13,17 +13,12 @@ public class MyPageCorrectionDTO {
     private String userName;
     private String userPr;
     private String profileImage;
-    private List<CategoryDTO> likeCategories;
-    private List<CategoryDTO> categories;
 
-    @Builder
-    public MyPageCorrectionDTO(Long userId, String userName, String userPr, String profileImage, List<CategoryDTO> likeCategories, List<CategoryDTO> categories) {
+    public MyPageCorrectionDTO(Long userId, String userName, String userPr, String profileImage) {
         this.userId = userId;
         this.userName = userName;
         this.userPr = userPr;
         this.profileImage = profileImage;
-        this.likeCategories = likeCategories;
-        this.categories = categories;
     }
 
     public Long getUserId() {
@@ -42,13 +37,6 @@ public class MyPageCorrectionDTO {
         return profileImage;
     }
 
-    public List<CategoryDTO> getLikeCategories() {
-        return likeCategories;
-    }
-
-    public List<CategoryDTO> getCategories() {
-        return categories;
-    }
 
     @Override
     public String toString() {
@@ -57,8 +45,6 @@ public class MyPageCorrectionDTO {
                 ", userName='" + userName + '\'' +
                 ", userPr='" + userPr + '\'' +
                 ", profileImage='" + profileImage + '\'' +
-                ", likeCategories=" + likeCategories +
-                ", categories=" + categories +
                 '}';
     }
 }

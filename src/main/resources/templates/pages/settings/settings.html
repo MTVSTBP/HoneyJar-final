@@ -40,14 +40,6 @@
             </section>
             <!-- 사용자 정보 끝 -->
 
-            <!-- 로그아웃 탭 시작 -->
-            <section id="logoutTab" class="setting-tab">
-                <div class="setting-tab__container">
-                    <span class="setting-tab__text" th:href="@{/logout}">로그아웃</span>
-                </div>
-            </section>
-            <!-- 로그아웃 탭 끝 -->
-
             <!-- 공지사항 탭 시작 -->
             <section id="noticeTab" class="setting-tab">
                 <div class="setting-tab__container">
@@ -58,7 +50,7 @@
             <!-- 공지사항 탭 끝 -->
 
             <!-- 1:1 문의 탭 시작 -->
-            <section id="contactTab" class="setting-tab">
+            <section id="inquiryTab" class="setting-tab">
                 <div class="setting-tab__container">
                     <span class="setting-tab__text">1:1 문의</span>
                     <div class="setting-tab__notification"></div>
@@ -75,13 +67,33 @@
             </section>
             <!-- FAQ 탭 끝 -->
 
+            <!-- 로그아웃 탭 시작 -->
+            <section id="logoutTab" class="setting-tab">
+                <div class="setting-tab__container">
+                    <span class="setting-tab__text" th:href="@{/logout}">로그아웃</span>
+                </div>
+            </section>
+            <!-- 로그아웃 탭 끝 -->
+
             <!-- 회원탈퇴 탭 시작 -->
-            <section id="withdrawTab" class="setting-tab">
+            <section id="leaveTab" class="setting-tab">
                 <div class="setting-tab__container">
                     <span class="setting-tab__text">회원탈퇴</span>
                 </div>
             </section>
             <!-- 회원탈퇴 탭 끝 -->
+
+            <!-- Modal 시작 -->
+            <div class="modal-container">
+                <div class="modal__content">
+                    <p class="modal__text">로그아웃 하시겠습니까?</p>
+                    <div class="modal__buttons">
+                        <button id="cancelButton" class="button button--cancel" type="button">취소</button>
+                        <button id="confirmButton" class="button button--confirm" type="submit">확인</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal 끝 -->
         </div>
     </div>
 </div>

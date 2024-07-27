@@ -17,12 +17,14 @@
         <div id="detailContainer">
             <div id="userDetail">
                 <div th:text="${myPage.userName}">유저 이름</div>
-                <img id="pencil" src="/assets/svg/mypage_profile_correction.svg"  alt="사진이 없습니다."/>
+                <a th:href="@{/mypage/correction}">
+                    <img id="pencil" src="/assets/svg/pencil.svg" alt="사진이 없습니다."/>
+                </a>
             </div>
-            <div id="pr" th:text="${myPage.userPr}">자기소개</div>
+            <div id="pr" th:text="${myPage.userPr}" th:onclick="open()">자기소개</div>
         </div>
         <div id="profileImage">
-            <img id="profileSvg" src="/assets/svg/base_profile.svg"  alt="사진이 없습니다."/>
+            <img id="profileSvg" th:src="${myPage.profileImage != null ? myPage.profileImage : '/assets/svg/base_profile.svg'}"  alt="사진이 없습니다."/>
         </div>
     </div>
     <div id="post_data">
@@ -59,10 +61,19 @@
     <div id="bookMark">
         <div id="textLine">
             <div id="bookMarkText">북마크</div>
-            <div id="more">더보기&gt</div>
+            <div>
+                <a id="more" th:href="@{/mypage/bookmark}">
+                    더보기&gt
+                </a>
+            </div>
         </div>
-        <div id="postData"></div>
+        <div class="my_list">
+            <ul>
+                <th:block th:replace="common/components/postComponent :: postComponent(posts=${posts}, maxPosts=null)"></th:block>
+            </ul>
+        </div>
     </div>
+<!--    <div th:replace="components/modal :: modal(props=${props})"></div>-->
     <div id="navigate"></div>
 </div>
 </body>
