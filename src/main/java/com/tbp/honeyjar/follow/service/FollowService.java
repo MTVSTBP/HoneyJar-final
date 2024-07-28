@@ -13,28 +13,28 @@ import java.util.List;
 @Service
 public class FollowService {
     private final FollowMapper followMapper;
-//    public FollowerDTO getFollower(Long userId) {
-//        FollowerDTO followerDTO = new FollowerDTO();
-//        followerDTO.setUserId(userId);
-//        followerDTO.setFollowers(followMapper.getFollower(userId));
-//        return followerDTO;
-//    }
-//    public FollowingDTO getFollowing(Long userId) {
-//        FollowingDTO followingDTO = new FollowingDTO();
-//        followingDTO.setUserId(userId);
-//        followingDTO.setFollowees(followMapper.getFollowing(userId)); // 이 부분을 확인하세요.
-//        return followingDTO;
-//    }
-
-    // 추가
-
-    public List<FollowDTO> getFollowers(Long userId) {
-        return followMapper.getFollowers(userId);
+    public FollowerDTO getFollower(Long userId) {
+        FollowerDTO followerDTO = new FollowerDTO();
+        followerDTO.setUserId(userId);
+        followerDTO.setFollowers(followMapper.getFollower(userId));
+        return followerDTO;
+    }
+    public FollowingDTO getFollowing(Long userId) {
+        FollowingDTO followingDTO = new FollowingDTO();
+        followingDTO.setUserId(userId);
+        followingDTO.setFollowees(followMapper.getFollowings(userId)); // 이 부분을 확인하세요.
+        return followingDTO;
     }
 
-    public List<FollowDTO> getFollowing(Long userId) {
-        return followMapper.getFollowing(userId);
-    }
+
+
+//    public List<FollowDTO> getFollowers(Long userId) {
+//        return followMapper.getFollowers(userId);
+//    }
+//
+//    public List<FollowDTO> getFollowing(Long userId) {
+//        return followMapper.getFollowing(userId);
+//    }
 
     public void followUser(Long userId, Long followUserId) {
         followMapper.insertFollow(userId, followUserId);

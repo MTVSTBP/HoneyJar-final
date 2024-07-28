@@ -35,7 +35,7 @@ public class FollowController {
     @GetMapping("/follower")
     public String follower(Model model, Principal principal) {
         Long userId = userService.findUserIdByKakaoId(principal.getName());
-        List<FollowDTO> followers = followService.getFollowers(userId);
+        FollowerDTO followers = followService.getFollower(userId);
         model.addAttribute("follows", followers);
         return "pages/follow/follower";
     }
@@ -44,7 +44,7 @@ public class FollowController {
     @GetMapping("/following")
     public String following(Model model, Principal principal) {
         Long userId = userService.findUserIdByKakaoId(principal.getName());
-        List<FollowDTO> followings = followService.getFollowing(userId);
+        FollowingDTO followings = followService.getFollowing(userId);
         model.addAttribute("followings", followings);
         return "pages/follow/following";
     }
