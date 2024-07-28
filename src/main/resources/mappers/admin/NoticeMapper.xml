@@ -9,6 +9,7 @@
         <result property="title" column="title"/>
         <result property="post" column="post"/>
         <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
     </resultMap>
 
     <resultMap id="adminNoticeResultMap" type="com.tbp.honeyjar.admin.dto.notice.NoticeResponseDto">
@@ -18,7 +19,7 @@
         <result property="createdAt" column="created_at"/>
     </resultMap>
 
-    <select id="findAllNotices" resultMap="adminNoticeListResultMap">
+    <select id="findAllNotices" parameterType="map" resultMap="adminNoticeListResultMap">
         select
             notice_id,
             title,
@@ -26,6 +27,12 @@
             created_at
         from notice
         order by notice_id
+        limit #{params.pageSize} OFFSET #{params.offset}
+    </select>
+
+    <select id="getNoticeCount" resultType="_int">
+        SELECT COUNT(*)
+        FROM notice
     </select>
 
     <select id="findById" resultMap="adminNoticeResultMap">
