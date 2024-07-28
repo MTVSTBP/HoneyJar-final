@@ -30,8 +30,7 @@ public class AdminInquiryService {
     public User findByKakaoId(String kakaoId) {
         return userMapper.findByKakaoId(kakaoId);
     }
-
-
+    
     /* for Admin, find all inquiries */
 
     @Transactional(readOnly = true)

@@ -6,12 +6,12 @@ import com.tbp.honeyjar.admin.dto.notice.NoticeResponseDto;
 import com.tbp.honeyjar.admin.dto.notice.NoticeSaveRequestDto;
 import com.tbp.honeyjar.admin.service.NoticeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,15 +23,22 @@ public class AdminNoticeController {
     private final NoticeService noticeService;
 
     @GetMapping
-    public String notice(Model model) {
+    public String notice(Model model, @RequestParam(defaultValue = "1") int page) {
+        page = page < 1 ? 1 : page;
+        Pageable pageable = PageRequest.of(page - 1, 5);
+        Page<NoticeListResponseDto> noticePage = noticeService.findAllNotices(pageable);
+        page = page > noticePage.getTotalPages() ? noticePage.getTotalPages() : page;
 
-        List<NoticeListResponseDto> noticeList = noticeService.findAllNotices();
-
-        if (!noticeList.isEmpty()) {
-            model.addAttribute("noticeList", noticeList);
+        System.out.println("noticePage : " + noticePage.toString());
+        if (!noticePage.isEmpty()) {
+            model.addAttribute("noticeList", noticePage);
         }
+        model.addAttribute("page", page);
+        model.addAttribute("totalPages", noticePage.getTotalPages());
 
-        return "pages/admin/notice/adminNotice";
+        return (page > noticePage.getTotalPages()) ?
+                "redirect:/admin/notice?page=" + page :
+                "pages/admin/notice/adminNotice";
     }
 
     @GetMapping("/{notice_id}")

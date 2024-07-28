@@ -1,7 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
+
+
     // 뒤로 가기 버튼 기능
     var backButton = document.getElementById('back-button');
-    
+
     if (backButton) {
         backButton.addEventListener('click', function(event) {
             event.preventDefault(); // 기본 링크 동작 방지
@@ -38,14 +40,17 @@ document.addEventListener('DOMContentLoaded', function() {
     // 공용 모달 설정
     const deleteConfirmModal = document.getElementById('deleteConfirmModal');
     const deleteSuccessModal = document.getElementById('deleteSuccessModal');
-    const deletePostButtons = document.querySelectorAll('.delete_p'); // 여러 삭제 버튼 대응
+    const deletePostButtons = document.querySelectorAll('.delete_p');
     const confirmDeleteButton = document.getElementById('confirmDelete');
     const completeDeleteButton = document.getElementById('completeDelete');
     const closeModalButtons = document.querySelectorAll('.close');
 
+    let currentDeleteHref = '';
     // 모달 열기
     deletePostButtons.forEach(button => {
-        button.addEventListener('click', function () {
+        button.addEventListener('click', function (event) {
+            event.preventDefault();
+            currentDeleteHref = button.getAttribute('th:href');
             deleteConfirmModal.style.display = 'block';
         });
     });
@@ -66,24 +71,25 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // 삭제 확인 버튼 클릭 시
-    if (confirmDeleteButton) {
-        confirmDeleteButton.addEventListener('click', function () {
-            deleteConfirmModal.style.display = 'none';
-            deleteSuccessModal.style.display = 'block';
-
-            // 삭제 작업을 여기서 수행
-            /*
-            performDeleteAction().then(response => {
-                if (response.success) {
+    confirmDeleteButton.addEventListener('click', function () {
+        fetch(currentDeleteHref, { method: 'POST' })
+            .then(response => {
+                if (response.ok) {
+                    deleteConfirmModal.style.display = 'none';
                     deleteSuccessModal.style.display = 'block';
                 } else {
                     console.error('Deletion failed');
                 }
-            });
-            */
-        });
-    }
+            })
+            .catch(error => console.error('Error:', error));
+    });
+
+    completeDeleteButton.addEventListener('click', function () {
+        deleteSuccessModal.style.display = 'none';
+        location.reload();
+    });
+
+
 
     // 삭제 완료 모달의 확인 버튼 클릭 시
     if (completeDeleteButton) {
@@ -96,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // function refreshQnaContainer() {
     //     const qnaContainer = document.getElementById('qna-container');
-        
+
     //     // AJAX 요청으로 QnA 데이터를 가져와서 업데이트
     //     fetch('/path/to/qna/api')
     //         .then(response => response.text())
