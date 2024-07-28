@@ -22,4 +22,22 @@
         WHERE
         f.followee_id = #{userId};
     </select>
+
+    <!-- 추가   -->
+    <insert id="insertFollow">
+        INSERT INTO follow (follower_id, followee_id)
+        VALUES (#{userId}, #{followUserId})
+    </insert>
+
+    <delete id="deleteFollow">
+        DELETE FROM follow
+        WHERE follower_id = #{userId} AND followee_id = #{followUserId}
+    </delete>
+
+    <select id="isFollowing" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM follow
+        WHERE follower_id = #{userId} AND followee_id = #{targetUserId}
+    </select>
+
 </mapper>
