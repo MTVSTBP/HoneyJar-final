@@ -1,4 +1,12 @@
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('#decline').forEach(button => {
+            button.addEventListener('click', function() {
+                unfollow(this);
+            });
+        });
+    });
+
     function unfollow(button) {
         const userId = button.getAttribute('data-user-id');
         const url = `/unfollow/${userId}`;
