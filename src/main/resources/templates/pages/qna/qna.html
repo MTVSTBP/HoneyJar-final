@@ -33,17 +33,18 @@
         </ul>
     </div>
 
-
-    <div th:each="qna : ${qnaList}" th:class="${qna.getCategoryId()} == 1 ? 'qna active' : 'qna'"
-         th:id="category + ${qna.getCategoryId()}">
-        <div class="qna_item">
-            <div th:text="${qna.title}" class="question">
-                <h5>위치정보는 어떻게 찾는건가요?</h5>
-            </div>
-            <div class="answer">
+    <div id="qna-container">
+        <div th:each="qna : ${qnaList}" th:class="${qna.getCategoryId()} == 1 ? 'qna active' : 'qna'"
+             th:id="category + ${qna.getCategoryId()}">
+            <div class="qna_item">
+                <div th:text="${qna.title}" class="question">
+                    <h5>위치정보는 어떻게 찾는건가요?</h5>
+                </div>
+                <div class="answer">
                         <span th:text="${qna.post}">
                             text
                         </span>
+                </div>
             </div>
         </div>
     </div>
