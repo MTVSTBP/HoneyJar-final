@@ -1,9 +1,11 @@
 package com.tbp.honeyjar.login.service.user;
 
+import com.tbp.honeyjar.login.DTO.UserDTO;
 import com.tbp.honeyjar.login.mapper.user.UserMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -21,4 +23,10 @@ public class UserService {
     public void deleteUser(String kakaoId) {
         userMapper.deleteUser(kakaoId, LocalDate.now());
     }
+
+    // 추가
+    public List<UserDTO> searchUsersByName(String name) {
+        return userMapper.searchUsersByName(name);
+    }
+
 }
