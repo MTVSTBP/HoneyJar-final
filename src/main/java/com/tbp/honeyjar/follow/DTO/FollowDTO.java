@@ -8,7 +8,7 @@ import lombok.*;
 @Setter
 public class FollowDTO {
     private Long userId;
-    private String userName;
+    private String name;
     private String profileImage;
     // 추가
     private boolean isFollowed;
@@ -17,7 +17,7 @@ public class FollowDTO {
     @Builder
     public FollowDTO(Long userId, String userName, String profileImage, boolean requestStatus) {
         this.userId = userId;
-        this.userName = userName;
+        this.name = userName;
         this.profileImage = profileImage;
 
         this.isFollowed = isFollowed;
@@ -40,7 +40,7 @@ public class FollowDTO {
     public String toString() {
         return "FollowDTO{" +
                 "userId=" + userId +
-                ", userName='" + userName + '\'' +
+                ", userName='" + name + '\'' +
                 ", profileImage='" + profileImage + '\'' +
                 ", isFollowed=" + isFollowed +
                 '}';

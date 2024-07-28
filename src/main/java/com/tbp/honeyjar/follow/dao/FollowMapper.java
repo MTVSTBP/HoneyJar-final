@@ -11,7 +11,11 @@ import java.util.List;
 @Mapper
 public interface FollowMapper {
     List<FollowDTO> getFollower(Long userId);
-    FollowingDTO getFollowings(Long userId);
+//    FollowingDTO getFollowings(Long userId);
+
+    List<FollowDTO> getFollowers(Long userId);
+    List<FollowDTO> getFollowing(Long userId);
+
 
     // 추가
     void insertFollow(@Param("userId") Long userId, @Param("followUserId") Long followUserId);
