@@ -1,9 +1,9 @@
 package com.tbp.honeyjar.admin.service;
 
-import com.tbp.honeyjar.admin.dao.NoticeMapper;
+import com.tbp.honeyjar.admin.dao.AdminNoticeMapper;
 import com.tbp.honeyjar.admin.dto.notice.NoticeCorrectionRequestDto;
-import com.tbp.honeyjar.admin.dto.notice.NoticeListResponseDto;
-import com.tbp.honeyjar.admin.dto.notice.NoticeResponseDto;
+import com.tbp.honeyjar.admin.dto.notice.AdminNoticeListResponseDto;
+import com.tbp.honeyjar.admin.dto.notice.AdminNoticeResponseDto;
 import com.tbp.honeyjar.admin.dto.notice.NoticeSaveRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,29 +14,29 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 @Transactional
-public class NoticeService {
+public class AdminNoticeService {
 
-    private final NoticeMapper noticeMapper;
+    private final AdminNoticeMapper adminNoticeMapper;
 
     @Transactional(readOnly = true)
-    public List<NoticeListResponseDto> findAllNotices() {
-        return noticeMapper.findAllNotices();
+    public List<AdminNoticeListResponseDto> findAllNotices() {
+        return adminNoticeMapper.findAllNotices();
     }
 
     @Transactional(readOnly = true)
-    public NoticeResponseDto findById(Long id) {
-        return noticeMapper.findById(id);
+    public AdminNoticeResponseDto findById(Long id) {
+        return adminNoticeMapper.findById(id);
     }
 
     public Long save(NoticeSaveRequestDto requestDto) {
-        return noticeMapper.save(requestDto);
+        return adminNoticeMapper.save(requestDto);
     }
 
     public Long delete(Long postId) {
-        return noticeMapper.delete(postId);
+        return adminNoticeMapper.delete(postId);
     }
 
     public Long correction(NoticeCorrectionRequestDto requestDto) {
-        return noticeMapper.correction(requestDto);
+        return adminNoticeMapper.correction(requestDto);
     }
 }

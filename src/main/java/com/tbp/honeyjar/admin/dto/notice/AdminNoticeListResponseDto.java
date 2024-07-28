@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Data
-public class NoticeListResponseDto {
+public class AdminNoticeListResponseDto {
 
     private Long noticeId;
     private String title;
