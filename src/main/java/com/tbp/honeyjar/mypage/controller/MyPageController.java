@@ -77,7 +77,7 @@ public class MyPageController {
     @GetMapping("/mypost")
     public String getMyPost(Model model, Principal principal, @RequestParam(required = false) Long category) {
         Long userId = userService.findUserIdByKakaoId(principal.getName());
-        List<PostListDTO> posts = myPageService.getMyPost(category, userId);
+        List<PostListDTO> posts = myPageService.getMyPosts(category, userId);
         model.addAttribute("posts", posts);
         model.addAttribute("categories", categoryService.findAllFoodCategory());
         model.addAttribute("selectedCategory", category);
