@@ -1,49 +1,46 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}"
+      layout:fragment="content"
+>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- css 초기화 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
-
-    <link rel="stylesheet" href="/src/pages/css/noticeDetail.css">
-    <script src="/src/pages/js/noticeDetail.js"></script>
-
-    <title>Document</title>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/notice/noticeDetail.css}"/>
+    <th:block layout:fragment="title">
+        <title>adminCategory</title>
+    </th:block>
 </head>
 
 <body>
-    <!-- 헤더영역 -->
-    <div></div>
-    <!-- //헤더영역 -->
-    <div id="container">
-        <div class="sub_title">
-            <a href="#" id="back-button">
-                <img src="/assets/svg/arrow_back.svg" alt="뒤로가기">
-                <h4>공지사항</h4>
-            </a>
-        </div>
-        <div class="noticeDetail">
-            <div class="info">
-                <div class="title">
-                    <h2>정기 업로드 예정</h2>
-                    <div class="user_info">
-                        <img src="/assets/svg/base_profile.svg" alt="관리자프로필">
-                        <p>관리자</p>
-                    </div>
-                    <span>
+<!-- 헤더영역 -->
+<div></div>
+<!-- //헤더영역 -->
+<div id="container">
+    <div class="sub_title">
+        <a href="#" id="back-button">
+            <img src="/assets/svg/arrow_back.svg" alt="뒤로가기">
+            <h4>공지사항</h4>
+        </a>
+    </div>
+    <div class="noticeDetail">
+        <div class="info">
+            <div class="title">
+                <h2 th:text="${notice.title}">정기 업로드 예정</h2>
+                <div class="user_info">
+                    <img src="/assets/svg/base_profile.svg" alt="관리자프로필">
+                    <p>관리자</p>
+                </div>
+                <span th:text="${notice.formattedCreatedAt}">
                         2024.07.01
                     </span>
-                </div>
             </div>
-            <div class="notice_context">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Generibusque nostris malo faciam arare quod praeclarorum. Timentis quosdam, addidisti donec iucunda curiosi detracto vitiis inani. Iam summo m statuat moderatius aliqua utriusque copulatas graecum intellegebat, t. Susceperant saepe zenonem naturales ponderum ne arbitrer tamen oblivione. Illae dapibus plus, nemo, senectus, pertinaces cupiditates suscipiet potest. Motus sponte democriti suspicor, unde sinat, altera. Verborum philosophorum pro malint mandamus, efflorescere, pecuniae delicata doctus. Aliter vindicet constituant faciendi conficiuntur imperitos, probatus. </p>
-            </div>
-            
+        </div>
+        <div th:text="${notice.post}" class="notice_context">
+            <p>포스트</p>
         </div>
     </div>
+</div>
 
 </body>
 
