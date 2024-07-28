@@ -19,4 +19,17 @@ public class FollowService {
     public FollowingDTO getFollowing(Long userId) {
         return followMapper.getFollowings(userId);
     }
+
+    // 추가
+    public void followUser(Long userId, Long followUserId) {
+        followMapper.insertFollow(userId, followUserId);
+    }
+
+    public void unfollowUser(Long userId, Long followUserId) {
+        followMapper.deleteFollow(userId, followUserId);
+    }
+
+    public boolean isFollowing(Long userId, Long targetUserId) {
+        return followMapper.isFollowing(userId, targetUserId);
+    }
 }

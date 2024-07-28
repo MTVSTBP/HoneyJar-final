@@ -63,4 +63,15 @@
             updated_at  = NOW()
         WHERE kakao_id = #{kakaoId}
     </update>
+
+    <!--  추가  -->
+    <resultMap id="UserDTOMap" type="com.tbp.honeyjar.login.DTO.UserDTO">
+        <id property="userId" column="user_id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+    <select id="searchUsersByName" resultMap="UserDTOMap">
+        SELECT user_id, name
+        FROM user
+        WHERE name LIKE CONCAT('%', #{name}, '%')
+    </select>
 </mapper>
