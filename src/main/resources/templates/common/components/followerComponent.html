@@ -4,16 +4,43 @@
             <div>
                 <img id="profile" th:src="${follow.profileImage != null ? follow.profileImage : '/assets/svg/base_profile.svg'}"/>
             </div>
-            <div id="text" th:text="${follow.userName}"></div>
+            <div id="text" th:text="${follow.name}"></div>
         </div>
         <div id="rightContainer">
             <div>
-                <button id="decline">팔로워 삭제</button>
+                <button id="decline" th:attr="data-user-id=${follow.userId}" onclick="unfollow(this)">팔로워 삭제</button>
             </div>
         </div>
     </div>
     <div id="border">
-            <hr />
+        <hr />
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // unfollow 함수 정의
+        window.unfollow = function(button) {
+            const userId = button.getAttribute('data-user-id');
+            const url = `/unfollow/${userId}`;
 
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('팔로워가 삭제되었습니다.');
+                        button.closest('#top_container').remove();
+                    } else {
+                        alert('팔로워 삭제에 실패했습니다.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('오류가 발생했습니다.');
+                });
+        };
+    });
+</script>

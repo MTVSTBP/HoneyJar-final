@@ -31,9 +31,9 @@ public class MyPageService {
         params.put("category", category);
         return myPageMapper.getMyBookmark(params, userId);
     }
-    public List<PostListDTO> getMyPost(Long category, Long userId) {
+    public List<PostListDTO> getMyPosts(Long category, Long userId) {
         Map<String, Object> params = new HashMap<>();
         params.put("category", category);
-        return myPageMapper.getMyPost(params, userId);
+        return myPageMapper.getMyPosts(params, userId);
     }
 }
