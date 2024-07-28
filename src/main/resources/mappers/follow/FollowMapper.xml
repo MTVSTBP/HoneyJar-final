@@ -44,7 +44,7 @@
 
     <delete id="deleteFollow">
         DELETE FROM follow
-        WHERE follower_id = #{userId} AND followee_id = #{followUserId}
+        WHERE followee_id = #{userId} AND follower_id = #{followUserId}
     </delete>
 
     <select id="isFollowing" resultType="boolean">
