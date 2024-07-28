@@ -8,7 +8,7 @@
         </div>
         <div id="rightContainer">
             <div>
-                <button id="decline" th:attr="data-user-id=${follow.userId}" onclick="unfollow(this)">팔로워 삭제</button>
+                <button class="decline" th:attr="data-user-id=${follow.userId}" onclick="unfollow(this)">팔로워 삭제</button>
             </div>
         </div>
     </div>
@@ -19,7 +19,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // unfollow 함수 정의
-        window.unfollow = function(button) {
+        function unfollow(button) {
             const userId = button.getAttribute('data-user-id');
             const url = `/unfollow/${userId}`;
 
@@ -32,7 +32,7 @@
                 .then(response => {
                     if (response.ok) {
                         alert('팔로워가 삭제되었습니다.');
-                        button.closest('#top_container').remove();
+                        button.closest('#top_container').remove(); // 해당 팔로워 요소 제거
                     } else {
                         alert('팔로워 삭제에 실패했습니다.');
                     }
@@ -41,6 +41,13 @@
                     console.error('Error:', error);
                     alert('오류가 발생했습니다.');
                 });
-        };
+        }
+
+        // 모든 버튼에 click 이벤트 리스너 추가
+        document.querySelectorAll('#decline').forEach(button => {
+            button.addEventListener('click', function() {
+                unfollow(this);  // 버튼 클릭 시 unfollow 호출
+            });
+        });
     });
 </script>
