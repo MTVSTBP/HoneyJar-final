@@ -37,8 +37,10 @@
         <div th:each="qna : ${qnaList}" th:class="${qna.getCategoryId()} == 1 ? 'qna active' : 'qna'"
              th:id="category + ${qna.getCategoryId()}">
             <div class="qna_item">
-                <div th:text="${qna.title}" class="question">
-                    <h5>위치정보는 어떻게 찾는건가요?</h5>
+                <div class="question">
+                    <div th:text="${qna.title}" class="title">
+                        <h5>위치정보는 어떻게 찾는건가요?</h5>
+                    </div>
                 </div>
                 <div class="answer">
                         <span th:text="${qna.post}">
