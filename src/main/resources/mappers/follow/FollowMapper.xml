@@ -10,7 +10,7 @@
         <result property="name" column="name"/>
     </resultMap>
 
-    <select id="getFollowers" resultMap="FollowDTOMap">
+    <select id="getFollower" resultMap="FollowDTOMap">
         SELECT
         u.user_id AS user_id,
         u.name AS name
