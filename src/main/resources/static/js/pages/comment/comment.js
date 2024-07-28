@@ -101,8 +101,9 @@ document.addEventListener("DOMContentLoaded", function() {
             event.preventDefault(); // 기본 링크 행동 방지
             event.stopPropagation(); // 클릭 이벤트 전파 방지
 
-            const postId = document.querySelector(".comment_postId").getAttribute('data-post-id');
-            const commentId =document.querySelector(".user_date").getAttribute('data-post-id'); // commentId 가져오기
+            const userRecord = this.closest('.user_record');
+            const postId = userRecord.querySelector(".user_info").getAttribute('data-post-id');
+            const commentId = userRecord.querySelector(".user_info").getAttribute('data-comment-id'); // commentId 가져오기
             console.log("최형석 바보ㅋ")
             console.log("commentId: ", commentId);
             console.log("postId: ", postId);
@@ -129,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 // 삭제 성공 후 처리 로직 추가
                 console.log('Comment deleted successfully');
                 // 예를 들어, 삭제된 댓글을 DOM에서 제거하는 등의 추가 작업 수행
-                this.closest('.user_record').remove(); // 댓글 요소 삭제
+                userRecord.remove(); // 댓글 요소 삭제
 
             } catch (error) {
                 console.error('There was a problem with the fetch operation:', error);
