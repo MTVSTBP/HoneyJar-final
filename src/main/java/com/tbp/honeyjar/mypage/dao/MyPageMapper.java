@@ -19,6 +19,6 @@ public interface MyPageMapper {
     List<PostListDTO> getMyPost(Long userId);
     MyPageCorrectionDTO getMyProfile(Long userId);
     List<PostListDTO> getMyBookmark(@Param("params") Map<String, Object> params, @Param("userId") Long userId);
-    List<PostListDTO> getMyPost(@Param("params") Map<String, Object> params, @Param("userId") Long userId);
+    List<PostListDTO> getMyPosts(@Param("params") Map<String, Object> params, @Param("userId") Long userId);
 
 }
