@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', function() {
 
 
@@ -56,6 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // 모달 닫기
     closeModalButtons.forEach(button => {
         button.addEventListener('click', function () {
             deleteConfirmModal.style.display = 'none';
