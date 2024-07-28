@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}"
+      layout:fragment="content"
+>
+
+<head>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/qna/qna.css}"/>
+    <th:block layout:fragment="title">
+        <title>Qna</title>
+    </th:block>
+</head>
+
+<body>
+<!-- header 영역 -->
+<div></div>
+<!-- //header 영역 -->
+<div id="container">
+    <div class="sub_title">
+        <h4>
+            FAQ
+            <br>
+            자주 묻는 질문
+        </h4>
+    </div>
+    <div class="qna_category">
+        <ul th:each="category : ${qnaCategory}">
+            <li>
+                <p th:data-category="${category.id}" th:text="${category.name}"
+                   th:class="${category.id} == 1 ? 'tab tab_active' : 'tab'">카테고리1</p>
+            </li>
+        </ul>
+    </div>
+
+
+    <div th:each="qna : ${qnaList}" th:class="${qna.getCategoryId()} == 1 ? 'qna active' : 'qna'"
+         th:id="category + ${qna.getCategoryId()}">
+        <div class="qna_item">
+            <div th:text="${qna.title}" class="question">
+                <h5>위치정보는 어떻게 찾는건가요?</h5>
+            </div>
+            <div class="answer">
+                        <span th:text="${qna.post}">
+                            text
+                        </span>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
