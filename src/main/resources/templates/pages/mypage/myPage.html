@@ -28,8 +28,7 @@
         </div>
     </div>
     <div id="post_data">
-        <div id="like">
-            <a th:href="@{/mypage/mypost}">
+        <div id="like" th:onclick="'location.href=\'@{/mypage/mypost}\'" style="cursor: pointer;">
             <div class="post_data_title">포스트</div>
             <div class="post_data_set">
                 <div class="post_data_icon">
@@ -38,10 +37,8 @@
                 <div class="post_data_num" th:text="${myPage.getNumberOfPosts()}"></div>
             </div>
             <div class="border"></div>
-            </a>
         </div>
-        <div id="follower">
-            <a th:href="@{/follow/follower}">
+        <div id="follower" th:onclick="'location.href=\'@{/follow/follower}\'" style="cursor: pointer;">
             <div class="post_data_title">팔로워</div>
             <div class="post_data_set">
                 <div class="post_data_icon">
@@ -50,10 +47,8 @@
                 <div class="post_data_num" th:text="${myPage.getNumberOfFollowers()}"></div>
             </div>
             <div class="border"></div>
-            </a>
         </div>
-        <div id="following">
-            <a th:href="@{/follow/following}">
+        <div id="following" th:onclick="'location.href=\'@{/follow/following}\'" style="cursor: pointer;">
             <div class="post_data_title">팔로잉</div>
             <div class="post_data_set">
                 <div class="post_data_icon">
@@ -61,7 +56,6 @@
                 </div>
                 <div class="post_data_num" th:text="${myPage.getNumberOfFollowees()}"></div>
             </div>
-            </a>
         </div>
     </div>
     <div id="bookMark">
