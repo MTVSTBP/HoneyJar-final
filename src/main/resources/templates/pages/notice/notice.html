@@ -25,7 +25,7 @@
         <ul class="list">
             <!-- 클릭했을때, 읽음 처리로 컬러 변경됨. class="notice_link" -->
             <li th:each="notice : ${noticeList}">
-                <a th:href="@{|/admin/notice/${notice.noticeId}|}" class="notice_link">
+                <a th:href="@{|/settings/notice/${notice.noticeId}|}" class="notice_link">
                     <div class="item">
                         <div th:text="${notice.title}" class="title">정기 업로드 예정</div>
                         <div class="context_text">
