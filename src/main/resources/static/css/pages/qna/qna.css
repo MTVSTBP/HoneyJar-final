@@ -16,6 +16,9 @@
 
 .qna_category {
     margin-top: 3rem;
+    display: flex;
+    overflow: auto;
+    scrollbar-width: none;
 }
 
 .qna_category ul {
@@ -60,9 +63,9 @@
 .qna_item .answer {
     display: none;
     font-size: 0.8rem;
-    color : #535353;
+    color: #535353;
     background-color: #FAFAFA;
-    padding:  1rem;
+    padding: 1rem;
     font-weight: 400;
     line-height: 1.5;
 }
