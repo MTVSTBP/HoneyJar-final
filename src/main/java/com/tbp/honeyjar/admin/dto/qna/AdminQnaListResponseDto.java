@@ -3,7 +3,7 @@ package com.tbp.honeyjar.admin.dto.qna;
 import lombok.Data;
 
 @Data
-public class QnaListResponseDto {
+public class AdminQnaListResponseDto {
 
     private Long id;
     private String title;
