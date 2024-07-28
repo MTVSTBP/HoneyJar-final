@@ -23,6 +23,15 @@
         <result property="content" column="content"/>
     </resultMap>
 
+    <resultMap id="inquriyResultMap" type="com.tbp.honeyjar.inquiry.dto.InquiryCommentDTO">
+        <id property="commentId" column="comment_id"/>
+        <result property="comment" column="comment"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="inquiryId" column="inquiry_id"/>
+        <result property="userId" column="user_id"/>
+    </resultMap>
+
     <!-- 댓글 조회 -->
     <select id="findAllCommentListById" resultMap="commentListResultMap" >
         SELECT DISTINCT
@@ -99,4 +108,29 @@
                 POST_ID = #{ post_id }
     </update>
 
+    <!-- inquiry 댓글 조회 -->
+    <select id="getCommentListInquiryId" parameterType="java.lang.Long" resultMap="inquriyResultMap">
+        SELECT
+                *
+        FROM
+                INQUIRY_COMMENT
+        WHERE
+                INQUIRY_ID = #{ inquiryId }
+    </select>
+
+    <!-- inquiry 댓글 등록 -->
+    <insert id="insertInquiryComment" parameterType="com.tbp.honeyjar.inquiry.dto.CreateInquiryCommentDTO">
+        INSERT INTO inquiry_comment
+        (
+                comment
+              , inquiry_id
+              , user_id
+        )
+        VALUES
+        (
+                #{comment}
+              , #{inquiryId}
+              , #{userId}
+        )
+    </insert>
 </mapper>
