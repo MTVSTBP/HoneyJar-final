@@ -1,10 +1,11 @@
 package com.tbp.honeyjar.admin.service;
 
-import com.tbp.honeyjar.admin.dao.NoticeMapper;
+import com.tbp.honeyjar.admin.dao.AdminNoticeMapper;
 import com.tbp.honeyjar.admin.dto.notice.NoticeCorrectionRequestDto;
-import com.tbp.honeyjar.admin.dto.notice.NoticeListResponseDto;
-import com.tbp.honeyjar.admin.dto.notice.NoticeResponseDto;
+import com.tbp.honeyjar.admin.dto.notice.AdminNoticeListResponseDto;
+import com.tbp.honeyjar.admin.dto.notice.AdminNoticeResponseDto;
 import com.tbp.honeyjar.admin.dto.notice.NoticeSaveRequestDto;
+import com.tbp.honeyjar.notice.dto.NoticeListResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -19,9 +20,9 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Service
 @Transactional
-public class NoticeService {
+public class AdminNoticeService {
 
-    private final NoticeMapper noticeMapper;
+    private final AdminNoticeMapper adminNoticeMapper;
 
     //    @Transactional(readOnly = true)
 //    public List<NoticeListResponseDto> findAllNotices(Pageable pageable) {
@@ -31,31 +32,31 @@ public class NoticeService {
 //        return noticeMapper.findAllNotices();
 //    }
     @Transactional(readOnly = true)
-    public Page<NoticeListResponseDto> findAllNotices(Pageable pageable) {
-        int totalPageCount = noticeMapper.getNoticeCount();
+    public Page<AdminNoticeListResponseDto> findAllNotices(Pageable pageable) {
+        int totalPageCount = adminNoticeMapper.getNoticeCount();
 
         Map<String, Object> params = new HashMap<>();
 
         params.put("offset", pageable.getOffset());
         params.put("pageSize", pageable.getPageSize());
-        List<NoticeListResponseDto> notices = noticeMapper.findAllNotices(params);
+        List<AdminNoticeListResponseDto> notices = adminNoticeMapper.findAllNotices(params);
         return new PageImpl<>(notices, pageable, totalPageCount);
     }
 
     @Transactional(readOnly = true)
-    public NoticeResponseDto findById(Long id) {
-        return noticeMapper.findById(id);
+    public AdminNoticeResponseDto findById(Long id) {
+        return adminNoticeMapper.findById(id);
     }
 
     public Long save(NoticeSaveRequestDto requestDto) {
-        return noticeMapper.save(requestDto);
+        return adminNoticeMapper.save(requestDto);
     }
 
     public Long delete(Long postId) {
-        return noticeMapper.delete(postId);
+        return adminNoticeMapper.delete(postId);
     }
 
     public Long correction(NoticeCorrectionRequestDto requestDto) {
-        return noticeMapper.correction(requestDto);
+        return adminNoticeMapper.correction(requestDto);
     }
 }

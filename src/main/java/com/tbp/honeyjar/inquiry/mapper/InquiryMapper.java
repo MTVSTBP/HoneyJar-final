@@ -18,7 +18,6 @@ public interface InquiryMapper {
     /* for count total-number of pages */
     int getInquiryCountByUserId(@Param("userId") Long userId);
 
-
     /* Find ALL Inquiry List for user */
     List<InquiryDto> getInquiryListByUserId(Long userId);
 

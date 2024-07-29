@@ -1,4 +1,4 @@
-package com.tbp.honeyjar.admin.dto.notice;
+package com.tbp.honeyjar.notice.dto;
 
 import lombok.Data;
 

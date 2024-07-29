@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tbp.honeyjar.qna.dao.QnaMapper">
+
+    <resultMap id="qnaListResultMap" type="com.tbp.honeyjar.qna.dto.QnaListResponseDto">
+        <id property="id" column="qna_id"/>
+        <result property="title" column="title"/>
+        <result property="post" column="post"/>
+        <result property="categoryId" column="category_id"/>
+    </resultMap>
+
+    <select id="findAllQna" resultMap="qnaListResultMap">
+        select
+        qna_id,
+        title,
+        post,
+        category_id
+        from qna
+        order by qna_id
+    </select>
+
+</mapper>

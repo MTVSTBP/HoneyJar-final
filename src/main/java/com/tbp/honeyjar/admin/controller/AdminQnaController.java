@@ -2,11 +2,11 @@ package com.tbp.honeyjar.admin.controller;
 
 import com.tbp.honeyjar.admin.dto.category.QnaCategoryListResponseDto;
 import com.tbp.honeyjar.admin.dto.qna.QnaCorrectionRequestDto;
-import com.tbp.honeyjar.admin.dto.qna.QnaListResponseDto;
+import com.tbp.honeyjar.admin.dto.qna.AdminQnaListResponseDto;
 import com.tbp.honeyjar.admin.dto.qna.QnaResponseDto;
 import com.tbp.honeyjar.admin.dto.qna.QnaSaveRequestDto;
 import com.tbp.honeyjar.admin.service.CategoryService;
-import com.tbp.honeyjar.admin.service.QnaService;
+import com.tbp.honeyjar.admin.service.AdminQnaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,13 +22,13 @@ import java.util.List;
 @RequestMapping("/admin/qna")
 public class AdminQnaController {
 
-    private final QnaService qnaService;
+    private final AdminQnaService adminQnaService;
     private final CategoryService categoryService;
 
     @GetMapping
     public String qna(Model model) {
 
-        List<QnaListResponseDto> qnaList = qnaService.findAllQna();
+        List<AdminQnaListResponseDto> qnaList = adminQnaService.findAllQna();
         List<QnaCategoryListResponseDto> qnaCategory = categoryService.findAllQnaCategory();
 
         model.addAttribute("qnaList", qnaList);
@@ -52,7 +52,7 @@ public class AdminQnaController {
 
         requestDto.setUserId(1L);
 
-        qnaService.save(requestDto);
+        adminQnaService.save(requestDto);
 
         return "redirect:/admin/qna";
     }
@@ -60,7 +60,7 @@ public class AdminQnaController {
     @GetMapping("/correction/{qna_id}")
     public String qnaCorrection(@PathVariable Long qna_id, Model model) {
 
-        QnaResponseDto dto = qnaService.findById(qna_id);
+        QnaResponseDto dto = adminQnaService.findById(qna_id);
         List<QnaCategoryListResponseDto> qnaCategory = categoryService.findAllQnaCategory();
 
         if (dto != null) {
@@ -74,11 +74,11 @@ public class AdminQnaController {
     @PostMapping("/correction/{qna_id}")
     public String qnaCorrection(@PathVariable Long qna_id, QnaCorrectionRequestDto requestDto) {
 
-        QnaResponseDto qna = qnaService.findById(qna_id);
+        QnaResponseDto qna = adminQnaService.findById(qna_id);
 
         if (qna != null) {
             requestDto.setId(qna.getId());
-            qnaService.correction(requestDto);
+            adminQnaService.correction(requestDto);
         }
 
         return "redirect:/admin/qna";
@@ -87,10 +87,10 @@ public class AdminQnaController {
     @GetMapping("/delete/{qna_id}")
     public String delete(@PathVariable Long qna_id) {
 
-        QnaResponseDto qna = qnaService.findById(qna_id);
+        QnaResponseDto qna = adminQnaService.findById(qna_id);
 
         if (qna != null) {
-            qnaService.delete(qna_id);
+            adminQnaService.delete(qna_id);
         }
 
         return "redirect:/admin/qna";
