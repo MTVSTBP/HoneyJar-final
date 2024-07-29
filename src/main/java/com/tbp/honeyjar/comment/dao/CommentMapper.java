@@ -4,6 +4,8 @@ import com.tbp.honeyjar.comment.dto.CommentListDTO;
 import com.tbp.honeyjar.comment.dto.CommentModifyDTO;
 import com.tbp.honeyjar.comment.dto.CommentRegistDTO;
 import com.tbp.honeyjar.comment.dto.CommentRequestDTO;
+import com.tbp.honeyjar.inquiry.dto.CreateInquiryCommentDTO;
+import com.tbp.honeyjar.inquiry.dto.InquiryCommentDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -24,4 +26,8 @@ public interface CommentMapper {
     void softDeleteComment(Long postId);
 
     List<CommentListDTO> findAllCommentListById(Long postId);
+
+    List<InquiryCommentDTO> getCommentListInquiryId(Long inquiryId);
+
+    int insertInquiryComment(CreateInquiryCommentDTO createInquiryCommentDTO);
 }

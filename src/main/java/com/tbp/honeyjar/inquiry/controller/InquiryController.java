@@ -2,9 +2,8 @@ package com.tbp.honeyjar.inquiry.controller;
 
 import com.tbp.honeyjar.admin.dto.category.QnaCategoryListResponseDto;
 import com.tbp.honeyjar.admin.service.CategoryService;
-import com.tbp.honeyjar.inquiry.dto.InquiryDto;
-import com.tbp.honeyjar.inquiry.dto.InquiryWriteDto;
-import com.tbp.honeyjar.inquiry.dto.InquiryUpdateDto;
+import com.tbp.honeyjar.comment.service.CommentService;
+import com.tbp.honeyjar.inquiry.dto.*;
 import com.tbp.honeyjar.inquiry.service.InquiryService;
 import com.tbp.honeyjar.login.entity.user.User;
 import com.tbp.honeyjar.login.service.user.UserService;
@@ -16,7 +15,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/settings/inquiry")
@@ -24,11 +25,13 @@ public class InquiryController {
     private InquiryService inquiryService;
     private UserService userService;
     private CategoryService categoryService;
+    private CommentService commentService;
 
-    public InquiryController(InquiryService inquiryService, UserService userService, CategoryService categoryService) {
+    public InquiryController(InquiryService inquiryService, UserService userService, CategoryService categoryService, CommentService commentService) {
         this.inquiryService = inquiryService;
         this.userService = userService;
         this.categoryService = categoryService;
+        this.commentService = commentService;
     }
 
     @GetMapping
@@ -52,7 +55,6 @@ public class InquiryController {
         return (page > inquiryPage.getTotalPages()) ?
                 "redirect:settings/inquiry?page=" + page :
                 "pages/inquiry/inquiry";
-
     }
 
     @GetMapping("/write")
@@ -81,11 +83,12 @@ public class InquiryController {
     }
 
     //principl 을 사용하여 id찾기
-    //
     @GetMapping("/detail/{inquiryId}")
     public String getInquiryDetail(@PathVariable Long inquiryId,
                                    @RequestParam(value = "page", defaultValue = "1") int page,
                                    Model model, Principal principal) {
+        List<InquiryCommentDTO> inquiryCommentList = commentService.getCommentListInquiryId(inquiryId);
+
         String kakaoId = principal.getName();
         User userInfo = inquiryService.findByKakaoId(kakaoId);
         InquiryDto inquiry = inquiryService.getInquiryById(inquiryId);
@@ -93,12 +96,40 @@ public class InquiryController {
         if (!inquiry.getUserId().equals(userInfo.getUserId())) {
             return "redirect:/settings/inquiry";
         }
+
+        model.addAttribute("comments", inquiryCommentList);
         model.addAttribute("inquiry", inquiry);
         model.addAttribute("username", userInfo.getName());
         model.addAttribute("page", page);
         model.addAttribute("categoryName", categoryService.findQnaById(inquiry.getCategoryId()).getName());
         return "pages/inquiry/inquiryDetail";
     }
+
+//    @PostMapping("/comment/{inquiryId}")
+//    public String inquiryRegistComment(@ModelAttribute CreateInquiryCommentDTO createInquiryCommentDTO, )
+
+    @PostMapping("/comment")
+    @ResponseBody
+    public Map<String, Object> submitComment(@RequestBody CreateInquiryCommentDTO createInquiryCommentDTO, Principal principal) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            String kakaoId = principal.getName();
+            User userInfo = inquiryService.findByKakaoId(kakaoId);
+
+            // Validate user
+            if (!userInfo.getUserId().equals(createInquiryCommentDTO.getUserId())) {
+                response.put("success", false);
+                return response;
+            }
+
+            commentService.inquiryCreateComment(createInquiryCommentDTO);
+            response.put("success", true);
+        } catch (Exception e) {
+            response.put("success", false);
+        }
+        return response;
+    }
+
 
     @GetMapping("/correction/{inquiryId}")
     public String inquiryCorrection(@PathVariable Long inquiryId, Model model, Principal principal) {

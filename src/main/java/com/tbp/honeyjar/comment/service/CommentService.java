@@ -5,6 +5,8 @@ import com.tbp.honeyjar.comment.dto.CommentListDTO;
 import com.tbp.honeyjar.comment.dto.CommentModifyDTO;
 import com.tbp.honeyjar.comment.dto.CommentRegistDTO;
 import com.tbp.honeyjar.comment.dto.CommentRequestDTO;
+import com.tbp.honeyjar.inquiry.dto.CreateInquiryCommentDTO;
+import com.tbp.honeyjar.inquiry.dto.InquiryCommentDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.stereotype.Service;
@@ -41,7 +43,14 @@ public class CommentService {
         commentMapper.softDeleteComment(postId);
     }
 
+    public List<InquiryCommentDTO> getCommentListInquiryId(Long inquiryId) {
+        return commentMapper.getCommentListInquiryId(inquiryId);
+    }
     public List<CommentListDTO> findAllCommentListById(Long postId) {
         return commentMapper.findAllCommentListById(postId);
+    }
+
+    public int inquiryCreateComment(CreateInquiryCommentDTO createInquiryCommentDTO) {
+        return commentMapper.insertInquiryComment(createInquiryCommentDTO);
     }
 }
