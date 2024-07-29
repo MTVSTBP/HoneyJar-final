@@ -1,0 +1,19 @@
+<div id="container" th:fragment="followerComponent(follows)" th:each="follow : ${follows.followers}">
+    <div id="top_container">
+        <div id="leftContainer">
+            <div>
+                <img id="profile"
+                     th:src="${follow.profileImage != null ? follow.profileImage : '/assets/svg/base_profile.svg'}"/>
+            </div>
+            <div id="text" th:text="${follow.name}"></div>
+        </div>
+        <div id="rightContainer">
+            <div>
+                <button class="decline" th:attr="data-user-id=${follow.userId}" onclick="unfollow(this)">팔로워 삭제</button>
+            </div>
+        </div>
+    </div>
+    <div id="border">
+        <hr/>
+    </div>
+</div>

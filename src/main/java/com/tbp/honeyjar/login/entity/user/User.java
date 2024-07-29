@@ -15,6 +15,7 @@ public class User {
     private String kakaoId;
     private String pr;
     private String name; // 닉네임(?)
+    private String profileImage;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private LocalDate firedAt;

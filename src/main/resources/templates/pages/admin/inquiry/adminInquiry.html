@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/admindefaultLayout}"
+      layout:fragment="content"
+      th:with="pageTitle='1:1문의'">
+<head>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/inquiry/inquiry.css}"/>
+    <th:block layout:fragment="title">
+        <title th:text="${pageTitle}">1:1문의</title>
+    </th:block>
+</head>
+<body>
+<div id="inquiry_container">
+    <div class="inquiry_sub_title">
+        <h4>1:1 문의</h4>
+    </div>
+    <div class="inquiry">
+        <div th:each="inquiry : ${inquiryList}" class="list">
+            <li>
+                <a th:href="@{'/admin/inquiry/detail/' + ${inquiry.id} + '?page=' + ${page}}">
+                    <div class="item">
+                        <div class="title" th:text="${inquiry.title}">Title</div>
+                        <div class="context_text">
+                            <p class="context" th:text="${inquiry.post}">Content</p>
+                            <span th:text="${#temporals.format(inquiry.createdAt, 'yyyy.MM.dd')}">Created At</span>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            </ul>
+        </div>
+        <div class="pagination">
+            <button th:disabled="${page == 1}" th:onclick="|changePage(1)|">처음</button>
+            <button th:disabled="${page == 1}" th:onclick="|changePage(${page - 1})|">이전</button>
+            <span th:text="'Page ' + ${page} + ' of ' + ${totalPages}">Page 1 of 1</span>
+            <button th:disabled="${page == totalPages}" th:onclick="|changePage(${page + 1})|">다음</button>
+            <button th:disabled="${page == totalPages}" th:onclick="|changePage(${totalPages})|">마지막</button>
+        </div>
+    </div>
+    <script th:inline="javascript" type="text/javascript" th:src="@{/js/pages/admin/inquiry/adminInquiry.js}"></script>
+    <script th:inline="javascript">
+        page = page < 1 ? 1 : page;
+        page = [[${page}]] > totalPages ? totalPages : [[${page}]];
+        totalPages = [[${totalPages}]];
+
+        function changePage(page) {
+            const params = new URLSearchParams(window.location.search);
+            params.set('page', page);
+            window.location.search = params.toString();
+            if (page < 1) {
+                page = 1;
+                firstPageButton.disabled = true;
+                prevPageButton.disabled = true;
+            } else {
+                firstPageButton.disabled = false;
+                prevPageButton.disabled = false;
+            }
+
+            if (page > totalPages) {
+                page = totalPages;
+                nextPageButton.disabled = true;
+                lastPageButton.disabled = true;
+            } else {
+                nextPageButton.disabled = false;
+                lastPageButton.disabled = false;
+
+            }
+            location.href = '/admin/inquiry?page=' + page;
+        }
+
+    </script>
+</body>
+</html>

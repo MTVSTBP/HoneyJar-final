@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tbp.honeyjar.comment.dao.CommentMapper">
+<!--    private Long commentId; //
+    private String comment; //
+    private String updatedAt;
+    private String userName;
+    private String url; // DB 컬럼 추가후 수정예정-->
+    <resultMap id="commentListResultMap" type="com.tbp.honeyjar.comment.dto.CommentListDTO">
+        <id property="commentId" column="comment_id"/>
+        <!--        <result property="profileImg" column=""/>-->
+        <result property="userId" column="user_id"/>
+        <result property="postId" column="post_id"/>
+        <result property="comment" column="comment"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="userName" column="name"/>
+    </resultMap>
+
+    <resultMap id="commentResultMap" type="com.tbp.honeyjar.comment.dto.CommentRequestDTO">
+        <id property="commentId" column="comment_id"/>
+        <result property="content" column="content"/>
+    </resultMap>
+
+    <resultMap id="inquriyResultMap" type="com.tbp.honeyjar.inquiry.dto.InquiryCommentDTO">
+        <id property="commentId" column="comment_id"/>
+        <result property="comment" column="comment"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+        <result property="inquiryId" column="inquiry_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
+    <!-- 댓글 조회 -->
+    <select id="findAllCommentListById" resultMap="commentListResultMap" >
+        SELECT DISTINCT
+                C.COMMENT_ID
+              , C.COMMENT
+              , C.CREATED_AT
+              , U.NAME
+              , U.user_id
+        FROM
+                COMMENT AS C
+        JOIN
+                USER AS U ON C.USER_ID = U.USER_ID
+        LEFT JOIN
+                IMAGE AS I ON C.USER_ID = I.USER_ID AND I.POST_ID IS NULL
+        WHERE
+                C.POST_ID = #{ postId }
+        ORDER BY
+                C.CREATED_AT desc;
+    </select>
+
+    <!-- 댓글 등록 -->
+    <insert id="registComment" parameterType="com.tbp.honeyjar.comment.dto.CommentRegistDTO" keyProperty="postId">
+        INSERT INTO COMMENT
+        (
+                COMMENT
+              , USER_ID
+              , POST_ID
+        )
+        VALUES
+        (
+                #{ comment }
+              , #{ userId }
+              , #{ postId }
+        )
+    </insert>
+
+    <!-- comment_id, user_id 기반 -->
+    <select id="commentListResultMap" resultMap="commentResultMap">
+        SELECT
+                COMMENT_ID
+              , COMMENT
+              , USER_ID
+        FROM
+                COMMENT
+        WHERE
+                COMMENT_ID = #{ commentId }
+            AND
+                USER_ID = #{ user_id }
+    </select>
+
+    <!-- 댓글 수정 -->
+    <update id="modifyComment" parameterType="com.tbp.honeyjar.comment.dto.CommentModifyDTO">
+        UPDATE COMMENT
+        SET
+                COMMENT = #{ comment }
+        WHERE
+                COMMENT_ID = #{ commentId }
+    </update>
+
+    <!-- 댓글 삭제 -->
+    <delete id="deleteCommentById" parameterType="java.lang.Long">
+        DELETE FROM COMMENT
+        WHERE
+                COMMENT_ID = #{ commentId }
+    </delete>
+
+    <!-- 코멘트 소프트 삭제 쿼리-->
+    <update id="softDeleteComment">
+        UPDATE
+                COMMENT
+        SET
+                DELETED = TRUE
+        WHERE
+                POST_ID = #{ post_id }
+    </update>
+
+    <!-- inquiry 댓글 조회 -->
+    <select id="getCommentListInquiryId" parameterType="java.lang.Long" resultMap="inquriyResultMap">
+        SELECT
+                c.comment_id,
+                c.comment,
+                c.created_at,
+                c.updated_at,
+                c.inquiry_id,
+                c.user_id,
+                u.name AS name
+        FROM
+                INQUIRY_COMMENT c
+        JOIN
+                USER u ON c.user_id = u.user_id
+        WHERE
+                c.inquiry_id = #{inquiryId}
+    </select>
+
+    <!-- inquiry 댓글 등록 -->
+    <insert id="insertInquiryComment" parameterType="com.tbp.honeyjar.inquiry.dto.CreateInquiryCommentDTO">
+        INSERT INTO inquiry_comment
+        (
+                comment
+              , inquiry_id
+              , user_id
+        )
+        VALUES
+        (
+                #{comment}
+              , #{inquiryId}
+              , #{userId}
+        )
+    </insert>
+</mapper>

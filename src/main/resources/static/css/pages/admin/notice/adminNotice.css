@@ -8,6 +8,7 @@ a {
     width: 95%;
     position: relative;
     margin: 0 auto;
+    padding-bottom: 5rem;
 }
 
 .sub_title {
@@ -195,4 +196,37 @@ a {
     justify-content: center;
     margin-top: 2rem;
     border:none;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem 0;
+    gap: 0.5rem;
+    padding-bottom: 2rem;
+}
+
+.pagination button {
+    background-color: #FF8243;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination button:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+
+.pagination button:not(:disabled):hover {
+    background-color: #e6732f;
+}
+
+.pagination span {
+    font-size: 1rem;
+    color: #737373;
 }

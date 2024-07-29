@@ -10,6 +10,7 @@ import com.tbp.honeyjar.login.mapper.admin.AdminMapper;
 import com.tbp.honeyjar.login.oauth.entity.RoleType;
 import com.tbp.honeyjar.login.oauth.token.AuthToken;
 import com.tbp.honeyjar.login.oauth.token.AuthTokenProvider;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.tbp.honeyjar.login.common.ApiResponse.*;
 import static com.tbp.honeyjar.login.common.HeaderUtil.*;
 
 @Slf4j
@@ -38,67 +38,53 @@ public class AdminAuthController extends AbstractAuthController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login")
     public ResponseEntity<ApiResponse<String>> adminLogin(
             @RequestBody AdminAuthenticationDTO adminAuthenticationDTO,
+            HttpServletRequest request,
             HttpServletResponse response
     ) {
         log.debug("Attempting admin login for email: {}", adminAuthenticationDTO.getEmail());
 
         Admin admin = adminMapper.findByEmail(adminAuthenticationDTO.getEmail());
 
-        if (admin != null) {
-            log.debug("Admin found: {}", admin);
+        if (admin != null && passwordEncoder.matches(adminAuthenticationDTO.getPassword(), admin.getPassword())) {
+            // 로그인 성공 시, 액세스 토큰 및 리프레시 토큰 생성 및 반환
+            Date now = new Date();
+            AuthToken accessToken = tokenProvider.createAuthToken(
+                    admin.getAdminId().toString(), // 관리자 ID를 이용하여 토큰 생성
+                    RoleType.ADMIN.getCode(),
+                    new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
+            );
 
-            if (passwordEncoder.matches(adminAuthenticationDTO.getPassword(), admin.getPassword())) {
-                log.debug("Password matched for admin: {}", admin.getEmail());
+            log.info("Created access token for admin: {}", accessToken.getToken());
 
-                if (admin.getAdminId() == null) {
-                    log.error("Admin found but adminId is null for email: {}", admin.getEmail());
-                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                            .body(new ApiResponse<>(ApiResponse.INTERNAL_SERVER_ERROR_CODE, "Internal server error", null));
-                }
+            long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
+            AuthToken refreshToken = tokenProvider.createAuthToken(
+                    appProperties.getAuth().getTokenSecret(),
+                    new Date(now.getTime() + refreshTokenExpiry)
+            );
 
-                Date now = new Date();
-                AuthToken accessToken = tokenProvider.createAuthToken(
-                        admin.getAdminId().toString(),
-                        RoleType.ADMIN.getCode(),
-                        new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
-                );
+            log.debug("Created refresh token for admin");
 
-                log.info("Created access token for admin: {}", accessToken.getToken());
+            int accessTokenMaxAge = (int) appProperties.getAuth().getTokenExpiry() / 1000;
+            CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), accessTokenMaxAge);
 
-                long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
-                AuthToken refreshToken = tokenProvider.createAuthToken(
-                        appProperties.getAuth().getTokenSecret(),
-                        new Date(now.getTime() + refreshTokenExpiry)
-                );
+            int refreshTokenMaxAge = (int) refreshTokenExpiry / 1000;
+            CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), refreshTokenMaxAge);
 
-                log.debug("Created refresh token for admin");
+            log.debug("Added access and refresh tokens to cookies");
 
-                int accessTokenMaxAge = (int) appProperties.getAuth().getTokenExpiry() / 1000;
-                CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), accessTokenMaxAge);
+            // 세션에 관리자 상태 저장
+            request.getSession().setAttribute("isAdmin", true);
 
-                int refreshTokenMaxAge = (int) refreshTokenExpiry / 1000;
-                CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), refreshTokenMaxAge);
+            Map<String, String> resultMap = new HashMap<>();
+            resultMap.put(TOKEN_NAME, accessToken.getToken());
+            resultMap.put("redirectUrl", "/admin/settings");
 
-                log.debug("Added access and refresh tokens to cookies");
-
-                Map<String, String> resultMap = new HashMap<>();
-                resultMap.put(TOKEN_NAME, accessToken.getToken());
-                resultMap.put("redirectUrl", "/admin");
-
-                log.info("Admin login successful for email: {}", admin.getEmail());
-                return ResponseEntity.ok(new ApiResponse<>(SUCCESS_CODE, "Login Successful", resultMap));
-            } else {
-                log.debug("Password does not match for admin: {}", admin.getEmail());
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(new ApiResponse<>(UNAUTHORIZED_CODE, "아이디 또는 비밀번호가 잘못되었습니다.", null));
-            }
+            return ResponseEntity.ok(new ApiResponse<>(ApiResponse.SUCCESS_CODE, "Login Successful", resultMap));
         } else {
-            log.debug("No admin found for email: {}", adminAuthenticationDTO.getEmail());
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new ApiResponse<>(UNAUTHORIZED_CODE, "아이디 또는 비밀번호가 잘못되었습니다.", null));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse<>(ApiResponse.UNAUTHORIZED_CODE, "아이디 또는 비밀번호가 잘못되었습니다.", null));
         }
     }
 }

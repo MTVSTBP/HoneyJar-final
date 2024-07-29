@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -40,9 +39,6 @@ public class AdminCategoryController {
     @PostMapping("/write/food")
     public String writeFoodCategory(FoodCategorySaveRequestDto requestDto) {
 
-        requestDto.setCreatedAt(LocalDateTime.now());
-        requestDto.setUpdatedAt(LocalDateTime.now());
-
         categoryService.saveFoodCategory(requestDto);
 
         return "redirect:/admin/category";
@@ -55,9 +51,6 @@ public class AdminCategoryController {
 
     @PostMapping("/write/qna")
     public String writeQnaCategory(QnaCategorySaveRequestDto requestDto) {
-
-        requestDto.setCreatedAt(LocalDateTime.now());
-        requestDto.setUpdatedAt(LocalDateTime.now());
 
         categoryService.saveQnaCategory(requestDto);
 
@@ -80,7 +73,6 @@ public class AdminCategoryController {
         FoodResponseDto food = categoryService.findFoodById(id);
 
         if (food != null) {
-            requestDto.setUpdatedAt(LocalDateTime.now());
             requestDto.setId(food.getId());
             categoryService.correctionFoodCategory(requestDto);
         }
@@ -104,7 +96,6 @@ public class AdminCategoryController {
         FoodResponseDto food = categoryService.findFoodById(id);
 
         if (food != null) {
-            requestDto.setUpdatedAt(LocalDateTime.now());
             requestDto.setId(food.getId());
             categoryService.correctionQnaCategory(requestDto);
         }
@@ -114,6 +105,7 @@ public class AdminCategoryController {
 
     @GetMapping("/delete/food/{id}")
     public String deleteFoodCategory(@PathVariable Long id) {
+
         FoodResponseDto food = categoryService.findFoodById(id);
 
         if (food != null) {
@@ -125,6 +117,7 @@ public class AdminCategoryController {
 
     @GetMapping("/delete/qna/{id}")
     public String deleteQnaCategory(@PathVariable Long id) {
+        
         QnaResponseDto qna = categoryService.findQnaById(id);
 
         if (qna != null) {

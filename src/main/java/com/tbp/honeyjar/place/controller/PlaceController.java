@@ -25,6 +25,21 @@ public class PlaceController {
     @GetMapping("/{placeId}")
     public ResponseEntity<PlaceDTO> getPlaceById(@PathVariable Long placeId) {
         PlaceDTO place = placeService.getPlaceById(placeId);
+        float rating = placeService.getRatingById(placeId);
+        place.setRatingAvg(rating);
         return ResponseEntity.ok(place);
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<?> updatePlace(@ModelAttribute PlaceDTO placeDTO) {
+        System.out.println("Received PlaceDTO for update: " + placeDTO);
+        placeService.updatePlace(placeDTO);
+        return ResponseEntity.ok("Place updated successfully");
+    }
+
+    @DeleteMapping("/delete/{placeId}")
+    public ResponseEntity<Void> deletePlace(@PathVariable Long placeId) {
+        placeService.deletePlace(placeId);
+        return ResponseEntity.ok().build();
     }
 }

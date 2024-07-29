@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.tbp.honeyjar.follow.dao.FollowMapper">
+
+    <resultMap id="FollowDTOMap" type="com.tbp.honeyjar.follow.DTO.FollowDTO">
+        <id property="userId" column="user_id"/>
+        <result property="name" column="name"/>
+    </resultMap>
+
+    <select id="getFollower" resultMap="FollowDTOMap">
+        SELECT
+        u.user_id AS user_id,
+        u.name AS name
+        FROM
+        follow f
+        JOIN
+        user u ON f.follower_id = u.user_id
+        LEFT JOIN
+        image i ON i.user_id = f.follower_id AND i.post_id IS NULL
+        WHERE
+        f.followee_id = #{userId}
+    </select>
+
+    <!-- 추가   -->
+    <select id="getFollowing" resultMap="FollowDTOMap">
+        SELECT
+        u.user_id AS user_id,
+        u.name AS name
+        FROM
+        follow f
+        JOIN
+        user u ON f.followee_id = u.user_id
+        WHERE
+        f.follower_id = #{userId}
+    </select>
+
+    <insert id="insertFollow">
+        INSERT INTO follow (follower_id, followee_id, request_status)
+        VALUES (#{userId}, #{followUserId}, false)
+    </insert>
+
+    <delete id="deleteFollow">
+        DELETE FROM follow
+        WHERE followee_id = #{userId} AND follower_id = #{followUserId}
+    </delete>
+
+    <select id="isFollowing" resultType="boolean">
+        SELECT COUNT(*) > 0
+        FROM follow
+        WHERE follower_id = #{userId} AND followee_id = #{targetUserId}
+    </select>
+
+
+</mapper>

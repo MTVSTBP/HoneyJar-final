@@ -14,6 +14,42 @@ import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 
+//@Configuration
+//public class FirebaseConfig {
+//
+//    @Value("${app.firebase-configuration-file}")
+//    private String firebaseConfigPath;
+//
+//    @Value("${app.firebase-bucket}")
+//    private String firebaseBucket;
+//
+//    @Bean
+//    public FirebaseApp firebaseApp() throws IOException {
+//        // Use ClassPathResource to load the file from the classpath
+//        ClassPathResource serviceAccount = new ClassPathResource(firebaseConfigPath);
+//
+//        FirebaseOptions options = FirebaseOptions.builder()
+//                .setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream()))
+//                .setStorageBucket(firebaseBucket)
+//                .build();
+//
+//        FirebaseApp app = FirebaseApp.initializeApp(options);
+//
+//        return app;
+//    }
+//
+//    @Bean
+//    public FirebaseAuth firebaseAuth() throws IOException {
+//        return FirebaseAuth.getInstance(firebaseApp());
+//    }
+//
+//    @Bean
+//    public Bucket bucket() throws IOException {
+//        return StorageClient.getInstance(firebaseApp()).bucket();
+//    }
+//}
+
+
 @Configuration
 public class FirebaseConfig {
 
@@ -25,26 +61,26 @@ public class FirebaseConfig {
 
     @Bean
     public FirebaseApp firebaseApp() throws IOException {
-        // Use ClassPathResource to load the file from the classpath
-        ClassPathResource serviceAccount = new ClassPathResource(firebaseConfigPath);
+        if (FirebaseApp.getApps().isEmpty()) {
+            ClassPathResource serviceAccount = new ClassPathResource(firebaseConfigPath);
 
-        FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream()))
-                .setStorageBucket(firebaseBucket)
-                .build();
+            FirebaseOptions options = FirebaseOptions.builder()
+                    .setCredentials(GoogleCredentials.fromStream(serviceAccount.getInputStream()))
+                    .setStorageBucket(firebaseBucket)
+                    .build();
 
-        FirebaseApp app = FirebaseApp.initializeApp(options);
-
-        return app;
+            return FirebaseApp.initializeApp(options);
+        }
+        return FirebaseApp.getInstance();
     }
 
     @Bean
-    public FirebaseAuth firebaseAuth() throws IOException {
-        return FirebaseAuth.getInstance(firebaseApp());
+    public FirebaseAuth firebaseAuth(FirebaseApp firebaseApp) {
+        return FirebaseAuth.getInstance(firebaseApp);
     }
 
     @Bean
-    public Bucket bucket() throws IOException {
-        return StorageClient.getInstance(firebaseApp()).bucket();
+    public Bucket bucket(FirebaseApp firebaseApp) {
+        return StorageClient.getInstance(firebaseApp).bucket();
     }
 }

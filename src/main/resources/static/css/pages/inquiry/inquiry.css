@@ -8,6 +8,7 @@ a {
     width: 95%;
     position: relative;
     margin: 0 auto;
+    padding-bottom: 5rem; /* 하단 내비게이션과 겹치지 않도록 여유 공간 추가 */
 }
 
 .inquiry_sub_title {
@@ -18,6 +19,11 @@ a {
     font-weight: 600;
     justify-content: space-between;
     align-items: center;
+}
+
+.inquiry ul {
+    list-style: none;
+    padding: 0;
 }
 
 .inquiry li {
@@ -64,7 +70,6 @@ a {
 }
 
 .add-button button {
-
     background: none;
     border: none;
     cursor: pointer;
@@ -74,6 +79,39 @@ a {
 
 .add-button svg {
     font-size: 2em;
-    /*width: 22px;
-    height: 22px;*/
+    /* width: 22px;
+    height: 22px; */
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem 0;
+    gap: 0.5rem;
+}
+
+.pagination button {
+    background-color: #FF8243;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination button:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+
+.pagination button:not(:disabled):hover {
+    background-color: #e6732f;
+}
+
+.pagination span {
+    font-size: 1rem;
+    color: #737373;
 }

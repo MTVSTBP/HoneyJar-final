@@ -3,6 +3,7 @@ package com.tbp.honeyjar.login.oauth.service;
 import com.tbp.honeyjar.login.entity.user.User;
 import com.tbp.honeyjar.login.mapper.user.UserMapper;
 import com.tbp.honeyjar.login.oauth.entity.ProviderType;
+import com.tbp.honeyjar.login.oauth.entity.RoleType;
 import com.tbp.honeyjar.login.oauth.entity.user.UserPrincipal;
 import com.tbp.honeyjar.login.oauth.info.OAuth2UserInfo;
 import com.tbp.honeyjar.login.oauth.info.OAuth2UserInfoFactory;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -17,13 +19,17 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserMapper userMapper;
+
+    public CustomOAuth2UserService(UserMapper userMapper) {
+        this.userMapper = userMapper;
+    }
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -40,7 +46,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
     }
 
-    private OAuth2User processOAuth2User(
+    private UserPrincipal processOAuth2User(
             OAuth2UserRequest userRequest,
             OAuth2User oAuth2User
     ) {
@@ -67,7 +73,20 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             user = createUser(userInfo);
         }
 
-        return UserPrincipal.create(user, oAuth2User.getAttributes());
+        // UserPrincipal 생성 시 userId를 name으로 설정
+        UserPrincipal userPrincipal = UserPrincipal.builder()
+                .userId(user.getUserId())
+                .kakaoId(user.getKakaoId())
+                .name(user.getName()) // UserPrincipal의 name 필드에 User의 name 값을 설정
+                .pr(user.getPr())
+                .profileImage(user.getProfileImage())
+                .attributes(oAuth2User.getAttributes())
+                .authorities(Collections.singletonList(new SimpleGrantedAuthority(RoleType.USER.getCode())))
+                .build();
+
+        log.info("Processed user: id={}, kakaoId={}, name={}, profileImage={}", user.getUserId(), user.getKakaoId(), user.getName(), user.getProfileImage());
+        log.info("Created UserPrincipal: id={}, kakaoId={}, name={}, profileImage={}", userPrincipal.getUserId(), userPrincipal.getKakaoId(), userPrincipal.getName(), userPrincipal.getProfileImage());
+        return userPrincipal;
     }
 
     private User createUser(OAuth2UserInfo userInfo) {
@@ -75,6 +94,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .kakaoId(userInfo.getId())
                 .name(userInfo.getName())
                 .pr("자기소개를 입력해 주세요.") // 기본 자기소개(pr) 필드 텍스트
+                .profileImage(userInfo.getImageUrl())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .userStatus(true)

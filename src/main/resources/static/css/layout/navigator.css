@@ -48,6 +48,8 @@ a {
 }
 
 .nav a p {
+    font-family: "Pretendard-Regular";
+    font-size: 10px;
     margin-top: 1rem;
 }
 

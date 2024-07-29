@@ -3,8 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/layout/defaultLayout}"
       layout:fragment="content"
-      th:with="pageTitle='1:1문의'"
->
+      th:with="pageTitle='1:1문의'">
 <head>
     <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/inquiry/inquiry.css}"/>
     <th:block layout:fragment="title">
@@ -16,7 +15,7 @@
     <div class="inquiry_sub_title">
         <h4>1:1 문의</h4>
         <div class="add-button">
-            <button th:onclick="'location.href=\'/settings/inquiry/write?userId=' + ${userId} + '\''">
+            <button onclick="location.href='/settings/inquiry/write'">
                 <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <rect x="9" width="4" height="22" rx="2" fill="#FF8243"/>
                     <rect x="22" y="9" width="4" height="22" rx="2" transform="rotate(90 22 9)" fill="#FF8243"/>
@@ -27,8 +26,8 @@
     <div class="inquiry">
         <div th:each="inquiry : ${inquiryList}" class="list">
             <li>
-                <a th:href="@{'/settings/inquiry/detail/' + ${inquiry.id}}" class="inquiry_link">
-                    <div class="item">
+                <a th:href="@{'/settings/inquiry/detail/' + ${inquiry.id} + '?page=' + ${page}}">
+                <div class="item">
                         <div class="title" th:text="${inquiry.title}">Title</div>
                         <div class="context_text">
                             <p class="context" th:text="${inquiry.post}">Content</p>
@@ -37,9 +36,47 @@
                     </div>
                 </a>
             </li>
+            </ul>
+        </div>
+        <div class="pagination">
+            <button th:disabled="${page == 1}" th:onclick="|changePage(1)|">처음</button>
+            <button th:disabled="${page == 1}" th:onclick="|changePage(${page - 1})|">이전</button>
+            <span th:text="'Page ' + ${page} + ' of ' + ${totalPages}">Page 1 of 1</span>
+            <button th:disabled="${page == totalPages}" th:onclick="|changePage(${page + 1})|">다음</button>
+            <button th:disabled="${page == totalPages}" th:onclick="|changePage(${totalPages})|">마지막</button>
         </div>
     </div>
-</div>
-<script th:inline="javascript" type="text/javascript" th:src="@{/js/pages/inquiry.js}"></script>
+    <script th:inline="javascript" type="text/javascript" th:src="@{/js/pages/inquiry/inquiry.js}"></script>
+    <script th:inline="javascript">
+        page = page < 1 ? 1 : page;
+        page = [[${page}]] > totalPages ? totalPages : [[${page}]];
+        totalPages = [[${totalPages}]];
+
+        function changePage(page) {
+            const params = new URLSearchParams(window.location.search);
+            params.set('page', page);
+            window.location.search = params.toString();
+            if (page < 1) {
+                page = 1;
+                firstPageButton.disabled = true;
+                prevPageButton.disabled = true;
+            } else {
+                firstPageButton.disabled = false;
+                prevPageButton.disabled = false;
+            }
+
+            if (page > totalPages) {
+                page = totalPages;
+                nextPageButton.disabled = true;
+                lastPageButton.disabled = true;
+            } else {
+                nextPageButton.disabled = false;
+                lastPageButton.disabled = false;
+
+            }
+            location.href = '/settings/inquiry?page=' + page;
+        }
+
+    </script>
 </body>
 </html>

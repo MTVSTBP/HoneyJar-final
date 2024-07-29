@@ -1,72 +1,95 @@
 document.addEventListener("DOMContentLoaded", function () {
+    const categoryElement = document.getElementById('category');
+    if (categoryElement) {
+        categoryElement.addEventListener('change', function() {
+            document.getElementById('filterForm').submit();
+        });
+    }
+
     // 슬라이더 이미지 설정
     const container = document.getElementById('container');
-    const kindWrap = container.querySelector('.kind_wrap');
-    const slider = kindWrap.querySelector('.slider');
-    const slideLis = slider.querySelectorAll('li');
-    const moveButton = kindWrap.querySelectorAll('.arrow a');
+    if (container) {
+        const kindWrap = container.querySelector('.kind_wrap');
+        const slider = kindWrap.querySelector('.slider');
+        const slideLis = slider.querySelectorAll('li');
+        const moveButton = kindWrap.querySelectorAll('.arrow a');
 
-    const clone1 = slideLis[0].cloneNode(true);
-    const cloneLast = slideLis[slideLis.length - 1].cloneNode(true);
-    slider.insertBefore(cloneLast, slideLis[0]);
-    slider.appendChild(clone1);
+        if (slideLis.length > 1) {
+            const clone1 = slideLis[0].cloneNode(true);
+            const cloneLast = slideLis[slideLis.length - 1].cloneNode(true);
+            slider.insertBefore(cloneLast, slideLis[0]);
+            slider.appendChild(clone1);
 
-    let currentIdx = 1;
-    let translate = 0;
-    const speedTime = 500;
+            let currentIdx = 1;
+            let translate = 0;
+            const speedTime = 500;
 
-    function setSliderWidth() {
-        const sliderCloneLis = slider.querySelectorAll('li');
-        const liWidth = container.clientWidth;
-        const sliderWidth = liWidth * sliderCloneLis.length;
-        slider.style.width = `${sliderWidth}px`;
-        sliderCloneLis.forEach(li => {
-            li.style.width = `${liWidth}px`;
-        });
-        translate = -liWidth * currentIdx;
-        slider.style.transform = `translateX(${translate}px)`;
-        return liWidth;
-    }
-
-    let liWidth = setSliderWidth();
-
-    moveButton.forEach(button => button.addEventListener('click', moveSlide));
-
-    function move(D) {
-        currentIdx += (-1 * D);
-        translate += liWidth * D;
-        slider.style.transform = `translateX(${translate}px)`;
-        slider.style.transition = `all ${speedTime}ms ease`;
-    }
-
-    function moveSlide(event) {
-        event.preventDefault();
-        if (event.currentTarget.classList.contains('next')) {
-            move(-1);
-            if (currentIdx === slider.querySelectorAll('li').length - 1) {
-                setTimeout(() => {
-                    slider.style.transition = 'none';
-                    currentIdx = 1;
-                    translate = -liWidth;
-                    slider.style.transform = `translateX(${translate}px)`;
-                }, speedTime);
+            function setSliderWidth() {
+                const sliderCloneLis = slider.querySelectorAll('li');
+                const liWidth = container.clientWidth;
+                const sliderWidth = liWidth * sliderCloneLis.length;
+                slider.style.width = `${sliderWidth}px`;
+                sliderCloneLis.forEach(li => {
+                    li.style.width = `${liWidth}px`;
+                });
+                translate = -liWidth * currentIdx;
+                slider.style.transform = `translateX(${translate}px)`;
+                return liWidth;
             }
+
+            let liWidth = setSliderWidth();
+
+            moveButton.forEach(button => button.addEventListener('click', moveSlide));
+
+            function move(D) {
+                currentIdx += (-1 * D);
+                translate += liWidth * D;
+                slider.style.transform = `translateX(${translate}px)`;
+                slider.style.transition = `all ${speedTime}ms ease`;
+            }
+
+            function moveSlide(event) {
+                event.preventDefault();
+                if (event.currentTarget.classList.contains('next')) {
+                    move(-1);
+                    if (currentIdx === slider.querySelectorAll('li').length - 1) {
+                        setTimeout(() => {
+                            slider.style.transition = 'none';
+                            currentIdx = 1;
+                            translate = -liWidth;
+                            slider.style.transform = `translateX(${translate}px)`;
+                        }, speedTime);
+                    }
+                } else {
+                    move(1);
+                    if (currentIdx === 0) {
+                        setTimeout(() => {
+                            slider.style.transition = 'none';
+                            currentIdx = slider.querySelectorAll('li').length - 2;
+                            translate = -(liWidth * currentIdx);
+                            slider.style.transform = `translateX(${translate}px)`;
+                        }, speedTime);
+                    }
+                }
+            }
+
+            window.addEventListener('resize', () => {
+                liWidth = setSliderWidth();
+            });
         } else {
-            move(1);
-            if (currentIdx === 0) {
-                setTimeout(() => {
-                    slider.style.transition = 'none';
-                    currentIdx = slider.querySelectorAll('li').length - 2;
-                    translate = -(liWidth * currentIdx);
-                    slider.style.transform = `translateX(${translate}px)`;
-                }, speedTime);
+            // 이미지가 하나밖에 없는 경우 화살표 숨기기
+            const arrowContainer = container.querySelector('.arrow');
+            if (arrowContainer) {
+                arrowContainer.style.display = 'none';
             }
+
+            const singleSlideWidth = container.clientWidth;
+            slideLis.forEach(li => {
+                li.style.width = `${singleSlideWidth}px`;
+            });
+            slider.style.width = `${singleSlideWidth}px`;
         }
     }
-
-    window.addEventListener('resize', () => {
-        liWidth = setSliderWidth();
-    });
 
     // 공용 모달 설정
     const deleteConfirmModal = document.getElementById('deleteConfirmModal');
@@ -75,6 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const confirmDeleteButton = document.getElementById('confirmDelete');
     const completeDeleteButton = document.getElementById('completeDelete');
     const closeModalButtons = document.querySelectorAll('.close');
+    const confirmCloseButton = document.getElementById('confirmClose');
 
     // 모달 열기
     if (deletePostButton) {
@@ -91,6 +115,13 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
+    // 취소 버튼 클릭 시 모달 닫기
+    if (confirmCloseButton) {
+        confirmCloseButton.addEventListener('click', function () {
+            deleteConfirmModal.style.display = 'none';
+        });
+    }
+
     window.addEventListener('click', function (event) {
         if (event.target === deleteConfirmModal) {
             deleteConfirmModal.style.display = 'none';
@@ -101,20 +132,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 삭제 확인 버튼 클릭 시
     if (confirmDeleteButton) {
-        confirmDeleteButton.addEventListener('click', function () {
-            deleteConfirmModal.style.display = 'none';
-            deleteSuccessModal.style.display = 'block';
+        confirmDeleteButton.addEventListener('click', async function () {
+            // 실제 삭제 작업 수행 (소프트 삭제)
+            try {
+                const response = await fetch(`/post/${postId}`, {
+                    method: 'DELETE',
+                });
 
-            // 삭제 작업을 여기서 수행
-            /*
-            performDeleteAction().then(response => {
-                if (response.success) {
+                if (response.ok) {
+                    deleteConfirmModal.style.display = 'none';
                     deleteSuccessModal.style.display = 'block';
                 } else {
-                    console.error('Deletion failed');
+                    console.error('삭제 실패');
                 }
-            });
-            */
+            } catch (error) {
+                console.error('삭제 오류:', error);
+            }
         });
     }
 
@@ -122,8 +155,8 @@ document.addEventListener("DOMContentLoaded", function () {
     if (completeDeleteButton) {
         completeDeleteButton.addEventListener('click', function () {
             deleteSuccessModal.style.display = 'none';
-            // 페이지를 리다이렉트하거나 필요한 후속 작업을 수행
-            window.location.href = '/src/pages/html/postList.html';
+            // 페이지를 리다이렉트하거나 필요한 후속 작업 수행
+            window.location.href = '/post';
         });
     }
 
@@ -132,23 +165,33 @@ document.addEventListener("DOMContentLoaded", function () {
     const bookmarkImage = document.getElementById("bookmarkImage");
 
     if (bookmarkButton && bookmarkImage) {
-        bookmarkButton.addEventListener("click", function () {
-            const isBookmarked = bookmarkImage.src.includes("bookmark_border.svg");
+        bookmarkButton.addEventListener("click", function (event) {
+            event.preventDefault();
+            const form = document.getElementById("bookmarkForm");
+            const formData = new FormData(form);
+            const isBookmarked = bookmarkButton.getAttribute("data-bookmarked") === "true";
 
-            // AJAX 요청 보내기 (북마크 상태 변경)
-            /*
-            sendBookmarkData(isBookmarked).then(response => {
-                if (response.success) {
-                    // 이미지 업데이트
-                    bookmarkImage.src = isBookmarked ? "/assets/svg/bookmark.svg" : "/assets/svg/bookmark_border.svg";
-                } else {
-                    console.error('Bookmark update failed');
-                }
-            });
-            */
-
-            // 임시로 이미지 업데이트
-            bookmarkImage.src = isBookmarked ? "/assets/svg/bookmark.svg" : "/assets/svg/bookmark_border.svg";
+            fetch(form.action, {
+                method: "POST",
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        if (data.bookmarked) {
+                            bookmarkImage.src = "/assets/svg/bookmark.svg";
+                            bookmarkButton.setAttribute("data-bookmarked", "true");
+                        } else {
+                            bookmarkImage.src = "/assets/svg/bookmark_border.svg";
+                            bookmarkButton.setAttribute("data-bookmarked", "false");
+                        }
+                    } else {
+                        console.error('Bookmark update failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         });
     }
 
@@ -157,24 +200,65 @@ document.addEventListener("DOMContentLoaded", function () {
     const likeCount = document.getElementById("likeCount");
 
     if (likeButton && likeImage && likeCount) {
+        const userId = parseInt(likeButton.getAttribute("data-user-id"))
+        const postId = parseInt(likeButton.getAttribute("data-post-id"))
+        let isLiked = likeButton.getAttribute("data-liked") === "true";
+
         likeButton.addEventListener("click", function () {
-            let isLiked = likeImage.src.includes("favorite_color.svg");
             const newCount = isLiked ? parseInt(likeCount.textContent) - 1 : parseInt(likeCount.textContent) + 1;
             likeCount.textContent = newCount;
             likeImage.src = isLiked ? "/assets/svg/favorite.svg" : "/assets/svg/favorite_color.svg";
 
             // AJAX 요청 보내기 (좋아요 상태 변경)
-            /*
-            sendLikeData(!isLiked, newCount);
-            */
+            if (!isLiked) {
+                likePost(userId, postId);
+                isLiked = true;
+            } else {
+                unlikePost(userId, postId);
+                isLiked = false;
+            }
         });
+    }
+
+    async function likePost(userId, postId) {
+        const res = await fetch('/post/like/' + postId, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'charset': 'UTF-8'
+            },
+            body: JSON.stringify({
+                'user-id': userId,
+                'post-id': postId
+            })
+        });
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
+        }
+    }
+
+    async function unlikePost(userId, postId) {
+        const res = await fetch('/post/like/' + postId, {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json',
+                'charset': 'UTF-8'
+            },
+            body: JSON.stringify({
+                'user-id': userId,
+                'post-id': postId
+            })
+        });
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
+        }
     }
 
     const commentButton = document.getElementById("commentButton");
 
     if (commentButton) {
         commentButton.addEventListener("click", function () {
-            window.location.href = "/src/pages/html/comment.html";
+            window.location.href = "/comment/" + postId ;
         });
     }
 
@@ -223,28 +307,68 @@ document.addEventListener("DOMContentLoaded", function () {
             });
         });
 
+        const modalButton = document.getElementById("openRatingModal");
+
         if (confirmRating) {
-            confirmRating.addEventListener('click', function () {
+            const userId = parseInt(likeButton.getAttribute("data-user-id"))
+            const postId = parseInt(likeButton.getAttribute("data-post-id"))
+            let isRated = modalButton.getAttribute("data-rated") === "true";
+
+            confirmRating.addEventListener('click', async function () {
                 ratingModal.style.display = "none";
 
-                // AJAX 요청 보내기 (평점 저장)
-                /*
-                sendRatingData(selectedRating).then(response => {
-                    if (response.success) {
-                        // 백엔드에서 총점을 받아와서 업데이트
-                        averageRating.textContent = response.newAverage;
-                        // 성공적으로 저장되면 별점 이미지를 업데이트
-                        ratingStar.src = "/assets/svg/star_color.svg";
-                    } else {
-                        console.error('Rating update failed');
-                    }
+                stars.forEach(star => {
+                    star.addEventListener('click', () => {
+                        selectedRating = star.getAttribute('data-value');
+                    });
                 });
-                */
 
-                // 임시로 별점 이미지 및 총점 업데이트
-                averageRating.textContent = (parseFloat(averageRating.textContent) + selectedRating) / 2;
-                ratingStar.src = "/assets/svg/star_color.svg";
+                if (!isRated) {
+                    await rating(userId, postId, selectedRating);
+                    isRated = true;
+                } else {
+                    await ratingAgain(userId, postId, selectedRating);
+                    isRated = false;
+                }
+
+                window.location.reload();
             });
+        }
+    }
+
+    async function rating(userId, postId, selectedRating) {
+        const res = await fetch('/post/rating/' + postId, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'charset': 'UTF-8'
+            },
+            body: JSON.stringify({
+                'user-id': userId,
+                'post-id': postId,
+                'rating': selectedRating
+            })
+        });
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
+        }
+    }
+
+    async function ratingAgain(userId, postId, selectedRating) {
+        const res = await fetch('/post/rating-again/' + postId, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'charset': 'UTF-8'
+            },
+            body: JSON.stringify({
+                'user-id': userId,
+                'post-id': postId,
+                'rating': selectedRating
+            })
+        });
+        if (!res.ok) {
+            throw new Error('Network response was not ok');
         }
     }
 
@@ -252,14 +376,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const moreHorizImage = document.querySelector('.more_h img');
     const clickBox = document.querySelector('.click_box');
 
-    moreHorizImage.addEventListener('click', function (event) {
-        event.stopPropagation();
-        clickBox.style.display = (clickBox.style.display === 'block') ? 'none' : 'block';
-    });
+    if (moreHorizImage && clickBox) {
+        moreHorizImage.addEventListener('click', function (event) {
+            event.stopPropagation();
+            clickBox.style.display = (clickBox.style.display === 'block') ? 'none' : 'block';
+        });
 
-    document.addEventListener('click', function (event) {
-        if (!clickBox.contains(event.target)) {
-            clickBox.style.display = 'none';
-        }
-    });
+        document.addEventListener('click', function (event) {
+            if (!clickBox.contains(event.target)) {
+                clickBox.style.display = 'none';
+            }
+        });
+    }
 });

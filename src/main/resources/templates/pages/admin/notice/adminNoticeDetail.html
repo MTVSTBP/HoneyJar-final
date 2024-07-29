@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{common/layout/defaultLayout}"
+      layout:decorate="~{common/layout/admindefaultLayout}"
       layout:fragment="content"
 >
 
@@ -31,13 +31,13 @@
                         <img src="/assets/svg/base_profile.svg" alt="관리자프로필">
                         <p>관리자</p>
                     </div>
-                    <span th:text="${notice.createdAt}">
-                        2024.07.01
+                    <span th:text="${notice.formattedCreatedAt}">
+                        2000.01.01
                     </span>
                 </div>
             </div>
             <div th:text="${notice.post}" class="notice_context">
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Generibusque nostris malo faciam arare quod praeclarorum. Timentis quosdam, addidisti donec iucunda curiosi detracto vitiis inani. Iam summo m statuat moderatius aliqua utriusque copulatas graecum intellegebat, t. Susceperant saepe zenonem naturales ponderum ne arbitrer tamen oblivione. Illae dapibus plus, nemo, senectus, pertinaces cupiditates suscipiet potest. Motus sponte democriti suspicor, unde sinat, altera. Verborum philosophorum pro malint mandamus, efflorescere, pecuniae delicata doctus. Aliter vindicet constituant faciendi conficiuntur imperitos, probatus. </p>
+                <p>포스트</p>
             </div>
             
         </div>

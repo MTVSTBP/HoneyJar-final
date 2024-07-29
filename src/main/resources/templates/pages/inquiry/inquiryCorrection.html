@@ -12,9 +12,9 @@
 </head>
 <body>
 <div id="container">
-    <form id="Form" th:action="@{'/settings/inquiry/correction/' + ${inquiry.id}}" method="post">
+    <form id="Form" th:action="@{|/settings/inquiry/correction/${inquiry.id}|}" method="post">
         <div class="sub_title">
-            <a th:href="@{/settings/inquiry}" id="back-button">
+            <a th:href="@{|/settings/inquiry/detail/${inquiry.id}|}" id="back-button">
                 <img src="/assets/svg/arrow_back.svg" alt="뒤로가기">
                 <h4>1:1 문의</h4>
             </a>
@@ -23,58 +23,66 @@
         <div class="category_wrap">
             <label for="category">카테고리</label>
             <div class="custom-select-wrapper">
-                <select id="category" name="category" th:value="${inquiry.categoryId}">
+                <select id="category" name="category">
                     <option value="">선택</option>
-                    <option value="1" th:selected="${inquiry.categoryId == 1}">카테고리1</option>
-                    <option value="2" th:selected="${inquiry.categoryId == 2}">카테고리2</option>
-                    <!-- 다른 카테고리 옵션들 -->
+                    <!-- Dynamically populate options using Thymeleaf -->
+                    <option th:each="category : ${categories}"
+                            th:value="${category.getId()}"
+                            th:text="${category.getName()}"
+                            th:selected="${category.getId() == inquiry.categoryId}">
+                        <!-- Check if category is selected -->
+                    </option>
                 </select>
             </div>
-            <p class="error-message" id="categoryError"></p>
         </div>
-        <!-- //category -->
+        <p class="error-message" id="categoryError"></p>
+</div>
+<!-- //category -->
 
-        <!-- title -->
-        <div class="form-group">
-            <div class="title">
-                <label for="inquiry_title">제목</label>
-                <input type="text" id="inquiry_title" name="title" th:value="${inquiry.title}" placeholder="제목을 입력하세요">
-                <p class="error-message" id="titleError"></p>
-            </div>
-        </div>
-        <!-- //title -->
+<!-- title -->
+<div class="form-group">
+    <div class="title">
+        <label for="inquiry_title">제목</label>
+        <input type="text" id="inquiry_title" name="title" th:value="${inquiry.title}" placeholder="제목을 입력하세요">
+        <p class="error-message" id="titleError"></p>
+    </div>
+</div>
+<!-- //title -->
 
-        <!-- content -->
-        <div class="form-group">
-            <label for="content">내용</label>
-            <textarea id="content" name="post" placeholder="내용을 입력하세요" rows="5" th:text="${inquiry.post}"></textarea>
-            <p class="error-message" id="contentError"></p>
-        </div>
-        <!-- //content -->
+<!-- content -->
+<div class="form-group">
+    <label for="content">내용</label>
+    <textarea id="content" name="post" placeholder="내용을 입력하세요" rows="5" th:text="${inquiry.post}"></textarea>
+    <p class="error-message" id="contentError"></p>
+</div>
+<!-- //content -->
 
-        <!-- submit button -->
-        <div class="submit_wrap">
-            <button type="submit" id="submitBtn">완료</button>
-        </div>
-        <!-- //submit button -->
+<!-- submit button -->
+<div class="submit_wrap">
+    <button type="submit" id="submitBtn">완료</button>
+</div>
+<!-- //submit button -->
 
-    </form>
+</form>
 
-    <!-- Modal -->
-    <!-- 모달에 확인 버튼 추가 -->
-    <div id="Modal" class="modal">
-        <div class="modal-content">
+<!-- Modal -->
+<!-- 모달에 확인 버튼 추가 -->
+<div id="Modal" class="modal">
+    <div class="modal-content">
                 <span class="close">
                     <img src="/assets/svg/close.svg" alt="닫기">
                 </span>
-            <div class="modal-text">
-                <p>수정이 완료되었어요!</p>
-            </div>
-            <button id="complete" class="complete">확인</button>
+        <div class="modal-text">
+            <p>수정이 완료되었어요!</p>
         </div>
+        <button id="complete" class="complete">확인</button>
     </div>
 </div>
+</div>
 
+<script th:inline="javascript">
+    var inquiryId = [[${inquiry.id}]];
+</script>
 <script th:src="@{/js/pages/inquiry/inquiryCorrection.js}"></script>
 </body>
 </html>

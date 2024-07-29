@@ -5,6 +5,6 @@ import lombok.Data;
 @Data
 public class QnaResponseDto {
 
-    private long id;
+    private Long id;
     private String name;
 }

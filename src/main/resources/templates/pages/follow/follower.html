@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout.html"
+      layout:decorate="~{common/layout/followLayout}"
+      layout:fragment="content"
+      th:with="pageTitle='Followers'">
+<head>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/follow/follower.css}"/>
+    <th:block layout:fragment="title">
+        <title th:text="${pageTitle}">Followers</title>
+    </th:block>
+</head>
+<body>
+<div id="backGround">
+    <div id="request">
+        <div>팔로워</div>
+        <th:block th:replace="common/components/followerComponent :: followerComponent(follows=${follows})"></th:block>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('#decline').forEach(button => {
+            button.addEventListener('click', function() {
+                unfollow(this);
+            });
+        });
+    });
+
+    function unfollow(button) {
+        const userId = button.getAttribute('data-user-id');
+        const url = `/unfollow/${userId}`;
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('팔로워가 삭제되었습니다.');
+                    button.closest('#top_container').remove(); // 해당 팔로워 요소 제거
+                } else {
+                    alert('팔로워 삭제에 실패했습니다.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('오류가 발생했습니다.');
+            });
+    }
+</script>
+</body>
+</html>

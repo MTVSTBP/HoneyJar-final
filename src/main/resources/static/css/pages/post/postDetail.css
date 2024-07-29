@@ -80,7 +80,7 @@ button {
 }
 
 .title_wrap .more_h img {
-    width: 90%;
+    width: 30px;
     text-align: center;
     cursor: pointer;
 }
@@ -101,7 +101,8 @@ button {
     line-height: 1.9;
     text-align: center;
     padding: 0 0.5rem;
-    font-size: 0.8rem;
+    font-family: "Pretendard-Bold";
+    font-size: 1.3rem;
     font-weight: 500;
 }
 
@@ -111,20 +112,24 @@ button {
 
 
 .title h2 {
-    font-size: 1.5rem;
+    font-family: "Pretendard-Bold";
+    font-size: 2rem;
     margin: 0;
     font-weight: 700;
     line-height: 1.2;
 }
 
 .title #category {
-    font-size: 0.9rem;
-    font-weight: 400;
+    font-family: "Pretendard-Regular";
+    font-size: 1.3rem;
+    font-weight: 500;
     color: #FDA65D;
 }
 
 .title p {
-    font-size: 0.7rem;
+    font-family: "Pretendard-Light";
+    font-size: 1rem;
+    font-weight: 300;
     color: #B4B4B4;
 }
 
@@ -138,25 +143,25 @@ button {
     margin-top: 1rem;
 }
 
-.kind_wrap>.kind_slider {
+.kind_wrap > .kind_slider {
     overflow: hidden;
     width: 100%;
 }
 
-.kind_wrap>.kind_slider .slider {
+.kind_wrap > .kind_slider .slider {
     display: flex;
     transition: transform 0.5s;
     width: 100%;
 }
 
-.kind_wrap>.kind_slider .slider li {
+.kind_wrap > .kind_slider .slider li {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
 }
 
-.kind_wrap>.kind_slider img {
+.kind_wrap > .kind_slider img {
     vertical-align: top;
     border-radius: 5%;
     width: 100%;
@@ -164,8 +169,8 @@ button {
     object-fit: cover;
 }
 
-.kind_wrap .arrow>a.prev,
-.kind_wrap .arrow>a.next {
+.kind_wrap .arrow > a.prev,
+.kind_wrap .arrow > a.next {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -174,12 +179,23 @@ button {
 }
 
 
-.kind_wrap .arrow>a.prev {
-    left: 10px;
+.kind_wrap .arrow > a.prev {
+    width: 10%;
+    height: 100%;
 }
 
-.kind_wrap .arrow>a.next {
-    right: 10px;
+.kind_wrap .arrow > a.prev img,
+.kind_wrap .arrow > a.next img {
+    width: 100%;
+    position: relative;
+    top: 45%;
+    display: flex;
+}
+
+.kind_wrap .arrow > a.next {
+    width: 10%;
+    height: 100%;
+    right: 0;
 }
 
 /* 음식점 정보 */
@@ -209,20 +225,22 @@ button {
     width: inherit;
 }
 
-.information .info+.info {
+.information .info + .info {
     margin: 1rem 0;
 }
 
 .information .info h5 {
     margin-bottom: 1rem;
     color: #535353;
+    font-family: "Pretendard-Bold";
     font-weight: 600;
     width: 25%;
-    font-size: 1rem;
+    font-size: 1.3rem;
 }
 
 .information .info p {
-    font-size: 0.8rem;
+    font-family: "Pretendard-Regular";
+    font-size: 1rem;
     font-weight: 400;
     color: #535353;
     margin-bottom: 1rem;
@@ -243,10 +261,13 @@ button {
     height: 218px;
 }
 
-.info_map{
-    width:150px;
-    text-align:center;
-    padding:6px 0;
+.info_map {
+    width: 150px;
+    text-align: center;
+    padding: 6px 0;
+    font-family: "Pretendard-Regular";
+    font-weight: 300;
+    font-size: 1.2rem;
 }
 
 
@@ -256,7 +277,8 @@ button {
     margin: 0 auto;
     width: 95%;
     line-height: 1.8;
-    font-size: 0.9rem;
+    font-family: "Pretendard-Regular";
+    font-size: 1.3rem;
     color: #535353;
     padding-bottom: 5.5rem;
 }
@@ -278,7 +300,6 @@ button {
     bottom: 0;
     background: #fff;
 }
-
 
 
 .comment_box button {
@@ -306,7 +327,6 @@ button {
     display: flex;
     align-items: center;
 }
-
 
 
 /* 모달 스타일 */
@@ -352,6 +372,30 @@ button {
     top: 5%;
 }
 
+.button-box {
+    height: 50px;
+    width: 80%;
+    display: flex;
+    justify-content: center;
+}
+
+.button-box .confirm {
+    width: 40%;
+    text-align: center;
+    background: #FF8243;
+    color: #fff;
+    font-size: 1rem;
+    border-radius: 0px 50px 50px 0px;
+    cursor: pointer;
+}
+
+.button-box .confirm.close2 {
+    background: #fff;
+    color: #FF8243;
+    border: 1px solid #FF8243;
+    border-radius: 50px 0px 0px 50px;
+}
+
 .rating {
     margin: 2rem 0;
 }
@@ -363,7 +407,7 @@ button {
     cursor: pointer;
 }
 
-.complete{
+.complete {
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -377,7 +421,7 @@ button {
     margin-top: 2rem;
 }
 
-.confirmRating{
+.confirmRating {
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -389,4 +433,31 @@ button {
     color: #fff;
     justify-content: center;
     margin-top: 2rem;
+}
+
+.post_info {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.post_info img {
+    width: 34px;
+    height: 34px;
+    margin-right: 0.5rem;
+    border-radius: 50%; /* 이미지를 원형으로 만듭니다 */
+    object-fit: cover; /* 이미지 비율을 유지하면서 컨테이너에 맞춥니다 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과를 추가합니다 */
+}
+
+.post_info span {
+    font-family: "Pretendard-Light";
+    font-size: 1.3rem;
+    font-weight: 300;
+}
+
+#likeCount, #commentCount, #averageRating {
+    font-family: "Pretendard-Regular";
+    font-size: 1.2rem;
+    font-weight: 300;
 }

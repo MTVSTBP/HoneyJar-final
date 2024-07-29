@@ -4,7 +4,6 @@
       layout:decorate="~{common/layout/writeLayout}"
       layout:fragment="content">
 <head>
-<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -12,60 +11,42 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
 
     <link th:href="@{/css/pages/mypage/myPageCorrection.css}" rel="stylesheet"/>
-    <script th:src="@{/js/pages/post/myPageCorrection.js}" type="text/javascript"></script>
+    <script th:src="@{/js/pages/mypage/myPageCorrection.js}" type="text/javascript"></script>
     <title>myPageCorrection</title>
 </head>
 <body>
     <div class="main">
 
-        <form id="myPageForm" class="my-page-form" th:object="${myPage}" method="post">
-            <!-- 프로필 사진 및 프로필 사진 변경 시작 -->
+        <form id="postForm" th:action="@{/mypage/{userId}/correction(userId=${myPage.userId})}" class="my-page-form" th:object="${myPage}" method="post">
+            <!-- 프로필 사진 시작 -->
             <section class="profile">
                 <div class="profile__image-container">
-                    <img class="profile__image" th:src="${myPage.profileImage != null ? myPage.profileImage : '/assets/svg/base_profile.svg'}" alt="프로필 사진"/>
-                    <div class="profile__change-button">
-                        <img src="/assets/svg/change_profile.svg" alt="프로필 변경"/>
-                        <input id="imageUpload" type="file" accept="image/jpeg, image/png, image/gif" style="display: none;">
-                    </div>
+                    <img class="profile__image" th:if="${myPage != null and myPage.profileImage != null}"
+                         th:src="${myPage.profileImage}"
+                         alt="프로필 이미지"/>
+                    <img class="profile__image" th:unless="${myPage != null and myPage.profileImage != null}"
+                         src="/assets/svg/base_profile.svg"
+                         alt="기본 프로필 이미지"/>
                 </div>
             </section>
-            <!-- 프로필 사진 및 프로필 사진 변경 끝 -->
+            <!-- 프로필 사진 끝 -->
 
             <!-- 닉네임 필드 시작 -->
             <section class="form-field">
-                <label class="form-field__label" for="nickName">userName</label>
-                <input id="nickName" class="form-field__input" type="text" th:field="*{userName}" placeholder="닉네임"/>
+                <label class="form-field__label" for="nickName">닉네임</label>
+                <input id="nickName" class="form-field__input" type="text" th:field="*{userName}" placeholder="입력하세요"/>
             </section>
             <!-- 닉네임 필드 끝 -->
 
             <!-- 자기소개 필드 시작 -->
             <section class="form-field">
-                <label class="form-field__label" for="introduction">userPr</label>
-                <input id="introduction" class="form-field__input" type="text" th:field="*{userPr}" placeholder="한줄 자기소개"/>
+                <label class="form-field__label" for="introduction">한줄 자기소개</label>
+                <input id="introduction" class="form-field__input" type="text" th:field="*{userPr}" placeholder="입력하세요"/>
             </section>
             <!-- 자기소개 필드 끝 -->
 
-            <!-- 자기소개 선택(Checkbox) 필드 시작 -->
-            <section class="category">
-                <label class="form-field__label">likeCategories</label>
-                <div class="category__group" th:each="category : ${myPage.likeCategories}">
-                    <label class="category__label">
-                        <input type="checkbox" class="category__checkbox" th:id="'category-' + ${category.categoryId}" th:checked="${myPage.likeCategories.contains(category)}"/>
-                        <span class="category__custom-checkbox"></span>
-                        <span class="category__text" th:text="${category.categoryName}">카테고리</span>
-                    </label>
-                </div>
-                <div class="category__group" th:each="category : ${myPage.categories}">
-                    <label class="category__label">
-                        <input type="checkbox" class="category__checkbox" th:id="'category-' + ${category.categoryId}" th:checked="${myPage.categories.contains(category)}"/>
-                        <span class="category__custom-checkbox"></span>
-                        <span class="category__text" th:text="${category.categoryName}">카테고리</span>
-                    </label>
-                </div>
-            </section>
-            <!-- 자기소개 선택(Checkbox) 필드 끝 -->
-
             <!-- Submit 버튼 시작 -->
+<!--            <button id="modifyButton" class="button button&#45;&#45;submit" type="submit" onclick="submitForm()">수정</button>-->
             <button id="modifyButton" class="button button--submit" type="submit">수정</button>
             <!-- Submit 버튼 끝 -->
         </form>
@@ -81,9 +62,5 @@
         </div>
         <!-- Modal 끝 -->
     </div>
-
-<!-- Footer 시작(주석 처리 후 사용하세요) -->
-<footer class="footer"></footer>
-<!-- Footer 끝 -->
 </body>
 </html>
