@@ -204,6 +204,7 @@ a {
     align-items: center;
     margin: 2rem 0;
     gap: 0.5rem;
+    padding-bottom: 2rem;
 }
 
 .pagination button {

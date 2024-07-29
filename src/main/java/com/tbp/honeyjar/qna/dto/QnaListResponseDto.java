@@ -1,4 +1,4 @@
-package com.tbp.honeyjar.admin.dto.qna;
+package com.tbp.honeyjar.qna.dto;
 
 import lombok.Data;
 

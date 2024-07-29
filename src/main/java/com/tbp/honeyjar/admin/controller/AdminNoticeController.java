@@ -1,10 +1,11 @@
 package com.tbp.honeyjar.admin.controller;
 
 import com.tbp.honeyjar.admin.dto.notice.NoticeCorrectionRequestDto;
-import com.tbp.honeyjar.admin.dto.notice.NoticeListResponseDto;
-import com.tbp.honeyjar.admin.dto.notice.NoticeResponseDto;
+import com.tbp.honeyjar.admin.dto.notice.AdminNoticeListResponseDto;
+import com.tbp.honeyjar.admin.dto.notice.AdminNoticeResponseDto;
 import com.tbp.honeyjar.admin.dto.notice.NoticeSaveRequestDto;
-import com.tbp.honeyjar.admin.service.NoticeService;
+import com.tbp.honeyjar.admin.service.AdminNoticeService;
+import com.tbp.honeyjar.notice.dto.NoticeListResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,19 +21,21 @@ import java.util.List;
 @RequestMapping("/admin/notice")
 public class AdminNoticeController {
 
-    private final NoticeService noticeService;
+    private final AdminNoticeService adminNoticeService;
 
     @GetMapping
     public String notice(Model model, @RequestParam(defaultValue = "1") int page) {
         page = page < 1 ? 1 : page;
         Pageable pageable = PageRequest.of(page - 1, 5);
-        Page<NoticeListResponseDto> noticePage = noticeService.findAllNotices(pageable);
+        Page<AdminNoticeListResponseDto> noticePage = adminNoticeService.findAllNotices(pageable);
         page = page > noticePage.getTotalPages() ? noticePage.getTotalPages() : page;
 
         System.out.println("noticePage : " + noticePage.toString());
         if (!noticePage.isEmpty()) {
             model.addAttribute("noticeList", noticePage);
+            Page<AdminNoticeListResponseDto> noticeList = adminNoticeService.findAllNotices(pageable);
         }
+
         model.addAttribute("page", page);
         model.addAttribute("totalPages", noticePage.getTotalPages());
 
@@ -41,10 +44,11 @@ public class AdminNoticeController {
                 "pages/admin/notice/adminNotice";
     }
 
-    @GetMapping("/{notice_id}")
-    public String noticeDetail(@PathVariable Long notice_id, Model model) {
 
-        NoticeResponseDto notice = noticeService.findById(notice_id);
+    @GetMapping("/{noticeId}")
+    public String noticeDetail(@PathVariable Long noticeId, Model model) {
+
+        AdminNoticeResponseDto notice = adminNoticeService.findById(noticeId);
 
         if (notice != null) {
             model.addAttribute("notice", notice);
@@ -61,7 +65,7 @@ public class AdminNoticeController {
     @PostMapping("/write")
     public String writeNotice(NoticeSaveRequestDto requestDto) {
 
-        noticeService.save(requestDto);
+        adminNoticeService.save(requestDto);
 
         return "redirect:/admin/notice";
     }
@@ -69,7 +73,7 @@ public class AdminNoticeController {
     @GetMapping("/correction/{notice_id}")
     public String correction(@PathVariable Long notice_id, Model model) {
 
-        NoticeResponseDto notice = noticeService.findById(notice_id);
+        AdminNoticeResponseDto notice = adminNoticeService.findById(notice_id);
 
         if (notice != null) {
             model.addAttribute("notice", notice);
@@ -81,11 +85,11 @@ public class AdminNoticeController {
     @PostMapping("/correction/{notice_id}")
     public String correctionNotice(@PathVariable Long notice_id, NoticeCorrectionRequestDto requestDto) {
 
-        NoticeResponseDto notice = noticeService.findById(notice_id);
+        AdminNoticeResponseDto notice = adminNoticeService.findById(notice_id);
 
         if (notice != null) {
             requestDto.setNoticeId(notice.getNoticeId());
-            noticeService.correction(requestDto);
+            adminNoticeService.correction(requestDto);
         }
 
         return "redirect:/admin/notice";
@@ -94,10 +98,10 @@ public class AdminNoticeController {
     @GetMapping("/delete/{notice_id}")
     public String delete(@PathVariable Long notice_id) {
 
-        NoticeResponseDto notice = noticeService.findById(notice_id);
+        AdminNoticeResponseDto notice = adminNoticeService.findById(notice_id);
 
         if (notice != null) {
-            noticeService.delete(notice.getNoticeId());
+            adminNoticeService.delete(notice.getNoticeId());
         }
 
         return "redirect:/admin/notice";
