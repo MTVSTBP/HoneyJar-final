@@ -14,7 +14,7 @@
 <!-- 헤더영역 -->
 <div></div>
 <!-- //헤더영역 -->
-<div id="container">
+<div id="container" th:data-inquiry-id="${inquiry.id}" th:data-user-id="${inquiry.userId}">
     <div class="sub_title">
         <a th:href="@{'/settings/inquiry?page=' + ${page}}" id="back-button">
             <img src="/assets/svg/arrow_back.svg" alt="뒤로가기">
@@ -43,95 +43,102 @@
     <div class="button_list">
         <a th:href="@{'/settings/inquiry/correction/' + ${inquiry.id}}" type="submit" class="btn">수정</a>
     </div>
-</div>
 
-<!-- 삭제 확인 모달 -->
-<div id="deleteConfirmModal" class="modal">
-    <div class="modal-content">
+    <!-- 삭제 확인 모달 -->
+    <div id="deleteConfirmModal" class="modal">
+        <div class="modal-content">
         <span class="close">
             <img src="/assets/svg/close.svg" alt="닫기">
         </span>
-        <div class="modal-text">
-            <p>정말로 삭제 하시겠어요?</p>
+            <div class="modal-text">
+                <p>정말로 삭제 하시겠어요?</p>
+            </div>
+            <button id="confirmDelete" class="complete">삭제</button>
         </div>
-        <button id="confirmDelete" class="complete">삭제</button>
     </div>
-</div>
 
-<!-- 삭제 완료 모달 -->
-<div id="deleteSuccessModal" class="modal">
-    <div class="modal-content">
+    <!-- 삭제 완료 모달 -->
+    <div id="deleteSuccessModal" class="modal">
+        <div class="modal-content">
         <span class="close">
             <img src="/assets/svg/close.svg" alt="닫기">
         </span>
-        <div class="modal-text">
-            <p>삭제가 완료되었습니다!</p>
+            <div class="modal-text">
+                <p>삭제가 완료되었습니다!</p>
+            </div>
+            <button id="completeDelete" class="complete">확인</button>
         </div>
-        <button id="completeDelete" class="complete">확인</button>
     </div>
-</div>
 
-<div class="comment_input">
-    <div class="edit_icon">
-        <img src="/assets/svg/mode.svg" alt="edit">
+    <div class="comment_input">
+        <div class="edit_icon">
+            <img src="/assets/svg/mode.svg" alt="edit">
+        </div>
+        <div class="input_comment">
+            댓글
+        </div>
+        <div class="input_area">
+            <textarea id="commentText" class="text" placeholder="댓글을 입력하세요."></textarea>
+        </div>
+        <div class="input_submit">
+            <button type="button" class="submit_button" onclick="submitComment()">등록</button>
+        </div>
+        <span><hr></span>
     </div>
-    <div class="input_comment">
-        댓글
-    </div>
-    <div class="input_area">
-        <textarea class="text" placeholder="댓글을 입력하세요."></textarea>
-    </div>
-    <div class="input_submit">
-        <button type="submit" class="submit_button">등록</button>
-    </div>
-    <span><hr></span>
-</div>
 
-<div class="comment_list">
-
-    <div th:each="comment : ${comments}" class="user_details">
-        <div class="user_record">
-            <div class="user">
-                <img src='/assets/svg/base_profile.svg' alt="사용자프로필" class="user_profile">
-                <div class="user_info2">
-                    <span class="user_name" th:text="${comment.getUserId()}">관리자</span>
+    <div class="comment_list">
+        <div th:each="comment : ${comments}" class="user_details">
+            <div class="user_record">
+                <div class="user">
+                    <img src='/assets/svg/base_profile.svg' alt="사용자프로필" class="user_profile">
+                    <div class="user_info2">
+                        <span class="user_name" th:text="${comment.getName()}">관리자</span>
+                        <span class="user_date" th:text="${comment.formattedCreatedAt}" >date</span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="user_comment">
-            <p class="commentText" th:text="${comment.comment}">안녕하세요. 꿀단지 입니다. 관련 문의에 대해 답변드립니다.</p>
+            <div class="user_comment">
+                <p class="commentText" th:text="${comment.comment}">안녕하세요. 꿀단지 입니다. 관련 문의에 대해 답변드립니다.</p>
+            </div>
         </div>
     </div>
-</div>
-<script>
-    function submitComment() {
-        var commentText = document.getElementById('commentText').value;
-        var inquiryId = /* Insert Thymeleaf variable for inquiryId */;
-        var userId = /* Insert Thymeleaf variable for userId */;
 
-        fetch('/settings/inquiry/comment', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': /* Insert Thymeleaf variable for CSRF token */
-            },
-            body: JSON.stringify({
-                comment: commentText,
-                inquiryId: inquiryId,
-                userId: userId
+    <script>
+        function submitComment() {
+            var commentText = document.getElementById('commentText').value;
+            var container = document.getElementById('container');
+            var inquiryId = container.getAttribute('data-inquiry-id');
+            var userId = container.getAttribute('data-user-id');
+            var name = container.getAttribute('data-name');
+
+            fetch('/settings/inquiry/comment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    comment: commentText,
+                    inquiryId: inquiryId,
+                    userId: userId,
+                    name:name
+
+                })
             })
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.reload();
-                } else {
-                    alert('댓글 등록에 실패했습니다.');
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    }
-</script>
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.reload();
+                    } else {
+                        alert('댓글 등록에 실패했습니다.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+
+</div>
+
+
 
 </body>
 </html>

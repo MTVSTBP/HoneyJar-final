@@ -30,6 +30,7 @@
         <result property="updatedAt" column="updated_at"/>
         <result property="inquiryId" column="inquiry_id"/>
         <result property="userId" column="user_id"/>
+        <result property="name" column="name"/>
     </resultMap>
 
     <!-- 댓글 조회 -->
@@ -111,11 +112,19 @@
     <!-- inquiry 댓글 조회 -->
     <select id="getCommentListInquiryId" parameterType="java.lang.Long" resultMap="inquriyResultMap">
         SELECT
-                *
+                c.comment_id,
+                c.comment,
+                c.created_at,
+                c.updated_at,
+                c.inquiry_id,
+                c.user_id,
+                u.name AS name
         FROM
-                INQUIRY_COMMENT
+                INQUIRY_COMMENT c
+        JOIN
+                USER u ON c.user_id = u.user_id
         WHERE
-                INQUIRY_ID = #{ inquiryId }
+                c.inquiry_id = #{inquiryId}
     </select>
 
     <!-- inquiry 댓글 등록 -->
