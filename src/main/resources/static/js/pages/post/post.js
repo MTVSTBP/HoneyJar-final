@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const bookmarkButtons = document.querySelectorAll(".bookmark");
+    const bookmarkButtons = document.querySelectorAll(".bookmark button");
     let currentPage = 1; // 현재 페이지를 1로 시작
     const postsPerPage = 6; // 한 번에 로드할 포스트 수
     let isLoading = false; // 로딩 상태를 추적
@@ -23,11 +23,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // 새로 고침 시 기본 값으로 설정
-    // sessionStorage.removeItem('sortOption');
-    // sessionStorage.removeItem('selectedCategory');
-    // sessionStorage.removeItem('goodRestaurant');
-
     // 세션 스토리지에서 이전 상태 불러오기
     const savedSortOption = sessionStorage.getItem('sortOption');
     const savedCategory = sessionStorage.getItem('selectedCategory');
@@ -47,9 +42,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 북마크 버튼 클릭 이벤트 처리
     bookmarkButtons.forEach(button => {
-        button.addEventListener("click", function (event) {
-            event.preventDefault();
-            const form = this.querySelector("form");
+        button.addEventListener("click", function(event) {
+            event.preventDefault();  // 기본 폼 제출을 막음
+            const form = this.closest("form");
             const formData = new FormData(form);
 
             fetch(form.action, {
@@ -62,12 +57,17 @@ document.addEventListener("DOMContentLoaded", function () {
                         const bookmarkImage = this.querySelector("img");
                         if (data.bookmarked) {
                             bookmarkImage.src = "/assets/svg/bookmark.svg";
+                            form.closest(".bookmark").classList.add("bookmarked");
                         } else {
                             bookmarkImage.src = "/assets/svg/bookmark_border.svg";
+                            form.closest(".bookmark").classList.remove("bookmarked");
                         }
                     } else {
                         console.error('Bookmark update failed');
                     }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
                 });
         });
     });
@@ -90,6 +90,41 @@ document.addEventListener("DOMContentLoaded", function () {
                     const newPosts = tempDiv.querySelectorAll('li.item');
                     newPosts.forEach(post => postList.appendChild(post));
                     currentPage++; // 다음 페이지로 증가
+
+                    // 추가된 포스트에도 북마크 이벤트 리스너 추가
+                    newPosts.forEach(post => {
+                        const bookmarkButton = post.querySelector(".bookmark button");
+                        if (bookmarkButton) {
+                            bookmarkButton.addEventListener("click", function(event) {
+                                event.preventDefault();
+                                const form = this.closest("form");
+                                const formData = new FormData(form);
+
+                                fetch(form.action, {
+                                    method: "POST",
+                                    body: formData
+                                })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.success) {
+                                            const bookmarkImage = this.querySelector("img");
+                                            if (data.bookmarked) {
+                                                bookmarkImage.src = "/assets/svg/bookmark.svg";
+                                                form.closest(".bookmark").classList.add("bookmarked");
+                                            } else {
+                                                bookmarkImage.src = "/assets/svg/bookmark_border.svg";
+                                                form.closest(".bookmark").classList.remove("bookmarked");
+                                            }
+                                        } else {
+                                            console.error('Bookmark update failed');
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                    });
+                            });
+                        }
+                    });
                 } else {
                     console.error('Post list element not found.');
                 }
@@ -161,6 +196,41 @@ document.addEventListener("DOMContentLoaded", function () {
                     tempDiv.innerHTML = html;
                     const newPosts = tempDiv.querySelectorAll('li.item');
                     newPosts.forEach(post => postList.appendChild(post));
+
+                    // 필터링된 포스트에도 북마크 이벤트 리스너 추가
+                    newPosts.forEach(post => {
+                        const bookmarkButton = post.querySelector(".bookmark button");
+                        if (bookmarkButton) {
+                            bookmarkButton.addEventListener("click", function(event) {
+                                event.preventDefault();
+                                const form = this.closest("form");
+                                const formData = new FormData(form);
+
+                                fetch(form.action, {
+                                    method: "POST",
+                                    body: formData
+                                })
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        if (data.success) {
+                                            const bookmarkImage = this.querySelector("img");
+                                            if (data.bookmarked) {
+                                                bookmarkImage.src = "/assets/svg/bookmark.svg";
+                                                form.closest(".bookmark").classList.add("bookmarked");
+                                            } else {
+                                                bookmarkImage.src = "/assets/svg/bookmark_border.svg";
+                                                form.closest(".bookmark").classList.remove("bookmarked");
+                                            }
+                                        } else {
+                                            console.error('Bookmark update failed');
+                                        }
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                    });
+                            });
+                        }
+                    });
                 } else {
                     console.error('Post list element not found.');
                 }

@@ -53,14 +53,14 @@ public class CommentController {
     // 댓글 수정
     @PostMapping("modify/{post_id}/{comment_id}")
     public String modifyComment(@PathVariable Long post_id, @PathVariable Long comment_id,  @ModelAttribute CommentModifyDTO modifyComment, @RequestParam String comment) {
-        System.out.println("comment controller calll!!!!! ");
+//        System.out.println("comment controller calll!!!!! ");
         modifyComment.setPostId(post_id);
         modifyComment.setCommentId(comment_id);
         modifyComment.setComment(comment);
 
         commentService.modifyComment(modifyComment);
 
-        logger.info("Modifying comment: " + modifyComment);
+//        logger.info("Modifying comment: " + modifyComment);
         commentService.modifyComment(modifyComment);
 
         return "redirect:/comment/" + post_id;
@@ -69,10 +69,11 @@ public class CommentController {
     // 댓글 삭제
     @GetMapping("delete/{post_id}/{comment_id}")
     public String deleteComment(@PathVariable Long post_id, @PathVariable Long comment_id, @ModelAttribute CommentDeleteDTO deleteComment) {
-
-        deleteComment.setCommentId(comment_id);
+        logger.info("테스트중 ------ -=== === Deleting comment: postId={}, commentId={}", post_id, comment_id);
         deleteComment.setPostId(post_id); // postId를 설정하는 부분 추가
+        deleteComment.setCommentId(comment_id);
 
+//        commentService.deleteComment(post_id);
         commentService.deleteComment(comment_id);
 
         return "redirect:/comment/" + post_id;

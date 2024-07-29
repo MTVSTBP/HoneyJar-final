@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const placeXField = document.getElementById('placeXCoordinate');
     const placeYField = document.getElementById('placeYCoordinate');
     const categoryField = document.getElementById('category');
+    const categoryError = document.getElementById('categoryError');
     const modal = document.getElementById('Modal');
     const completeBtn = document.getElementById('complete');
     const maxFiles = 5;
@@ -127,7 +128,14 @@ document.addEventListener("DOMContentLoaded", function () {
                     ctx.drawImage(img, 0, 0, width, height);
 
                     const dataURL = canvas.toDataURL('image/jpeg', 0.7); // 압축 품질 설정 (0.7은 70% 품질)
-                    resolve(dataURL);
+
+                    // 중복 파일 검사
+                    const isDuplicate = selectedFiles.some(fileData => fileData.dataURL === dataURL);
+                    if (!isDuplicate) {
+                        resolve(dataURL);
+                    } else {
+                        reject('Duplicate file');
+                    }
                 };
                 img.src = event.target.result;
             };
@@ -155,11 +163,19 @@ document.addEventListener("DOMContentLoaded", function () {
 
         for (const file of files) {
             if (selectedFiles.length < maxFiles) {
-                const compressedDataURL = await compressImage(file);
-                selectedFiles.push({ name: file.name, dataURL: compressedDataURL });
-                localStorage.setItem('selectedFiles', JSON.stringify(selectedFiles));
-                updateImagePreview();
-                validateForm();
+                try {
+                    const compressedDataURL = await compressImage(file);
+                    selectedFiles.push({ name: file.name, dataURL: compressedDataURL });
+                    localStorage.setItem('selectedFiles', JSON.stringify(selectedFiles));
+                    updateImagePreview();
+                    validateForm();
+                } catch (error) {
+                    if (error === 'Duplicate file') {
+                        console.log('Duplicate file detected, skipping:', file.name);
+                    } else {
+                        console.error('Error compressing image:', error);
+                    }
+                }
             }
         }
         resetFileInput();
@@ -186,6 +202,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const postTitle = postTitleElement ? postTitleElement.value.trim() : '';
         const content = contentElement ? contentElement.value.trim() : '';
         const placeName = placeNameElement ? placeNameElement.value.trim() : '';
+        const categoryValue = categoryField.value.trim();
 
         const postTitleError = document.getElementById('postTitleError');
         const contentError = document.getElementById('contentError');
@@ -213,6 +230,13 @@ document.addEventListener("DOMContentLoaded", function () {
             isValid = false;
         } else {
             hideErrorMessage(placeNameError);
+        }
+
+        if (!categoryValue) {
+            showErrorMessage(categoryError, '카테고리를 선택하세요.');
+            isValid = false;
+        } else {
+            hideErrorMessage(categoryError);
         }
 
         if (selectedFiles.length === 0) {
@@ -243,6 +267,7 @@ document.addEventListener("DOMContentLoaded", function () {
         event.preventDefault();
         hideErrorMessage(errorMessage);
 
+        // 폼 유효성 검사
         if (!validateForm()) {
             return;
         }
@@ -294,7 +319,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
-
     // 모달 확인 버튼 클릭 시 상세 페이지로 이동
     completeBtn.addEventListener('click', function () {
         window.location.href = `/post`;
@@ -315,6 +339,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const currentUrl = window.location.href;
         window.location.href = '/post/map?redirectTo=' + encodeURIComponent(currentUrl);
     }
+
     // 주소 입력 필드 클릭 시
     placeNameInput.addEventListener('click', openMapPage);
     placeNameButton.addEventListener('click', openMapPage);
@@ -359,7 +384,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // 초기화 시 폼 상태 복원
     restoreFormState();
+
+    // 폼 입력 필드에 이벤트 리스너 추가하여 입력 시마다 validateForm 호출
+    const formFields = ['postTitle', 'content', 'placeNameInput', 'bestMenu', 'price', 'category'];
+    formFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.addEventListener('input', validateForm);
+            field.addEventListener('change', validateForm); // select 요소의 변경 이벤트에도 validateForm 호출
+        }
+    });
+
+    // 초기 상태에서 유효성 검사 호출
+    validateForm();
 });
-
-
-

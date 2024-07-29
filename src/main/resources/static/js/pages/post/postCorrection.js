@@ -41,12 +41,17 @@ document.addEventListener("DOMContentLoaded", function () {
     const placeYField = document.getElementById('placeYCoordinate');
     const placeRoadAddressNameField = document.getElementById('placeRoadAddressName');
     const categoryField = document.getElementById('category');
+    const categoryError = document.createElement('p');
+    categoryError.className = 'error-message';
+    categoryError.id = 'categoryError';
+    categoryField.parentNode.insertBefore(categoryError, categoryField.nextSibling);
     const modal = document.getElementById('Modal');
     const completeBtn = document.getElementById('complete');
     const maxFiles = 5;
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
     let selectedFiles = JSON.parse(localStorage.getItem('selectedFiles')) || [];
     let thumbnailIndex = localStorage.getItem('thumbnailIndex') !== null ? parseInt(localStorage.getItem('thumbnailIndex')) : null;
+    let deletedImages = JSON.parse(localStorage.getItem('deletedImages')) || [];
     let postId;
 
     // 서버에서 전달받은 기존 이미지 URL 배열을 JavaScript 배열로 변환
@@ -98,7 +103,8 @@ document.addEventListener("DOMContentLoaded", function () {
             deleteBtn.src = "/assets/svg/close.svg";
             deleteBtn.classList.add('delete-button');
             deleteBtn.addEventListener('click', function () {
-                selectedFiles.splice(index, 1);
+                const deletedFile = selectedFiles.splice(index, 1)[0];
+                existingImageUrls = existingImageUrls.filter(url => url !== deletedFile.dataURL);
                 if (thumbnailIndex === index) {
                     thumbnailIndex = null;
                 } else if (thumbnailIndex > index) {
@@ -109,6 +115,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 resetFileInput();
                 localStorage.setItem('selectedFiles', JSON.stringify(selectedFiles));
                 localStorage.setItem('thumbnailIndex', thumbnailIndex);
+                localStorage.setItem('deletedImages', JSON.stringify(existingImageUrls.filter(url => !selectedFiles.some(fileData => fileData.dataURL === url))));
             });
             imageContainer.appendChild(deleteBtn);
 
@@ -245,11 +252,13 @@ document.addEventListener("DOMContentLoaded", function () {
         const postTitle = postTitleElement ? postTitleElement.value.trim() : '';
         const content = contentElement ? contentElement.value.trim() : '';
         const placeName = placeNameElement ? placeNameElement.value.trim().replace(/^,/, '') : '';
+        const categoryValue = categoryField.value.trim();
 
         const postTitleError = document.getElementById('postTitleError');
         const contentError = document.getElementById('contentError');
         const imageError = document.getElementById('imageError');
         const placeNameError = document.getElementById('placeNameError');
+        const categoryError = document.getElementById('categoryError');
 
         let isValid = true;
 
@@ -285,6 +294,13 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
                 hideErrorMessage(imageError);
             }
+        }
+
+        if (!categoryValue) {
+            showErrorMessage(categoryError, '카테고리를 선택하세요.');
+            isValid = false;
+        } else {
+            hideErrorMessage(categoryError);
         }
 
         if (isValid) {
@@ -363,7 +379,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         // 삭제된 이미지를 formData에 추가
-        const deletedImages = existingImageUrls.filter(url => !selectedFiles.some(fileData => fileData.dataURL === url));
         deletedImages.forEach((url) => {
             formData.append('deletedImages', url);
         });
@@ -392,6 +407,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 postId = result.postId;
                 localStorage.removeItem('selectedFiles'); // 로컬스토리지에서 selectedFiles 삭제
                 localStorage.removeItem('thumbnailIndex'); // 로컬스토리지에서 thumbnailIndex 삭제
+                localStorage.removeItem('deletedImages'); // 로컬스토리지에서 deletedImages 삭제
                 modal.style.display = 'block';
             }
         } catch (error) {
@@ -433,7 +449,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById('content').value = postFormState.content;
             document.getElementById('bestMenu').value = postFormState.bestMenu;
             document.getElementById('price').value = postFormState.price;
-            document.getElementById('placeNameInput').value.trim().replace(/^,/, '');
+            document.getElementById('placeNameInput').value = postFormState.placeName;
             categoryField.value = postFormState.category;
             placeIdField.value = postFormState.placeId;
             localStorage.removeItem('postFormState');
@@ -454,7 +470,3 @@ document.addEventListener("DOMContentLoaded", function () {
 
     restoreFormState();
 });
-
-
-
-

@@ -12,6 +12,10 @@ a {
     color: #535353;
 }
 
+#Form {
+    padding-bottom: 1rem;
+}
+
 input, textarea {
     max-width: 450px;
     width: 100%;

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Following List</title>
+</head>
+<body>
+<h1>Following List</h1>
+<div th:each="user : ${followings}">
+  <div>
+    <span th:text="${user.name}">User Name</span>
+    <form th:action="@{/follow/unfollow/{userId}(userId=${user.userId})}" method="post">
+      <button type="submit">Unfollow</button>
+    </form>
+  </div>
+</div>
+</body>
+</html>
+

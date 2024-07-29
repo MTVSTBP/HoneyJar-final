@@ -5,16 +5,10 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface PostMapper {
 
-//    List<PostListDTO> findPostsByCategory(@Param("category") Long category,
-//                                          @Param("size") int size,
-//                                          @Param("offset") int offset,
-//                                          @Param("userId") Long userId,
-//                                          @Param("maxPrice") Integer maxPrice);
     List<PostListDTO> findPostsByCategory(@Param("category") Long category,
                                           @Param("size") int size,
                                           @Param("offset") int offset,

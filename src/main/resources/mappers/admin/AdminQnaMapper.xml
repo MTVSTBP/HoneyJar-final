@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.tbp.honeyjar.admin.dao.QnaMapper">
+<mapper namespace="com.tbp.honeyjar.admin.dao.AdminQnaMapper">
 
-    <resultMap id="adminQnaListResultMap" type="com.tbp.honeyjar.admin.dto.qna.QnaListResponseDto">
+    <resultMap id="adminQnaListResultMap" type="com.tbp.honeyjar.admin.dto.qna.AdminQnaListResponseDto">
         <id property="id" column="qna_id"/>
         <result property="title" column="title"/>
         <result property="post" column="post"/>
@@ -20,20 +20,20 @@
 
     <select id="findAllQna" resultMap="adminQnaListResultMap">
         select
-            qna_id,
-            title,
-            post,
-            category_id
+        qna_id,
+        title,
+        post,
+        category_id
         from qna
         order by qna_id
     </select>
 
     <select id="findById" resultMap="adminQnaResultMap">
         select
-            qna_id,
-            title,
-            post,
-            category_id
+        qna_id,
+        title,
+        post,
+        category_id
         from qna
         where qna_id = #{id}
     </select>
@@ -41,26 +41,26 @@
     <insert id="save" parameterType="com.tbp.honeyjar.admin.dto.qna.QnaSaveRequestDto">
         insert into qna
         (
-            title,
-            post,
-            category_id,
-            user_id
+        title,
+        post,
+        category_id,
+        user_id
         )
         values
         (
-            #{title},
-            #{post},
-            #{categoryId},
-            #{userId}
+        #{title},
+        #{post},
+        #{categoryId},
+        #{userId}
         )
     </insert>
 
     <update id="correction" parameterType="com.tbp.honeyjar.admin.dto.qna.QnaCorrectionRequestDto">
         update qna
         set
-            title = #{title},
-            post = #{post},
-            category_id = #{categoryId}
+        title = #{title},
+        post = #{post},
+        category_id = #{categoryId}
         where
         qna_id = #{id}
     </update>

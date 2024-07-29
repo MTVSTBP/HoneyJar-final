@@ -40,15 +40,14 @@ public class AdminInquiryController {
     }
 
     @GetMapping
-    public String getAdminInquiries(Model model, Principal principal, @RequestParam(defaultValue = "1") int page) {
-        String kakaoId = principal.getName();
+    public String getAdminInquiries(Model model, @RequestParam(defaultValue = "1") int page) {
         page = page < 1 ? 1 : page;
         Pageable pageable = PageRequest.of(page - 1, 5);  // 페이지 번호는 0부터 시작하므로 -1
         Page<InquiryDto> inquiryPage = adminInquiryService.getInquiryList(pageable);
-        model.addAttribute("inquiryList", inquiryPage.getContent());
         page = page > inquiryPage.getTotalPages() ? inquiryPage.getTotalPages() : page;
 
         model.addAttribute("page", page);
+        model.addAttribute("inquiryList", inquiryPage.getContent());
         model.addAttribute("totalPages", inquiryPage.getTotalPages());
 
         return (page > inquiryPage.getTotalPages()) ?
