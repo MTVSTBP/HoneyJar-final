@@ -29,7 +29,7 @@ public class HoneyJarApplication {
 
         return args -> {
             String adminEmail = "admin@admin.com";
-            String adminPassword = "!N%yLC@#E9xM";
+            String adminPassword = "!N%yLC@#E9xdM";
 
             // 기존 관리자 계정 있는지 확인
             if (adminService.getAdminByEmail(adminEmail) == null) {
