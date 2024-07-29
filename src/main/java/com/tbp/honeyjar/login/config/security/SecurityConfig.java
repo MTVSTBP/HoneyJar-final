@@ -11,8 +11,12 @@ import com.tbp.honeyjar.login.oauth.service.CustomOAuth2UserService;
 import com.tbp.honeyjar.login.oauth.token.AuthTokenProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.boot.web.server.ConfigurableWebServerFactory;
+import org.springframework.boot.web.server.ErrorPage;
+import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -91,11 +95,11 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         // 정적 리소스에 대한 접근 허용
-                        .requestMatchers("/assets/**", "/css/**", "/js/**", "/images/**", "/favicon.*").permitAll()
+                        .requestMatchers("/static/**", "/assets/**", "/*.json", "/css/**", "/js/**", "/img/**", "/*.json", "/favicon.ico").permitAll()
 
                         // 인증이 필요 없는 public 엔드포인트
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers("/login", "/admin/login").permitAll()
-                        .requestMatchers("/login").anonymous()
                         .requestMatchers("/oauth2/authorization/**", "/login/oauth2/code/**").permitAll()
 
                         // 관리자 전용 엔드포인트

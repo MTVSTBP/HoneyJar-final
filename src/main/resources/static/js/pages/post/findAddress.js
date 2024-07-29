@@ -187,14 +187,14 @@ function storeAndRedirect() {
             y: selectedPlace.y,
             x: selectedPlace.x
         };
-
-        // 부모 창으로 데이터 전달
-        window.opener.postMessage(JSON.stringify(placeData), '*');
-        window.close();
+        localStorage.setItem('selectedPlace', JSON.stringify(placeData));
+        // 부모 창으로 이동 (redirectTo 값 사용)
+        window.location.href = redirectTo;
     } else {
         alert("장소를 선택해 주세요.");
     }
 }
+
 
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('completeBtn').addEventListener('click', storeAndRedirect);

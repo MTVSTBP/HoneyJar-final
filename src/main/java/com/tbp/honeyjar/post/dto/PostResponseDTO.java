@@ -11,6 +11,7 @@ public class PostResponseDTO {
     private String title;
     private String recommendMenu;
     private int price;
+    private int postCount;
     private String post;
     private Long placeId;
     private String placeName; // place 이름
@@ -34,13 +35,14 @@ public class PostResponseDTO {
     public PostResponseDTO() {}
 
 
-    public PostResponseDTO(Long postId, Long categoryId, String categoryName, String title, String recommendMenu, int price, String post, Long placeId, String placeName, String roadAddressName, Double xCoordinate, Double yCoordinate, LocalDateTime createdAt, LocalDateTime updatedAt, List<String> imageUrls, String userName, Long userId, boolean bookmarked, String mainImageUrl, int thumbnailIndex) {
+    public PostResponseDTO(Long postId, Long categoryId, String categoryName, String title, String recommendMenu, int price, int postCount, String post, Long placeId, String placeName, String roadAddressName, Double xCoordinate, Double yCoordinate, LocalDateTime createdAt, LocalDateTime updatedAt, List<String> imageUrls, String userName, Long userId, boolean bookmarked, String mainImageUrl, int thumbnailIndex) {
         this.postId = postId;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.title = title;
         this.recommendMenu = recommendMenu;
         this.price = price;
+        this.postCount = postCount;
         this.post = post;
         this.placeId = placeId;
         this.placeName = placeName;
@@ -103,6 +105,14 @@ public class PostResponseDTO {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public int getPostCount() {
+        return postCount;
+    }
+
+    public void setPostCount(int postCount) {
+        this.postCount = postCount;
     }
 
     public String getPost() {

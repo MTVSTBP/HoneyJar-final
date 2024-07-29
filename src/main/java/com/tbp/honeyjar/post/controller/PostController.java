@@ -6,8 +6,13 @@ import com.google.gson.Gson;
 import com.tbp.honeyjar.admin.service.CategoryService;
 import com.tbp.honeyjar.image.service.ImageService;
 import com.tbp.honeyjar.login.service.user.UserService;
+import com.tbp.honeyjar.mypage.DTO.MyPageDTO;
+import com.tbp.honeyjar.mypage.service.MyPageService;
+import com.tbp.honeyjar.place.dto.PlaceDTO;
+import com.tbp.honeyjar.place.service.PlaceService;
 import com.tbp.honeyjar.post.dto.*;
 import com.tbp.honeyjar.post.service.PostService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,38 +21,35 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.*;
 
-
+@Slf4j
 @Controller
 @RequestMapping("/post")
 public class PostController {
 
     private final PostService postService;
     private final CategoryService categoryService;
+    private final PlaceService placeService;
     private final ImageService imageService;
     private final UserService userService;
+    private final MyPageService myPageService;
 
 
-    public PostController(PostService postService, CategoryService categoryService, ImageService imageService, UserService userService) {
+    public PostController(PostService postService, CategoryService categoryService, PlaceService placeService, ImageService imageService, UserService userService, MyPageService myPageService) {
         this.postService = postService;
         this.categoryService = categoryService;
+        this.placeService = placeService;
         this.imageService = imageService;
         this.userService = userService;
+        this.myPageService = myPageService;
     }
 
-
     @GetMapping
-    public String postList(Model model,
-                           @RequestParam(required = false) Long category,
-                           @RequestParam(defaultValue = "0") int page,
-                           @RequestParam(defaultValue = "6") int size,
-                           @RequestParam(required = false) boolean goodRestaurant,
-                           @RequestParam(required = false) String sortOption,
-                           @RequestParam(required = false) Double latitude,
-                           @RequestParam(required = false) Double longitude,
-                           Principal principal) {
+    public String postList(Model model, @RequestParam(required = false) Long category, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "6") int size, @RequestParam(required = false) boolean goodRestaurant, @RequestParam(required = false) String sortOption, @RequestParam(required = false) Double latitude, @RequestParam(required = false) Double longitude, Principal principal) {
 
         Long userId = null;
         if (principal != null) {
@@ -56,6 +58,10 @@ public class PostController {
 
         Integer maxPrice = goodRestaurant ? 10000 : null;
         List<PostListDTO> posts = postService.findPostsByCategory(category, page, size, userId, maxPrice, sortOption, latitude, longitude);
+
+        // MyPageDTO 객체 생성 (또는 서비스에서 가져오기)
+        MyPageDTO myPage = myPageService.getMyPage(userId);
+        model.addAttribute("myPage", myPage);
 
         // 최초 요청 시 4개의 포스트만 반환
         if (page == 0) {
@@ -72,8 +78,6 @@ public class PostController {
     }
 
 
-
-
     @GetMapping("/write")
     public String postCreateForm(Model model) {
         model.addAttribute("postRequestDTO", new PostRequestDTO());
@@ -83,12 +87,7 @@ public class PostController {
 
 
     @PostMapping("/write")
-    public ResponseEntity<Map<String, Object>> postCreate(
-            @ModelAttribute PostRequestDTO postRequestDTO,
-            @RequestParam(value = "files", required = false) List<MultipartFile> files,
-            @RequestParam("mainImageFile") MultipartFile mainImageFile,
-            @RequestParam("mainImageUrl") String mainImageUrl,
-            Principal principal) throws IOException {
+    public ResponseEntity<Map<String, Object>> postCreate(@ModelAttribute PostRequestDTO postRequestDTO, @RequestParam(value = "files", required = false) List<MultipartFile> files, @RequestParam("mainImageFile") MultipartFile mainImageFile, @RequestParam("mainImageUrl") String mainImageUrl, Principal principal) throws IOException {
 
         Map<String, Object> response = new HashMap<>();
         try {
@@ -123,6 +122,7 @@ public class PostController {
     public String getPostDetail(@RequestParam Long postId, Model model, Principal principal) {
         Long loggedInUserId = userService.findUserIdByKakaoId(principal.getName()); // 로그인된 사용자의 userId를 가져옴
         PostResponseDTO post = postService.findPostById(postId, loggedInUserId); // userId를 추가로 전달
+        MyPageDTO myPage = myPageService.getMyPage(loggedInUserId);
         int commentCnt = postService.commentCount(postId);
 
         boolean isAuthor = false;
@@ -141,6 +141,7 @@ public class PostController {
             System.out.println("Logged in UserId: " + loggedInUserId);
             System.out.println("Is Author: " + isAuthor);
 
+            model.addAttribute("myPage", myPage);
             model.addAttribute("post", post);
             model.addAttribute("isAuthor", isAuthor); // 작성자인지 여부를 모델에 추가
             model.addAttribute("userId", loggedInUserId);
@@ -186,7 +187,7 @@ public class PostController {
 
     @PostMapping("/rating/{postId}")
     @ResponseBody
-    public void postRating(@PathVariable Long postId, Principal principal,@RequestBody PostRatingRequestDto requestDto) {
+    public void postRating(@PathVariable Long postId, Principal principal, @RequestBody PostRatingRequestDto requestDto) {
         Long userId = userService.findUserIdByKakaoId(principal.getName());
         PostResponseDTO post = postService.findPostById(postId, userId);
 
@@ -201,7 +202,7 @@ public class PostController {
 
     @PostMapping("/rating-again/{postId}")
     @ResponseBody
-    public void postRatingAgain(@PathVariable Long postId, Principal principal,@RequestBody PostRatingRequestDto requestDto) {
+    public void postRatingAgain(@PathVariable Long postId, Principal principal, @RequestBody PostRatingRequestDto requestDto) {
         Long userId = userService.findUserIdByKakaoId(principal.getName());
         PostResponseDTO post = postService.findPostById(postId, userId);
 
@@ -233,13 +234,7 @@ public class PostController {
     }
 
     @PostMapping("/correction")
-    public ResponseEntity<?> postCorrection(@ModelAttribute PostRequestDTO postRequestDTO,
-                                            @RequestParam(value = "files", required = false) List<MultipartFile> files,
-                                            @RequestParam("mainImageFile") MultipartFile mainImageFile,
-                                            @RequestParam("mainImageUrl") String mainImageUrl,
-                                            @RequestParam(value = "existingImageUrls", required = false) List<String> existingImageUrls,
-                                            @RequestParam(value = "deletedImages", required = false) List<String> deletedImages,
-                                            Principal principal) throws IOException, FirebaseAuthException {
+    public ResponseEntity<?> postCorrection(@ModelAttribute PostRequestDTO postRequestDTO, @RequestParam(value = "files", required = false) List<MultipartFile> files, @RequestParam("mainImageFile") MultipartFile mainImageFile, @RequestParam("mainImageUrl") String mainImageUrl, @RequestParam(value = "existingImageUrls", required = false) List<String> existingImageUrls, @RequestParam(value = "deletedImages", required = false) List<String> deletedImages, Principal principal) throws IOException, FirebaseAuthException {
         Long loggedInUserId = userService.findUserIdByKakaoId(principal.getName());
         PostResponseDTO existingPost = postService.findPostById(postRequestDTO.getPostId(), loggedInUserId);
 
@@ -296,10 +291,33 @@ public class PostController {
         return ResponseEntity.ok("Post deleted successfully");
     }
 
+    @GetMapping("/by-place")
+    public String getPostsByPlace(@RequestParam String placeName, Model model) {
+        List<PostListDTO> posts = postService.findPostsByPlaceName(placeName);
+        model.addAttribute("posts", posts);
+        model.addAttribute("placeName", placeName);
+        // 필터링 폼에 필요한 속성들은 null로 설정
+//        model.addAttribute("categories", null);
+//        model.addAttribute("selectedCategory", null);
+//        model.addAttribute("goodRestaurant", null);
+        return "pages/post/post";
+    }
+
+    @GetMapping("/coordinates")
+    @ResponseBody
+    public List<Map<String, Double>> getAllPostCoordinates() {
+        return postService.findAllPostCoordinates();
+    }
+
+    @GetMapping("/info")
+    @ResponseBody
+    public Map<String, Object> getPlaceInfo(@RequestParam Double lat, @RequestParam Double lng) {
+        return postService.getPlaceInfoByCoordinates(lat, lng);
+    }
+
     @GetMapping("/search")
-    public ResponseEntity<List<PostListDTO>> searchPostsByPlaceName(@RequestParam String keyword) {
-        List<PostListDTO> posts = postService.findPostsByPlaceName(keyword);
-        return ResponseEntity.ok(posts);
+    @ResponseBody
+    public List<PostResponseDTO> searchPosts(@RequestParam String keyword) {
+        return postService.searchPostsByPlaceName(keyword);
     }
 }
-

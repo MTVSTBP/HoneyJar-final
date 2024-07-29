@@ -10,13 +10,14 @@ public class PostListDTO {
     private Long categoryId;
     private String userName;
     private Long placeId;
+    private String placeName;
     private Double xCoordinate;
     private Double yCoordinate;
     private Double distance;
 
     public PostListDTO() {}
 
-    public PostListDTO(Long postId, String postTitle, String post, String mainImageUrl, Boolean bookmarked, Long categoryId, String userName, Long placeId, Double xCoordinate, Double yCoordinate, Double distance) {
+    public PostListDTO(Long postId, String postTitle, String post, String mainImageUrl, Boolean bookmarked, Long categoryId, String userName, Long placeId, String placeName, Double xCoordinate, Double yCoordinate, Double distance) {
         this.postId = postId;
         this.postTitle = postTitle;
         this.post = post;
@@ -25,6 +26,7 @@ public class PostListDTO {
         this.categoryId = categoryId;
         this.userName = userName;
         this.placeId = placeId;
+        this.placeName = placeName;
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
         this.distance = distance;
@@ -94,6 +96,14 @@ public class PostListDTO {
         this.placeId = placeId;
     }
 
+    public String getPlaceName() {
+        return placeName;
+    }
+
+    public void setPlaceName(String placeName) {
+        this.placeName = placeName;
+    }
+
     public Double getxCoordinate() {
         return xCoordinate;
     }
@@ -129,6 +139,7 @@ public class PostListDTO {
                 ", categoryId=" + categoryId +
                 ", userName='" + userName + '\'' +
                 ", placeId=" + placeId +
+                ", placeName=" + placeName +
                 ", xCoordinate=" + xCoordinate +
                 ", yCoordinate=" + yCoordinate +
                 ", distance=" + distance +

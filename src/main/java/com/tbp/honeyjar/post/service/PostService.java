@@ -12,6 +12,7 @@ import com.tbp.honeyjar.place.dto.PlaceDTO;
 import com.tbp.honeyjar.place.service.PlaceService;
 import com.tbp.honeyjar.post.dao.PostMapper;
 import com.tbp.honeyjar.post.dto.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,7 +21,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
+@Slf4j
 @Service
 public class PostService {
 
@@ -160,7 +161,7 @@ public class PostService {
     }
 
     @Transactional
-    public void updatePost(PostRequestDTO postRequestDTO, List<MultipartFile> files, MultipartFile mainImageFile, String mainImageUrl) throws IOException, FirebaseAuthException {
+    public void updatePost(PostRequestDTO postRequestDTO, List<MultipartFile> files, MultipartFile mainImageFile, String mainImageUrl, List<String> deletedImages) throws IOException, FirebaseAuthException {
         Long placeId = postRequestDTO.getPlaceId();
         if (placeId == null) {
             placeId = postMapper.findPlaceIdByPostId(postRequestDTO.getPostId());
@@ -176,10 +177,7 @@ public class PostService {
         }
         placeDTO.setPlaceId(placeId);
 
-        // road_address_name 값의 앞에 쉼표를 제거
         placeDTO.setRoadAddressName(removeLeadingComma(placeDTO.getRoadAddressName()));
-
-        // 중복 제거 코드
         placeDTO.setName(removeDuplicates(placeDTO.getName()));
         placeDTO.setxCoordinate(removeDuplicateCoordinates(placeDTO.getxCoordinate()));
         placeDTO.setyCoordinate(removeDuplicateCoordinates(placeDTO.getyCoordinate()));
@@ -187,7 +185,6 @@ public class PostService {
 
         placeService.updatePlace(placeDTO);
 
-        // 기존 이미지 정보 가져오기
         List<ImageDTO> existingImages = imageService.getImagesByPostId(postRequestDTO.getPostId());
 
         // Initialize existingImageUrls to an empty list if null
@@ -207,26 +204,21 @@ public class PostService {
             }
         }
 
-        // 기존 메인 이미지 상태 업데이트 (모든 기존 메인 이미지의 is_main 값을 false로 설정)
         for (ImageDTO image : existingImages) {
             if (image.isMain()) {
                 imageService.updateMainImageStatus(image.getImageId(), false);
             }
         }
 
-        // 새로운 메인 이미지 업로드
         final String mainImageUploadUrl;
         if (mainImageFile != null && !mainImageFile.isEmpty()) {
-            // 새로운 썸네일 이미지가 업로드된 경우
             mainImageUploadUrl = fireBaseService.uploadFile(mainImageFile, UUID.randomUUID().toString());
         } else {
-            // 기존 썸네일 이미지를 사용하는 경우
             mainImageUploadUrl = postRequestDTO.getMainImageUrl();
         }
         postRequestDTO.setMainImageUrl(mainImageUploadUrl);
         imageService.saveMainImage(mainImageUploadUrl, postRequestDTO.getUserId(), postRequestDTO.getPostId());
 
-        // 새로운 이미지 업로드
         List<String> imageUrls = new ArrayList<>();
         if (files != null && !files.isEmpty()) {
             for (MultipartFile file : files) {
@@ -234,8 +226,6 @@ public class PostService {
                 String imageUrl = fireBaseService.uploadFile(file, fileName);
                 imageUrls.add(imageUrl);
             }
-
-            // 메인 이미지 URL을 리스트에서 제외
             imageUrls = imageUrls.stream()
                     .filter(imageUrl -> !imageUrl.equals(mainImageUploadUrl))
                     .collect(Collectors.toList());
@@ -244,7 +234,6 @@ public class PostService {
             imageService.saveImages(imageUrls, postRequestDTO.getUserId(), postRequestDTO.getPostId());
         }
 
-        // 새로운 메인 이미지 상태 업데이트 (새로운 썸네일 이미지의 is_main 값을 true로 설정)
         ImageDTO newMainImage = imageService.getImagesByPostId(postRequestDTO.getPostId())
                 .stream()
                 .filter(image -> image.getUrl().equals(mainImageUploadUrl))
@@ -255,7 +244,6 @@ public class PostService {
             imageService.updateMainImageStatus(newMainImage.getImageId(), true);
         }
 
-        // 포스트 업데이트
         postMapper.updatePost(postRequestDTO);
     }
 
@@ -330,7 +318,42 @@ public class PostService {
         postMapper.ratingAgain(requestDto);
     }
 
-    public List<PostListDTO> findPostsByPlaceName(String keyword) {
-        return postMapper.findPostsByPlaceName(keyword);
+    public List<Map<String, Double>> findAllPostCoordinates() {
+        return postMapper.findAllPostCoordinates();
+    }
+
+    public List<PostListDTO> findPostsByPlaceName(String placeName) {
+        return postMapper.findPostsByPlaceName(placeName);
+    }
+
+    public Map<String, Object> getPlaceInfoByCoordinates(double latitude, double longitude) {
+        List<PostResponseDTO> posts = postMapper.findPostsByCoordinates(latitude, longitude);
+        Map<String, Object> result = new HashMap<>();
+
+        if (!posts.isEmpty()) {
+            result.put("placeName", posts.get(0).getPlaceName());
+            result.put("postCount", posts.size());
+            if (posts.size() == 1) {
+                result.put("postId", posts.get(0).getPostId());
+            }
+        } else {
+            result.put("postCount", 0);
+        }
+
+        return result;
+    }
+
+    public List<PostResponseDTO> searchPostsByPlaceName(String keyword) {
+        List<PostResponseDTO> posts = postMapper.searchPostsByPlaceName(keyword);
+        Map<String, List<PostResponseDTO>> postsByPlace = posts.stream()
+                .collect(Collectors.groupingBy(PostResponseDTO::getPlaceName));
+
+        return postsByPlace.entrySet().stream()
+                .map(entry -> {
+                    PostResponseDTO representative = entry.getValue().get(0);
+                    representative.setPostCount(entry.getValue().size());
+                    return representative;
+                })
+                .collect(Collectors.toList());
     }
 }

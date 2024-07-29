@@ -1,10 +1,8 @@
 package com.tbp.honeyjar.login.controller.user;
 
+import com.tbp.honeyjar.login.service.user.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 
 @Controller
 public class UserLoginController {
@@ -15,9 +13,9 @@ public class UserLoginController {
     }
 
     // 추가
-    private  final UserService userService;
+    private final UserService userService;
 
-    public UserLoginController(final UserService userService) {
+    public UserLoginController(UserService userService) {
         this.userService = userService;
     }
 

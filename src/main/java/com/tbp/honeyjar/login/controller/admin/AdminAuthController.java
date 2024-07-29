@@ -80,7 +80,7 @@ public class AdminAuthController extends AbstractAuthController {
 
             Map<String, String> resultMap = new HashMap<>();
             resultMap.put(TOKEN_NAME, accessToken.getToken());
-            resultMap.put("redirectUrl", "/admin");
+            resultMap.put("redirectUrl", "/admin/settings");
 
             return ResponseEntity.ok(new ApiResponse<>(ApiResponse.SUCCESS_CODE, "Login Successful", resultMap));
         } else {

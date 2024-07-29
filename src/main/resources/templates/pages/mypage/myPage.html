@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout=""
-      layout:decorate="~{common/layout/defaultLayout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/myPageLayout}"
       layout:fragment="content"
       th:with="pageTitle='MyPage'">
 <head>
@@ -9,72 +9,72 @@
     <th:block layout:fragment="title">
         <title th:text="${pageTitle}">MyPage</title>
     </th:block>
+    <th:block layout:fragment="script">
+        <script th:src="@{/js/pages/bookmark/bookmark.js}"></script>
+    </th:block>
 </head>
 <body>
-<div id="container2">
-    <div id="header"></div>
-    <div id="profileContainer">
-        <div id="detailContainer">
-            <div id="userDetail">
-                <div th:text="${myPage.userName}">유저 이름</div>
-                <a th:href="@{/mypage/correction}">
-                    <img id="pencil" src="/assets/svg/pencil.svg" alt="사진이 없습니다."/>
-                </a>
+<div class="page-container">
+    <div class="content-wrapper">
+        <div class="wrapper">
+            <div class="info-box">
+                <div class="stats">
+                    <div id="like" onclick="location.href='/mypage/mypost'" style="cursor: pointer;">
+                        <div class="post_data_title">포스트</div>
+                        <div class="post_data_set">
+                            <div class="post_data_icon">
+                                <img src="/assets/svg/post.svg" alt="사진이 없습니다."/>
+                            </div>
+                            <div class="post_data_num" th:text="${myPage.getNumberOfPosts()}"></div>
+                        </div>
+                        <div class="border"></div>
+                    </div>
+<!--                    <div id="follower" onclick="location.href='/follow/follower'" style="cursor: pointer;">-->
+                    <div id="follower" onclick="showAlert('팔로워')" style="cursor: pointer;">
+                        <div class="post_data_title">팔로워</div>
+                        <div class="post_data_set">
+                            <div class="post_data_icon">
+                                <img src="/assets/svg/human.svg" alt="사진이 없습니다."/>
+                            </div>
+                            <div class="post_data_num" th:text="${myPage.getNumberOfFollowers()}"></div>
+                        </div>
+                        <div class="border"></div>
+                    </div>
+<!--                    <div id="following" onclick="location.href='/follow/following'" style="cursor: pointer;">-->
+                    <div id="following" onclick="showAlert('팔로잉')" style="cursor: pointer;">
+                        <div class="post_data_title">팔로잉</div>
+                        <div class="post_data_set">
+                            <div class="post_data_icon">
+                                <img src="/assets/svg/human.svg" alt="사진이 없습니다."/>
+                            </div>
+                            <div class="post_data_num" th:text="${myPage.getNumberOfFollowees()}"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div id="pr" th:text="${myPage.userPr}" th:onclick="open()">자기소개</div>
-        </div>
-        <div id="profileImage">
-            <img id="profileSvg" th:src="${myPage.profileImage != null ? myPage.profileImage : '/assets/svg/base_profile.svg'}"  alt="사진이 없습니다."/>
+            <div id="bookMark">
+                <div id="textLine">
+                    <div id="bookMarkText">북마크</div>
+                    <div>
+                        <a id="more" th:href="@{/mypage/bookmark}">
+                            더보기 &gt
+                        </a>
+                    </div>
+                </div>
+                <div class="my_list">
+                    <ul>
+                        <th:block
+                                th:replace="common/components/postComponent :: postComponent(posts=${posts}, maxPosts=null)"></th:block>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
-    <div id="post_data">
-        <div id="like" onclick="location.href='/mypage/mypost'" style="cursor: pointer;">
-            <div class="post_data_title">포스트</div>
-            <div class="post_data_set">
-                <div class="post_data_icon">
-                    <img src="/assets/svg/post.svg" alt="사진이 없습니다."/>
-                </div>
-                <div class="post_data_num" th:text="${myPage.getNumberOfPosts()}"></div>
-            </div>
-            <div class="border"></div>
-        </div>
-        <div id="follower" onclick="location.href='/follow/follower'" style="cursor: pointer;">
-            <div class="post_data_title">팔로워</div>
-            <div class="post_data_set">
-                <div class="post_data_icon">
-                    <img src="/assets/svg/human.svg" alt="사진이 없습니다."/>
-                </div>
-                <div class="post_data_num" th:text="${myPage.getNumberOfFollowers()}"></div>
-            </div>
-            <div class="border"></div>
-        </div>
-        <div id="following" onclick="location.href='/follow/following'" style="cursor: pointer;">
-            <div class="post_data_title">팔로잉</div>
-            <div class="post_data_set">
-                <div class="post_data_icon">
-                    <img src="/assets/svg/human.svg" alt="사진이 없습니다."/>
-                </div>
-                <div class="post_data_num" th:text="${myPage.getNumberOfFollowees()}"></div>
-            </div>
-        </div>
-    </div>
-    <div id="bookMark">
-        <div id="textLine">
-            <div id="bookMarkText">북마크</div>
-            <div>
-                <a id="more" th:href="@{/mypage/bookmark}">
-                    더보기&gt
-                </a>
-            </div>
-        </div>
-        <div class="my_list">
-            <ul>
-                <th:block th:replace="common/components/postComponent :: postComponent(posts=${posts}, maxPosts=null)"></th:block>
-            </ul>
-        </div>
-    </div>
-    <div id="navigate"></div>
 </div>
-<script th:inline="javascript" type="text/javascript" th:src="@{/js/pages/bookmark/bookmark.js}"></script>
+<script>
+    function showAlert(type) {
+        alert(type + " 기능은 현재 개발 중입니다.");
+    }
+</script>
 </body>
 </html>

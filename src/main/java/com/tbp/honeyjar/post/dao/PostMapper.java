@@ -1,10 +1,12 @@
 package com.tbp.honeyjar.post.dao;
 
+import com.tbp.honeyjar.place.dto.PlaceDTO;
 import com.tbp.honeyjar.post.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface PostMapper {
@@ -48,5 +50,11 @@ public interface PostMapper {
 
     int commentCount(Long postId);
 
-    List<PostListDTO> findPostsByPlaceName(String keyword);
+    List<Map<String, Double>> findAllPostCoordinates();
+
+    List<PostListDTO> findPostsByPlaceName(String placeName);
+
+    List<PostResponseDTO> findPostsByCoordinates(@Param("lat") double lat, @Param("lng") double lng);
+
+    List<PostResponseDTO> searchPostsByPlaceName(String keyword);
 }

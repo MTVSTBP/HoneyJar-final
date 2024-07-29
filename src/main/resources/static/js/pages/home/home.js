@@ -1,86 +1,117 @@
-document.addEventListener('DOMContentLoaded', function() {
-    var map;
-    var markers = [];
-    var clusterer;
+let map;
+let clusterer;
+let markerImage;
 
-    function initMap() {
-        var mapContainer = document.getElementById('map');
-        var mapOption = {
-            center: new kakao.maps.LatLng(36.2683, 127.6358),
-            level: 14
-        };
+document.addEventListener('DOMContentLoaded', function () {
+    const mapContainer = document.getElementById('map');
+    const mapOption = {
+        center: new kakao.maps.LatLng(36.2683, 127.6358),
+        level: 13
+    };
 
-        map = new kakao.maps.Map(mapContainer, mapOption);
+    map = new kakao.maps.Map(mapContainer, mapOption);
+    clusterer = new kakao.maps.MarkerClusterer({
+        map: map,
+        averageCenter: true,
+        minLevel: 10
+    });
 
-        // 지도 크기 재설정
-        window.setTimeout(function() {
-            map.relayout();
-        }, 0);
+    markerImage = new kakao.maps.MarkerImage(
+        '/assets/img/marker.png',
+        new kakao.maps.Size(52, 64),
+        {offset: new kakao.maps.Point(26, 64)}
+    );
 
-        // kakao.maps.load(function() {
-        //     clusterer = new kakao.maps.MarkerClusterer({
-        //         map: map,
-        //         averageCenter: true,
-        //         minLevel: 10
-        //     });
-        //     loadAllMarkers();
-        // });
-    }
-
-    // function loadAllMarkers() {
-    //     fetch("/post/search?keyword=")
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             console.log("Fetched data:", data);
-    //             createMarkers(data);
-    //         })
-    //         .catch(error => console.error('Error:', error));
-    // }
-    //
-    // function createMarkers(posts) {
-    //     console.log("Creating markers for posts:", posts);
-    //     if (clusterer) clusterer.clear();
-    //     markers = [];
-    //
-    //     posts.forEach(function(post) {
-    //         console.log("Creating marker for post:", post);
-    //         var markerPosition = new kakao.maps.LatLng(post.yCoordinate, post.xCoordinate);
-    //         var marker = new kakao.maps.Marker({
-    //             position: markerPosition,
-    //             map: map  // 여기에 map을 추가
-    //         });
-    //
-    //         markers.push(marker);
-    //
-    //         kakao.maps.event.addListener(marker, 'click', function() {
-    //             window.location.href = '/post/detail?postId=' + post.postId;
-    //         });
-    //     });
-    //
-    //     console.log("Total markers created:", markers.length);
-    //     if (clusterer) clusterer.addMarkers(markers);
-    //
-    //     if (markers.length > 0) {
-    //         var bounds = new kakao.maps.LatLngBounds();
-    //         markers.forEach(function(marker) {
-    //             bounds.extend(marker.getPosition());
-    //         });
-    //         map.setBounds(bounds);
-    //     }
-    // }
-    //
-    // function searchAndDisplayMarkers(keyword) {
-    //     fetch("/post/search?keyword=" + encodeURIComponent(keyword))
-    //         .then(response => response.json())
-    //         .then(data => {
-    //             console.log("Search results:", data);
-    //             createMarkers(data);
-    //         })
-    //         .catch(error => console.error('Error:', error));
-    // }
-    //
-    // window.searchAndDisplayMarkers = searchAndDisplayMarkers;
-
-    // 약간의 지연 후 initMap 실행
-    setTimeout(initMap, 100);
+    loadInitialMarkers();
 });
+
+function loadInitialMarkers() {
+    fetch('/post/coordinates')
+        .then(response => response.json())
+        .then(data => {
+            const markers = data.map(coord => {
+                const marker = new kakao.maps.Marker({
+                    position: new kakao.maps.LatLng(coord.lat, coord.lng),
+                    image: markerImage
+                });
+
+                kakao.maps.event.addListener(marker, 'click', function () {
+                    fetch(`/post/info?lat=${coord.lat}&lng=${coord.lng}`)
+                        .then(response => response.json())
+                        .then(placeInfo => {
+                            if (placeInfo.postCount > 1) {
+                                window.location.href = `/post/by-place?placeName=${encodeURIComponent(placeInfo.placeName)}`;
+                            } else if (placeInfo.postCount === 1) {
+                                window.location.href = `/post/detail?postId=${placeInfo.postId}`;
+                            }
+                        });
+                });
+
+                return marker;
+            });
+
+            clusterer.addMarkers(markers);
+
+            kakao.maps.event.addListener(clusterer, 'clusterclick', function (cluster) {
+                const level = map.getLevel() - 1;
+                map.setLevel(level, {anchor: cluster.getCenter()});
+            });
+
+            kakao.maps.event.addListener(map, 'zoom_changed', function () {
+                if (map.getLevel() <= 3) {
+                    clusterer.clear();
+                    data.forEach(coord => {
+                        const marker = new kakao.maps.Marker({
+                            position: new kakao.maps.LatLng(coord.lat, coord.lng),
+                            image: markerImage
+                        });
+                        kakao.maps.event.addListener(marker, 'click', function () {
+                            fetch(`/post/info?lat=${coord.lat}&lng=${coord.lng}`)
+                                .then(response => response.json())
+                                .then(placeInfo => {
+                                    if (placeInfo.postCount > 1) {
+                                        window.location.href = `/post/by-place?placeName=${encodeURIComponent(placeInfo.placeName)}`;
+                                    } else if (placeInfo.postCount === 1) {
+                                        window.location.href = `/post/detail?postId=${placeInfo.postId}`;
+                                    }
+                                });
+                        });
+                        marker.setMap(map);
+                    });
+                } else {
+                    clusterer.clear();
+                    clusterer.addMarkers(markers);
+                }
+            });
+        });
+}
+
+window.searchAndDisplayMarkers = function (keyword) {
+    fetch(`/post/search?keyword=${encodeURIComponent(keyword)}`)
+        .then(response => response.json())
+        .then(posts => {
+            map.setLevel(3);
+            clusterer.clear();
+
+            posts.forEach(post => {
+                const marker = new kakao.maps.Marker({
+                    position: new kakao.maps.LatLng(post.yCoordinate, post.xCoordinate),
+                    image: markerImage
+                });
+
+                kakao.maps.event.addListener(marker, 'click', function () {
+                    if (post.postCount > 1) {
+                        window.location.href = `/post/by-place?placeName=${encodeURIComponent(post.placeName)}`;
+                    } else {
+                        window.location.href = `/post/detail?postId=${post.postId}`;
+                    }
+                });
+
+                marker.setMap(map);
+            });
+
+            if (posts.length > 0) {
+                map.setCenter(new kakao.maps.LatLng(posts[0].yCoordinate, posts[0].xCoordinate));
+            }
+        });
+};

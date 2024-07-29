@@ -28,5 +28,4 @@ public class UserService {
     public List<UserDTO> searchUsersByName(String name) {
         return userMapper.searchUsersByName(name);
     }
-
 }

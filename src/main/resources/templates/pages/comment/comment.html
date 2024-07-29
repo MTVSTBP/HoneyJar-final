@@ -33,7 +33,12 @@
     <div class="comment_list">
         <div class="user_details" th:each="comment, commentIndex : ${commentList}">
             <div class="user_record">
-                <img src='/assets/svg/base_profile.svg' alt="" class="user_profile">
+                <img class="user_profile" th:if="${myPage != null and myPage.profileImage != null}"
+                     th:src="${myPage.profileImage}"
+                     alt="프로필 이미지"/>
+                <img class="user_profile" th:unless="${myPage != null and myPage.profileImage != null}"
+                     src="/assets/svg/base_profile.svg"
+                     alt="기본 프로필 이미지"/>
                 <div class="user">
                     <div class="user_info" th:data-post-id="${comment.postId}" th:data-comment-id="${comment.commentId}">
                         <span class="user_name" th:text="${comment.userName}">사용자</span>

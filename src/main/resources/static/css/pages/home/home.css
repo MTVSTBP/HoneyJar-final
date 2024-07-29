@@ -7,18 +7,22 @@
 }
 
 /* Map Container Start */
-#map-container, #map {
-    width: 100%;
-    /*height: 100%;*/
-    height: 400px;
-    position: relative;
-    min-height: 400px;  /* 또는 원하는 최소 높이 */
-}
+/*#map-container, #map {*/
+/*    width: 100%;*/
+/*    !*height: 100%;*!*/
+/*    height: 400px;*/
+/*    position: relative;*/
+/*    min-height: 400px;  !* 또는 원하는 최소 높이 *!*/
+/*}*/
 
 #map-container {
+    width: 100%;
+    height: 400px;
+    position: relative;
+    min-height: 400px;
     flex: 1;
-    min-height: 0;
-    transition: height 0.5s ease; /* 검색 이벤트 이후 자연스러운 리사이징 효과 */
+    /*min-height: 0;*/
+    /*transition: height 0.5s ease; !* 검색 이벤트 이후 자연스러운 리사이징 효과 *!*/
 }
 
 #map {

@@ -48,7 +48,7 @@ public class LeaveController {
             if (user != null) {
                 model.addAttribute("user", user);
                 model.addAttribute("name", user.getName());
-                return "pages/settings/leave/leave";
+                return "pages/settings/leave";
             } else {
                 log.warn("User not found for Kakao ID: {}", kakaoId);
             }

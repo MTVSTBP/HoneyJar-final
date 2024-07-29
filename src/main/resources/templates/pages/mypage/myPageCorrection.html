@@ -18,17 +18,18 @@
     <div class="main">
 
         <form id="postForm" th:action="@{/mypage/{userId}/correction(userId=${myPage.userId})}" class="my-page-form" th:object="${myPage}" method="post">
-            <!-- 프로필 사진 및 프로필 사진 변경 시작 -->
+            <!-- 프로필 사진 시작 -->
             <section class="profile">
                 <div class="profile__image-container">
-                    <img class="profile__image" th:src="${myPage.profileImage != null ? myPage.profileImage : '/assets/svg/base_profile.svg'}" alt="프로필 사진"/>
-                    <div class="profile__change-button">
-                        <img src="/assets/svg/change_profile.svg" alt="프로필 변경"/>
-                        <input id="imageUpload" type="file" accept="image/jpeg, image/png, image/gif" style="display: none;">
-                    </div>
+                    <img class="profile__image" th:if="${myPage != null and myPage.profileImage != null}"
+                         th:src="${myPage.profileImage}"
+                         alt="프로필 이미지"/>
+                    <img class="profile__image" th:unless="${myPage != null and myPage.profileImage != null}"
+                         src="/assets/svg/base_profile.svg"
+                         alt="기본 프로필 이미지"/>
                 </div>
             </section>
-            <!-- 프로필 사진 및 프로필 사진 변경 끝 -->
+            <!-- 프로필 사진 끝 -->
 
             <!-- 닉네임 필드 시작 -->
             <section class="form-field">
@@ -45,7 +46,8 @@
             <!-- 자기소개 필드 끝 -->
 
             <!-- Submit 버튼 시작 -->
-            <button id="modifyButton" class="button button--submit" type="submit" onclick="submitForm()">수정</button>
+<!--            <button id="modifyButton" class="button button&#45;&#45;submit" type="submit" onclick="submitForm()">수정</button>-->
+            <button id="modifyButton" class="button button--submit" type="submit">수정</button>
             <!-- Submit 버튼 끝 -->
         </form>
 

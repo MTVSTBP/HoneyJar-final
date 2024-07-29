@@ -12,6 +12,7 @@ import com.tbp.honeyjar.post.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -58,7 +59,7 @@ public class MyPageController {
     @GetMapping("/correction")
     public String getMyPageCorrection(Model model, Principal principal) {
         Long userId = userService.findUserIdByKakaoId(principal.getName());
-        MyPageCorrectionDTO myPage = myPageService.getMyProfile(userId);
+        MyPageDTO myPage = myPageService.getMyPage(userId);
         model.addAttribute("myPage", myPage);
         return "pages/mypage/myPageCorrection";
     }
@@ -69,6 +70,11 @@ public class MyPageController {
     public String getMyPageBookmark(Model model, Principal principal, @RequestParam(required = false) Long category) {
         Long userId = userService.findUserIdByKakaoId(principal.getName());
         List<PostListDTO> posts = myPageService.getMyBookmark(category, userId);
+
+        // MyPageDTO 객체 생성 (또는 서비스에서 가져오기)
+        MyPageDTO myPage = myPageService.getMyPage(userId);
+        model.addAttribute("myPage", myPage);
+
         model.addAttribute("posts", posts);
         model.addAttribute("categories", categoryService.findAllFoodCategory());
         model.addAttribute("selectedCategory", category);

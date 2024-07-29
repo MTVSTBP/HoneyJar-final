@@ -17,7 +17,12 @@
             <span id="category" th:text="*{categoryName}">카테고리명</span>
             <h2 th:text="*{title}">제목</h2>
             <div class="post_info">
-                <img src="/assets/svg/base_profile.svg" alt="">
+                <img th:if="${myPage != null and myPage.profileImage != null}"
+                     th:src="${myPage.profileImage}"
+                     alt="프로필 이미지"/>
+                <img th:unless="${myPage != null and myPage.profileImage != null}"
+                     src="/assets/svg/base_profile.svg"
+                     alt="기본 프로필 이미지"/>
                 <span th:text="${post.userName}">닉네임</span>
             </div>
             <p id="date" th:text="${#temporals.format(post.createdAt, 'yyyy년 M월 d일 HH시 mm분')}">2024.06.24</p>

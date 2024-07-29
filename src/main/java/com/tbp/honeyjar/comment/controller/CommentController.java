@@ -3,6 +3,8 @@ package com.tbp.honeyjar.comment.controller;
 import com.tbp.honeyjar.comment.dto.*;
 import com.tbp.honeyjar.comment.service.CommentService;
 import com.tbp.honeyjar.login.service.user.UserService;
+import com.tbp.honeyjar.mypage.DTO.MyPageDTO;
+import com.tbp.honeyjar.mypage.service.MyPageService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,18 +23,30 @@ import org.slf4j.LoggerFactory;
 public class CommentController {
     private final CommentService commentService;
     private final UserService userService;
+    private final MyPageService myPageService;
+
     private static final Logger logger = LoggerFactory.getLogger(CommentController.class);
 
-    public CommentController(CommentService commentService, UserService userService) {
+    public CommentController(CommentService commentService, UserService userService, MyPageService myPageService) {
         this.commentService = commentService;
         this.userService = userService;
+        this.myPageService = myPageService;
     }
 
     // 댓글 조회
     @GetMapping("{postId}")
     public String commentList(@PathVariable Long postId, Model model, Principal principal) {
 
+        Long userId = null;
+        if (principal != null) {
+            userId = userService.findUserIdByKakaoId(principal.getName());
+        }
+
         List<CommentListDTO> commentList = commentService.findAllCommentListById(postId);
+        // MyPageDTO 객체 생성 (또는 서비스에서 가져오기)
+        MyPageDTO myPage = myPageService.getMyPage(userId);
+
+        model.addAttribute("myPage", myPage);
         model.addAttribute("commentList", commentList);
         model.addAttribute("userId", userService.findUserIdByKakaoId(principal.getName()));
         return "pages/comment/comment";

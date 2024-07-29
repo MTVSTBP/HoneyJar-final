@@ -6,7 +6,8 @@
         <id property="userId" column="user_id"/>
         <result property="userName" column="name"/>
         <result property="userPr" column="pr"/>
-        <result property="profileImage" column="url"/>
+<!--        <result property="profileImage" column="url"/>-->
+        <result property="profileImage" column="profile_image"/>
         <result property="numberOfPosts" column="numberOfPosts"/>
         <result property="numberOfFollowers" column="numberOfFollowers"/>
         <result property="numberOfFollowees" column="numberOfFollowees"/>
@@ -31,14 +32,22 @@
         <result property="profileImage" column="url"/>
     </resultMap>
     <select id="getUserDetail" resultMap="MyPageListMap">
-        SELECT U.user_id, U.name, U.pr, I.url,
+        SELECT U.user_id, U.name, U.pr, U.profile_image,
                (SELECT COUNT(*) FROM post AS P WHERE P.user_id = U.user_id) AS numberOfPosts,
                (SELECT COUNT(*) FROM follow WHERE followee_id = U.user_id) AS numberOfFollowers,
                (SELECT COUNT(*) FROM follow WHERE follower_id = U.user_id) AS numberOfFollowees
         FROM user AS U
-                 LEFT JOIN image AS I ON U.user_id = I.user_id AND I.post_id IS NULL
         WHERE U.user_id = #{userId};
     </select>
+<!--    <select id="getUserDetail" resultMap="MyPageListMap">-->
+<!--        SELECT U.user_id, U.name, U.pr, I.url,-->
+<!--               (SELECT COUNT(*) FROM post AS P WHERE P.user_id = U.user_id) AS numberOfPosts,-->
+<!--               (SELECT COUNT(*) FROM follow WHERE followee_id = U.user_id) AS numberOfFollowers,-->
+<!--               (SELECT COUNT(*) FROM follow WHERE follower_id = U.user_id) AS numberOfFollowees-->
+<!--        FROM user AS U-->
+<!--                 LEFT JOIN image AS I ON U.user_id = I.user_id AND I.post_id IS NULL-->
+<!--        WHERE U.user_id = #{userId};-->
+<!--    </select>-->
     <select id="getCategoryList" resultMap="CategoryListMap">
         SELECT category_id, category_name
         FROM category

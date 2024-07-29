@@ -13,8 +13,9 @@
 </head>
 <body>
 <div id="container">
-    <!-- 필터링 폼 -->
-    <div th:replace="common/components/filterForm :: filterForm(categories=${categories}, selectedCategory=${selectedCategory}, goodRestaurant=${goodRestaurant}, actionUrl='/post')"></div>
+    <!-- 필터링 폼 (placeName이 없을 때만 표시) -->
+    <div th:if="${placeName == null}" th:replace="common/components/filterForm :: filterForm(categories=${categories}, selectedCategory=${selectedCategory}, goodRestaurant=${goodRestaurant}, actionUrl='/post')"></div>
+<!--    <div th:replace="common/components/filterForm :: filterForm(categories=${categories}, selectedCategory=${selectedCategory}, goodRestaurant=${goodRestaurant}, actionUrl='/post')"></div>-->
     <!-- //필터링 폼 -->
 
     <!-- myListbox -->

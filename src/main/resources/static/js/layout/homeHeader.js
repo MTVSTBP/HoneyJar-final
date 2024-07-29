@@ -12,10 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function performSearch() {
         const keyword = searchInput.value.trim();
         if (keyword !== '') {
-            // home.js의 searchAndDisplayMarkers 함수 호출
-            if (typeof searchAndDisplayMarkers === "function") {
-                searchAndDisplayMarkers(keyword);
-            }
+            window.searchAndDisplayMarkers(keyword);
         }
     }
 });

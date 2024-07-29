@@ -28,6 +28,9 @@ textarea {
 }
 
 select {
+    font-family: "Pretendard-Regular";
+    font-size: 1rem;
+    font-weight: 500;
     max-width: 150px;
     width: 90%;
     border: 1px solid #ededed;
@@ -99,7 +102,9 @@ input:focus, select:focus, textarea:focus {
 .checkbox span {
     vertical-align: middle;
     margin-right: 8px;
-    font-size: 0.6rem;
+    font-family: "Pretendard-Light";
+    font-size: 1rem;
+    font-weight: 300;
 }
 
 
@@ -121,7 +126,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 .mylist_select .checkbox label {
-    font-size: 0.7rem;
+    font-size: 1rem;
 }
 
 .mylist_select .checkbox input{
@@ -189,7 +194,11 @@ input:focus, select:focus, textarea:focus {
 
 .my_list ul .item .post_info img {
     width: 34px;
+    height: 34px;
     margin-right: 0.5rem;
+    border-radius: 50%;  /* 이미지를 원형으로 만듭니다 */
+    object-fit: cover;  /* 이미지 비율을 유지하면서 컨테이너에 맞춥니다 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  /* 약간의 그림자 효과를 추가합니다 */
 }
 
 .my_list ul .item .post_info .info_context {
@@ -197,6 +206,7 @@ input:focus, select:focus, textarea:focus {
     width: 80%;
 }
 .my_list ul .item .post_info .info_context h5 {
+    font-family: "Pretendard-Regular";
     font-size: 1rem;
     font-weight: 600;
     white-space: nowrap;
@@ -204,7 +214,9 @@ input:focus, select:focus, textarea:focus {
     text-overflow: ellipsis;
 }
 .my_list ul .item .post_info .info_context span {
-    font-size: 0.6rem;
+    font-family: "Pretendard-Regular";
+    font-size: 0.8rem;
+    font-weight: 400;
 }
 
 .my_list ul .item .bookmark {
