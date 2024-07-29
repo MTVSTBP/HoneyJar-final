@@ -66,12 +66,12 @@ document.addEventListener("DOMContentLoaded", function () {
         validateForm(false);
         hideErrorMessage(document.getElementById(event.target.id + 'Error'));
     });
-    postForm.addEventListener('submit', function (event) {
-        event.preventDefault();
-
-        if (!validateForm(true)) {
-            return;
-        }
+    // postForm.addEventListener('submit', function (event) {
+    //     event.preventDefault();
+    //
+    //     if (!validateForm(true)) {
+    //         return;
+    //     }
 
         openModal();
     });

@@ -3,17 +3,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.tbp.honeyjar.login.mapper.user.UserMapper">
-    <select id="findByUserName" resultType="com.tbp.honeyjar.login.entity.user.User">
-        SELECT user_id     as userId,
-               kakao_id    as kakaoId,
-               pr,
-               name,
-               created_at  as createdAt,
-               updated_at  as updatedAt,
-               fired_at    as firedAt,
-               user_status as userStatus
+    <select id="findByUserId" parameterType="long" resultType="com.tbp.honeyjar.login.entity.user.User">
+        SELECT *
         FROM user
-        WHERE name = #{name}
+        WHERE user_id = #{userId}
     </select>
 
     <select id="findByKakaoId" resultType="com.tbp.honeyjar.login.entity.user.User">
@@ -25,12 +18,6 @@
                updated_at  as updatedAt,
                fired_at    as firedAt,
                user_status as userStatus
-        FROM user
-        WHERE kakao_id = #{kakaoId}
-    </select>
-
-    <select id="findUserIdByKakaoId" parameterType="String" resultType="Long">
-        SELECT user_id as userId
         FROM user
         WHERE kakao_id = #{kakaoId}
     </select>
@@ -63,15 +50,4 @@
             updated_at  = NOW()
         WHERE kakao_id = #{kakaoId}
     </update>
-
-    <!--  추가  -->
-    <resultMap id="UserDTOMap" type="com.tbp.honeyjar.login.DTO.UserDTO">
-        <id property="userId" column="user_id"/>
-        <result property="name" column="name"/>
-    </resultMap>
-    <select id="searchUsersByName" resultMap="UserDTOMap">
-        SELECT user_id, name
-        FROM user
-        WHERE name LIKE CONCAT('%', #{name}, '%')
-    </select>
 </mapper>

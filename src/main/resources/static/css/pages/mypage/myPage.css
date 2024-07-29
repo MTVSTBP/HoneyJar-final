@@ -4,7 +4,6 @@
     width: 100%;
     height: 100%;
     align-items: center;
-    flex: none;
 }
 #header {
     width: 100%;
@@ -53,7 +52,7 @@
 }
 #pr {
     display: flex;
-    width: 200%;
+    width: 100%;
     height: 26%;
     padding-left: 3px;
     font-size: 12px;
@@ -78,15 +77,14 @@
     height: 48px;
 }
 #post_data {
-    width: 342px; /* 고정된 너비 */
-    min-height: 125px; /* 고정된 높이 */
+    width: 342px;
+    height: 125px;
     border-radius: 18px;
     border-color: #c7c7c7;
     border-style: solid;
     border-width: 1px;
     margin-top: 20px;
     display: flex;
-    box-sizing: border-box; /* 패딩과 테두리를 포함한 크기 */
 }
 #like {
     height: 100%;
@@ -166,108 +164,9 @@ div#bookMarkText {
     font-size: 15px;
     font-family: Inter, sans-serif;
     font-weight: bold;
-    color: #393939;
 }
-#more {
+div#more {
     font-size: 12px;
     font-family: Inter, sans-serif;
     font-weight: bold;
-    color: #393939;
-}
-.post_div {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-.my_list {
-    width: 100%;
-}
-
-.my_list ul {
-    padding-bottom: 7rem;
-    margin-top: 1rem;
-}
-
-.my_list ul .item {
-    width: 48%;
-    height: 250px;
-    position: relative;
-    margin-bottom: 1rem;
-
-}
-
-
-.my_list ul .item a {
-    display: block;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-}
-.my_list ul .item a::before{
-    content: "";
-    width: 100%;
-    height: 100%;
-    background-color: #00000045;
-    display: block;
-    position: absolute;
-    border-radius: 5%;
-}
-
-.my_list ul .item a img {
-    width: 100%;
-    border-radius: 10px;
-    height: inherit;
-}
-
-.my_list ul .item .post_info {
-    display: flex;
-    justify-content: flex-start;
-    position: absolute;
-    bottom: 5%;
-    width: 90%;
-    left: 5%;
-}
-
-.my_list ul .item .post_info img {
-    width: 34px;
-    margin-right: 0.5rem;
-}
-
-.my_list ul .item .post_info .info_context {
-    color: #fff;
-    width: 80%;
-}
-.my_list ul .item .post_info .info_context h5 {
-    font-size: 1rem;
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-.my_list ul .item .post_info .info_context span {
-    font-size: 0.6rem;
-}
-
-.my_list ul .item .bookmark {
-    position: absolute;
-    top: 3%;
-    right: 0;
-    width: 20%;
-    height: 15%;
-}
-
-.my_list ul .item .bookmark button{
-    border: 0;
-    background: transparent;
-    padding: 0;
-    width: 100%;
-}
-
-.my_list ul .item .bookmark img {
-    width: 35px;
 }

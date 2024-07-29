@@ -175,22 +175,11 @@ button {
 
 
 .kind_wrap .arrow>a.prev {
-    width: 10%;
-    height: 100%;
-}
-
-.kind_wrap .arrow>a.prev img,
-.kind_wrap .arrow>a.next img {
-    width: 100%;
-    position: relative;
-    top: 45%;
-    display: flex;
+    left: 10px;
 }
 
 .kind_wrap .arrow>a.next {
-    width: 10%;
-    height: 100%;
-    right: 0;
+    right: 10px;
 }
 
 /* 음식점 정보 */
@@ -363,29 +352,6 @@ button {
     top: 5%;
 }
 
-.button-box {
-    height: 50px;
-    width: 80%;
-    display: flex;
-    justify-content: center;
-}
-.button-box .confirm {
-    width: 40%;
-    text-align: center;
-    background: #FF8243;
-    color: #fff;
-    font-size: 1rem;
-    border-radius: 0px 50px 50px 0px;
-    cursor: pointer;
-}
-
-.button-box .confirm.close2 {
-    background: #fff;
-    color: #FF8243;
-    border: 1px solid #FF8243;
-    border-radius: 50px 0px 0px 50px;
-}
-
 .rating {
     margin: 2rem 0;
 }
@@ -423,18 +389,4 @@ button {
     color: #fff;
     justify-content: center;
     margin-top: 2rem;
-}
-
-.post_info {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-}
-.post_info img {
-    width: 34px;
-    margin-right: 0.5rem;
-}
-
-.post_info span {
-    font-size: 0.8rem;
 }

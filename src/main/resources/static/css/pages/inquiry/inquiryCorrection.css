@@ -12,10 +12,6 @@ a {
     color: #535353;
 }
 
-#Form {
-    padding-bottom: 1rem;
-}
-
 input, textarea {
     max-width: 450px;
     width: 100%;
@@ -60,6 +56,8 @@ button {
     margin-bottom: 0.5rem;
 }
 
+
+
 #back-button {
     display: flex;
     align-items: center;
@@ -78,6 +76,7 @@ button {
     font-size: 1.1rem;
     font-weight: 600;
 }
+
 
 .custom-select-wrapper {
     position: relative;
@@ -110,6 +109,11 @@ button {
     pointer-events: none;
 }
 
+
+
+
+
+
 #container {
     margin: 0 auto;
     min-width: 320px;
@@ -117,6 +121,7 @@ button {
     width: 95%;
     margin-top: 3.8rem;
 }
+
 
 .form-group {
     margin-bottom: 20px;
@@ -146,10 +151,11 @@ button {
     cursor: pointer;
 }
 
-.submit_wrap {
+.submit_wrap{
     text-align: right;
     margin-bottom: 8rem;
 }
+
 
 .error-message {
     color: red;
@@ -157,6 +163,7 @@ button {
     margin-top: 5px;
     font-size: 12px;
 }
+
 
 #submitBtn {
     background-color: #E5E5E5;
@@ -170,6 +177,7 @@ button {
     background-color: #FF8243;
     cursor: pointer;
 }
+
 
 /* 모달 스타일 */
 .modal {
@@ -187,21 +195,23 @@ button {
 
 .modal-content {
     background-color: #fff;
+    margin: auto;
     padding: 3rem 0 1rem;
     width: 80%;
     max-width: 480px;
     min-width: 320px;
     border-radius: 10px;
-    position: relative;
-    transform: translate(-50%, -50%);
-    top: 50%;
+    position: absolute;
     left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 2rem;
+    bottom: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.modal-text {
+.modal-text{
     padding: 2rem 0;
     width: 80%;
     text-align: center;
@@ -220,7 +230,7 @@ button {
     cursor: pointer;
 }
 
-.complete {
+.complete{
     cursor: pointer;
     display: flex;
     align-items: center;

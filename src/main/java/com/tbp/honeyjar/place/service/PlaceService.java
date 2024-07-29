@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import com.tbp.honeyjar.place.dto.PlaceDTO;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 public class PlaceService {
 
@@ -23,23 +22,5 @@ public class PlaceService {
 
     public PlaceDTO getPlaceById(Long placeId) {
         return placeMapper.findPlaceById(placeId);
-    }
-
-    @Transactional
-    public void updatePlace(PlaceDTO placeDTO) {
-        System.out.println("Before update: " + placeMapper.findPlaceById(placeDTO.getPlaceId()));
-        System.out.println("placeDTO = " + placeDTO);
-        placeMapper.updatePlace(placeDTO);
-        System.out.println("After update: " + placeMapper.findPlaceById(placeDTO.getPlaceId()));
-    }
-
-    @Transactional
-    public void deletePlace(Long placeId) {
-        placeMapper.deletePlaceById(placeId);
-    }
-
-    @Transactional(readOnly = true)
-    public float getRatingById(Long placeId) {
-        return placeMapper.getRatingById(placeId);
     }
 }

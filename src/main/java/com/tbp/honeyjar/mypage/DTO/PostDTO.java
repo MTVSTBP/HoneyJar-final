@@ -1,10 +1,10 @@
 package com.tbp.honeyjar.mypage.DTO;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Getter
-@Setter
 @NoArgsConstructor
 public class PostDTO {
     private Long postId;
@@ -23,6 +23,30 @@ public class PostDTO {
         this.postWriterProfileImage = postWriterProfileImage;
         this.postThumbnail = postThumbnail;
         this.isBookmarked = isBookmarked;
+    }
+
+    public Long getPostId() {
+        return postId;
+    }
+
+    public String getPostTitle() {
+        return postTitle;
+    }
+
+    public String getPostWriter() {
+        return postWriter;
+    }
+
+    public String getPostWriterProfileImage() {
+        return postWriterProfileImage;
+    }
+
+    public String getPostThumbnail() {
+        return postThumbnail;
+    }
+
+    public boolean isBookmarked() {
+        return isBookmarked;
     }
 
     @Override

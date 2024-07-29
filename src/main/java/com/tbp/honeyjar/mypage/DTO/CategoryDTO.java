@@ -2,7 +2,6 @@ package com.tbp.honeyjar.mypage.DTO;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Data
 @NoArgsConstructor
@@ -12,14 +11,6 @@ public class CategoryDTO {
 
     public CategoryDTO(Long categoryId, String categoryName) {
         this.categoryId = categoryId;
-        this.categoryName = categoryName;
-    }
-
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
 

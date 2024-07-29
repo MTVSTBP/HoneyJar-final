@@ -24,11 +24,9 @@
             <div class="custom-select-wrapper">
                 <select id="category" name="category">
                     <option value="">선택</option>
-                    <!-- Dynamically populate options using Thymeleaf -->
-                    <option th:each="category : ${categories}"
-                            th:value="${category.getId()}"
-                            th:text="${category.getName()}">
-                    </option>
+                    <option value="1">카테고리1</option>
+                    <option value="2">카테고리2</option>
+                    <!-- 다른 카테고리 옵션들 -->
                 </select>
             </div>
             <p class="error-message" id="categoryError"></p>

@@ -2,8 +2,6 @@ var markers = [];
 var overlays = []; // 생성된 오버레이를 저장할 배열
 var selectedPlace = null; // 선택된 장소를 저장할 변수
 
-console.log("redirectTo:", redirectTo); // 디버깅을 위한 콘솔 로그
-
 var mapContainer = document.getElementById('map'),
     mapOption = {
         center: new kakao.maps.LatLng(37.413827745, 127.099316624097),
@@ -182,26 +180,17 @@ function storeAndRedirect() {
     if (selectedPlace) {
         const placeData = {
             address_name: selectedPlace.address_name,
-            road_address_name: selectedPlace.road_address_name,
+            road_address_name: selectedPlace.road_address_name || selectedPlace.address_name,
             place_name: selectedPlace.place_name,
             y: selectedPlace.y,
             x: selectedPlace.x
         };
-        console.log(placeData)
         localStorage.setItem("selectedPlace", JSON.stringify(placeData));
-
-        // URL로 리다이렉트
-        if (redirectTo) {
-            window.location.href = redirectTo;
-        } else {
-            console.error("redirectTo URL is not set");
-        }
+        window.location.href = "/post/write";
     } else {
         alert("장소를 선택해 주세요.");
     }
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById('completeBtn').addEventListener('click', storeAndRedirect);
-});
-
+// 완료 버튼 클릭 시
+document.getElementById('completeBtn').addEventListener('click', storeAndRedirect);

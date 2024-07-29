@@ -76,34 +76,34 @@ document.addEventListener("DOMContentLoaded", function () {
         validateForm(false);
         hideErrorMessage(document.getElementById(event.target.id + 'Error'));
     });
-    // postForm.addEventListener('submit', function (event) {
-    //     event.preventDefault();
-    //
-    //     if (!validateForm(true)) {
-    //         return;
-    //     }
-    //
-    //     openModal();
-});
+    postForm.addEventListener('submit', function (event) {
+        event.preventDefault();
 
-function openModal() {
-    modal.style.display = "block";
-}
+        if (!validateForm(true)) {
+            return;
+        }
 
-function closeModal() {
-    modal.style.display = "none";
-}
+        openModal();
+    });
 
-closeBtn.addEventListener("click", closeModal);
-
-completeBtn.addEventListener("click", function () {
-    closeModal();
-    window.location.href = "/admin/qna";
-});
-
-window.addEventListener("click", function (event) {
-    if (event.target === modal) {
-        closeModal();
+    function openModal() {
+        modal.style.display = "block";
     }
-});
 
+    function closeModal() {
+        modal.style.display = "none";
+    }
+
+    closeBtn.addEventListener("click", closeModal);
+
+    completeBtn.addEventListener("click", function () {
+        closeModal();
+        window.location.href = "/admin/qna";
+    });
+
+    window.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+});

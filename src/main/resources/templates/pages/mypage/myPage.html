@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout=""
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout.html"
       layout:decorate="~{common/layout/defaultLayout}"
       layout:fragment="content"
       th:with="pageTitle='MyPage'">
@@ -17,18 +17,16 @@
         <div id="detailContainer">
             <div id="userDetail">
                 <div th:text="${myPage.userName}">유저 이름</div>
-                <a th:href="@{/mypage/correction}">
-                    <img id="pencil" src="/assets/svg/pencil.svg" alt="사진이 없습니다."/>
-                </a>
+                <img id="pencil" src="/assets/svg/mypage_profile_correction.svg"  alt="사진이 없습니다."/>
             </div>
-            <div id="pr" th:text="${myPage.userPr}" th:onclick="open()">자기소개</div>
+            <div id="pr" th:text="${myPage.userPr}">자기소개</div>
         </div>
         <div id="profileImage">
-            <img id="profileSvg" th:src="${myPage.profileImage != null ? myPage.profileImage : '/assets/svg/base_profile.svg'}"  alt="사진이 없습니다."/>
+            <img id="profileSvg" src="/assets/svg/base_profile.svg"  alt="사진이 없습니다."/>
         </div>
     </div>
     <div id="post_data">
-        <div id="like" onclick="location.href='/mypage/mypost'" style="cursor: pointer;">
+        <div id="like">
             <div class="post_data_title">포스트</div>
             <div class="post_data_set">
                 <div class="post_data_icon">
@@ -38,7 +36,7 @@
             </div>
             <div class="border"></div>
         </div>
-        <div id="follower" onclick="location.href='/follow/follower'" style="cursor: pointer;">
+        <div id="follower">
             <div class="post_data_title">팔로워</div>
             <div class="post_data_set">
                 <div class="post_data_icon">
@@ -48,7 +46,7 @@
             </div>
             <div class="border"></div>
         </div>
-        <div id="following" onclick="location.href='/follow/following'" style="cursor: pointer;">
+        <div id="following">
             <div class="post_data_title">팔로잉</div>
             <div class="post_data_set">
                 <div class="post_data_icon">
@@ -61,20 +59,11 @@
     <div id="bookMark">
         <div id="textLine">
             <div id="bookMarkText">북마크</div>
-            <div>
-                <a id="more" th:href="@{/mypage/bookmark}">
-                    더보기&gt
-                </a>
-            </div>
+            <div id="more">더보기&gt</div>
         </div>
-        <div class="my_list">
-            <ul>
-                <th:block th:replace="common/components/postComponent :: postComponent(posts=${posts}, maxPosts=null)"></th:block>
-            </ul>
-        </div>
+        <div id="postData"></div>
     </div>
     <div id="navigate"></div>
 </div>
-<script th:inline="javascript" type="text/javascript" th:src="@{/js/pages/bookmark/bookmark.js}"></script>
 </body>
 </html>

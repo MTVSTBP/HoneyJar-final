@@ -49,7 +49,7 @@ public class CookieUtil {
         cookie.setHttpOnly(true); // XSS 공격 방지를 위해 HttpOnly 설정
         cookie.setSecure(true); // HTTPS 환경에서만 쿠키 전송
         cookie.setMaxAge(maxAge);
-        cookie.setAttribute("SameSite", "lax"); // 또는 "Lax"
+        cookie.setAttribute("SameSite", "Strict"); // 또는 "Lax"
         response.addCookie(cookie);
         log.debug("Added cookie: name={}, value={}, maxAge={}", name, value, maxAge);
     }

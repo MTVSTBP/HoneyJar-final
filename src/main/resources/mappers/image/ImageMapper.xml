@@ -4,14 +4,6 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.tbp.honeyjar.image.dao.ImageMapper">
 
-    <resultMap id="imageDTOtResultMap" type="com.tbp.honeyjar.image.dto.ImageDTO">
-        <id property="imageId" column="image_id"/>
-        <result property="url" column="url"/>
-        <result property="userId" column="user_id"/>
-        <result property="postId" column="post_id"/>
-        <result property="isMain" column="is_main"/>
-    </resultMap>
-
     <!-- 이미지 단건 삽입 -->
     <insert id="insertImage" parameterType="com.tbp.honeyjar.image.dto.ImageDTO">
         INSERT INTO image (url, user_id, post_id, is_main)
@@ -28,34 +20,10 @@
     </insert>
 
     <!-- 포스트 ID로 이미지 찾기 -->
-    <select id="findImagesByPostId" resultMap="imageDTOtResultMap">
+    <select id="findImagesByPostId" resultType="com.tbp.honeyjar.image.dto.ImageDTO">
         SELECT image_id, url, user_id, post_id, is_main
         FROM image
         WHERE post_id = #{postId}
     </select>
 
-    <!-- 포스트 ID로 메인 이미지 찾기 -->
-    <select id="findMainImageByPostId" resultMap="imageDTOtResultMap">
-        SELECT image_id, url, user_id, post_id, is_main
-        FROM image
-        WHERE post_id = #{postId} AND is_main = 1
-    </select>
-
-    <!-- 포스트 ID로 이미지 삭제 -->
-    <delete id="deleteImagesByPostId">
-        DELETE FROM image WHERE post_id = #{postId}
-    </delete>
-
-    <!-- 이미지 단건 삭제 -->
-    <delete id="deleteImageById" parameterType="long">
-        DELETE FROM image WHERE image_id = #{imageId}
-    </delete>
-
-
-    <!-- 메인이미지 업데이트 -->
-    <update id="updateMainImageStatus">
-        UPDATE image
-        SET is_main = #{isMain}
-        WHERE image_id = #{imageId}
-    </update>
 </mapper>

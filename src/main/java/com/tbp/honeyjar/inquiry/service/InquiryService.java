@@ -1,69 +1,34 @@
 package com.tbp.honeyjar.inquiry.service;
 
-import com.tbp.honeyjar.admin.dao.AdminInquiryMapper;
 import com.tbp.honeyjar.inquiry.dto.InquiryDto;
 import com.tbp.honeyjar.inquiry.dto.InquiryWriteDto;
 import com.tbp.honeyjar.inquiry.dto.InquiryUpdateDto;
 import com.tbp.honeyjar.inquiry.mapper.InquiryMapper;
-import com.tbp.honeyjar.login.entity.user.User;
-import com.tbp.honeyjar.login.mapper.user.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
-@Transactional
 public class InquiryService {
     InquiryMapper inquiryMapper;
-    UserMapper userMapper;
 
-    public InquiryService(InquiryMapper inquiryMapper, UserMapper userMapper) {
+    @Autowired(required = true)
+    public InquiryService(InquiryMapper inquiryMapper) {
         this.inquiryMapper = inquiryMapper;
-        this.userMapper = userMapper;
     }
 
-    /*  */
-
-    @Transactional(readOnly = true)
-    public User findByKakaoId(String kakaoId) {
-        return userMapper.findByKakaoId(kakaoId);
+    public List<InquiryDto> getInquiryList() {
+        return inquiryMapper.getInquiryList();
     }
 
-    /* User find inquiry in page-unit */
-    @Transactional(readOnly = true)
-    public Page<InquiryDto> getInquiryListByUserId(String kakaoId, Pageable pageable) {
-        System.out.println("kakaoId : " + kakaoId);
-        Long userId = userMapper.findByKakaoId(kakaoId).getUserId();
-        int totalPageCount = inquiryMapper.getInquiryCountByUserId(userId);
-
-        Map<String, Object> params = new HashMap<>();
-
-        params.put("userId", userId);
-        params.put("pageSize", pageable.getPageSize());
-        params.put("offset", pageable.getOffset());
-
-        List<InquiryDto> inquiries = inquiryMapper.getInquiryListByUserId(params);
-        return new PageImpl<>(inquiries, pageable, totalPageCount);
-    }
-
-    @Transactional(readOnly = true)
-    public List<InquiryDto> getInquiryListByUserId(String kakaoId) {
-        Long userId = userMapper.findByKakaoId(kakaoId).getUserId();
+    public List<InquiryDto> getInquiryListByUserId(Long userId) {
         return inquiryMapper.getInquiryListByUserId(userId);
     }
 
-    /* get inquiryDetail by inquiryId */
-    @Transactional(readOnly = true)
-    public InquiryDto getInquiryById(Long inquiryId) {
-        return inquiryMapper.getInquiryById(inquiryId);
+    public InquiryDto getInquiryById(Long id) {
+        return inquiryMapper.getInquiryById(id);
     }
 
     public int createInquiry(InquiryWriteDto inquiryWriteDto) {
@@ -80,5 +45,9 @@ public class InquiryService {
 
     public void updateInquiry(InquiryUpdateDto inquiryUpdateDto) {
         inquiryMapper.update(inquiryUpdateDto);
+    }
+
+    public void deleteInquiry(Long id) {
+        inquiryMapper.delete(id);
     }
 }
