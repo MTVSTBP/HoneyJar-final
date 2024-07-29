@@ -83,7 +83,7 @@ a {
     height: 22px; */
 }
 
-/* 개선된 버튼 스타일 */
+/* Pagination */
 .pagination {
     display: flex;
     justify-content: center;
