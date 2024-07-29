@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const fileCountMessage = document.getElementById('fileCountMessage');
     const fileTypeMessage = document.getElementById('fileTypeMessage');
     const submitBtn = document.getElementById('submitBtn');
-    const placeNameInput = document.getElementById('placeNameInput');
     const placeNameButton = document.getElementById('openMap');
     const postForm = document.getElementById('postForm');
     const errorMessage = document.getElementById('errorMessage');
@@ -18,6 +17,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const completeBtn = document.getElementById('complete');
     const maxFiles = 5;
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
+    const openMapBtn = document.getElementById('openMap');
+    const placeNameInput = document.getElementById('placeNameInput');
+    const placeNameHidden = document.getElementById('placeName');
+    const placeXCoordinate = document.getElementById('placeXCoordinate');
+    const placeYCoordinate = document.getElementById('placeYCoordinate');
+
     let selectedFiles = JSON.parse(localStorage.getItem('selectedFiles')) || [];
     let thumbnailIndex = localStorage.getItem('thumbnailIndex') !== null ? parseInt(localStorage.getItem('thumbnailIndex')) : null;
     let postId;
@@ -363,6 +369,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
         updateImagePreview();
     }
+
+    openMapBtn.addEventListener('click', function() {
+        window.open('/post/map?redirectTo=/post/write', 'findAddress', 'width=500,height=600');
+    });
+
+    window.addEventListener('message', function(event) {
+        const placeData = JSON.parse(event.data);
+        placeNameInput.value = placeData.road_address_name || placeData.address_name;
+        placeNameHidden.value = placeData.place_name;
+        placeXCoordinate.value = placeData.x;
+        placeYCoordinate.value = placeData.y;
+    });
 
     // 초기화 시 폼 상태 복원
     restoreFormState();

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}"
+      layout:fragment="content"
+      th:with="pageTitle='Setting'">
+
+<head>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/settings/notice/notice.css}"/>
+    <th:block layout:fragment="title">
+        <title>공지사항</title>
+    </th:block>
+</head>
+
+<body>
+<div id="container">
+    <div class="sub_title">
+        <h4>공지사항</h4>
+    </div>
+
+    <div class="notice">
+        <ul class="list">
+            <!-- 클릭했을때, 읽음 처리로 컬러 변경됨. class="notice_link" -->
+            <li th:each="notice : ${noticeList}">
+                <a th:href="@{|/settings/notice/${notice.noticeId}|}" class="notice_link">
+                    <div class="item">
+                        <div th:text="${notice.title}" class="title">제목 불러오는 중...</div>
+                        <div class="context_text">
+                            <p th:text="${notice.post}" class="context">본문 불러오는 중...</p>
+                            <span th:text="${notice.formattedCreatedAt}">작성일자 불러오는 중...</span>
+                        </div>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script th:inline="javascript" th:src="@{/js/pages/settings/notice/notice.js}"></script>
+</body>
+
+</html>

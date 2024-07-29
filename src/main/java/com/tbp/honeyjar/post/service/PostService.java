@@ -276,7 +276,6 @@ public class PostService {
     }
 
 
-
     @Transactional
     public void softDeletePost(Long postId) {
         postMapper.softDeletePost(postId);
@@ -285,6 +284,7 @@ public class PostService {
     public int commentCount(Long postId) {
         return postMapper.commentCount(postId);
     }
+
     public void likePost(PostLikeRequestDto requestDto) {
         postMapper.likePost(requestDto);
     }
@@ -315,5 +315,9 @@ public class PostService {
 
     public void ratingAgain(PostRatingRequestDto requestDto) {
         postMapper.ratingAgain(requestDto);
+    }
+
+    public List<PostListDTO> findPostsByPlaceName(String keyword) {
+        return postMapper.findPostsByPlaceName(keyword);
     }
 }

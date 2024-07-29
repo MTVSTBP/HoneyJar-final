@@ -51,8 +51,8 @@ function displayPlaces(places) {
 
         bounds.extend(placePosition);
 
-        (function(marker, title, place, placePosition) {
-            itemEl.onclick = function() {
+        (function (marker, title, place, placePosition) {
+            itemEl.onclick = function () {
                 map.panTo(placePosition);
                 map.setLevel(2); // 확대 레벨 설정
 
@@ -159,8 +159,8 @@ function displayPagination(pagination) {
         if (i === pagination.current) {
             el.className = 'on';
         } else {
-            el.onclick = (function(i) {
-                return function() {
+            el.onclick = (function (i) {
+                return function () {
                     pagination.gotoPage(i);
                 }
             })(i);
@@ -187,21 +187,16 @@ function storeAndRedirect() {
             y: selectedPlace.y,
             x: selectedPlace.x
         };
-        console.log(placeData)
-        localStorage.setItem("selectedPlace", JSON.stringify(placeData));
 
-        // URL로 리다이렉트
-        if (redirectTo) {
-            window.location.href = redirectTo;
-        } else {
-            console.error("redirectTo URL is not set");
-        }
+        // 부모 창으로 데이터 전달
+        window.opener.postMessage(JSON.stringify(placeData), '*');
+        window.close();
     } else {
         alert("장소를 선택해 주세요.");
     }
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('completeBtn').addEventListener('click', storeAndRedirect);
 });
 

@@ -9,6 +9,7 @@ import java.util.List;
 
 @Mapper
 public interface UserMapper {
+    User findByUserId(Long userId);
     User findByUserName(String name);
     User findByKakaoId(String kakaoId);
     Long findUserIdByKakaoId(String kakaoId);

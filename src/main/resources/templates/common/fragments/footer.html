@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <!-- Thymeleaf 선언 / FooterFragment 임을 선언-->
-<html lang="en"  xmlns:th="http://www.thymeleaf.org" th:fragment="footer" >
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="footer">
 <footer id="footer">
     <div class="wrap">
         <div id="nav_container">
             <ul class="nav">
-                <li id ="home">
-                    <a href="/">
+                <li id="home">
+                    <a href="#" data-action="home">
                         <img src="/assets/svg/home.svg" alt="홈">
                         <p>홈</p>
                     </a>
@@ -20,17 +20,16 @@
                 <li id="created">
                     <a href="/post/write">
                         <img src="/assets/svg/created.svg" alt="맛집추가">
-
                     </a>
                 </li>
                 <li id="mypage">
-                    <a href="/mypage">
+                    <a href="#" data-action="mypage">
                         <img src="/assets/svg/mypage.svg" alt="마이페이지">
                         <p>마이페이지</p>
                     </a>
                 </li>
                 <li id="settings">
-                    <a href="/settings">
+                    <a href="#" data-action="settings">
                         <img src="/assets/svg/settings.svg" alt="설정">
                         <p>설정</p>
                     </a>

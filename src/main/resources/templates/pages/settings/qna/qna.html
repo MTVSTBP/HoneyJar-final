@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/defaultLayout}"
+      layout:fragment="content"
+      th:with="pageTitle='Setting'">
+
+<head>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/settings/qna/qna.css}"/>
+    <th:block layout:fragment="title">
+        <title>FAQ</title>
+    </th:block>
+</head>
+
+<body>
+<div id="container">
+    <div class="sub_title">
+        <h4>FAQ<br>자주 묻는 질문</h4>
+    </div>
+    <div class="qna_category">
+        <ul>
+            <li th:each="qnaCategory, iterStat : ${qnaCategoryList}">
+                <p th:text="${qnaCategory.name}"
+                   th:data-category="${qnaCategory.id}"
+                   th:class="${iterStat.first} ? 'tab tab_active' : 'tab'"
+                >
+                    카테고리 불러오는 중...
+                </p>
+            </li>
+        </ul>
+    </div>
+
+    <div id="qna-container">
+        <div th:each="qna : ${qnaList}"
+             th:class="'qna category-' + ${qna.categoryId}"
+             th:style="${qna.categoryId == 1} ? 'display: block;' : 'display: none;'"
+        >
+            <div class="qna_item">
+                <div class="question">
+                    <div th:text="${qna.title}" class="title">
+                        <h5>제목 불러오는 중...</h5>
+                    </div>
+                </div>
+                <div class="answer">
+                    <span th:text="${qna.post}">본문 불러오는 중...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:inline="javascript" th:src="@{/js/pages/settings/qna/qna.js}"></script>
+</body>
+
+</html>

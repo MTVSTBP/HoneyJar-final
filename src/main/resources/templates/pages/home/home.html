@@ -1,0 +1,29 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout/homeLayout}"
+      layout:fragment="content">
+
+<head>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/home/home.css}" href="/css/pages/home/home.css"/>
+    <title>홈</title>
+</head>
+
+<body>
+
+<div id="main-container">
+    <div id="map-container">
+        <div id="map"></div>
+    </div>
+    <div id="search-container">
+        <div id="search-results"></div>
+    </div>
+</div>
+
+<th:block layout:fragment="script">
+    <script type="text/javascript"
+            src="//dapi.kakao.com/v2/maps/sdk.js?appkey=801fe93e4b5c07756a1d7821185a0a72&libraries=services,clusterer"></script>
+    <script th:src="@{/js/layout/homeHeader.js}"></script>
+    <script th:src="@{/js/pages/home/home.js}"></script>
+</th:block>
+</body>
+</html>

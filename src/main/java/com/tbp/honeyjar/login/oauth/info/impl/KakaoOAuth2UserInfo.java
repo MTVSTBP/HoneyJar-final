@@ -2,9 +2,11 @@ package com.tbp.honeyjar.login.oauth.info.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tbp.honeyjar.login.oauth.info.OAuth2UserInfo;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 
+@Slf4j
 public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
 
     private static final ObjectMapper objectMapper = new ObjectMapper();

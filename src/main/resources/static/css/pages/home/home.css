@@ -1,0 +1,76 @@
+#main-container {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 181px);
+    display: flex;
+    flex-direction: column;
+}
+
+/* Map Container Start */
+#map-container, #map {
+    width: 100%;
+    /*height: 100%;*/
+    height: 400px;
+    position: relative;
+    min-height: 400px;  /* 또는 원하는 최소 높이 */
+}
+
+#map-container {
+    flex: 1;
+    min-height: 0;
+    transition: height 0.5s ease; /* 검색 이벤트 이후 자연스러운 리사이징 효과 */
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+#map.blur {
+    filter: blur(3px);
+    pointer-events: none;
+}
+
+/* Map Container End */
+
+/* Search Container Start */
+#search-container {
+    flex: 0;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    transition: height 0.5s ease;
+    overflow: hidden;
+}
+
+#search-options {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+#radius-button {
+    padding: 5px 10px;
+    background-color: #FFD140;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#search-results {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.search-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.search-active #map-container {
+    flex: 1;
+}
+
+.search-active #search-container {
+    flex: 1;
+}
+/* Search Container End */

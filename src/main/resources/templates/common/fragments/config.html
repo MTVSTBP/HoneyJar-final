@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <!--Thymeleaf, ConfigFragment 선언-->
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:fragment="config">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      th:fragment="config"
+      th:attr="data-is-admin=${isAdmin ? 'true' : 'false'}">
 <head>
     <!--Common Head-->
     <meta charset="UTF-8">
