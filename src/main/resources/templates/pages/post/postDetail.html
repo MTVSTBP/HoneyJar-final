@@ -16,18 +16,9 @@
         <div class="title">
             <span id="category" th:text="*{categoryName}">카테고리명</span>
             <h2 th:text="*{title}">제목</h2>
-            <div class="post_info">
-                <img th:if="${myPage != null and myPage.profileImage != null}"
-                     th:src="${myPage.profileImage}"
-                     alt="프로필 이미지"/>
-                <img th:unless="${myPage != null and myPage.profileImage != null}"
-                     src="/assets/svg/base_profile.svg"
-                     alt="기본 프로필 이미지"/>
-                <span th:text="${post.userName}">닉네임</span>
-            </div>
-            <p id="date" th:text="${#temporals.format(post.createdAt, 'yyyy년 M월 d일 HH시 mm분')}">2024.06.24</p>
+            <p id="date" th:text="*{createdAt}">2024.06.24</p>
         </div>
-        <div class="more_h" th:if="${isAuthor}">
+        <div class="more_h">
             <img src="/assets/svg/more_horiz.svg" alt="more_horiz">
             <div class="click_box">
                 <div class="d_flex">
@@ -74,17 +65,14 @@
 
             <div class="address info">
                 <h5>주소</h5>
-                <p th:text="*{roadAddressName}">주소</p>
+                <p th:text="*{placeName}">주소</p>
             </div>
         </div>
 
         <div class="bookmark">
-            <form id="bookmarkForm" th:action="@{/bookmarks/toggle}" method="post">
-                <input type="hidden" name="postId" th:value="${post.postId}">
-                <button id="bookmarkButton" th:data-bookmarked="${post.bookmarked}">
-                    <img th:src="${post.bookmarked} ? @{/assets/svg/bookmark.svg} : @{/assets/svg/bookmark_border.svg}" alt="북마크" id="bookmarkImage">
-                </button>
-            </form>
+            <button id="bookmarkButton">
+                <img src="/assets/svg/bookmark_border.svg" alt="북마크" id="bookmarkImage">
+            </button>
         </div>
     </div>
     <!-- //information -->
@@ -104,22 +92,21 @@
     <!-- comment -->
     <div class="comment_box">
         <div class="like">
-            <button id="likeButton" th:data-post-id="${post.postId}" th:data-user-id="${userId}" th:data-liked="${isLiked}">
-                <img th:src="${isLiked} ? '/assets/svg/favorite_color.svg' : '/assets/svg/favorite.svg'" alt="좋아요" id="likeImage">
-                <span id="likeCount" th:text="${likeCount}">0</span>
+            <button id="likeButton" data-post-id="*{postId}">
+                <img src="/assets/svg/favorite.svg" alt="좋아요" id="likeImage">
+                <span id="likeCount">0</span>
             </button>
         </div>
         <div class="comment">
-            <button id="commentButton"
-                    data-post-id="${post.postId}">
+            <button id="commentButton">
                 <img src="/assets/svg/mode_comment.svg" alt="댓글">
-                <span id="commentCount" th:text="${commentCnt}">0</span>
+                <span id="commentCount">0</span>
             </button>
         </div>
         <div class="scope" id="rating">
-            <button id="openRatingModal" th:data-rated="${isRated}">
-                <img th:src="${isRated} ? '/assets/svg/star_color.svg' : '/assets/svg/star.svg'" alt="별점" id="ratingStar">
-                <span id="averageRating" th:text="${rating}">0</span>
+            <button id="openRatingModal" data-post-id="*{postId}">
+                <img src="/assets/svg/star.svg" alt="별점" id="ratingStar">
+                <span id="averageRating">0</span>
             </button>
         </div>
     </div>
@@ -163,59 +150,6 @@
     // 마커가 지도 위에 표시되도록 설정합니다
     marker.setMap(map);
     /*]]>*/
-</script>
-
-
-<!-- 삭제 확인 모달 -->
-<div id="deleteConfirmModal" class="modal" style="display:none;">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <div class="modal-text">
-            <p>정말 삭제하시겠습니까?</p>
-        </div>
-        <div class="button-box">
-            <button id="confirmClose" class="confirm close2">취소</button>
-            <button id="confirmDelete" class="confirm">확인</button>
-        </div>
-    </div>
-</div>
-
-<!-- 삭제 완료 모달 -->
-<div id="deleteSuccessModal" class="modal" style="display:none;">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <div class="modal-text">
-            <p>삭제가 완료되었습니다!</p>
-        </div>
-        <button id="completeDelete" class="complete">확인</button>
-    </div>
-</div>
-
-
-<!-- Modal -->
-<!-- 모달에 확인 버튼 추가 -->
-<div id="ratingModal" class="modal">
-    <div class="modal-content">
-                        <span class="close">
-                            <img src="/assets/svg/close.svg" alt="">
-                        </span>
-        <div class="rating">
-            <p>평점을 남겨주세요!</p>
-        </div>
-        <div class="modal-rating">
-            <span class="star" data-value="1">&#9733;</span>
-            <span class="star" data-value="2">&#9733;</span>
-            <span class="star" data-value="3">&#9733;</span>
-            <span class="star" data-value="4">&#9733;</span>
-            <span class="star" data-value="5">&#9733;</span>
-        </div>
-        <button id="confirmRating" class="confirmRating" name="rating">확인</button>
-    </div>
-</div>
-
-
-<script th:inline="javascript">
-    var postId = /*[[${post.postId}]]*/ 'defaultPostId';
 </script>
 
 <script th:inline="javascript" type="text/javascript" th:src="@{/js/pages/post/postDetail.js}"></script>

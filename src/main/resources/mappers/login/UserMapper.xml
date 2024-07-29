@@ -3,40 +3,17 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.tbp.honeyjar.login.mapper.user.UserMapper">
-    <select id="findByUserId" resultType="com.tbp.honeyjar.login.entity.user.User">
-        SELECT user_id       as userId,
-               kakao_id      as kakaoId,
-               pr            as pr,
-               name          as name,
-               profile_image as profileImage,
-               created_at    as createdAt,
-               updated_at    as updatedAt,
-               fired_at      as firedAt,
-               user_status   as userStatus
+    <select id="findByUserId" parameterType="long" resultType="com.tbp.honeyjar.login.entity.user.User">
+        SELECT *
         FROM user
         WHERE user_id = #{userId}
-    </select>
-
-    <select id="findByUserName" resultType="com.tbp.honeyjar.login.entity.user.User">
-        SELECT user_id       as userId,
-               kakao_id      as kakaoId,
-               pr            as pr,
-               name          as name,
-               profile_image as profileImage,
-               created_at    as createdAt,
-               updated_at    as updatedAt,
-               fired_at      as firedAt,
-               user_status   as userStatus
-        FROM user
-        WHERE name = #{name}
     </select>
 
     <select id="findByKakaoId" resultType="com.tbp.honeyjar.login.entity.user.User">
         SELECT user_id     as userId,
                kakao_id    as kakaoId,
-               pr          as pr,
-               name        as name,
-               profile_image as profileImage,
+               pr,
+               name,
                created_at  as createdAt,
                updated_at  as updatedAt,
                fired_at    as firedAt,
@@ -45,31 +22,24 @@
         WHERE kakao_id = #{kakaoId}
     </select>
 
-    <select id="findUserIdByKakaoId" parameterType="String" resultType="Long">
-        SELECT user_id as userId
-        FROM user
-        WHERE kakao_id = #{kakaoId}
-    </select>
-
     <insert id="insertUser" parameterType="com.tbp.honeyjar.login.entity.user.User" useGeneratedKeys="true"
             keyProperty="userId">
-        INSERT INTO user (kakao_id, pr, name, profile_image, created_at, updated_at, user_status)
-        VALUES (#{kakaoId}, #{pr}, #{name}, #{profileImage}, NOW(), NOW(), true)
+        INSERT INTO user (kakao_id, pr, name, created_at, updated_at, user_status)
+        VALUES (#{kakaoId}, #{pr}, #{name}, NOW(), NOW(), true)
     </insert>
 
     <update id="updateUser" parameterType="com.tbp.honeyjar.login.entity.user.User">
         UPDATE user
-        SET name          = #{name},
-            pr            = #{pr},
-            profile_image = #{profileImage},
-            updated_at    = NOW()
+        SET name       = #{name},
+            pr         = #{pr},
+            updated_at = NOW()
         WHERE user_id = #{userId}
     </update>
 
     <update id="deleteUser">
         UPDATE user
         SET user_status = false,
-            fired_at    = #{firedAt}
+            fired_at = #{firedAt}
         WHERE kakao_id = #{kakaoId}
     </update>
 
@@ -80,15 +50,4 @@
             updated_at  = NOW()
         WHERE kakao_id = #{kakaoId}
     </update>
-
-    <!--  추가  -->
-    <resultMap id="UserDTOMap" type="com.tbp.honeyjar.login.DTO.UserDTO">
-        <id property="userId" column="user_id"/>
-        <result property="name" column="name"/>
-    </resultMap>
-    <select id="searchUsersByName" resultMap="UserDTOMap">
-        SELECT user_id, name
-        FROM user
-        WHERE name LIKE CONCAT('%', #{name}, '%')
-    </select>
 </mapper>

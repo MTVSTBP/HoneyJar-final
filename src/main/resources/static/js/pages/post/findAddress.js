@@ -2,8 +2,6 @@ var markers = [];
 var overlays = []; // 생성된 오버레이를 저장할 배열
 var selectedPlace = null; // 선택된 장소를 저장할 변수
 
-console.log("redirectTo:", redirectTo); // 디버깅을 위한 콘솔 로그
-
 var mapContainer = document.getElementById('map'),
     mapOption = {
         center: new kakao.maps.LatLng(37.413827745, 127.099316624097),
@@ -51,8 +49,8 @@ function displayPlaces(places) {
 
         bounds.extend(placePosition);
 
-        (function (marker, title, place, placePosition) {
-            itemEl.onclick = function () {
+        (function(marker, title, place, placePosition) {
+            itemEl.onclick = function() {
                 map.panTo(placePosition);
                 map.setLevel(2); // 확대 레벨 설정
 
@@ -159,8 +157,8 @@ function displayPagination(pagination) {
         if (i === pagination.current) {
             el.className = 'on';
         } else {
-            el.onclick = (function (i) {
-                return function () {
+            el.onclick = (function(i) {
+                return function() {
                     pagination.gotoPage(i);
                 }
             })(i);
@@ -182,21 +180,17 @@ function storeAndRedirect() {
     if (selectedPlace) {
         const placeData = {
             address_name: selectedPlace.address_name,
-            road_address_name: selectedPlace.road_address_name,
+            road_address_name: selectedPlace.road_address_name || selectedPlace.address_name,
             place_name: selectedPlace.place_name,
             y: selectedPlace.y,
             x: selectedPlace.x
         };
-        localStorage.setItem('selectedPlace', JSON.stringify(placeData));
-        // 부모 창으로 이동 (redirectTo 값 사용)
-        window.location.href = redirectTo;
+        localStorage.setItem("selectedPlace", JSON.stringify(placeData));
+        window.location.href = "/post/write";
     } else {
         alert("장소를 선택해 주세요.");
     }
 }
 
-
-document.addEventListener("DOMContentLoaded", function () {
-    document.getElementById('completeBtn').addEventListener('click', storeAndRedirect);
-});
-
+// 완료 버튼 클릭 시
+document.getElementById('completeBtn').addEventListener('click', storeAndRedirect);

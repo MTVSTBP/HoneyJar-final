@@ -158,8 +158,8 @@ body {
 }
 
 .more_h {
-    position: relative;
-}
+     position: relative;
+ }
 .title_wrap .more_h img {
     width: 90%;
     text-align: center;
@@ -191,13 +191,4 @@ body {
 
 .edit_comment {
     display: none;
-}
-
-.user_profile {
-    width: 34px;
-    height: 34px;
-    margin-right: 0.5rem;
-    border-radius: 50%;  /* 이미지를 원형으로 만듭니다 */
-    object-fit: cover;  /* 이미지 비율을 유지하면서 컨테이너에 맞춥니다 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  /* 약간의 그림자 효과를 추가합니다 */
 }

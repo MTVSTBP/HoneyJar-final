@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (accessToken) {
         console.log('User is logged in');
         // 로그인 상태에 따른 UI 업데이트 등을 수행
-        window.location.href = '/home'; // 이미 로그인된 경우 홈페이지로 리다이렉트
+        window.location.href = '/'; // 이미 로그인된 경우 홈페이지로 리다이렉트
     } else {
         console.log('User is not logged in');
         // 비로그인 상태에 따른 처리
@@ -31,7 +31,24 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         kakaoLoginButton.addEventListener('click', () => {
-            window.location.href = '/oauth2/authorization/kakao';
+            // 카카오 로그인 처리 후 서버의 /login 엔드포인트 호출
+            fetch('/login', {
+                method: 'POST',
+                credentials: 'same-origin'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 200) {
+                        // 로그인 성공
+                        window.location.href = data.data.redirectUrl;
+                    } else {
+                        // 로그인 실패
+                        console.error('Login failed:', data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         });
     }
 });

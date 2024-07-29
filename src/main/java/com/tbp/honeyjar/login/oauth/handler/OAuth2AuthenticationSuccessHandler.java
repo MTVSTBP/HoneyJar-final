@@ -4,7 +4,6 @@ import com.tbp.honeyjar.login.common.CookieUtil;
 import com.tbp.honeyjar.login.config.properties.AppProperties;
 import com.tbp.honeyjar.login.oauth.entity.ProviderType;
 import com.tbp.honeyjar.login.oauth.entity.RoleType;
-import com.tbp.honeyjar.login.oauth.entity.user.UserPrincipal;
 import com.tbp.honeyjar.login.oauth.info.OAuth2UserInfo;
 import com.tbp.honeyjar.login.oauth.info.OAuth2UserInfoFactory;
 import com.tbp.honeyjar.login.oauth.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
@@ -16,15 +15,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.URI;
@@ -38,17 +34,12 @@ import static com.tbp.honeyjar.login.oauth.repository.OAuth2AuthorizationRequest
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final AuthTokenProvider tokenProvider;
     private final AppProperties appProperties;
     private final OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestRepository;
-
-    public OAuth2AuthenticationSuccessHandler(AuthTokenProvider tokenProvider, AppProperties appProperties, OAuth2AuthorizationRequestBasedOnCookieRepository authorizationRequestRepository) {
-        this.tokenProvider = tokenProvider;
-        this.appProperties = appProperties;
-        this.authorizationRequestRepository = authorizationRequestRepository;
-    }
 
     @Override
     public void onAuthenticationSuccess(
@@ -64,39 +55,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         }
 
         clearAuthenticationAttributes(request, response);
-
-        // 토큰 생성
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        Date now = new Date();
-        AuthToken accessToken = tokenProvider.createAuthToken(
-                userPrincipal.getUsername(),
-                RoleType.USER.getCode(), // 기본적으로 USER 역할 부여
-                new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
-        );
-
-        // Refresh Token 생성
-        long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
-        AuthToken refreshToken = tokenProvider.createAuthToken(
-                appProperties.getAuth().getTokenSecret(),
-                new Date(now.getTime() + refreshTokenExpiry)
-        );
-
-        // 토큰을 쿠키에 저장
-        int accessTokenMaxAge = (int) appProperties.getAuth().getTokenExpiry() / 1000;
-        CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), accessTokenMaxAge);
-
-        // Refresh Token을 쿠키에 저장
-        int refreshTokenMaxAge = (int) refreshTokenExpiry / 1000;
-        CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), refreshTokenMaxAge);
-
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals(RoleType.ADMIN.getCode()));
-        request.getSession().setAttribute("isAdmin", isAdmin);
-
-        // SecurityContext에 Authentication 저장
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userPrincipal, null, authentication.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
@@ -112,19 +70,43 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             throw new IllegalArgumentException("Sorry! We've got an Unauthorized Redirect URI and can't proceed with the authentication");
         }
 
-        // 사용자 역할에 따라 targetUrl 결정
-        String targetUrl;
+        String targetUrl = redirectUri.orElse(getDefaultTargetUrl());
 
-        if (redirectUri.isPresent() && isAuthorizedRedirectUri(redirectUri.get())) {
-            targetUrl = redirectUri.get();
-        } else if (hasAdminRole(authentication)) {
-            targetUrl = "/admin";
-        } else {
-            targetUrl = "/home";
-        }
+        OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
+        ProviderType providerType = ProviderType.valueOf(authToken.getAuthorizedClientRegistrationId().toUpperCase());
 
-        return UriComponentsBuilder.fromUriString(targetUrl)
-                .build().toUriString();
+        OidcUser oidcUser = ((OidcUser) authentication.getPrincipal());
+        OAuth2UserInfo userInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(providerType, oidcUser.getAttributes());
+
+        Date now = new Date();
+        AuthToken accessToken = tokenProvider.createAuthToken(
+                userInfo.getId(),
+                RoleType.USER.getCode(),
+                new Date(now.getTime() + appProperties.getAuth().getTokenExpiry())
+        );
+        log.debug("AuthToken accessToken: {}", accessToken);
+
+        // 리프레시 토큰 설정
+        long refreshTokenExpiry = appProperties.getAuth().getRefreshTokenExpiry();
+        log.debug("refreshTokenExpiry: {}", refreshTokenExpiry);
+
+        AuthToken refreshToken = tokenProvider.createAuthToken(
+                appProperties.getAuth().getTokenSecret(),
+                new Date(now.getTime() + refreshTokenExpiry)
+        );
+        log.debug("AuthToken refreshToken: {}", refreshToken);
+
+        // 액세스 토큰 쿠키 설정
+        int accessTokenCookieMaxAge = (int) appProperties.getAuth().getTokenExpiry() / 1000;
+        CookieUtil.deleteCookie(request, response, ACCESS_TOKEN);
+        CookieUtil.addCookie(response, ACCESS_TOKEN, accessToken.getToken(), accessTokenCookieMaxAge);
+
+        // 리프레시 토큰 쿠키 설정
+        int refreshTokenCookieMaxAge  = (int) refreshTokenExpiry / 1000;
+        CookieUtil.deleteCookie(request, response, REFRESH_TOKEN);
+        CookieUtil.addCookie(response, REFRESH_TOKEN, refreshToken.getToken(), refreshTokenCookieMaxAge);
+
+        return targetUrl;
     }
 
     protected void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
@@ -132,9 +114,17 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         authorizationRequestRepository.removeAuthorizationRequestCookies(request, response);
     }
 
-    private boolean hasAdminRole(Authentication authentication) {
-        return authentication.getAuthorities().stream()
-                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(RoleType.ADMIN.getCode()));
+    private boolean hasAuthority(Collection<? extends GrantedAuthority> authorities, String authority) {
+        if (authorities == null) {
+            return false;
+        }
+
+        for (GrantedAuthority grantedAuthority : authorities) {
+            if (authority.equals(grantedAuthority.getAuthority())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private boolean isAuthorizedRedirectUri(String uri) {

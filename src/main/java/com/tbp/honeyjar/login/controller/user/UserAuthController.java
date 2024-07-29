@@ -85,7 +85,7 @@ public class UserAuthController extends AbstractAuthController {
 
         Map<String, String> resultMap = new HashMap<>();
         resultMap.put(TOKEN_NAME, accessToken.getToken());
-        resultMap.put("redirectUrl", "/home");
+        resultMap.put("redirectUrl", "/");
 
         return ResponseEntity.ok(new ApiResponse<>(SUCCESS_CODE, "Login successful", resultMap));
     }

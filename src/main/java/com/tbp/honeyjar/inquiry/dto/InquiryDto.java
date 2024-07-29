@@ -17,4 +17,5 @@ public class InquiryDto {
     private LocalDateTime updatedAt; // 수정 일자
     private Long userId; // 유저 번호 (FK)
     private Long categoryId; // 카테고리
+
 }

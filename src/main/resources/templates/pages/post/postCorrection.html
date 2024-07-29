@@ -4,19 +4,20 @@
       layout:decorate="~{common/layout/writeLayout}"
       layout:fragment="content">
 <head>
-    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/post/postCorrection.css}"/>
+    <link th:inline="css" rel="stylesheet" th:href="@{/css/pages/post/postWrite.css}"/>
     <th:block layout:fragment="title">
-        <title th:text="${postRequestDTO.title}">포스트 수정</title>
+        <title>포스트 수정</title>
     </th:block>
 </head>
 <body>
 <div id="container">
-    <form id="postForm" th:object="${postRequestDTO}" th:action="@{/post/correction}" method="post">
+    <form id="postForm" th:object="${postRequestDTO}" th:action="@{/posts/update}" method="post">
         <div class="category_public_wrap">
+            <!-- category -->
             <div class="category_wrap">
                 <label for="category">카테고리</label>
                 <div class="custom-select-wrapper">
-                    <select id="category" th:field="*{categoryId}">
+                    <select id="category" th:field="*{category}">
                         <option value="">선택</option>
                         <option th:each="category : ${categories}"
                                 th:value="${category.id}"
@@ -25,6 +26,17 @@
                 </div>
                 <p class="error-message" id="categoryError"></p>
             </div>
+            <!-- //category -->
+
+            <!-- 공개 여부 -->
+            <div class="public_wrap">
+                <label for="publicPost">공개 여부</label>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="publicPost" checked="true">
+                    <label for="publicPost"></label>
+                </div>
+            </div>
+            <!-- //공개 여부 -->
         </div>
 
         <!-- image upload -->
@@ -34,23 +46,18 @@
                 <img src="/assets/svg/camera_enhance.svg" alt="Upload Icon">
             </label>
             <input type="file" id="imageUpload" accept="image/jpeg, image/png, image/gif" multiple>
-            <div id="imagePreview">
-                <img src="https://storage.googleapis.com/download/storage/v1/b/honey-jar-e8380.appspot.com/o/1542a9fd-e461-4cd8-a94a-80cc1bde63e1?generation=1721914749070469&alt=media">
-            </div>
+            <div id="imagePreview"></div>
             <p id="fileCountMessage">최대 5개까지 업로드할 수 있습니다.</p>
             <p id="fileTypeMessage">jpg, png, gif 파일만 업로드할 수 있습니다.</p>
             <p class="error-message" id="imageError"></p>
         </div>
         <!-- //image upload -->
 
-        <!-- JSON 데이터 포함 -->
-        <script id="initial-data" type="application/json" th:text="${existingImageUrlsJson}"></script>
-
         <!-- titles -->
         <div class="form-group">
             <div class="post_title">
                 <label for="postTitle">제목</label>
-                <input type="text" id="postTitle" th:field="*{title}" placeholder="제목을 입력하세요">
+                <input type="text" id="postTitle" th:field="*{postTitle}" placeholder="제목을 입력하세요">
                 <p class="error-message" id="postTitleError"></p>
             </div>
         </div>
@@ -59,7 +66,7 @@
         <!-- recommended menu -->
         <div class="form-group">
             <label for="bestMenu">대표 메뉴</label>
-            <input type="text" id="bestMenu" th:field="*{recommendMenu}" placeholder="추천 메뉴를 입력하세요">
+            <input type="text" id="bestMenu" th:field="*{bestMenu}" placeholder="추천 메뉴를 입력하세요">
             <p class="error-message" id="bestMenuError"></p>
         </div>
         <!-- //recommended menu -->
@@ -72,58 +79,48 @@
         </div>
         <!-- //price -->
 
-        <!-- placeId and place fields -->
-        <input type="hidden" id="postId" th:field="*{postId}">
-        <input type="hidden" id="placeId" th:field="*{placeId}">
-        <input type="hidden" id="placeName" th:field="*{place.name}">
-        <input type="hidden" id="placeXCoordinate" th:field="*{place.xCoordinate}">
-        <input type="hidden" id="placeYCoordinate" th:field="*{place.yCoordinate}">
-        <input type="hidden" id="placeRoadAddressName" th:field="*{place.roadAddressName}">
-
-
-
-        <!-- placeName -->
-        <div class="form-group placeName_wrap">
-            <label for="placeNameInput">주소</label>
+        <!-- address -->
+        <div class="form-group address_wrap">
+            <label for="address">주소</label>
             <div class="input-group">
-                <input type="text" id="placeNameInput" th:field="*{place.roadAddressName}"  placeholder="주소를 입력하세요">
+                <input type="text" id="address" th:field="*{address}" placeholder="주소를 입력하세요">
                 <button type="button" id="openMap">
                     <img src="/assets/svg/place.svg" alt="마커이미지">
                 </button>
             </div>
-            <p class="error-message" id="placeNameError"></p>
+            <p class="error-message" id="addressError"></p>
         </div>
-        <!-- //placeName -->
+        <!-- //address -->
 
         <!-- content -->
         <div class="form-group">
             <label for="content">내용</label>
-            <textarea id="content" th:field="*{post}" placeholder="내용을 입력하세요" rows="5"></textarea>
+            <textarea id="content" th:field="*{content}" placeholder="내용을 입력하세요" rows="5"></textarea>
             <p class="error-message" id="contentError"></p>
         </div>
         <!-- //content -->
 
         <!-- submit button -->
         <div class="submit_wrap">
-            <button type="submit" id="submitBtn">수정</button>
+            <button type="submit" id="submitBtn">등록</button>
         </div>
         <!-- //submit button -->
+
     </form>
 
     <!-- Modal -->
-    <div id="Modal" class="modal" style="display:none;">
+    <div id="Modal" class="modal">
         <div class="modal-content">
             <span class="close">
                 <img src="/assets/svg/close.svg" alt="닫기">
             </span>
             <div class="modal-text">
-                <p>수정이 완료되었어요!</p>
+                <p>등록이 완료되었어요!</p>
             </div>
             <button id="complete" class="complete">확인</button>
         </div>
     </div>
 </div>
-
 
 <script th:inline="javascript" type="text/javascript" th:src="@{/js/pages/post/postCorrection.js}"></script>
 

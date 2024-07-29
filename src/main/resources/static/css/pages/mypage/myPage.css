@@ -1,50 +1,91 @@
-/* Common Styles */
-.page-container {
+#container2 {
     display: flex;
     flex-direction: column;
-    justify-content: center;
     width: 100%;
-    min-height: 100vh;
-    height: 580px;
-    box-sizing: border-box;
-}
-
-.content-wrapper {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-}
-
-.wrapper {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 18px 10px;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-/* Common Styles End */
-
-/* Info Box Styles Start */
-.info-box {
-    background-color: #FFFEFE;
-    border: 1px solid #C7C7C7;
-    border-radius: 18px;
-    width: 100%;
-    height: 125px;
-}
-
-.stats {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    position: relative;
     height: 100%;
+    align-items: center;
 }
-
+#header {
+    width: 100%;
+}
+#profileContainer {
+    display: flex;
+    justify-content: space-between;
+    height: 102px;
+    width: 100%;
+    background-color: #ffd140;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    box-sizing: border-box;
+}
+#detailContainer {
+    display: flex;
+    flex-direction: column;
+    width: 35%;
+    height: 100%;
+    padding-top: 5px;
+}
+#userName {
+    padding-left: 3px;
+    font-size: 24px;
+    font-family: Inter, sans-serif;
+    font-weight: bold;
+    color: #393939;
+}
+#userDetail {
+    display: flex;
+    justify-content: space-between;
+    height: 33%;
+    width: 100%;
+    align-items: center;
+    font-family: Inter, sans-serif;
+    font-size: 12px;
+    font-weight: 300;
+    color: #393939;
+}
+#pencil {
+    width: 22px;
+    height: 22px;
+}
+#pr {
+    display: flex;
+    width: 100%;
+    height: 26%;
+    padding-left: 3px;
+    font-size: 12px;
+    align-items: center;
+    margin-top: 5px;
+}
+#postIcon {
+    width: 22px;
+    height: 22px;
+}
+#postNumber {
+    display: flex;
+    width: 80%;
+}
+#postText {
+    display: flex;
+    height: 26%;
+    width: 60%;
+}
+#profileSvg {
+    width: 48px;
+    height: 48px;
+}
+#post_data {
+    width: 342px;
+    height: 125px;
+    border-radius: 18px;
+    border-color: #c7c7c7;
+    border-style: solid;
+    border-width: 1px;
+    margin-top: 20px;
+    display: flex;
+}
 #like {
     height: 100%;
     width: 33.33%;
@@ -54,7 +95,6 @@
     justify-content: center;
     flex-direction: column;
 }
-
 #follower {
     height: 100%;
     width: 33.33%;
@@ -64,7 +104,6 @@
     justify-content: center;
     flex-direction: column;
 }
-
 #following {
     height: 100%;
     width: 33.33%;
@@ -74,16 +113,14 @@
     justify-content: center;
     flex-direction: column;
 }
-
 div.post_data_title {
     height: 12%;
     text-align: center;
-    font-size: 15px;
-    font-family: "Pretendard-Regular", sans-serif;
-    font-weight: 500;
+    font-size: 12px;
+    font-family: Inter, sans-serif;
+    font-weight: bold;
     color: #565656;
 }
-
 div.post_data_set {
     height: 33%;
     width: 50%;
@@ -91,7 +128,6 @@ div.post_data_set {
     justify-content: space-between;
     align-items: center;
 }
-
 div.border {
     height: 80%;
     border-style: solid;
@@ -101,152 +137,36 @@ div.border {
     position: absolute;
     right: 0;
 }
-
 div.post_data_icon {
     height: 24px;
     width: 24px;
 }
-
 div.post_data_num {
     font-size: 36px;
     font-family: Inter, sans-serif;
     font-weight: bold;
 }
-
 div#bookMark {
-    margin-top: 40px;
-    width: 100%;
+    margin-top: 10px;
+    width: 90%;
 }
-
 div#textLine {
     width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    margin-top: 10px;
 }
-
 div#post_number {
     display: flex;
 }
-
 div#bookMarkText {
-    font-family: "Pretendard-Regular", sans-serif;
-    font-size: 20px;
-    font-weight: 700;
-    color: #393939;
-}
-
-#more {
-    font-family: "Pretendard-Regular", sans-serif;
     font-size: 15px;
-    font-weight: 700;
-    color: #393939;
+    font-family: Inter, sans-serif;
+    font-weight: bold;
 }
-
-.my_list {
-    width: 100%;
-}
-
-.post_div {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-
-.my_list ul {
-    padding-bottom: 7rem;
-    margin-top: 1rem;
-}
-
-.my_list ul .item {
-    width: 48%;
-    height: 250px;
-    position: relative;
-    margin-bottom: 1rem;
-
-}
-
-.my_list ul .item a {
-    display: block;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 1;
-}
-
-.my_list ul .item a::before {
-    content: "";
-    width: 100%;
-    height: 100%;
-    background-color: #00000045;
-    display: block;
-    position: absolute;
-    border-radius: 5%;
-}
-
-.my_list ul .item a img {
-    width: 100%;
-    border-radius: 10px;
-    height: inherit;
-}
-
-.my_list ul .item .post_info {
-    display: flex;
-    justify-content: flex-start;
-    position: absolute;
-    bottom: 5%;
-    width: 90%;
-    left: 5%;
-}
-
-.my_list ul .item .post_info img {
-    width: 34px;
-    height: 34px;
-    margin-right: 0.5rem;
-    border-radius: 50%;  /* 이미지를 원형으로 만듭니다 */
-    object-fit: cover;  /* 이미지 비율을 유지하면서 컨테이너에 맞춥니다 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);  /* 약간의 그림자 효과를 추가합니다 */
-}
-
-.my_list ul .item .post_info .info_context {
-    color: #fff;
-    width: 80%;
-}
-
-.my_list ul .item .post_info .info_context h5 {
-    font-family: "Pretendard-Regular";
-    font-size: 1rem;
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.my_list ul .item .post_info .info_context span {
-    font-family: "Pretendard-Regular";
-    font-size: 0.8rem;
-    font-weight: 400;
-}
-
-.my_list ul .item .bookmark {
-    position: absolute;
-    top: 3%;
-    right: 0;
-    width: 20%;
-    height: 15%;
-}
-
-.my_list ul .item .bookmark button {
-    border: 0;
-    background: transparent;
-    padding: 0;
-    width: 100%;
-}
-
-.my_list ul .item .bookmark img {
-    width: 35px;
+div#more {
+    font-size: 12px;
+    font-family: Inter, sans-serif;
+    font-weight: bold;
 }

@@ -72,13 +72,12 @@
         <input type="hidden" id="placeName" th:field="*{place.name}">
         <input type="hidden" id="placeXCoordinate" th:field="*{place.xCoordinate}">
         <input type="hidden" id="placeYCoordinate" th:field="*{place.yCoordinate}">
-        <input type="hidden" id="placeRoadAddressName" th:field="*{place.roadAddressName}">
 
         <!-- placeName -->
         <div class="form-group placeName_wrap">
             <label for="placeNameInput">주소</label>
             <div class="input-group">
-                <input type="text" id="placeNameInput" th:field="*{place.roadAddressName}" placeholder="주소를 입력하세요">
+                <input type="text" id="placeNameInput" placeholder="주소를 입력하세요">
                 <button type="button" id="openMap">
                     <img src="/assets/svg/place.svg" alt="마커이미지">
                 </button>
